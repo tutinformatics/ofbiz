@@ -38,5 +38,15 @@ under the License.
         <auto-attributes include="nonpk" mode="IN" optional="false"/>
         <override name="comments" optional="true"/>
     </service>
+
+    <service name="testAccountingService" default-entity-name="testEntity" engine="java"
+             location="ee.taltech.TestService" invoke="createTestEntity" auth="true">
+        <description>Create an Demo record using a service in Java</description>
+        <auto-attributes include="pk" mode="OUT" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="false"/>
+        <override name="comments" optional="true"/>
+    </service>
+
+
     
 </services>

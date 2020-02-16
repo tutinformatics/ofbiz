@@ -1,0 +1,5 @@
+/.gradle
+.idea
+*.iml
+.DS_Store
+data/.camel
