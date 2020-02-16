@@ -1,0 +1,27 @@
+version: '3.4'
+
+services:
+
+  ofbiz:
+    container_name: ofbiz
+    build:
+      context: .
+    restart: unless-stopped
+    ports:
+      - "8443:8443"
+      - "8080:8080"
+      - "1099:1099"
+#    depends_on:
+#      - citus
+
+
+#  citus:
+#    container_name: citus-distributed
+#    image: postgres:11.5
+#    restart: unless-stopped
+#    environment:
+#      POSTGRES_USER: arete
+#      POSTGRES_DB: arete
+#      POSTGRES_PASSWORD: 4Rqdfqaf3g1SgIyLejpcT2OARISpx90h7q30b4JiWKRElLuzPhby9ZYVDY3nDpOu
+#    ports:
+#      - "5433:5432"
