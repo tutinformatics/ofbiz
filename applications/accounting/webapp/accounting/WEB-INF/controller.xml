@@ -2601,17 +2601,10 @@ under the License.
         <response name="error" type="view-last"/>
     </request-map>
 
-    <request-map uri="MyViewFtl">
-        <security https="true" auth="true"/>
-        <response name="success" type="view" value="MyViewFtl"/>
-    </request-map>
-
     <!-- end of request mappings -->
 
     <!-- View Mappings -->
     <view-map name="main" type="screen" page="component://accounting/widget/CommonScreens.xml#main"/>
-
-    <view-map name="MyViewFtl" type="screen" page="component://accounting/widget/MyScreens.xml#MyViewFtl"/>
 
     <!-- BillingAccount -->
     <view-map name="FindBillingAccount" type="screen" page="component://accounting/widget/BillingAccountScreens.xml#FindBillingAccount"/>
