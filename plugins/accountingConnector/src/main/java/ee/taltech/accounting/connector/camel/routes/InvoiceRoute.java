@@ -6,9 +6,10 @@ import org.apache.camel.model.rest.RestBindingMode;
 public class InvoiceRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception {
-        restConfiguration()
+        restConfiguration("rest-api")
                 .component("restlet")
-                .host("localhost").port("8081")
+                .host("localhost")
+                //.port("9000")
                 .bindingMode(RestBindingMode.auto);
 
         rest("/api/test")
