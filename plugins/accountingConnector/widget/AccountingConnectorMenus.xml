@@ -18,12 +18,8 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-<section xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0"
-    xmlns:xl="http://www.w3.org/1999/xlink" 
-    xmlns:xi="http://www.w3.org/2001/XInclude"
-    xsi:schemaLocation="http://docbook.org/ns/docbook ../../../content/dtd/docbook.xsd"
-    xmlns="http://docbook.org/ns/docbook">
-    <title>Accounting-connector  Overview</title>
-    <para>The Accounting-connector Help file template.</para>
-</section>
-
+<menus xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ofbiz.apache.org/Widget-Menu" xsi:schemaLocation="http://ofbiz.apache.org/Widget-Menu http://ofbiz.apache.org/dtds/widget-menu.xsd">
+    <menu name="MainAppBar" title="${uiLabelMap.AccountingConnectorApplication}" extends="CommonAppBarMenu" extends-resource="component://common/widget/CommonMenus.xml">
+        <menu-item name="main" title="${uiLabelMap.CommonMain}"><link target="main"/></menu-item>
+    </menu>
+</menus>

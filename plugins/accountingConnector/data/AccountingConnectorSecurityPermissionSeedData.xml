@@ -19,12 +19,12 @@ under the License.
 -->
 
 <entity-engine-xml>
-    <SecurityPermission description="View operations in the Accounting-connector Component." permissionId="ACCOUNTING-CONNECTOR_VIEW"/>
-    <SecurityPermission description="Create operations in the Accounting-connector Component." permissionId="ACCOUNTING-CONNECTOR_CREATE"/>
-    <SecurityPermission description="Update operations in the Accounting-connector Component." permissionId="ACCOUNTING-CONNECTOR_UPDATE"/>
-    <SecurityPermission description="Delete operations in the Accounting-connector Component." permissionId="ACCOUNTING-CONNECTOR_DELETE"/>
-    <SecurityPermission description="ALL operations in the Accounting-connector Component." permissionId="ACCOUNTING-CONNECTOR_ADMIN"/>
+    <SecurityPermission description="View operations in the AccountingConnector Component." permissionId="ACCOUNTINGCONNECTOR_VIEW"/>
+    <SecurityPermission description="Create operations in the AccountingConnector Component." permissionId="ACCOUNTINGCONNECTOR_CREATE"/>
+    <SecurityPermission description="Update operations in the AccountingConnector Component." permissionId="ACCOUNTINGCONNECTOR_UPDATE"/>
+    <SecurityPermission description="Delete operations in the AccountingConnector Component." permissionId="ACCOUNTINGCONNECTOR_DELETE"/>
+    <SecurityPermission description="ALL operations in the AccountingConnector Component." permissionId="ACCOUNTINGCONNECTOR_ADMIN"/>
 
-    <SecurityGroupPermission fromDate="2001-05-13 12:00:00.0" groupId="SUPER" permissionId="ACCOUNTING-CONNECTOR_ADMIN"/>
+    <SecurityGroupPermission fromDate="2001-05-13 12:00:00.0" groupId="SUPER" permissionId="ACCOUNTINGCONNECTOR_ADMIN"/>
 
 </entity-engine-xml>

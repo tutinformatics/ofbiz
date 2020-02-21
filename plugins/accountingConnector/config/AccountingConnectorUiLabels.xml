@@ -19,22 +19,22 @@ under the License.
 -->
 
 <resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-properties.xsd">
-    <property key="Accounting-connectorApplication">
-        <value xml:lang="en">Accounting-connector Application</value>
-        <value xml:lang="zh">Accounting-connector应用程序</value>
-        <value xml:lang="zh-TW">Accounting-connector應用程式</value>
+    <property key="AccountingConnectorApplication">
+        <value xml:lang="en">AccountingConnector Application</value>
+        <value xml:lang="zh">AccountingConnector应用程序</value>
+        <value xml:lang="zh-TW">AccountingConnector應用程式</value>
     </property>
-    <property key="Accounting-connectorCompanyName">
-        <value xml:lang="en">OFBiz: Accounting-connector</value>
-        <value xml:lang="zh-TW">OFBiz: Accounting-connector</value>
+    <property key="AccountingConnectorCompanyName">
+        <value xml:lang="en">OFBiz: AccountingConnector</value>
+        <value xml:lang="zh-TW">OFBiz: AccountingConnector</value>
     </property>
-    <property key="Accounting-connectorCompanySubtitle">
+    <property key="AccountingConnectorCompanySubtitle">
         <value xml:lang="en">Part of the Apache OFBiz Family of Open Source Software</value>
         <value xml:lang="it">Un modulo della famiglia di software open source Apache OFBiz</value>
         <value xml:lang="zh">开源软件OFBiz的组成部分</value>
         <value xml:lang="zh-TW">開源軟體OFBiz的組成部分</value>
     </property>
-    <property key="Accounting-connectorViewPermissionError">
+    <property key="AccountingConnectorViewPermissionError">
         <value xml:lang="en">You are not allowed to view this page.</value>
         <value xml:lang="zh">不允许你浏览这个页面。</value>
         <value xml:lang="zh-TW">不允許您檢視這個頁面.</value>
