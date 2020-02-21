@@ -27,8 +27,7 @@ under the License.
     <service name="getInvoicesService" default-entity-name="Invoice" engine="java"
              location="ee.taltech.accounting.connector.InvoiceService" invoke="getInvoices" auth="true">
         <description>Get Invoices</description>
-        <auto-attributes include="pk" mode="OUT" optional="false"/>
-        <auto-attributes include="nonpk" mode="IN" optional="false"/>
+        <attribute mode="IN" name="body" optional="true" type="Object"/>
         <override name="comments" optional="true"/>
     </service>
     

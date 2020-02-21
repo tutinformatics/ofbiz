@@ -20,7 +20,6 @@ public class InvoiceService {
             List<GenericValue> orderItems = EntityQuery.use(delegator)
                     .from("Invoice")
                     .queryList();
-            System.out.println(orderItems);
         } catch (GenericEntityException e) {
             e.printStackTrace();
         }
