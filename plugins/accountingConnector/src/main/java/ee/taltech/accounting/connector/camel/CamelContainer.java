@@ -16,11 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package org.apache.ofbiz.camel.loader;
+package ee.taltech.accounting.connector.camel;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.sparkrest.SparkComponent;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.impl.DefaultPackageScanClassResolver;
 import org.apache.camel.impl.SimpleRegistry;
@@ -52,13 +53,15 @@ public class CamelContainer implements Container {
     public void init(List<StartupCommand> ofbizCommands, String name, String configFile) throws ContainerException {
         this.name = name;
         context = createCamelContext();
+        context.addComponent("restlet", new SparkComponent());
         ContainerConfig.Configuration cfg = ContainerConfig.getConfiguration(name, configFile);
-        String packageName = ContainerConfig.getPropertyValue(cfg, "package", "org.apache.ofbiz.camel.route");
+        String packageName = ContainerConfig.getPropertyValue(cfg, "package", "ee.taltech.accounting.connector.camel.routes");
         PackageScanClassResolver packageResolver = new DefaultPackageScanClassResolver();
         Set<Class<?>> routesClassesSet = packageResolver.findImplementations(RouteBuilder.class, packageName);
         routesClassesSet.forEach(key -> {
             RouteBuilder routeBuilder;
             try {
+                Debug.logInfo("Creating route: " + key.getName(), module);
                 routeBuilder = createRoutes(key.getName());
                 addRoutesToContext(routeBuilder);
             } catch (ContainerException e) {

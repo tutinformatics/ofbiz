@@ -22,6 +22,11 @@ dependencies {
 
     //pluginLibsCompile 'junit:junit-dep:4.10'
     //pluginLibsRuntime 'junit:junit-dep:4.10'
+    pluginLibsCompile 'org.apache.camel:camel-core:2.21.0'
+    pluginLibsCompile 'org.apache.camel:camel-rest:3.0.1'
+    pluginLibsCompile 'org.apache.camel:camel-servlet:2.13.2'
+    pluginLibsCompile 'org.apache.camel:camel-stream:2.19.1'  // remove?
+    pluginLibsCompile 'org.apache.camel:camel-spark-rest:2.16.1'
 }
 
 task install {
