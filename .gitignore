@@ -18,6 +18,8 @@ runtime/tempfiles/*
 runtime/indexes/products/
 !runtime/tempfiles/README
 applications/content/index/
+plugins/
+!plugins/accountingConnector
 changelog
 .classpath
 .project
