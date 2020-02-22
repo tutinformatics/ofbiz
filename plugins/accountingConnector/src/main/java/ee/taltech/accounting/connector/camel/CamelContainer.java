@@ -23,6 +23,7 @@ import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.sparkrest.SparkComponent;
 import org.apache.camel.impl.DefaultCamelContext;
+import org.apache.camel.impl.DefaultCamelContextNameStrategy;
 import org.apache.camel.impl.DefaultPackageScanClassResolver;
 import org.apache.camel.impl.SimpleRegistry;
 import org.apache.camel.spi.PackageScanClassResolver;
@@ -35,6 +36,7 @@ import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.DelegatorFactory;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ServiceContainer;
+import org.osgi.framework.ServiceRegistration;
 
 import java.util.List;
 import java.util.Set;
@@ -47,12 +49,14 @@ public class CamelContainer implements Container {
     //    private static LocalDispatcherFactory dispatcherFactory;
     private static ProducerTemplate producerTemplate;
     private CamelContext context;
+    private ServiceRegistration<CamelContext> serviceRegistration;
     private String name;
 
     @Override
     public void init(List<StartupCommand> ofbizCommands, String name, String configFile) throws ContainerException {
         this.name = name;
         context = createCamelContext();
+        context.setNameStrategy(new DefaultCamelContextNameStrategy("rest-api"));
         context.addComponent("restlet", new SparkComponent());
         ContainerConfig.Configuration cfg = ContainerConfig.getConfiguration(name, configFile);
         String packageName = ContainerConfig.getPropertyValue(cfg, "package", "ee.taltech.accounting.connector.camel.routes");
@@ -72,6 +76,7 @@ public class CamelContainer implements Container {
         producerTemplate = context.createProducerTemplate();
 
     }
+
 
     @Override
     public boolean start() throws ContainerException {
