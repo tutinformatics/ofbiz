@@ -3,7 +3,6 @@ build/
 applications/*/build
 framework/*/build
 plugins/
-!plugins/crmClientView
 runtime/git-rebase/*
 runtime/SvnInfo.ftl
 runtime/GitInfo.ftl
