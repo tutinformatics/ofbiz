@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+    <Contact contactId="1" name="Siret"/>
+    <Contact contactId="2" name="Tanel"/>
+    <Contact contactId="3" name="Agris"/>
+</entity-engine-xml>
