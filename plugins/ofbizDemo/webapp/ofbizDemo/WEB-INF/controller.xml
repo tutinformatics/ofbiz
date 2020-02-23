@@ -52,10 +52,10 @@ under the License.
     <request-map uri="FindOfbizDemo"><security https="true" auth="true"/><response name="success" type="view" value="FindOfbizDemo"/></request-map>
 
     <request-map uri="createOfbizDemoEvent">
-        <security https="true" auth="true"/>
+<!--        <security https="true" auth="true"/>-->
         <event type="java" path="com.companyname.ofbizdemo.events.OfbizDemoEvents" invoke="createOfbizDemoEvent"/>
-        <response name="success" type="view" value="main"/>
-        <response name="error" type="view" value="main"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
     </request-map>
 
     <!-- View Mapping -->
