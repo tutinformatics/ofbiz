@@ -1,23 +1,21 @@
 package ee.taltech.accounting.connector.camel.routes;
 
 import ee.taltech.accounting.connector.camel.service.InvoiceService;
-import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.ofbiz.service.LocalDispatcher;
 
-public class InvoiceRoute extends RouteBuilder {
+public class InvoiceRoute extends BaseRoute {
 
     private InvoiceService invoiceService;
-    private LocalDispatcher localDispatcher;
 
 
     public InvoiceRoute(LocalDispatcher localDispatcher) {
-        this.localDispatcher = localDispatcher;
+        super(localDispatcher);
         invoiceService = new InvoiceService(localDispatcher.getDelegator());
     }
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
         restConfiguration("rest-api")
                 .component("restlet")
                 .host("localhost")
@@ -25,7 +23,7 @@ public class InvoiceRoute extends RouteBuilder {
                 .bindingMode(RestBindingMode.auto);
 
         rest("/api")
-                .get("/users")
+                .get("/invoices")
                 .id("api-users")
                 .produces("application/json")
                 .route()
