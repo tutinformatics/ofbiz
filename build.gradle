@@ -152,6 +152,17 @@ configurations {
     }
 }
 
+repositories {
+    maven {
+        url "https://repo.eclipse.org/content/repositories/paho-snapshots/"
+    }
+}
+
+dependencies {
+    compile 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.2'
+    compile 'org.eclipse.paho:org.eclipse.paho.android.service:1.0.2'
+}
+
 dependencies {
     implementation 'apache-xerces:xercesImpl:2.9.1'
     implementation 'com.google.zxing:core:3.4.0'
@@ -489,17 +500,17 @@ task createTenant(group: ofbizServer, description: 'Create a new tenant in your 
 }
 
 // ========== Documentation tasks ==========
-tasks.withType(AsciidoctorTask) { task ->
-    backends 'html5', 'pdf'
-    attributes \
-        'doctype': 'book',
-        'experimental': '',
-        'icons': 'font',
-        'sectnums': '',
-        'chapter-label': '',
-        'toc': '',
-        'toclevels': '3'
-}
+//tasks.withType(AsciidoctorTask) { task ->
+//    backends 'html5', 'pdf'
+//    attributes \
+//        'doctype': 'book',
+//        'experimental': '',
+//        'icons': 'font',
+//        'sectnums': '',
+//        'chapter-label': '',
+//        'toc': '',
+//        'toclevels': '3'
+//}
 
 task deleteOfbizDocumentation {
     doFirst { delete "${buildDir}/asciidoc/ofbiz" }
