@@ -1,5 +1,7 @@
 package ee.taltech.accounting.connector.camel.service;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
@@ -32,16 +34,18 @@ public class InvoiceService {
         return ServiceUtil.returnSuccess();
     }*/
 
-    public List<?> getInvoices() {
+    public String getInvoices() {
+        List<GenericValue> orderItems;
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
-            List<GenericValue> orderItems = EntityQuery.use(delegator)
+            orderItems = EntityQuery.use(delegator)
                     .from("Invoice")
                     .queryList();
-            return orderItems;
+            String json =  gson.toJson(orderItems);
+            return json;
         } catch (GenericEntityException e) {
             e.printStackTrace();
         }
-
-        return null; //TODO: Error to json
+        return null;
     }
 }
