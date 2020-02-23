@@ -18,6 +18,7 @@
  *******************************************************************************/
 package ee.taltech.accounting.connector.camel;
 
+import ee.taltech.accounting.connector.camel.service.InvoiceService;
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
@@ -48,6 +49,7 @@ public class CamelContainer implements Container {
     private static final String module = CamelContainer.class.getName();
     //    private static LocalDispatcherFactory dispatcherFactory;
     private static ProducerTemplate producerTemplate;
+    private LocalDispatcher dispatcher;
     private CamelContext context;
     private ServiceRegistration<CamelContext> serviceRegistration;
     private String name;
@@ -123,7 +125,7 @@ public class CamelContainer implements Container {
     }
 
     private DefaultCamelContext createCamelContext() throws ContainerException {
-        LocalDispatcher dispatcher = createDispatcher();
+        dispatcher = createDispatcher();
         SimpleRegistry registry = new SimpleRegistry();
         registry.put("dispatcher", dispatcher);
         return new DefaultCamelContext(registry);
@@ -133,7 +135,7 @@ public class CamelContainer implements Container {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         try {
             Class<?> c = loader.loadClass(routeBuilderClassName);
-            return (RouteBuilder) c.newInstance();
+            return (RouteBuilder) c.getConstructor(LocalDispatcher.class).newInstance(dispatcher);
         } catch (Exception e) {
             Debug.logError(e, "Cannot get instance of the camel route builder: " + routeBuilderClassName, module);
             throw new ContainerException(e);
