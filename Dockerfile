@@ -1,3 +1,4 @@
+
 FROM openjdk:8
 
 MAINTAINER tutinformatics
@@ -11,7 +12,7 @@ RUN ./gradlew
 
 RUN ./gradlew cleanAll loadAll
 
-# Use volume mount for no restart xml changes
+# Use volume mount for no restart xml changes etc.
 VOLUME /ofbiz
 
 # Run ofbiz
