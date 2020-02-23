@@ -25,7 +25,7 @@ under the License.
     <version>1.0</version>
 
     <service name="getInvoicesService" default-entity-name="Invoice" engine="java"
-             location="ee.taltech.accounting.connector.InvoiceService" invoke="getInvoices" auth="true">
+             location="ee.taltech.accounting.connector.camel.service.InvoiceService" invoke="getInvoices" auth="true">
         <description>Get Invoices</description>
         <attribute mode="IN" name="body" optional="true" type="Object"/>
         <override name="comments" optional="true"/>
