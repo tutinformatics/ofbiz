@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<entity-engine-xml>
-    <OfbizDemoType ofbizDemoTypeId="INTERNAL" description="Internal Demo - Office"/>
-    <OfbizDemoType ofbizDemoTypeId="EXTERNAL" description="External Demo - On Site"/>
-</entity-engine-xml>
