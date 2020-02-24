@@ -34,4 +34,9 @@ under the License.
              location="com.taltech.crm.services.CrmServices" invoke="createContact" auth="false">
         <description>Create a Contact record using a service in Java</description>
     </service>
+
+    <service name="getContactsByJavaService" default-entity-name="Contact" engine="java"
+             location="com.taltech.crm.services.CrmServices" invoke="getContacts" auth="false">
+        <description>Get all Contact records using a service in Java</description>
+    </service>
 </services>

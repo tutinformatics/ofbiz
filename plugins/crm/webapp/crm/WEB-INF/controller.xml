@@ -48,6 +48,12 @@ under the License.
         <response name="success" type="request" value="json"/>
     </request-map>
 
+    <request-map uri="getContacts">
+        <security https="true" auth="false"/>
+        <event type="service" invoke="getContactsByJavaService"/>
+        <response name="success" type="request" value="json"/>
+    </request-map>
+
     <!-- View Mappings -->
     <view-map name="main" type="screen" page="component://crm/widget/CrmScreens.xml#main"/>
 </site-conf>
