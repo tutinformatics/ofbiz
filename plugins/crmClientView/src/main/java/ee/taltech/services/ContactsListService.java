@@ -29,7 +29,7 @@ public class ContactsListService {
             Debug.log("==========This is my first Java Service implementation in Apache OFBiz. OfbizDemo record created successfully with ofbizDemoId:"+ofbizDemo.getString("ofbizDemoId"));
         } catch (GenericEntityException e) {
             Debug.logError(e, module);
-            return ServiceUtil.returnError("Error in creating record in OfbizDemo entity ........" +module);
+            return ServiceUtil.returnError("Error in creating record in OfbizDemo entity ........" + module);
         }
         return result;
     }
@@ -49,7 +49,7 @@ public class ContactsListService {
             Debug.log("==========This is my first Java Service implementation in Apache OFBiz. OfbizDemo record created successfully with ofbizDemoId:");
         } catch (GenericEntityException e) {
             Debug.logError(e, module);
-            return ServiceUtil.returnError("Error in creating record in OfbizDemo entity ........" +module);
+            return ServiceUtil.returnError("Error in creating record in OfbizDemo entity ........" + module);
         }
 
         return result;
