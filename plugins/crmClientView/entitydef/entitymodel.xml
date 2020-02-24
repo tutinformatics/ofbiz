@@ -44,4 +44,10 @@ under the License.
             <key-map field-name="ofbizDemoTypeId"/>
         </relation>
     </entity>
+
+    <entity entity-name="Contact" package-name="org.apache.ofbiz.ofbizdemo" title="Contact entity">
+        <field name="contactId" type="id"><description>primary sequenced ID</description></field>
+        <field name="name" type="name"></field>
+        <prim-key field="contactId"/>
+    </entity>
 </entitymodel>

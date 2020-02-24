@@ -29,7 +29,9 @@ under the License.
             <widgets>
                 <decorator-screen name="CrmClientViewCommonDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <label text="Hello World!! :)"/>
+                        <screenlet title="Add contact">
+                            <include-form name="AddContact" location="component://crmClientView/widget/CrmClientViewForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
