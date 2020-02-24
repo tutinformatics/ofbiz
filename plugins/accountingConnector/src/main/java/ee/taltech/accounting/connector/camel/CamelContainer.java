@@ -18,7 +18,6 @@
  *******************************************************************************/
 package ee.taltech.accounting.connector.camel;
 
-import ee.taltech.accounting.connector.camel.service.InvoiceService;
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
