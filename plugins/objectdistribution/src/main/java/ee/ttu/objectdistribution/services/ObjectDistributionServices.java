@@ -1,7 +1,4 @@
 package ee.ttu.objectdistribution.services;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.UUID;
 
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.entity.Delegator;
@@ -12,6 +9,10 @@ import org.apache.ofbiz.service.ServiceUtil;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
+
+import java.util.Arrays;
+import java.util.Map;
+import java.util.UUID;
 
 public class ObjectDistributionServices {
 
@@ -36,8 +37,8 @@ public class ObjectDistributionServices {
             IMqttClient publisher = new MqttClient("tcp://mqtt.eclipse.org:1883", publisherId);
             MqttClientService mqttClientService = new MqttClientService(publisher);
             mqttClientService.makeConnection();
-            EngineTemperatureSensor engineTemperatureSensor = new EngineTemperatureSensor(publisher);
-            engineTemperatureSensor.call();
+            MqttService mqttService = new MqttService(publisher);
+            mqttService.call();
             //RECEIVER
             String receiverID = UUID.randomUUID().toString();
             IMqttClient receiver = new MqttClient("tcp://mqtt.eclipse.org:1883", receiverID);
@@ -48,9 +49,7 @@ public class ObjectDistributionServices {
         } catch (GenericEntityException | MqttException e) {
             Debug.logError(e, module);
             Debug.log("Starting ObjectDistributionService Failed...");
-            return ServiceUtil.returnError("Error in creating record in ObjectDistribution entity ........" +module);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            return ServiceUtil.returnError("Error in creating record in ObjectDistribution entity ........" + module);
         } catch (Exception e) {
             e.printStackTrace();
         }

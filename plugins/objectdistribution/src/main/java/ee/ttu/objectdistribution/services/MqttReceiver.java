@@ -1,6 +1,5 @@
 package ee.ttu.objectdistribution.services;
 
-import ee.ttu.objectdistribution.services.EngineTemperatureSensor;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
@@ -18,11 +17,9 @@ public class MqttReceiver {
     public void receiveMessage() throws InterruptedException, MqttException {
         CountDownLatch receivedSignal = new CountDownLatch(10);
         System.out.println("RECEIVE MESSAGE");
-        client.subscribe(EngineTemperatureSensor.TOPIC, (topic, message) -> {
-            System.out.println(message);
-            System.out.println(topic);
+        client.subscribe(MqttService.TOPIC, (topic, message) -> {
             byte[] payload = message.getPayload();
-            System.out.println(payload);
+            System.out.println(message);
             receivedSignal.countDown();
         });
         receivedSignal.await(1, TimeUnit.MINUTES);
