@@ -1,17 +1,16 @@
-package ee.taltech.accounting.connector.camel.routes;
+package ee.taltech.marketing.affiliate.connector.camel.routes;
 
-import ee.taltech.accounting.connector.camel.service.InvoiceService;
+import ee.taltech.marketing.affiliate.connector.camel.service.PartyService;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.ofbiz.service.LocalDispatcher;
 
-public class InvoiceRoute extends BaseRoute {
+public class PartyRoute extends BaseRoute {
 
-    private InvoiceService invoiceService;
+    private PartyService partyService;
 
-
-    public InvoiceRoute(LocalDispatcher localDispatcher) {
+    public PartyRoute(LocalDispatcher localDispatcher) {
         super(localDispatcher);
-        invoiceService = new InvoiceService(localDispatcher.getDelegator());
+        partyService = new PartyService(localDispatcher.getDelegator());
     }
 
     @Override
@@ -23,11 +22,11 @@ public class InvoiceRoute extends BaseRoute {
                 .bindingMode(RestBindingMode.auto);
 
         rest("/api")
-                .get("/invoices")
+                .get("/parties")
                 .id("api-users")
                 .produces("application/json")
                 .route()
-                .bean(invoiceService, "getInvoices")
+                .bean(partyService, "getParties")
                 .endRest();
     }
 }
