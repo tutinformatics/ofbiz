@@ -21,7 +21,9 @@ public class Routes extends RouteBuilder {
                 .component("spark-rest")
                 .host("localhost")
                 .port(9898)
-                .bindingMode(RestBindingMode.json);
+                .bindingMode(RestBindingMode.json)
+                .enableCORS(true)
+                .corsHeaderProperty("Access-Control-Allow-Origin","*");
 
         rest("/api")
                 .get("/product")
