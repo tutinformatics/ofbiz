@@ -1,13 +1,14 @@
-package ee.taltech.accounting.connector.camel.routes;
+package ee.taltech.marketing.affiliate.connector.camel.routes;
 
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.ofbiz.service.LocalDispatcher;
 
 public abstract class BaseRoute extends RouteBuilder {
-    protected LocalDispatcher localDispatcher;
 
+    protected LocalDispatcher localDispatcher;
 
     public BaseRoute(LocalDispatcher localDispatcher) {
         this.localDispatcher = localDispatcher;
     }
+
 }

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package ee.taltech.accounting.connector.camel;
+package ee.taltech.marketing.affiliate.connector.camel;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
@@ -60,7 +60,7 @@ public class CamelContainer implements Container {
         context.setNameStrategy(new DefaultCamelContextNameStrategy("rest-api"));
         context.addComponent("restlet", new SparkComponent());
         ContainerConfig.Configuration cfg = ContainerConfig.getConfiguration(name, configFile);
-        String packageName = ContainerConfig.getPropertyValue(cfg, "package", "ee.taltech.accounting.connector.camel.routes");
+        String packageName = ContainerConfig.getPropertyValue(cfg, "package", "ee.taltech.marketing.affiliate.connector.camel.routes");
         PackageScanClassResolver packageResolver = new DefaultPackageScanClassResolver();
         Set<Class<?>> routesClassesSet = packageResolver.findImplementations(RouteBuilder.class, packageName);
         routesClassesSet.forEach(key -> {
