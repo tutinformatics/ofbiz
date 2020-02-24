@@ -2600,6 +2600,7 @@ under the License.
         <response name="success" type="view-last"/>
         <response name="error" type="view-last"/>
     </request-map>
+
     <!-- end of request mappings -->
 
     <!-- View Mappings -->
