@@ -18,14 +18,13 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
-    <!-- ========================================================= -->
-    <!-- ======================== Defaults ======================= -->
-    <!-- ========================================================= -->
-    <title>Entity of ServicesREST Component</title>
-    <description>None</description>
-    <copyright></copyright>
-    <version></version>
+<entity-engine-xml>
+    <SecurityPermission description="View operations in the ServicesRest Component." permissionId="SERVICESREST_VIEW"/>
+    <SecurityPermission description="Create operations in the ServicesRest Component." permissionId="SERVICESREST_CREATE"/>
+    <SecurityPermission description="Update operations in the ServicesRest Component." permissionId="SERVICESREST_UPDATE"/>
+    <SecurityPermission description="Delete operations in the ServicesRest Component." permissionId="SERVICESREST_DELETE"/>
+    <SecurityPermission description="ALL operations in the ServicesRest Component." permissionId="SERVICESREST_ADMIN"/>
 
-</entitymodel>
+    <SecurityGroupPermission fromDate="2001-05-13 12:00:00.0" groupId="SUPER" permissionId="SERVICESREST_ADMIN"/>
+
+</entity-engine-xml>

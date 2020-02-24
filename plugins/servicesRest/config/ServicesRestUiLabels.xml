@@ -19,22 +19,22 @@ under the License.
 -->
 
 <resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-properties.xsd">
-    <property key="ServicesRESTApplication">
-        <value xml:lang="en">ServicesREST Application</value>
-        <value xml:lang="zh">ServicesREST应用程序</value>
-        <value xml:lang="zh-TW">ServicesREST應用程式</value>
+    <property key="ServicesRestApplication">
+        <value xml:lang="en">ServicesRest Application</value>
+        <value xml:lang="zh">ServicesRest应用程序</value>
+        <value xml:lang="zh-TW">ServicesRest應用程式</value>
     </property>
-    <property key="ServicesRESTCompanyName">
-        <value xml:lang="en">OFBiz: ServicesREST</value>
-        <value xml:lang="zh-TW">OFBiz: ServicesREST</value>
+    <property key="ServicesRestCompanyName">
+        <value xml:lang="en">OFBiz: ServicesRest</value>
+        <value xml:lang="zh-TW">OFBiz: ServicesRest</value>
     </property>
-    <property key="ServicesRESTCompanySubtitle">
+    <property key="ServicesRestCompanySubtitle">
         <value xml:lang="en">Part of the Apache OFBiz Family of Open Source Software</value>
         <value xml:lang="it">Un modulo della famiglia di software open source Apache OFBiz</value>
         <value xml:lang="zh">开源软件OFBiz的组成部分</value>
         <value xml:lang="zh-TW">開源軟體OFBiz的組成部分</value>
     </property>
-    <property key="ServicesRESTViewPermissionError">
+    <property key="ServicesRestViewPermissionError">
         <value xml:lang="en">You are not allowed to view this page.</value>
         <value xml:lang="zh">不允许你浏览这个页面。</value>
         <value xml:lang="zh-TW">不允許您檢視這個頁面.</value>

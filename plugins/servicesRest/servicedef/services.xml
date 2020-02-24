@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -18,18 +18,16 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-<chapter xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0"
-    xmlns:xl="http://www.w3.org/1999/xlink" 
-    xmlns:xi="http://www.w3.org/2001/XInclude"
-    xsi:schemaLocation="http://docbook.org/ns/docbook ../../../applications/content/dtd/docbook.xsd"
-    xmlns="http://docbook.org/ns/docbook">
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+    <description>ServicesRest Services</description>
+    <vendor></vendor>
+    <version>1.0</version>
+
+    <service name="noSyntaxError" engine="interface">
+        <description>
+            Dummy service to prevent empty files and syntax error - Remove when the 1st real service will be added here 
+        </description>
+    </service> 
     
-    <title><anchor xml:id="ServicesREST"/>The ServicesREST Component</title>
-    <section>
-        <title>Introduction</title>
-        <para>
-        </para>
-    </section>
-        <xi:include href="../data/helpdata/HELP_ServicesREST.xml" />
-    
-</chapter>
+</services>

@@ -18,8 +18,14 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-<menus xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ofbiz.apache.org/Widget-Menu" xsi:schemaLocation="http://ofbiz.apache.org/Widget-Menu http://ofbiz.apache.org/dtds/widget-menu.xsd">
-    <menu name="MainAppBar" title="${uiLabelMap.ServicesRESTApplication}" extends="CommonAppBarMenu" extends-resource="component://common/widget/CommonMenus.xml">
-        <menu-item name="main" title="${uiLabelMap.CommonMain}"><link target="main"/></menu-item>
-    </menu>
-</menus>
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
+    <!-- ========================================================= -->
+    <!-- ======================== Defaults ======================= -->
+    <!-- ========================================================= -->
+    <title>Entity of ServicesRest Component</title>
+    <description>None</description>
+    <copyright></copyright>
+    <version></version>
+
+</entitymodel>

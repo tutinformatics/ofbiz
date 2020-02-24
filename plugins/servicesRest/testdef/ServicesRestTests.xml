@@ -18,13 +18,9 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-<entity-engine-xml>
-    <SecurityPermission description="View operations in the ServicesREST Component." permissionId="SERVICESREST_VIEW"/>
-    <SecurityPermission description="Create operations in the ServicesREST Component." permissionId="SERVICESREST_CREATE"/>
-    <SecurityPermission description="Update operations in the ServicesREST Component." permissionId="SERVICESREST_UPDATE"/>
-    <SecurityPermission description="Delete operations in the ServicesREST Component." permissionId="SERVICESREST_DELETE"/>
-    <SecurityPermission description="ALL operations in the ServicesREST Component." permissionId="SERVICESREST_ADMIN"/>
+<test-suite suite-name="ServicesResttests"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/test-suite.xsd">
 
-    <SecurityGroupPermission fromDate="2001-05-13 12:00:00.0" groupId="SUPER" permissionId="SERVICESREST_ADMIN"/>
 
-</entity-engine-xml>
+</test-suite>
