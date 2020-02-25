@@ -24,10 +24,19 @@ public class InvoiceRoute extends BaseRoute {
 
         rest("/api")
                 .get("/invoices")
-                .id("api-users")
+                .id("invoice-get-all")
                 .produces("application/json")
                 .route()
                 .bean(invoiceService, "getInvoices")
+                .endRest();
+
+        rest("/api")
+                .post("/invoice")
+//                .type(InvoicePojo.class)
+                .id("invoice-post")
+                .produces("application/json")
+                .route()
+                .bean(invoiceService, "createInvoice")
                 .endRest();
     }
 }
