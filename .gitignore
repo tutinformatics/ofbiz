@@ -2,6 +2,7 @@ bin/
 build/
 applications/*/build
 framework/*/build
+plugins/ofbizDemo
 runtime/git-rebase/*
 runtime/SvnInfo.ftl
 runtime/GitInfo.ftl
@@ -36,5 +37,3 @@ desktop.ini
 .*.swp
 .*.swo
 *.patch
-
-plugins/ofbizDemo
