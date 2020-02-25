@@ -19,5 +19,6 @@ under the License.
 -->
 
 <entity-engine-xml>
-
+    <CMSExtendedType CMSExtendedTypeId="INTERNAL" description="Internal Demo - Office"/>
+    <CMSExtendedType CMSExtendedTypeId="EXTERNAL" description="External Demo - On Site"/>
 </entity-engine-xml>

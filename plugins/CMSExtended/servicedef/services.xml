@@ -28,6 +28,12 @@ under the License.
         <description>
             Dummy service to prevent empty files and syntax error - Remove when the 1st real service will be added here 
         </description>
-    </service> 
+    </service>
+    <service name="createCMSETest" default-entity-name="CMSExtendedTestForm" engine="entity-auto" invoke="create" auth="true">
+        <description>Create an CMSE TEST record</description>
+        <auto-attributes include="pk" mode="OUT" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="false"/>
+        <override name="comments" optional="true"/>
+    </service>
     
 </services>

@@ -38,10 +38,16 @@ under the License.
         <event name="test" type="java" path="org.apache.ofbiz.webapp.event.TestEvent" invoke="test"/>
     </postprocessor>
     -->
+    <request-map uri="createCMSETest">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createCMSETest"/>
+        <response name="success" type="view" value="main"/>
+    </request-map>
 
     <!-- Request Mappings -->
     <request-map uri="main"><security https="true" auth="true"/><response name="success" type="view" value="main"/></request-map>
     
     <!-- View Mappings -->
     <view-map name="main" type="screen" page="component://CMSExtended/widget/CMSExtendedScreens.xml#main"/>
+
 </site-conf>

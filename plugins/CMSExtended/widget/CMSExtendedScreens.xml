@@ -27,8 +27,11 @@ under the License.
                 <set field="headerItem" value="main"/><!-- this highlights the selected menu-item with name "main" -->
             </actions>
             <widgets>
-                <decorator-screen name="CMSExtendedCommonDecorator" location="${parameters.mainDecoratorLocation}">
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
+                        <screenlet title="TEST ADDING CMS EXTENDED FORM">
+                            <include-form name="CMSExtendedTestForm" location="component://CMSExtended/widget/CMSExtendedForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
