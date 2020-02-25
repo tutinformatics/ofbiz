@@ -11,6 +11,8 @@ services:
       - "8443:8443"
       - "8080:8080"
       - "1099:1099"
+      - "4567:4567"  # sparkle for REST api
+
 #    depends_on:
 #      - citus
 
