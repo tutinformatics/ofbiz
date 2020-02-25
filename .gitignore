@@ -20,6 +20,7 @@ runtime/indexes/products/
 applications/content/index/
 
 !plugins/accountingConnector
+!plugins/elukaarPlugin
 changelog
 .classpath
 .project
