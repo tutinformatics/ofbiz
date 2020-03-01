@@ -11,7 +11,7 @@ public class Routes extends RouteBuilder {
     private ContactsListService contactsListService;
 
     public Routes(LocalDispatcher localDispatcher) {
-        this.localDispatcher =git  localDispatcher;
+        this.localDispatcher = localDispatcher;
         contactsListService = new ContactsListService(this.localDispatcher.getDispatchContext());
     }
 
