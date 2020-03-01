@@ -50,7 +50,7 @@ under the License.
     <request-map uri="getContactsList">
         <security https="true" auth="false"/>
 <!--        <event type="service" invoke="getContactsListService"/>-->
-        <event type="java" path="main.java.ee.taltech.services.ContactsListService" invoke="getContactsList"/>
+        <event type="java" path="main.java.ee.taltech.services.ContactsListService" invoke="getContactList"/>
 <!--        <response name="success" type="view" value="FindContacts"/>-->
         <response name="success" type="request" value="json"/>
         <response name="error" type="view" value="main"/>
@@ -63,25 +63,6 @@ under the License.
         <response name="success" type="request" value="json"/>
     </request-map>
 
-    <request-map uri="getContacts">
-        <security https="true" auth="false"/>
-        <event type="service" invoke="getContacts"/>
-        <response name="success" type="request" value="json"/>
-    </request-map>
-
-    <request-map uri="createOfbizDemo">
-        <security https="true" auth="false"/>
-        <event type="service" invoke="createOfbizDemoByJavaService"/>
-        <response name="success" type="request" value="json"/>
-        <response name="error" type="request" value="main"/>
-    </request-map>
-
-    <request-map uri="getOfbizDemos">
-        <security https="true" auth="false"/>
-        <event type="service" invoke="getOfbizDemosByJavaService"/>
-        <response name="success" type="request" value="json"/>
-        <response name="error" type="request" value="main"/>
-    </request-map>
     <!-- View Mappings -->
     <view-map name="main" type="screen" page="component://crmClientView/widget/CrmClientViewScreens.xml#main"/>
     <view-map name="FindContacts" type="screen" page="component://marketing/widget/sfa/ContactScreens.xml#FindContacts"/>
