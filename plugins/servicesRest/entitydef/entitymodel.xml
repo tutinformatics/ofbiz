@@ -28,4 +28,157 @@ under the License.
     <copyright></copyright>
     <version></version>
 
+    <entity entity-name="ProductX" package-name="org.apache.ofbiz.servicesRest" title="Custom product entity">
+        <field name="product_id" type="id"></field>
+        <field name="name" type="name"></field>
+        <field name="description" type="description"></field>
+        <field name="sales_price" type="floating-point"></field>
+        <field name="product_type_code" type="id"></field>
+        <prim-key field="product_id"/>
+        <relation type="one" fk-name="PRODX_PROD_TYPE_CODE" rel-entity-name="Product_TypeX">
+            <key-map field-name="product_type_code"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="Product_TypeX" package-name="org.apache.ofbiz.servicesRest" title="Product type">
+        <field name="product_type_code" type="id"></field>
+        <field name="description" type="description"></field>
+        <prim-key field="product_type_code"/>
+    </entity>
+
+    <entity entity-name="Product_ConfigX" package-name="org.apache.ofbiz.servicesRest" title="Product has configuration">
+        <field name="product_id" type="id"></field>
+        <field name="config_id" type="id"></field>
+        <prim-key field="product_id"/>
+        <prim-key field="config_id"/>
+        <relation type="one" fk-name="PRODCONF_PROD_ID" rel-entity-name="ProductX">
+            <key-map field-name="product_id"/>
+        </relation>
+        <relation type="one" fk-name="PRODCONF_CONF_ID" rel-entity-name="ConfigX">
+            <key-map field-name="config_id"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="ConfigX" package-name="org.apache.ofbiz.servicesRest" title="Configuration">
+        <field name="config_id" type="id"></field>
+        <field name="path" type="url"></field>
+        <prim-key field="config_id"/>
+    </entity>
+
+    <entity entity-name="Product_TemplateX" package-name="org.apache.ofbiz.servicesRest" title="Product has template">
+        <field name="product_id" type="id"></field>
+        <field name="template_id" type="id"></field>
+        <prim-key field="product_id"/>
+        <prim-key field="template_id"/>
+        <relation type="one" fk-name="PRODTMPL_PROD_ID" rel-entity-name="ProductX">
+            <key-map field-name="product_id"/>
+        </relation>
+        <relation type="one" fk-name="PRODTMPL_TMPL_ID" rel-entity-name="TemplateX">
+            <key-map field-name="template_id"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="TemplateX" package-name="org.apache.ofbiz.servicesRest" title="Template">
+        <field name="template_id" type="id"></field>
+        <field name="path" type="url"></field>
+        <field name="template_type_code" type="id"></field>
+        <prim-key field="template_id"/>
+        <relation type="one" fk-name="TMPL_TYPE_CODE" rel-entity-name="Template_TypeX">
+            <key-map field-name="template_type_code"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="Template_TypeX" package-name="org.apache.ofbiz.servicesRest" title="Template Type">
+        <field name="template_type_code" type="id"></field>
+        <field name="description" type="description"></field>
+        <prim-key field="template_type_code"/>
+    </entity>
+
+    <entity entity-name="Product_Order_LineX" package-name="org.apache.ofbiz.servicesRest" title="Product Order Line">
+        <field name="product_id" type="id"></field>
+        <field name="order_id" type="id"></field>
+        <field name="quantity" type="numeric"></field>
+        <field name="retailer_id" type="id"></field>
+        <field name="subscription_id" type="id"></field>
+        <prim-key field="product_id"/>
+        <prim-key field="order_id"/>
+        <relation type="one" fk-name="POL_PROD_ID" rel-entity-name="ProductX">
+            <key-map field-name="product_id"/>
+        </relation>
+        <relation type="one" fk-name="POL_ORDR_ID" rel-entity-name="OrderX">
+            <key-map field-name="order_id"/>
+        </relation>
+        <relation type="one" fk-name="POL_RTLR_ID" rel-entity-name="RetailerX">
+            <key-map field-name="retailer_id"/>
+        </relation>
+        <relation type="one" fk-name="POL_SUBS_ID" rel-entity-name="SubscriptionX">
+            <key-map field-name="subscription_id"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="RetailerX" package-name="org.apache.ofbiz.servicesRest" title="Retailer">
+        <field name="retailer_id" type="id"></field>
+        <field name="name" type="name"></field>
+        <field name="description" type="description"></field>
+        <prim-key field="retailer_id"/>
+    </entity>
+
+    <entity entity-name="SubscriptionX" package-name="org.apache.ofbiz.servicesRest" title="Subscription">
+        <field name="subscription_id" type="id"></field>
+        <field name="duration" type="numeric"></field>
+        <field name="users" type="numeric"></field>
+        <prim-key field="subscription_id"/>
+    </entity>
+
+    <entity entity-name="OrderX" package-name="org.apache.ofbiz.servicesRest" title="Order">
+        <field name="order_id" type="id"></field>
+        <field name="order_status_code" type="id"></field>
+        <field name="customer_id" type="id"></field>
+        <field name="delivery_deadline" type="date-time"></field>
+        <prim-key field="order_id"/>
+        <relation type="one" fk-name="ORDR_CSTMR_ID" rel-entity-name="CustomerX">
+            <key-map field-name="customer_id"/>
+        </relation>
+        <relation type="one" fk-name="ORDR_STAT_CODE" rel-entity-name="Order_StatusX">
+        <key-map field-name="order_status_code"/>
+    </relation>
+    </entity>
+
+    <entity entity-name="Order_StatusX" package-name="org.apache.ofbiz.servicesRest" title="Order Status">
+        <field name="order_status_code" type="id"></field>
+        <field name="order_status_description" type="description"></field>
+        <prim-key field="order_status_code"/>
+    </entity>
+
+    <entity entity-name="CustomerX" package-name="org.apache.ofbiz.servicesRest" title="Customer">
+        <field name="customer_id" type="id"></field>
+        <field name="name" type="name"></field>
+        <field name="email" type="email"></field>
+        <field name="address_code" type="id"></field>
+        <field name="password" type="short-varchar"></field>
+        <field name="client_status_code" type="id"></field>
+        <prim-key field="customer_id"/>
+        <relation type="one" fk-name="CSTMR_ADDR_CODE" rel-entity-name="AddressX">
+            <key-map field-name="address_code"/>
+        </relation>
+        <relation type="one" fk-name="CSTMR_STAT_CODE" rel-entity-name="Customer_StatusX">
+            <key-map field-name="client_status_code"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="Customer_StatusX" package-name="org.apache.ofbiz.servicesRest" title="Customer Status">
+        <field name="client_status_code" type="id"></field>
+        <field name="description" type="description"></field>
+        <prim-key field="client_status_code"/>
+    </entity>
+
+    <entity entity-name="AddressX" package-name="org.apache.ofbiz.servicesRest" title="Address">
+        <field name="address_code" type="id"></field>
+        <field name="street" type="short-varchar"></field>
+        <field name="city" type="short-varchar"></field>
+        <field name="country" type="short-varchar"></field>
+        <field name="zip" type="numeric"></field>
+        <prim-key field="address_code"/>
+    </entity>
+
 </entitymodel>
