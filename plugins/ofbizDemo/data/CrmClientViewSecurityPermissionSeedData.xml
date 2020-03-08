@@ -19,8 +19,12 @@ under the License.
 -->
 
 <entity-engine-xml>
-    <OfbizDemo ofbizDemoId="SAMPLE_DEMO_1" ofbizDemoTypeId="INTERNAL" firstName="Sample First 1" lastName="Sample Last 1" comments="This is test comment for first record."/>
-    <OfbizDemo ofbizDemoId="SAMPLE_DEMO_2" ofbizDemoTypeId="INTERNAL" firstName="Sample First 2" lastName="Sample last 2" comments="This is test comment for second record."/>
-    <OfbizDemo ofbizDemoId="SAMPLE_DEMO_3" ofbizDemoTypeId="EXTERNAL" firstName="Sample First 3" lastName="Sample last 3" comments="This is test comment for third record."/>
-    <OfbizDemo ofbizDemoId="SAMPLE_DEMO_4" ofbizDemoTypeId="EXTERNAL" firstName="Sample First 4" lastName="Sample last 4" comments="This is test comment for fourth record."/>
+    <SecurityPermission description="View operations in the CrmClientView Component." permissionId="CRMCLIENTVIEW_VIEW"/>
+    <SecurityPermission description="Create operations in the CrmClientView Component." permissionId="CRMCLIENTVIEW_CREATE"/>
+    <SecurityPermission description="Update operations in the CrmClientView Component." permissionId="CRMCLIENTVIEW_UPDATE"/>
+    <SecurityPermission description="Delete operations in the CrmClientView Component." permissionId="CRMCLIENTVIEW_DELETE"/>
+    <SecurityPermission description="ALL operations in the CrmClientView Component." permissionId="CRMCLIENTVIEW_ADMIN"/>
+
+    <SecurityGroupPermission fromDate="2001-05-13 12:00:00.0" groupId="SUPER" permissionId="CRMCLIENTVIEW_ADMIN"/>
+
 </entity-engine-xml>

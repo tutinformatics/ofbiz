@@ -24,12 +24,12 @@ under the License.
     xsi:schemaLocation="http://docbook.org/ns/docbook ../../../applications/content/dtd/docbook.xsd"
     xmlns="http://docbook.org/ns/docbook">
     
-    <title><anchor xml:id="OfbizDemo"/>The OfbizDemo Component</title>
+    <title><anchor xml:id="CrmClientView"/>The CrmClientView Component</title>
     <section>
         <title>Introduction</title>
         <para>
         </para>
     </section>
-        <xi:include href="../data/helpdata/HELP_OfbizDemo.xml" />
+        <xi:include href="../data/helpdata/HELP_CrmClientView.xml" />
     
 </chapter>

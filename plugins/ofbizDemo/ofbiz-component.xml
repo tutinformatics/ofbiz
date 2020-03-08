@@ -18,24 +18,27 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-<ofbiz-component name="ofbizDemo"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-component.xsd">
+<ofbiz-component name="crmClientView"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-component.xsd">
     <!-- define resource loaders; most common is to use the component resource loader -->
     <resource-loader name="main" type="component"/>
+
+    <container name="camel-container" loaders="main,rmi" class="ee.taltech.services.loader.CamelContainer">
+        <!--<property name="dispatcher-factory" value="org.apache.ofbiz.service.GenericDispatcherFactory"/>-->
+
+        <property name="routes.package" value="org.apache.ofbiz.camel.route"/>
+        <!-- Possible future implementation might read from an XML DSL -->
+        <property name="routeConfigFile" value="config/camel-routes.xml"/>
+        <property name="dispatcher-name" value="camel-dispatcher"/>
+        <property name="delegator-name" value="default"/>
+    </container>
 
     <!-- place the config directory on the classpath to access configuration files -->
     <classpath type="dir" location="config"/>
     <!-- entity resources: model(s), eca(s), group, and data definitions -->
     <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel.xml"/>
     <!-- <entity-resource type="eca" reader-name="main" loader="main" location="entitydef/eecas.xml"/> -->
-    <entity-resource type="data" reader-name="seed" loader="main" location="data/OfbizDemoTypeData.xml"/>
-    <entity-resource type="data" reader-name="seed" loader="main" location="data/OfbizDemoSecurityPermissionSeedData.xml"/>
-    <entity-resource type="data" reader-name="demo" loader="main" location="data/OfbizDemoSecurityGroupDemoData.xml"/>
-    <entity-resource type="data" reader-name="demo" loader="main" location="data/OfbizDemoDemoData.xml"/>
-    <entity-resource type="data" reader-name="demo" loader="main" location="data/ContactDemoData.xml"/>
-    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/PartySeedData.xml"/>
-    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/PartySeedData.xml"/>
 
     <!-- service resources: model(s), eca(s) and group definitions -->
     <service-resource type="model" loader="main" location="servicedef/services.xml"/>
@@ -44,13 +47,13 @@ under the License.
     <service-resource type="group" loader="main" location="servicedef/groups.xml"/>
     -->
 
-    <test-suite loader="main" location="testdef/OfbizDemoTests.xml"/>
+    <test-suite loader="main" location="testdef/CrmClientViewTests.xml"/>
 
     <!-- web applications; will be mounted when using the embedded container -->
-    <webapp name="ofbizDemo"
-        title="OfbizDemo"
-        server="default-server"
-        location="webapp/ofbizDemo"
-        base-permission="OFBTOOLS,OFBIZDEMO"
-        mount-point="/ofbizDemo"/>
+    <webapp name="crmClientView"
+            title="CrmClientView"
+            server="default-server"
+            location="webapp/crmClientView"
+            base-permission="OFBTOOLS,CRMCLIENTVIEW"
+            mount-point="/crmClientView"/>
 </ofbiz-component>

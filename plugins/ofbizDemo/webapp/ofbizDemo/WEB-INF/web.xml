@@ -19,17 +19,17 @@ under the License.
 -->
 
 <web-app version="4.0" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
-    <display-name>Apache OFBiz - OfbizDemo Component</display-name>
-    <description>OfbizDemo Component of the Apache OFBiz Project</description>
+    <display-name>Apache OFBiz - CrmClientView Component</display-name>
+    <description>CrmClientView Component of the Apache OFBiz Project</description>
 
     <!-- context-param>
         <param-name>webSiteId</param-name>
-        <param-value>ofbizDemoSite</param-value>
+        <param-value>crmClientViewSite</param-value>
         <description>A unique ID used to look up the WebSite entity. Only for component using a WebSite entity, like ecommerce</description>
     </context-param-->
     <context-param>
         <description>A unique name used to identify/recognize the local dispatcher for the Service Engine</description>
-        <param-name>localDispatcherName</param-name><param-value>ofbizDemo</param-value>
+        <param-name>localDispatcherName</param-name><param-value>crmClientView</param-value>
     </context-param>
     <context-param>
         <description>The Name of the Entity Delegator to use, defined in entityengine.xml</description>
@@ -38,7 +38,7 @@ under the License.
     <context-param>
         <description>The location of the main-decorator screen to use for this webapp; referred to as a context variable in screen def XML files.</description>
         <param-name>mainDecoratorLocation</param-name>
-        <param-value>component://ofbizDemo/widget/CommonScreens.xml</param-value>
+        <param-value>component://crmClientView/widget/CommonScreens.xml</param-value>
     </context-param>
     <context-param>
         <description>Remove unnecessary whitespace from HTML output.</description>
