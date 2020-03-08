@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+
+  ofbiz:
+    container_name: ofbiz
+    build:
+      context: .
+    restart: unless-stopped
+    ports:
+      - "8443:8443"
+      - "8080:8080"
+      - "1099:1099"
+      - "4567:4567"
+
