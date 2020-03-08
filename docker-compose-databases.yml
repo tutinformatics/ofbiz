@@ -104,7 +104,7 @@ services:
     ports: ["${MASTER_EXTERNAL_PORT:-5432}:5432"]
     labels: ['com.citusdata.role=Master']
     volumes:
-      - ../docker-postgresql-multiple-databases:/docker-entrypoint-initdb.d
+      - ./docker-postgresql-multiple-databases:/docker-entrypoint-initdb.d
     environment:
       - POSTGRES_MULTIPLE_DATABASES=ofbiz,ofbizolap,ofbiztenant
       - POSTGRES_USER=${POSTGRES_USER:-ofbiz}
@@ -115,7 +115,7 @@ services:
     restart: unless-stopped
     labels: ['com.citusdata.role=Worker']
     volumes:
-      - ../docker-postgresql-multiple-databases:/docker-entrypoint-initdb.d
+      - ./docker-postgresql-multiple-databases:/docker-entrypoint-initdb.d
     environment:
       - POSTGRES_MULTIPLE_DATABASES=ofbiz,ofbizolap,ofbiztenant
       - POSTGRES_USER=${POSTGRES_USER:-ofbiz}
@@ -129,7 +129,7 @@ services:
     image: 'citusdata/membership-manager:latest'
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ../docker-postgresql-multiple-databases:/docker-entrypoint-initdb.d
+      - ./docker-postgresql-multiple-databases:/docker-entrypoint-initdb.d
     environment:
       - POSTGRES_MULTIPLE_DATABASES=ofbiz,ofbizolap,ofbiztenant
       - POSTGRES_USER=${POSTGRES_USER:-ofbiz}
