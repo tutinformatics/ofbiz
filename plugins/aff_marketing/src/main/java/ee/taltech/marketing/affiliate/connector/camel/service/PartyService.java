@@ -2,6 +2,8 @@ package ee.taltech.marketing.affiliate.connector.camel.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.apache.camel.Exchange;
+import org.apache.camel.component.sparkrest.SparkMessage;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
@@ -31,7 +33,9 @@ public class PartyService {
     public static final String module = PartyService.class.getName();
 
     // alternative way
-    public String getAdminParties() {
+    public String getAdminParties(Exchange exchange) {
+        SparkMessage msg = (SparkMessage) exchange.getIn();
+        Map<String, String> params = msg.getRequest().params();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
         DispatchContext myContext = new DispatchContext("myContext", null, dispather);

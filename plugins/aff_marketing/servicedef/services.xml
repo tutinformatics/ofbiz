@@ -25,7 +25,7 @@ under the License.
     <version>1.0</version>
 
     <service name="getPartiesService" default-entity-name="Party" engine="java"
-             location="PartyService" invoke="getParties" auth="true">
+             location="PartyService" invoke="getAdminParties" auth="true">
         <description>Get Parties</description>
         <attribute mode="IN" name="body" optional="true" type="Object"/>
         <override name="comments" optional="true"/>
