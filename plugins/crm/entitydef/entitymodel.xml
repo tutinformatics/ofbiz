@@ -23,16 +23,53 @@ under the License.
     <!-- ========================================================= -->
     <!-- ======================== Defaults ======================= -->
     <!-- ========================================================= -->
-    <title>Entity of Crm Component</title>
+    <title>Entity of crmPipeline Component</title>
     <description>None</description>
     <copyright></copyright>
     <version></version>
 
-    <entity entity-name="Contact" package-name="org.apache.ofbiz.ofbizdemo" title="Contact entity">
-        <field name="contactId" type="id"><description>primary sequenced ID</description></field>
-        <field name="firstName" type="name"></field>
-        <field name="lastName" type="name"></field>
-        <prim-key field="contactId"/>
+
+    <entity entity-name="pipeline" package-name="org.apache.ofbiz.crmPipeline" title="pipeline Type Entity">
+        <field name="pipelineId" type="id"/>
+        <field name="userId" type="id"/>
+        <prim-key field="pipelineId"/>
+    </entity>
+
+    <entity entity-name="agent" package-name="org.apache.ofbiz.crmPipeline" title="Agent Type Entity">
+        <field name="agentId" type="id"/>
+        <field name="name" type="name"/>
+        <field name="telecomNumber" type="numeric"/>
+        <field name="emailAddress" type="name"/>
+        <prim-key field="agentId"/>
+    </entity>
+
+    <entity entity-name="opportunity" package-name="org.apache.ofbiz.crmPipeline" title="opportunity Type entity">
+        <field name="opportunityId" type="id"/>
+        <field name="pipelineId" type="id"/>
+        <field name="customerId" type="id"/>
+        <field name="contactId" type="id"/>
+        <field name="agentId" type="id"/>
+        <field name="name" type="name"/>
+        <field name="description" type="name"/>
+        <field name="stage" type="name"/>
+        <relation type="one" fk-name="PIPELINE_ID" rel-entity-name="pipeline">
+            <key-map field-name="pipelineId"/>
+        </relation>
+        <relation type="one" fk-name="AGENT_ID" rel-entity-name="agent">
+            <key-map field-name="agentId"/>
+        </relation>
+        <prim-key field="opportunityId"/>
+    </entity>
+
+    <entity entity-name="customer" package-name="org.apache.ofbiz.crmPipeline" title="customer Type entity">
+        <field name="customerId" type="id"/>
+        <field name="partyGroup" type="id"/>
+        <field name="postalAddress" type="id"/>
+        <field name="telecomNumber" type="id"/>
+        <field name="emailAadress" type="id"/>
+        <field name="extension" type="name"/>
+        <field name="partyId" type="name"/>
+        <prim-key field="customerId"/>
     </entity>
 
 </entitymodel>
