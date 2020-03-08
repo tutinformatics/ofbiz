@@ -19,21 +19,21 @@ under the License.
 -->
 
 <screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns="http://ofbiz.apache.org/Widget-Screen" xsi:schemaLocation="http://ofbiz.apache.org/Widget-Screen http://ofbiz.apache.org/dtds/widget-screen.xsd">
+         xmlns="http://ofbiz.apache.org/Widget-Screen" xsi:schemaLocation="http://ofbiz.apache.org/Widget-Screen http://ofbiz.apache.org/dtds/widget-screen.xsd">
 
     <screen name="main-decorator">
         <section>
             <actions>
-                <property-map resource="OfbizDemoUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="CrmClientViewUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
 
-                <set field="layoutSettings.companyName" from-field="uiLabelMap.OfbizDemoCompanyName" global="true"/>
-                <set field="layoutSettings.companySubtitle" from-field="uiLabelMap.OfbizDemoCompanySubtitle" global="true"/>
+                <set field="layoutSettings.companyName" from-field="uiLabelMap.CrmClientViewCompanyName" global="true"/>
+                <set field="layoutSettings.companySubtitle" from-field="uiLabelMap.CrmClientViewCompanySubtitle" global="true"/>
 
-                <set field="activeApp" value="ofbizDemo" global="true"/>
+                <set field="activeApp" value="crmClientView" global="true"/>
                 <set field="applicationMenuName" value="MainAppBar" global="true"/>
-                <set field="applicationMenuLocation" value="component://ofbizDemo/widget/OfbizDemoMenus.xml" global="true"/>
-                <set field="applicationTitle" from-field="uiLabelMap.OfbizDemoApplication" global="true"/>
+                <set field="applicationMenuLocation" value="component://crmClientView/widget/CrmClientViewMenus.xml" global="true"/>
+                <set field="applicationTitle" from-field="uiLabelMap.CrmClientViewApplication" global="true"/>
             </actions>
             <widgets>
                 <include-screen name="GlobalDecorator" location="component://common/widget/CommonScreens.xml"/>
@@ -41,7 +41,7 @@ under the License.
         </section>
     </screen>
 
-    <screen name="OfbizDemoCommonDecorator">
+    <screen name="CrmClientViewCommonDecorator">
         <section>
             <actions>
             </actions>
@@ -50,13 +50,13 @@ under the License.
                     <decorator-section name="body">
                         <section>
                             <condition>
-                                <if-has-permission permission="OFBIZDEMO" action="_VIEW"/>
+                                <if-has-permission permission="CRMCLIENTVIEW" action="_VIEW"/>
                             </condition>
                             <widgets>
                                 <decorator-section-include name="body"/>
                             </widgets>
                             <fail-widgets>
-                                <label style="h3">${uiLabelMap.OfbizDemoViewPermissionError}</label>
+                                <label style="h3">${uiLabelMap.CrmClientViewViewPermissionError}</label>
                             </fail-widgets>
                         </section>
                     </decorator-section>

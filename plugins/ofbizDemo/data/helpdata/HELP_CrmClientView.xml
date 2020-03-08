@@ -18,13 +18,12 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-<entity-engine-xml>
-    <SecurityPermission description="View operations in the OfbizDemo Component." permissionId="OFBIZDEMO_VIEW"/>
-    <SecurityPermission description="Create operations in the OfbizDemo Component." permissionId="OFBIZDEMO_CREATE"/>
-    <SecurityPermission description="Update operations in the OfbizDemo Component." permissionId="OFBIZDEMO_UPDATE"/>
-    <SecurityPermission description="Delete operations in the OfbizDemo Component." permissionId="OFBIZDEMO_DELETE"/>
-    <SecurityPermission description="ALL operations in the OfbizDemo Component." permissionId="OFBIZDEMO_ADMIN"/>
+<section xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="5.0"
+    xmlns:xl="http://www.w3.org/1999/xlink" 
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xsi:schemaLocation="http://docbook.org/ns/docbook ../../../content/dtd/docbook.xsd"
+    xmlns="http://docbook.org/ns/docbook">
+    <title>CrmClientView  Overview</title>
+    <para>The CrmClientView Help file template.</para>
+</section>
 
-    <SecurityGroupPermission fromDate="2001-05-13 12:00:00.0" groupId="SUPER" permissionId="OFBIZDEMO_ADMIN"/>
-
-</entity-engine-xml>
