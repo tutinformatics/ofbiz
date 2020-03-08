@@ -1,6 +1,7 @@
 package main.java.ee.taltech.services.route;
 
 import main.java.ee.taltech.services.ContactsListService;
+import main.java.ee.taltech.services.SalesOpportunityService;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.ofbiz.service.LocalDispatcher;
@@ -9,10 +10,12 @@ public class Routes extends RouteBuilder {
     LocalDispatcher localDispatcher;
 
     private ContactsListService contactsListService;
+    private SalesOpportunityService salesOpportunityService;
 
     public Routes(LocalDispatcher localDispatcher) {
         this.localDispatcher = localDispatcher;
         contactsListService = new ContactsListService(this.localDispatcher.getDispatchContext());
+        salesOpportunityService = new SalesOpportunityService(this.localDispatcher.getDispatchContext());
     }
 
     @Override
@@ -28,6 +31,13 @@ public class Routes extends RouteBuilder {
                 .produces("application/json")
                 .route()
                 .bean(contactsListService, "getContactList()")
+                .endRest();
+        //SalesOpportunity
+        rest("/api")
+                .get("/salesopportunity")
+                .produces("application/json")
+                .route()
+                .bean(salesOpportunityService, "getSalesOpportunityList()")
                 .endRest();
     }
 }
