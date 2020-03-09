@@ -52,11 +52,6 @@ public class Converters implements ConverterLoader {
             super(JSON.class, GenericValue.class);
         }
 
-        // very bad, don't ever use it
-        public GenericValue convert(String entityName, JSON obj) throws ConversionException {
-            return convert("default", entityName, obj);
-        }
-
         public GenericValue convert(String delegatorName, String entityName, JSON obj) throws ConversionException {
             JSONObject node;
             node = new JSONObject(obj.toString());
