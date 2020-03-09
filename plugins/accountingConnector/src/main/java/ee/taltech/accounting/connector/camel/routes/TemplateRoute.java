@@ -33,10 +33,10 @@ public class TemplateRoute extends BaseRoute {
                 .bean(templateService, "getInvoices")
                 .endRest();
 
-        // enables POST on /api/invoice, could write POJOs for entities, but it's really discouraged
+        // enables POST on /api/invoice, could write POJOs for entities if needed for some reason
         // just convert it to genericvalue
         rest("/api")
-                .post("/invoice")
+                .post("/invoices")
 //                .type(InvoicePojo.class)
                 .id("invoice-post")
                 .produces("application/json")

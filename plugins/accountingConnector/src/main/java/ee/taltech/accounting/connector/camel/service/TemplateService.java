@@ -26,21 +26,6 @@ public class TemplateService {
 		this.delegator = delegator;
 	}
 
-	//@Deprecated
-    /*public Map<String, Object> getInvoices(DispatchContext dctx, Map<String, ?> context) {
-        Delegator delegator = dctx.getDelegator();
-        try {
-            List<GenericValue> orderItems = EntityQuery.use(delegator)
-                    .from("Invoice")
-                    .queryList();
-            System.out.println(orderItems);
-        } catch (GenericEntityException e) {
-            e.printStackTrace();
-        }
-
-        return ServiceUtil.returnSuccess();
-    }*/
-
 	/**
 	 * Example service of how to use a GET request.
 	 *
@@ -83,12 +68,16 @@ public class TemplateService {
 	 */
 	public Response createInvoice(String json) {
 		try {
+			// uses custom method in the converter class that takes in delegator name, entity name and json
+			// and spits out a GenericValue.
+			// The converter "default" method with just GenericValue input wants the object to contain
+			// _ENTITY_NAME_ and _DELEGATOR_NAME_ fields to be able to do the conversion.
+			GenericValue object = jsonToGenericConverter.convert(delegator.getDelegatorName(), "Invoice", JSON.from(json));
+			// incrementing the primary key ID, ofbiz takes care of it if PK is just one field
+			object.setNextSeqId();
 			// uses delegator's create() method that takes in a GenericValue and saves it into DB
-			delegator.create(
-					// uses custom method in the converter class that takes in delegator name, entity name and json
-					// and spits out a GenericValue.
-					jsonToGenericConverter.convert(delegator.getDelegatorName(), "Invoice", JSON.from(json))
-			);
+			// it knows where to save it because genericvalue object knows what entity it is and what delegator it must use
+			delegator.create(object);
 			return Response.ok().type("application/json").build();
 		} catch (GenericEntityException | ConversionException e) {
 			e.printStackTrace();
