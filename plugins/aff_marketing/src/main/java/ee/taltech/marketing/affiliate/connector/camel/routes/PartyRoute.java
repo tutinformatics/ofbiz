@@ -22,10 +22,17 @@ public class PartyRoute extends BaseRoute {
                 .bindingMode(RestBindingMode.auto);
 
         rest("/api")
-                .get("/parties/{party}")
+                .get("/parties/find-by-id/{id}")
                 .produces("application/json")
                 .route()
-                .bean(partyService, "getAdminParties")
+                .bean(partyService, "getPartyById")
+                .endRest();
+
+        rest("/api")
+                .get("/parties/affiliate/create")
+                .produces("application/json")
+                .route()
+                .bean(partyService, "createAffiliate")
                 .endRest();
     }
 }
