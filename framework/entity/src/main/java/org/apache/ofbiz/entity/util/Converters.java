@@ -52,6 +52,7 @@ public class Converters implements ConverterLoader {
             super(JSON.class, GenericValue.class);
         }
 
+        // very bad, don't ever use it
         public GenericValue convert(String entityName, JSON obj) throws ConversionException {
             return convert("default", entityName, obj);
         }
@@ -96,6 +97,15 @@ public class Converters implements ConverterLoader {
     public static class GenericValueToJSON extends AbstractConverter<GenericValue, JSON> {
         public GenericValueToJSON() {
             super(GenericValue.class, JSON.class);
+        }
+
+        public JSON convertNoNames(GenericValue obj) throws ConversionException {
+            Map<String, Object> fieldMap = new HashMap<>(obj);
+            try {
+                return JSON.from(fieldMap);
+            } catch (IOException e) {
+                throw new ConversionException(e);
+            }
         }
 
         @Override
