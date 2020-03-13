@@ -18,12 +18,13 @@ public class InvoiceRoute extends BaseRoute {
     public void configure() {
         restConfiguration("rest-api")
                 .component("restlet")
-                .host("localhost")
+                .host("127.0.0.1")
                 .port("4567")
-                .bindingMode(RestBindingMode.auto);
+                .setEnableCORS(true);
 
         rest("/api")
                 .get("/invoices")
+                .enableCORS(true)
                 .id("api-users")
                 .produces("application/json")
                 .route()
