@@ -1,7 +1,6 @@
 package ee.taltech.accounting.connector.camel.routes;
 
 import ee.taltech.accounting.connector.camel.service.InvoiceService;
-import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.ofbiz.service.LocalDispatcher;
 
 public class InvoiceRoute extends BaseRoute {
@@ -29,6 +28,15 @@ public class InvoiceRoute extends BaseRoute {
                 .produces("application/json")
                 .route()
                 .bean(invoiceService, "getInvoices")
+                .endRest();
+
+        rest("/api")
+                .post("/invoice")
+                .enableCORS(true)
+                .id("invoice-post")
+                .produces("application/json")
+                .route()
+                .bean(invoiceService, "createInvoice")
                 .endRest();
     }
 }
