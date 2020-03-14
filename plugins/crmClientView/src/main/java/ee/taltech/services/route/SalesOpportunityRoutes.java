@@ -6,15 +6,14 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.ofbiz.service.LocalDispatcher;
 
-public class Routes extends RouteBuilder {
+public class SalesOpportunityRoutes extends RouteBuilder {
     LocalDispatcher localDispatcher;
 
     private ContactsListService contactsListService;
     private SalesOpportunityService salesOpportunityService;
 
-    public Routes(LocalDispatcher localDispatcher) {
+    public SalesOpportunityRoutes(LocalDispatcher localDispatcher) {
         this.localDispatcher = localDispatcher;
-        contactsListService = new ContactsListService(this.localDispatcher.getDispatchContext());
         salesOpportunityService = new SalesOpportunityService(this.localDispatcher.getDispatchContext());
     }
 
@@ -26,13 +25,6 @@ public class Routes extends RouteBuilder {
                 .port(7463)
                 .bindingMode(RestBindingMode.json);
 
-        rest("/api")
-                .get("/contact")
-                .produces("application/json")
-                .route()
-                .bean(contactsListService, "getContactList()")
-                .endRest();
-        //SalesOpportunity
         rest("/api")
                 .get("/salesopportunity")
                 .produces("application/json")
