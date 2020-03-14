@@ -46,13 +46,18 @@ under the License.
         <response name="success" type="view" value="main"/>
     </request-map>
 
-    <request-map uri="getWorkEfforts">
-        <security https="true" auth="true"/>
-        <event type="service" invoke="getWorkEffortsService"/>
-        <response name="success" type="view" value="main"/>
+   <request-map uri="WorkEfforts">
+       <security https="true" auth="true"/>
+        <!-- <event type="service" invoke="getWorkEffortsService"/>-->
+        <response name="success" type="view" value="WorkEfforts"/>
     </request-map>
 
-    <!-- View Mappings -->
+ <!-- View Mappings -->
     <view-map name="main" type="screen"
               page="component://manufacturingWarehouse/widget/ManufacturingWarehouseScreens.xml#main"/>
+
+
+   <view-map name="WorkEfforts" type="screen"
+             page="component://manufacturingWarehouse/widget/ManufacturingWarehouseScreens.xml#WorkEfforts"/>
+
 </site-conf>
