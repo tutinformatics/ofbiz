@@ -47,8 +47,6 @@ under the License.
         <field name="estimatedSetupMillis" title="${uiLabelMap.estimatedSetupMillis}"><display/></field>
 
 
-
-
     </form>
 
 </forms>
