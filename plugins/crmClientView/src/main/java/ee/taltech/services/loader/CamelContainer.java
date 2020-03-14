@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package main.java.ee.taltech.services.loader;
+package ee.taltech.services.loader;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
