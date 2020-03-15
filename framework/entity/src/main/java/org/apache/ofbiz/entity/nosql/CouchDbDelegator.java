@@ -552,4 +552,5 @@ public class CouchDbDelegator extends GenericNoSqlDelegator {
   public boolean useDistributedCacheClear() {
     return false;
   }
+
 }
