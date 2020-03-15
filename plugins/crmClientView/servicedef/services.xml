@@ -33,6 +33,13 @@ under the License.
 
 
     <!--    added-->
+
+    <service name="createContactService" default-entity-name="Contact" engine="entity-auto" invoke="create" auth="false">
+        <description>Create a contact record</description>
+        <override name="name" optional="true"/>
+    </service>
+
+
     <!--
     <service name="getContactListService" default-entity-name="ContactList" engine="java"
              location="java.ee.taltech.services.ContactsListService" invoke="getContactList" auth="false">
@@ -54,10 +61,7 @@ under the License.
         <auto-attributes include="pk" mode="OUT" optional="false"/>
         <auto-attributes include="nonpk" mode="IN" optional="false"/>
     </service>
-    <service name="createContact" default-entity-name="Contact" engine="entity-auto" invoke="create" auth="false">
-        <description>Create a contact record</description>
-        <override name="name" optional="true"/>
-    </service>
+
 
     <service name="getOfbizDemosByJavaService" default-entity-name="OfbizDemo" engine="java"
                  location="java.ee.taltech.services.ContactsListService" invoke="getOfbizDemos" auth="false">
