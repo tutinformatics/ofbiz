@@ -16,10 +16,7 @@ import org.apache.ofbiz.service.GenericDispatcherFactory;
 import org.apache.ofbiz.service.LocalDispatcher;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class PartyService {
 
@@ -60,8 +57,11 @@ public class PartyService {
         Map<String, Object> context = new HashMap<>();
         AttributeWithId attributeWithId = getValueFromBody(exchange, AttributeWithId.class);
         context.put("partyId", attributeWithId.getPartyId());
+        context.put("locale", Locale.ENGLISH);
         return gson.toJson(PartyServices.createAffiliate(myContext, context));
     }
+
+
 
     // an alternative way of fetching data
     public String getParties() {
