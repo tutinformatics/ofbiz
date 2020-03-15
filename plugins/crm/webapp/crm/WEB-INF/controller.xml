@@ -7,9 +7,7 @@ regarding copyright ownership.  The ASF licenses this file
 to you under the Apache License, Version 2.0 (the
 "License"); you may not use this file except in compliance
 with the License.  You may obtain a copy of the License at
-
 http://www.apache.org/licenses/LICENSE-2.0
-
 Unless required by applicable law or agreed to in writing,
 software distributed under the License is distributed on an
 "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -19,7 +17,7 @@ under the License.
 -->
 
 <site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns="http://ofbiz.apache.org/Site-Conf" xsi:schemaLocation="http://ofbiz.apache.org/Site-Conf http://ofbiz.apache.org/dtds/site-conf.xsd">
+           xmlns="http://ofbiz.apache.org/Site-Conf" xsi:schemaLocation="http://ofbiz.apache.org/Site-Conf http://ofbiz.apache.org/dtds/site-conf.xsd">
     <!-- The controller elements that are common to all OFBiz components
          can be found in the following xml file. A component can override the
          elements found in the common-controller.xml file. -->
@@ -49,14 +47,14 @@ under the License.
 
     <request-map uri="getContactsList">
         <security https="true" auth="false"/>
-<!--        <event type="service" invoke="getContactsListService"/>-->
-        <event type="java" path="main.java.ee.taltech.services.ContactsService" invoke="getContactList"/>
-<!--        <response name="success" type="view" value="FindContacts"/>-->
+        <!--        <event type="service" invoke="getContactsListService"/>-->
+        <event type="java" path="com.taltech.crm.services.ContactsService" invoke="getContactList"/>
+        <!--        <response name="success" type="view" value="FindContacts"/>-->
         <response name="success" type="request" value="json"/>
         <response name="error" type="view" value="main"/>
     </request-map>
 
-<!--    ADDED-->
+    <!--    ADDED-->
     <request-map uri="createContact">
         <security https="true" auth="false"/>
         <event type="service" invoke="createContact"/>
@@ -64,7 +62,7 @@ under the License.
     </request-map>
 
     <!-- View Mappings -->
-    <view-map name="main" type="screen" page="component://crmClientView/widget/CrmClientViewScreens.xml#main"/>
+    <view-map name="main" type="screen" page="component://crm/widget/CrmScreens.xml#main"/>
     <view-map name="FindContacts" type="screen" page="component://marketing/widget/sfa/ContactScreens.xml#FindContacts"/>
 
 </site-conf>

@@ -9,7 +9,6 @@ import java.util.List;
 
 public class AgentService {
 
-
     private DispatchContext dctx;
     private Delegator delegator;
 

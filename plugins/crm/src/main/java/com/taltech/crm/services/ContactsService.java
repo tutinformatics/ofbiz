@@ -8,7 +8,6 @@ import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.ServiceUtil;
 
 import java.util.List;
-import java.util.Map;
 
 public class ContactsService {
 

@@ -29,13 +29,13 @@ under the License.
     <version></version>
 
 
-    <entity entity-name="pipeline" package-name="org.apache.ofbiz.crmPipeline" title="pipeline Type Entity">
+    <entity entity-name="pipeline" package-name="org.apache.ofbiz.crm" title="pipeline Type Entity">
         <field name="pipelineId" type="id"/>
         <field name="userId" type="id"/>
         <prim-key field="pipelineId"/>
     </entity>
 
-    <entity entity-name="agent" package-name="org.apache.ofbiz.crmPipeline" title="Agent Type Entity">
+    <entity entity-name="agent" package-name="org.apache.ofbiz.crm" title="Agent Type Entity">
         <field name="agentId" type="id"/>
         <field name="name" type="name"/>
         <field name="telecomNumber" type="numeric"/>
@@ -43,7 +43,7 @@ under the License.
         <prim-key field="agentId"/>
     </entity>
 
-    <entity entity-name="opportunity" package-name="org.apache.ofbiz.crmPipeline" title="opportunity Type entity">
+    <entity entity-name="opportunity" package-name="org.apache.ofbiz.crm" title="opportunity Type entity">
         <field name="opportunityId" type="id"/>
         <field name="pipelineId" type="id"/>
         <field name="customerId" type="id"/>
@@ -61,7 +61,7 @@ under the License.
         <prim-key field="opportunityId"/>
     </entity>
 
-    <entity entity-name="customer" package-name="org.apache.ofbiz.crmPipeline" title="customer Type entity">
+    <entity entity-name="customer" package-name="org.apache.ofbiz.crm" title="customer Type entity">
         <field name="customerId" type="id"/>
         <field name="partyGroup" type="id"/>
         <field name="postalAddress" type="id"/>

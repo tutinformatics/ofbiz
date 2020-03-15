@@ -19,7 +19,4 @@ under the License.
 -->
 
 <entity-engine-xml>
-    <Contact contactId="SAMPLE_DEMO_1" firstName="Siret" lastName="Jorro"/>
-    <Contact contactId="SAMPLE_DEMO_2" firstName="Agris" lastName="Janisk"/>
-    <Contact contactId="SAMPLE_DEMO_3" firstName="Tanel" lastName="Ehatamm"/>
 </entity-engine-xml>

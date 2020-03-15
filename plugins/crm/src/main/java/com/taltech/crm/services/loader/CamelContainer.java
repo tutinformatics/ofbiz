@@ -53,7 +53,7 @@ public class CamelContainer implements Container {
         this.name = name;
         context = createCamelContext();
         ContainerConfig.Configuration cfg = ContainerConfig.getConfiguration(name, configFile);
-        String packageName = ContainerConfig.getPropertyValue(cfg, "package", "ee.taltech.services.route");
+        String packageName = ContainerConfig.getPropertyValue(cfg, "package", "com.taltech.crm.services.route");
         PackageScanClassResolver packageResolver = new DefaultPackageScanClassResolver();
         Set<Class<?>> routesClassesSet = packageResolver.findImplementations(RouteBuilder.class, packageName);
         routesClassesSet.forEach(key -> {
