@@ -977,10 +977,8 @@ public class GenericDelegator implements Delegator {
                 this.saveEntitySyncRemoveInfo(primaryKey);
             }
 
-            if (testMode) {
-                if (removedEntity != null) {
-                    storeForTestRollback(new TestOperation(OperationType.DELETE, removedEntity));
-                }
+            if (testMode && removedEntity != null) {
+                storeForTestRollback(new TestOperation(OperationType.DELETE, removedEntity));
             }
 
             ecaRunner.evalRules(EntityEcaHandler.EV_RETURN, EntityEcaHandler.OP_REMOVE, primaryKey, false);
@@ -1031,11 +1029,8 @@ public class GenericDelegator implements Delegator {
             ecaRunner.evalRules(EntityEcaHandler.EV_CACHE_CLEAR, EntityEcaHandler.OP_REMOVE, value, false);
             this.clearCacheLine(value);
 
-
-            if (testMode) {
-                if (removedValue != null) {
-                    storeForTestRollback(new TestOperation(OperationType.DELETE, removedValue));
-                }
+            if (testMode && removedValue != null) {
+                storeForTestRollback(new TestOperation(OperationType.DELETE, removedValue));
             }
 
             if (saveEntitySyncRemoveInfo) {
@@ -1296,13 +1291,8 @@ public class GenericDelegator implements Delegator {
                 if (!primaryKey.isPrimaryKey()) {
                     throw new GenericModelException("[GenericDelegator.storeAll] One of the passed primary keys is not a valid primary key: " + primaryKey);
                 }
-                GenericValue existing;
-                try {
-                    existing = helper.findByPrimaryKey(primaryKey);
-                } catch (GenericEntityNotFoundException e) {
-                    existing = null;
-                }
 
+                GenericValue existing = getExistingByPrimaryKey(primaryKey, helper);
                 if (existing == null) {
                     if (storeOptions.isCreateDummyFks()) {
                         value.checkFks(true);
@@ -1346,6 +1336,16 @@ public class GenericDelegator implements Delegator {
         }
     }
 
+    private GenericValue getExistingByPrimaryKey(GenericPK primaryKey, GenericHelper helper) throws GenericEntityException {
+        GenericValue existing;
+        try {
+            existing = helper.findByPrimaryKey(primaryKey);
+        } catch (GenericEntityNotFoundException e) {
+            existing = null;
+        }
+        return existing;
+    }
+
     /* (non-Javadoc)
      * @see org.apache.ofbiz.entity.Delegator#removeAll(java.lang.String)
      */
@@ -1363,7 +1363,7 @@ public class GenericDelegator implements Delegator {
             return 0;
         }
 
-        boolean beganTransaction = false;
+        boolean isTransactionBegan = false;
         int numRemoved = 0;
 
         try {
@@ -1374,12 +1374,12 @@ public class GenericDelegator implements Delegator {
                     numRemoved += this.removeByAnd(value.getEntityName(), value.getAllFields());
                 }
             }
-            TransactionUtil.commit(beganTransaction);
+            TransactionUtil.commit(isTransactionBegan);
             return numRemoved;
         } catch (GenericEntityException e) {
             String errMsg = "Failure in removeAll operation: " + e.toString() + ". Rolling back transaction.";
             Debug.logError(e, errMsg, module);
-            TransactionUtil.rollback(beganTransaction, errMsg, e);
+            TransactionUtil.rollback(isTransactionBegan, errMsg, e);
             throw new GenericEntityException(e);
         }
     }
@@ -1417,26 +1417,20 @@ public class GenericDelegator implements Delegator {
             }
         }
 
-        boolean beganTransaction = false;
+        boolean isBeganTransaction = false;
+
         try {
             if (alwaysUseTransaction) {
-                beganTransaction = TransactionUtil.begin();
+                isBeganTransaction = TransactionUtil.begin();
             }
 
             ecaRunner.evalRules(EntityEcaHandler.EV_VALIDATE, EntityEcaHandler.OP_FIND, primaryKey, false);
-
-            GenericHelper helper = getEntityHelper(entityName);
-            GenericValue value = null;
-
             ecaRunner.evalRules(EntityEcaHandler.EV_RUN, EntityEcaHandler.OP_FIND, primaryKey, false);
-            try {
-                value = helper.findByPrimaryKey(primaryKey);
-            } catch (GenericEntityNotFoundException e) {
-            }
+
+            GenericValue value = getGenericValueByPrimaryKey(entityName, primaryKey);
             if (value != null) {
                 value.setDelegator(this);
             }
-
             if (useCache) {
                 if (value != null) {
                     ecaRunner.evalRules(EntityEcaHandler.EV_CACHE_PUT, EntityEcaHandler.OP_FIND, value, false);
@@ -1447,14 +1441,26 @@ public class GenericDelegator implements Delegator {
             }
 
             ecaRunner.evalRules(EntityEcaHandler.EV_RETURN, EntityEcaHandler.OP_FIND, (value == null ? primaryKey : value), false);
-            TransactionUtil.commit(beganTransaction);
+            TransactionUtil.commit(isBeganTransaction);
             return value;
         } catch (GenericEntityException e) {
             String errMsg = "Failure in findOne operation for entity [" + entityName + "]: " + e.toString() + ". Rolling back transaction.";
             Debug.logError(e, errMsg, module);
-            TransactionUtil.rollback(beganTransaction, errMsg, e);
+            TransactionUtil.rollback(isBeganTransaction, errMsg, e);
             throw new GenericEntityException(e);
         }
+    }
+
+    private GenericValue getGenericValueByPrimaryKey(String entityName, GenericPK primaryKey) throws GenericEntityException {
+        GenericHelper helper = getEntityHelper(entityName);
+        GenericValue value = null;
+
+        try {
+            value = helper.findByPrimaryKey(primaryKey);
+        } catch (GenericEntityNotFoundException e) {
+        }
+
+        return value;
     }
 
     /* (non-Javadoc)
