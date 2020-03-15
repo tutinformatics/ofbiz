@@ -92,16 +92,13 @@ public class PartyService {
         affiliateCreateContext.put("locale", Locale.ENGLISH);
         PartyServices.createAffiliate(dispatchCtx, affiliateCreateContext);
 
-
-        String rootPartyId = parseJson("rootPartyId", exchange);
-        if (rootPartyId != null) {
-            try {
-                GenericValue genericValue = EntityQuery.use(delegator).from("Affiliate").where("partyId", userPartyId).queryOne();
-                genericValue.set("RootPartyId", rootPartyId);
-                delegator.store(genericValue);
-            } catch (GenericEntityException e) {
-                Debug.logWarning(e.getMessage(), module);
-            }
+        try {
+            String rootPartyId = parseJson("rootPartyId", exchange);
+            GenericValue genericValue = EntityQuery.use(delegator).from("Affiliate").where("partyId", userPartyId).queryOne();
+            genericValue.set("RootPartyId", rootPartyId);
+            delegator.store(genericValue);
+        } catch (GenericEntityException | NullPointerException e) {
+            Debug.logWarning(e.getMessage(), module);
         }
 
         return gson.toJson(Map.of("status", "ok"));
