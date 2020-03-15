@@ -1,9 +1,9 @@
 package ee.taltech.marketing.affiliate.connector.camel.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import ee.taltech.marketing.affiliate.connector.camel.restResponse.AttributeWithId;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.apache.camel.Exchange;
 import org.apache.camel.component.sparkrest.SparkMessage;
 import org.apache.ofbiz.entity.Delegator;
@@ -14,11 +14,10 @@ import org.apache.ofbiz.party.party.PartyServices;
 import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.GenericDispatcherFactory;
 import org.apache.ofbiz.service.LocalDispatcher;
+import org.apache.ofbiz.service.ServiceUtil;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class PartyService {
@@ -27,15 +26,14 @@ public class PartyService {
     GenericDispatcherFactory genericDispatcherFactory;
     LocalDispatcher dispatcher;
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    private DispatchContext myContext;
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private DispatchContext dispatchCtx;
 
 
     public PartyService(Delegator delegator) {
         this.delegator = delegator;
         this.genericDispatcherFactory = new GenericDispatcherFactory();
         this.dispatcher = genericDispatcherFactory.createLocalDispatcher("myDispatcher", delegator);
-        this.myContext = new DispatchContext("myContext", null, dispatcher);
+        this.dispatchCtx = new DispatchContext("myContext", null, dispatcher);
     }
 
 
@@ -56,29 +54,44 @@ public class PartyService {
         return gson.toJson(PartyServices.findPartyById(myContext, context));
     }
 
-    public String createAffiliate(Exchange exchange) {
-        Map<String, Object> context = new HashMap<>();
-        AttributeWithId attributeWithId = getValueFromBody(exchange, AttributeWithId.class);
-        context.put("partyId", attributeWithId.getPartyId());
-        return gson.toJson(PartyServices.createAffiliate(myContext, context));
-    }
+    /**
+     * @param exchange - http request wrapped by Camel
+     * @return - status of operation
+     */
+    public String createAffiliateForUserLogin(Exchange exchange) throws GenericEntityException {
+        Map<String, Object> affiliateCreateContext = new HashMap<>();
 
-    // an alternative way of fetching data
-    public String getParties() {
-        List<GenericValue> parties = new ArrayList<>();
-        try {
-            parties = EntityQuery.use(delegator)
-                    .from("Party")
-                    .queryList();
-        } catch (GenericEntityException e) {
-            e.printStackTrace();
-            GenericValue error = new GenericValue();
-            error.put("Error", e);
-            parties.add(error);
+        //Retrieve UserLogin via userLoginId
+        String userLoginId = parseJson("userLoginId", exchange);
+        GenericValue currentUserLogin = ServiceUtil.getUserLogin(dispatchCtx, affiliateCreateContext, userLoginId);
+
+        // check type of user's party via partyId
+        String userPartyId = currentUserLogin.getString("partyId");
+        Locale locale = Locale.ENGLISH;
+        GenericValue userParty = EntityQuery
+                .use(delegator)
+                .from("Party")
+                .where("partyId", userPartyId)
+                .queryOne();
+        Map<String, Object> result;
+        if (userParty != null) {
+            if (!"PERSON".equals(userParty.getString("partyTypeId"))){
+                return gson.toJson(Map.of("status","user already has party of another type"));
+            }
+            return gson.toJson(Map.of("status","party of type Person already exists"));
+        } else {
+            Map<String, Object> personCreateContext = new HashMap<>();
+            personCreateContext.put("locale", locale);
+            personCreateContext.put("userLogin", currentUserLogin);
+            result = PartyServices.createPerson(dispatchCtx, personCreateContext);
         }
-        return gson.toJson(parties);
-    }
 
+        // create affiliate by for created/existing party
+        affiliateCreateContext.put("partyId", result.get("partyId"));
+        affiliateCreateContext.put("locale", Locale.ENGLISH);
+        PartyServices.createAffiliate(dispatchCtx, affiliateCreateContext);
+        return gson.toJson(Map.of("status", "ok"));
+    }
 
     /**
      * handled map = Map<ParameterName, ParameterValue>
@@ -97,24 +110,15 @@ public class PartyService {
     }
 
     /**
-     * handled map = Map<ParameterName, ParameterValue>
-     * this map can be found by the following path:
-     * exchange -> in -> request -> params
-     *
-     * @param exchange  - request wrapped by camel
-     * @return value of field
+     * @param property - name of property to retrieve from json
+     * @param exchange - object populated by Camel
+     * @return string value of json property
      */
-    private <T> T getValueFromBody(Exchange exchange, Class<T> valueType) {
+    private String parseJson(String property, Exchange exchange) {
         SparkMessage msg = (SparkMessage) exchange.getIn();
-        T o = null;
-        try {
-            o = objectMapper.readValue(msg.getBody().toString(), valueType);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return o;
+        JsonParser parser = new JsonParser();
+        JsonObject obj = parser.parse(msg.getBody().toString()).getAsJsonObject();
+        return obj.get(property).getAsString();
     }
-
-
 
 }

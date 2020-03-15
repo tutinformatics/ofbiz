@@ -29,10 +29,10 @@ public class PartyRoute extends BaseRoute {
                 .endRest();
 
         rest("/api")
-                .get("/parties/affiliate/create")
+                .post("/parties/affiliate/create")
                 .produces("application/json")
                 .route()
-                .bean(partyService, "createAffiliate")
+                .bean(partyService, "createAffiliateForUserLogin")
                 .endRest();
     }
 }
