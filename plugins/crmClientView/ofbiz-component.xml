@@ -24,7 +24,7 @@ under the License.
     <!-- define resource loaders; most common is to use the component resource loader -->
     <resource-loader name="main" type="component"/>
 
-    <container name="camel-container" loaders="main,rmi" class="main.java.ee.taltech.services.loader.CamelContainer">
+    <container name="camel-container" loaders="main,rmi" class="ee.taltech.services.loader.CamelContainer">
         <!--<property name="dispatcher-factory" value="org.apache.ofbiz.service.GenericDispatcherFactory"/>-->
 
         <property name="routes.package" value="org.apache.ofbiz.camel.route"/>

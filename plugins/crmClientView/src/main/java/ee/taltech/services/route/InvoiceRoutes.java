@@ -1,8 +1,6 @@
-package main.java.ee.taltech.services.route;
+package ee.taltech.services.route;
 
-import main.java.ee.taltech.services.ContactsListService;
-import main.java.ee.taltech.services.InvoiceService;
-import main.java.ee.taltech.services.SalesOpportunityService;
+import ee.taltech.services.InvoiceService;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.ofbiz.service.LocalDispatcher;

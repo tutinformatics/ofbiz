@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package main.java.ee.taltech.services.loader;
+package ee.taltech.services.loader;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
@@ -53,7 +53,7 @@ public class CamelContainer implements Container {
         this.name = name;
         context = createCamelContext();
         ContainerConfig.Configuration cfg = ContainerConfig.getConfiguration(name, configFile);
-        String packageName = ContainerConfig.getPropertyValue(cfg, "package", "main.java.ee.taltech.services.route");
+        String packageName = ContainerConfig.getPropertyValue(cfg, "package", "ee.taltech.services.route");
         PackageScanClassResolver packageResolver = new DefaultPackageScanClassResolver();
         Set<Class<?>> routesClassesSet = packageResolver.findImplementations(RouteBuilder.class, packageName);
         routesClassesSet.forEach(key -> {
