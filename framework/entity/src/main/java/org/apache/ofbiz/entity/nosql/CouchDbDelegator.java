@@ -7,7 +7,6 @@ import org.apache.ofbiz.entity.datasource.GenericHelper;
 import org.apache.ofbiz.entity.datasource.GenericHelperInfo;
 import org.apache.ofbiz.entity.eca.EntityEcaHandler;
 import org.apache.ofbiz.entity.model.*;
-import org.apache.ofbiz.entity.nosql.GenericNoSqlDelegator;
 import org.apache.ofbiz.entity.util.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -16,10 +15,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class CouchDbDelegator extends GenericNoSqlDelegator {
 
@@ -180,7 +176,7 @@ public class CouchDbDelegator extends GenericNoSqlDelegator {
 
   @Override
   public List<GenericValue> findList(String entityName, EntityCondition entityCondition, Set<String> fieldsToSelect, List<String> orderBy, EntityFindOptions findOptions, boolean useCache) throws GenericEntityException {
-    return null;
+    return new ArrayList<>();
   }
 
   @Override
