@@ -25,11 +25,32 @@ public class Routes extends RouteBuilder {
                 .enableCORS(true)
                 .corsHeaderProperty("Access-Control-Allow-Origin","*");
 
-        rest("/api")
-                .get("/product")
-                    .produces("application/json")
-                    .route()
-                    .bean(productService, "getProductList()")
-                    .endRest();
+        rest("/api/products")
+                .get("/list")
+                .produces("application/json")
+                .route()
+                .bean(productService, "getProductList")
+                .endRest();
+
+        rest("/api/products")
+                .post("/add")
+                .consumes("application/json")
+                .produces("application/json")
+                .route()
+                .bean(productService, "addProduct")
+                .endRest();
+
+        rest("/api/products")
+                .get("/id/{productId}")
+                .produces("application/json")
+                .route()
+                .bean(productService, "getProductById(${header.productId})")
+                .endRest();
+
+        rest("/api/products")
+                .delete("/id/{productId}")
+                .route()
+                .bean(productService, "deleteProduct(${header.productId})")
+                .endRest();
     }
 }
