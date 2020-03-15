@@ -18,16 +18,23 @@ public class ContactRoutes extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         restConfiguration("rest-api")
-                .component("spark-rest")
-                .host("localhost")
-                .port(7463)
-                .bindingMode(RestBindingMode.json);
+            .component("spark-rest")
+            .host("localhost")
+            .port(7463)
+            .bindingMode(RestBindingMode.json);
 
-        rest("/api")
-                .get("/contact")
-                .produces("application/json")
-                .route()
-                .bean(contactsListService, "getContactList()")
-                .endRest();
+            rest("/api").get("/contact")
+                    .produces("application/json")
+                    .route()
+                    .bean(contactsListService, "getContactList")
+                    .endRest();
+
+        rest("/api").get("/contact/{name}")
+                        .produces("application/json")
+                        .route()
+                        .bean(contactsListService, "getContactByFirstName(${header.name})")
+                    .endRest();
+
     }
+
 }
