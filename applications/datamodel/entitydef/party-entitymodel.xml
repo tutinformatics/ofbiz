@@ -1560,7 +1560,11 @@ under the License.
       <field name="siteVisitors" type="comment"></field>
       <field name="dateTimeCreated" type="date-time"></field>
       <field name="dateTimeApproved" type="date-time"></field>
+      <field name="RootPartyId" type="id"></field>
       <prim-key field="partyId"/>
+      <relation type="one" fk-name="ROOT_AFFILIATE_PARTY" rel-entity-name="Affiliate">
+        <key-map field-name="RootPartyId" rel-field-name="partyId"/>
+      </relation>
       <relation type="one" fk-name="AFFILIATE_PARTY" rel-entity-name="Person">
         <key-map field-name="partyId"/>
       </relation>
