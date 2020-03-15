@@ -318,7 +318,7 @@ public class GenericDelegator implements Delegator {
             return;
         }
 
-        Callable<EntityEcaHandler<?>> creator = () -> createEntityEcaHandler();
+        Callable<EntityEcaHandler<?>> creator = this::createEntityEcaHandler;
         FutureTask<EntityEcaHandler<?>> futureTask = new FutureTask<>(creator);
         if (this.entityEcaHandler.compareAndSet(null, futureTask)) {
             // This needs to use BATCH, as the service engine might add it's own items into a thread pool.
@@ -335,10 +335,10 @@ public class GenericDelegator implements Delegator {
             String entityEcaHandlerClassName = this.delegatorInfo.getEntityEcaHandlerClassName();
 
             try {
-                Class<?> eecahClass = loader.loadClass(entityEcaHandlerClassName);
-                EntityEcaHandler<?> entityEcaHandler = UtilGenerics.cast(eecahClass.getDeclaredConstructor().newInstance());
-                entityEcaHandler.setDelegator(this);
-                return entityEcaHandler;
+                Class<?> eeCahClass = loader.loadClass(entityEcaHandlerClassName);
+                EntityEcaHandler<?> entityEcaHandlerClass = UtilGenerics.cast(eeCahClass.getDeclaredConstructor().newInstance());
+                entityEcaHandlerClass.setDelegator(this);
+                return entityEcaHandlerClass;
             } catch (ReflectiveOperationException e) {
                 Debug.logWarning(e, "EntityEcaHandler class with name " + entityEcaHandlerClassName + " was not found, Entity ECA Rules will be disabled", module);
             } catch (ClassCastException e) {
@@ -604,7 +604,7 @@ public class GenericDelegator implements Delegator {
      * @see org.apache.ofbiz.entity.Delegator#makeValue(java.lang.String, java.util.Map)
      */
     @Override
-    public GenericValue makeValue(String entityName, Map<String, ? extends Object> fields) {
+    public GenericValue makeValue(String entityName, Map<String, ?> fields) {
         ModelEntity entity = this.getModelEntity(entityName);
         if (entity == null) {
             throw new IllegalArgumentException("[GenericDelegator.makeValue] could not find entity for entityName: " + entityName);
@@ -636,7 +636,7 @@ public class GenericDelegator implements Delegator {
      * @see org.apache.ofbiz.entity.Delegator#makeValidValue(java.lang.String, java.util.Map)
      */
     @Override
-    public GenericValue makeValidValue(String entityName, Map<String, ? extends Object> fields) {
+    public GenericValue makeValidValue(String entityName, Map<String, ?> fields) {
         ModelEntity entity = this.getModelEntity(entityName);
         if (entity == null) {
             throw new IllegalArgumentException("[GenericDelegator.makeValidValue] could not find entity for entityName: " + entityName);
@@ -667,7 +667,7 @@ public class GenericDelegator implements Delegator {
      * @see org.apache.ofbiz.entity.Delegator#makePK(java.lang.String, java.util.Map)
      */
     @Override
-    public GenericPK makePK(String entityName, Map<String, ? extends Object> fields) {
+    public GenericPK makePK(String entityName, Map<String, ?> fields) {
         ModelEntity entity = this.getModelEntity(entityName);
         if (entity == null) {
             throw new IllegalArgumentException("[GenericDelegator.makePK] could not find entity for entityName: " + entityName);
