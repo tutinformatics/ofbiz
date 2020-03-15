@@ -17,47 +17,67 @@ import java.util.List;
 public class TemplateService {
 
 	public static final String module = TemplateService.class.getName();
+	// there probably is a slightly better way to do them
+	public static final Converters.JSONToGenericValue jsonToGenericConverter = new Converters.JSONToGenericValue();
+	public static final Converters.GenericValueToJSON genericToJsonConverter = new Converters.GenericValueToJSON();
 	Delegator delegator;
 
 	public TemplateService(Delegator delegator) {
 		this.delegator = delegator;
 	}
 
-	//@Deprecated
-    /*public Map<String, Object> getInvoices(DispatchContext dctx, Map<String, ?> context) {
-        Delegator delegator = dctx.getDelegator();
-        try {
-            List<GenericValue> orderItems = EntityQuery.use(delegator)
-                    .from("Invoice")
-                    .queryList();
-            System.out.println(orderItems);
-        } catch (GenericEntityException e) {
-            e.printStackTrace();
-        }
-
-        return ServiceUtil.returnSuccess();
-    }*/
-
+	/**
+	 * Example service of how to use a GET request.
+	 *
+	 * @return JSON String of Invoice list
+	 * @author probably Tavo
+	 * @see framework/entity/src/main/java/org/apache/ofbiz/entity/util/Converters.java
+	 */
 	public String getInvoices() {
+		// list of GenericValues, which are generic versions of entities
 		List<GenericValue> orderItems = new ArrayList<>();
+		// Gson for converting to json, you can also use built-in genericToJsonConverter, but in that case
+		// a convertNoName method must be used to not get "_DELEGATOR_NAME_" and "_ENTITY_NAME_" fields put onto them
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
 		try {
+			// EntityQuery is a wrapper class for delegator to be able to build nice queries for entities.
+			// The delegator determines which database to connect to, it is defined in the plugin ofbiz-component.xml.
+			// If none is defined there, the "default" will be used.
+			// It isn't something you have to pay attention to, but just know that creating a delegator for "default"
+			// configuration manually is not a good idea. If you need a delegator, you should be able to get it from
+			// somewhere, localdispatcher in this case in templateRoute class.
 			orderItems = EntityQuery.use(delegator)
-					.from("Invoice")
-					.queryList();
+					.from("Invoice")    // "Invoice" is name of the entity defined in datamodel component under applications/
+					.queryList();       // execute
 		} catch (GenericEntityException e) {
 			e.printStackTrace();
 			GenericValue error = new GenericValue();
 			error.put("Error", e);
 			orderItems.add(error);
 		}
+		// convert to json and send them off
 		return gson.toJson(orderItems);
 	}
 
-
+	/**
+	 * POST example
+	 *
+	 * @param json String form of an entity
+	 * @return response to say if success or not
+	 */
 	public Response createInvoice(String json) {
 		try {
-			delegator.create(new Converters.JSONToGenericValue().convert("Invoice", JSON.from(json)));
+			// uses custom method in the converter class that takes in delegator name, entity name and json
+			// and spits out a GenericValue.
+			// The converter "default" method with just GenericValue input wants the object to contain
+			// _ENTITY_NAME_ and _DELEGATOR_NAME_ fields to be able to do the conversion.
+			GenericValue object = jsonToGenericConverter.convert(delegator.getDelegatorName(), "Invoice", JSON.from(json));
+			// incrementing the primary key ID, ofbiz takes care of it if PK is just one field
+			object.setNextSeqId();
+			// uses delegator's create() method that takes in a GenericValue and saves it into DB
+			// it knows where to save it because genericvalue object knows what entity it is and what delegator it must use
+			delegator.create(object);
 			return Response.ok().type("application/json").build();
 		} catch (GenericEntityException | ConversionException e) {
 			e.printStackTrace();
@@ -66,10 +86,5 @@ public class TemplateService {
 
 //		GenericDelegator delegator = (GenericDelegator) DelegatorFactory.getDelegator("default");
 //		LocalDispatcher dispatcher = ServiceDispatcher.getLocalDispatcher("default", delegator);
-
-
-//			delegator.create("Invoice", UtilMisc.toMap("partyIdFrom", "Company", "invoiceTypeId", "SALES_INVOICE", "dueDate", Timestamp.valueOf(LocalDateTime.now()),
-//							"description", "tere", "invoiceDate", Timestamp.valueOf(LocalDateTime.now()), "currencyUomId", "USD", "statusId", "INVOICE_PAID", "invoiceId", "8888", "partyId", "AcctBuyer"));
-
 	}
 }
