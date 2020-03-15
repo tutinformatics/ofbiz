@@ -87,7 +87,7 @@ public class ContactsListService {
             String capitalizedName = name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
 
             EntityCondition condition = EntityCondition.makeCondition(
-                    "firstName", EntityOperator.EQUALS, name);
+                    "firstName", EntityOperator.EQUALS, capitalizedName);
             //delegator.removeByAnd("Person",  UtilMisc.toMap("firstName", capitalizedName));
             delegator.removeByCondition("Person", condition);
 
