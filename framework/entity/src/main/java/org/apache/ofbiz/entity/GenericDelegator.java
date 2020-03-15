@@ -2270,8 +2270,7 @@ public class GenericDelegator implements Delegator {
             } catch (GenericEntityException e) {
                 Debug.logInfo("Entity definition not found for sequence name " + seqName, module);
             }
-            Long newSeqId = sequencer == null ? null : sequencer.getNextSeqId(seqName, staggerMax, seqModelEntity);
-            return newSeqId;
+            return sequencer == null ? null : sequencer.getNextSeqId(seqName, staggerMax, seqModelEntity);
         } catch (Exception e) {
             String errMsg = "Failure in getNextSeqIdLong operation for seqName [" + seqName + "]: " + e.toString() + ". Rolling back transaction.";
             Debug.logError(e, errMsg, module);
