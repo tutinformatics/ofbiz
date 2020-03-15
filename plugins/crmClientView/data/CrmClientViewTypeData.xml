@@ -19,5 +19,6 @@ under the License.
 -->
 
 <entity-engine-xml>
-
+    <OfbizDemoType ofbizDemoTypeId="INTERNAL"/>
+    <OfbizDemoType ofbizDemoTypeId="EXTERNAL"/>
 </entity-engine-xml>

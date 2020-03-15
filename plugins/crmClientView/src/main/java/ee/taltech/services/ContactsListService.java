@@ -16,6 +16,7 @@ import org.apache.ofbiz.service.DispatchContext;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class ContactsListService {
 
@@ -57,6 +58,19 @@ public class ContactsListService {
     }
     */
 
+    public GenericValue createContact(Map<String, Object> data) {
+        try {
+            Optional<GenericValue> product = Converter.mapToGenericValue(delegator, "Product", data);
+            if (product.isPresent()) {
+                product.get().setNextSeqId();
+                delegator.createOrStore(product.get());
+                return product.get();
+            }
+        } catch (GenericEntityException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public List<GenericValue> getContactList() {
         try {
@@ -73,7 +87,7 @@ public class ContactsListService {
             String capitalizedName = name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
 
             EntityCondition condition = EntityCondition.makeCondition(
-                    "firstName", EntityOperator.EQUALS, capitalizedName);
+                    "firstName", EntityOperator.EQUALS, name);
             //delegator.removeByAnd("Person",  UtilMisc.toMap("firstName", capitalizedName));
             delegator.removeByCondition("Person", condition);
 
