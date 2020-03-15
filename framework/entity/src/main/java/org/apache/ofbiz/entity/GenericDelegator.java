@@ -1471,18 +1471,14 @@ public class GenericDelegator implements Delegator {
             EntityEcaRuleRunner<?> ecaRunner = this.getEcaRuleRunner(primaryKey.getEntityName());
             ecaRunner.evalRules(EntityEcaHandler.EV_VALIDATE, EntityEcaHandler.OP_FIND, primaryKey, false);
 
-            GenericHelper helper = getEntityHelper(primaryKey.getEntityName());
-            GenericValue value = null;
-
             if (!primaryKey.isPrimaryKey()) {
                 throw new GenericModelException("[GenericDelegator.findByPrimaryKey] Passed primary key is not a valid primary key: " + primaryKey);
             }
 
+            GenericHelper helper = getEntityHelper(primaryKey.getEntityName());
+            GenericValue value = getGenericValueByPrimaryKeyPartial(primaryKey, keys, helper);
+
             ecaRunner.evalRules(EntityEcaHandler.EV_RUN, EntityEcaHandler.OP_FIND, primaryKey, false);
-            try {
-                value = helper.findByPrimaryKeyPartial(primaryKey, keys);
-            } catch (GenericEntityNotFoundException e) {
-            }
             if (value != null) {
                 value.setDelegator(this);
             }
@@ -1496,6 +1492,15 @@ public class GenericDelegator implements Delegator {
             TransactionUtil.rollback(beganTransaction, errMsg, e);
             throw new GenericEntityException(e);
         }
+    }
+
+    private GenericValue getGenericValueByPrimaryKeyPartial(GenericPK primaryKey,
+                                                            Set<String> keys,
+                                                            GenericHelper helper) throws GenericEntityException {
+        try {
+            return helper.findByPrimaryKeyPartial(primaryKey, keys);
+        } catch (GenericEntityNotFoundException ignored) { }
+        return null;
     }
 
     /** Finds all Generic entities
@@ -1623,7 +1628,7 @@ public class GenericDelegator implements Delegator {
         EntityListIterator eli = helper.findListIteratorByCondition(this, modelViewEntity, whereEntityCondition,
                 havingEntityCondition, fieldsToSelect, orderBy, findOptions);
         eli.setDelegator(this);
-        //TODO: add decrypt fields
+        // TODO: add decrypt fields
         return eli;
     }
 
@@ -1678,7 +1683,7 @@ public class GenericDelegator implements Delegator {
                 beganTransaction = TransactionUtil.begin();
             }
 
-            //TODO: add eca eval calls
+            // TODO: add eca eval calls
             // traverse the relationships
             ModelEntity modelEntity = value.getModelEntity();
             ModelRelation modelRelationOne = modelEntity.getRelation(relationNameOne);
@@ -2065,7 +2070,7 @@ public class GenericDelegator implements Delegator {
     @Override
     public List<GenericValue> readXmlDocument(URL url) throws SAXException, ParserConfigurationException, java.io.IOException {
         if (url == null) {
-            return null;
+            return Collections.emptyList();
         }
         return this.makeValues(UtilXml.readXmlDocument(url, false));
     }
@@ -2076,14 +2081,14 @@ public class GenericDelegator implements Delegator {
     @Override
     public List<GenericValue> makeValues(Document document) {
         if (document == null) {
-            return null;
+            return Collections.emptyList();
         }
         List<GenericValue> values = new LinkedList<>();
 
         Element docElement = document.getDocumentElement();
 
         if (docElement == null) {
-            return null;
+            return Collections.emptyList();
         }
         if (!"entity-engine-xml".equals(docElement.getTagName())) {
             Debug.logError("[GenericDelegator.makeValues] Root node was not <entity-engine-xml>", module);
