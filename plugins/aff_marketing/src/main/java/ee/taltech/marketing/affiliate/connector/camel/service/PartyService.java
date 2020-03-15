@@ -106,13 +106,13 @@ public class PartyService {
      */
     private <T> T getValueFromBody(Exchange exchange, Class<T> valueType) {
         SparkMessage msg = (SparkMessage) exchange.getIn();
-        Object o = null;
+        T o = null;
         try {
             o = objectMapper.readValue(msg.getBody().toString(), valueType);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return (T) o;
+        return o;
     }
 
 
