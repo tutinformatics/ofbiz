@@ -104,8 +104,8 @@ javadoc {
     }
 }
 
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
+sourceCompatibility = '11'
+targetCompatibility = '11'
 
 // Java compile options, syntax gradlew -PXlint:none build
 tasks.withType(JavaCompile) {

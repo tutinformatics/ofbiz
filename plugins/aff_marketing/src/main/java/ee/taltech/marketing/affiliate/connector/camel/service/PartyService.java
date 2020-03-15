@@ -75,7 +75,7 @@ public class PartyService {
                 .from("Party")
                 .where("partyId", userPartyId)
                 .queryOne();
-        Map<String, Object> result;
+
         if (userParty != null) {
             if (!"PERSON".equals(userParty.getString("partyTypeId"))) {
                 return gson.toJson(Map.of("status", "user already has party of another type"));
@@ -85,7 +85,7 @@ public class PartyService {
         Map<String, Object> personCreateContext = new HashMap<>();
         personCreateContext.put("locale", locale);
         personCreateContext.put("userLogin", currentUserLogin);
-        result = PartyServices.createPerson(dispatchCtx, personCreateContext);
+        PartyServices.createPerson(dispatchCtx, personCreateContext);
 
         // create affiliate by for created/existing party
         affiliateCreateContext.put("partyId", userPartyId);
