@@ -41,6 +41,7 @@ import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.ofbiz.base.concurrent.ConstantFuture;
 import org.apache.ofbiz.base.concurrent.ExecutionPool;
 import org.apache.ofbiz.base.util.Debug;
@@ -98,7 +99,9 @@ public class GenericDelegator implements Delegator {
 
     protected ModelReader modelReader = null;
     protected ModelGroupReader modelGroupReader = null;
-    /** This flag is only here for lower level technical testing, it shouldn't be user configurable (or at least I don't think so yet); when true all operations without a transaction will be wrapped in one; seems to be necessary for some (all?) XA aware connection pools, and should improve overall stability and consistency */
+    /** This flag is only here for lower level technical testing, it shouldn't be user configurable (or at least I don't think so yet);
+     *  when true all operations without a transaction will be wrapped in one;
+     *  seems to be necessary for some (all?) XA aware connection pools, and should improve overall stability and consistency */
     public static final boolean alwaysUseTransaction = true;
     // TODO should this is be handled by tenant?
     public static final boolean saveEntitySyncRemoveInfo = UtilProperties.getPropertyAsBoolean("general", "saveEntitySyncRemove", false);
@@ -109,7 +112,6 @@ public class GenericDelegator implements Delegator {
     private String originalDelegatorName = null;
 
     protected DelegatorElement delegatorInfo = null;
-
     protected Cache cache = null;
 
     protected final AtomicReference<Future<DistributedCacheClear>> distributedCacheClear = new AtomicReference<>();
@@ -118,14 +120,18 @@ public class GenericDelegator implements Delegator {
     protected final AtomicReference<SequenceUtil> AtomicRefSequencer = new AtomicReference<>(null);
     protected EntityCrypto crypto = null;
 
-    /** A ThreadLocal variable to allow other methods to specify a user identifier (usually the userLoginId, though technically the Entity Engine doesn't know anything about the UserLogin entity) */
+    /** A ThreadLocal variable to allow other methods to specify a user identifier
+     * (usually the userLoginId, though technically the Entity Engine doesn't know anything about the UserLogin entity) */
     private static final ThreadLocal<List<String>> userIdentifierStack = new ThreadLocal<>();
-    /** A ThreadLocal variable to allow other methods to specify a session identifier (usually the visitId, though technically the Entity Engine doesn't know anything about the Visit entity) */
+
+    /** A ThreadLocal variable to allow other methods to specify a session identifier
+     * (usually the visitId, though technically the Entity Engine doesn't know anything about the Visit entity) */
     private static final ThreadLocal<List<String>> sessionIdentifierStack = new ThreadLocal<>();
 
     private boolean testMode = false;
     private boolean testRollbackInProgress = false;
-    private static final AtomicReferenceFieldUpdater<GenericDelegator, LinkedBlockingDeque<?>> testOperationsUpdater = UtilGenerics.cast(AtomicReferenceFieldUpdater.newUpdater(GenericDelegator.class, LinkedBlockingDeque.class, "testOperations"));
+    private static final AtomicReferenceFieldUpdater<GenericDelegator, LinkedBlockingDeque<?>> testOperationsUpdater =
+        UtilGenerics.cast(AtomicReferenceFieldUpdater.newUpdater(GenericDelegator.class, LinkedBlockingDeque.class, "testOperations"));
     private volatile LinkedBlockingDeque<TestOperation> testOperations = null;
 
     protected static List<String> getUserIdentifierStack() {
@@ -2523,9 +2529,9 @@ public class GenericDelegator implements Delegator {
         return testDelegator;
     }
 
-    private void setTestMode(boolean testMode) {
-        this.testMode = testMode;
-        if (testMode) {
+    private void setTestMode(boolean isTestMode) {
+        this.testMode = isTestMode;
+        if (isTestMode) {
             testOperationsUpdater.set(this, new LinkedBlockingDeque<TestOperation>());
         } else {
             this.testOperations.clear();
@@ -2602,7 +2608,7 @@ public class GenericDelegator implements Delegator {
             return;
         }
 
-        Callable<DistributedCacheClear> creator = () -> createDistributedCacheClear();
+        Callable<DistributedCacheClear> creator = this::createDistributedCacheClear;
         FutureTask<DistributedCacheClear> futureTask = new FutureTask<>(creator);
         if (distributedCacheClear.compareAndSet(null, futureTask)) {
             ExecutionPool.GLOBAL_BATCH.submit(futureTask);
@@ -2651,12 +2657,12 @@ public class GenericDelegator implements Delegator {
     @Override
     public String getCurrentSessionIdentifier() {
         List<String> curValList = getSessionIdentifierStack();
-        return curValList.size() > 0 ? curValList.get(0) : null;
+        return CollectionUtils.isNotEmpty(curValList) ? curValList.get(0) : null;
     }
 
     @Override
     public String getCurrentUserIdentifier() {
         List<String> curValList = getUserIdentifierStack();
-        return curValList.size() > 0 ? curValList.get(0) : null;
+        return CollectionUtils.isNotEmpty(curValList) ? curValList.get(0) : null;
     }
 }
