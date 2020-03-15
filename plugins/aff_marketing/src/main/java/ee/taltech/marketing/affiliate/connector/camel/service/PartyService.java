@@ -58,7 +58,8 @@ public class PartyService {
 
     public String createAffiliate(Exchange exchange) {
         Map<String, Object> context = new HashMap<>();
-        context.put("partyId", getValueFromBody("partyId", exchange));
+        AttributeWithId attributeWithId = getValueFromBody(exchange, AttributeWithId.class);
+        context.put("partyId", attributeWithId.getPartyId());
         return gson.toJson(PartyServices.createAffiliate(myContext, context));
     }
 
@@ -100,20 +101,20 @@ public class PartyService {
      * this map can be found by the following path:
      * exchange -> in -> request -> params
      *
-     * @param fieldName - name of field needed to be retrieved from body
      * @param exchange  - request wrapped by camel
      * @return value of field
      */
-    private String getValueFromBody(String fieldName, Exchange exchange) {
-//        DOES NOT WORK YET
+    private <T> T getValueFromBody(Exchange exchange, Class<T> valueType) {
         SparkMessage msg = (SparkMessage) exchange.getIn();
+        Object o = null;
         try {
-            AttributeWithId attributeWithId = objectMapper.readValue(msg.getBody().toString(), AttributeWithId.class);
-            String id = attributeWithId.getPartyId();
+            o = objectMapper.readValue(msg.getBody().toString(), valueType);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return (T) o;
     }
+
+
 
 }
