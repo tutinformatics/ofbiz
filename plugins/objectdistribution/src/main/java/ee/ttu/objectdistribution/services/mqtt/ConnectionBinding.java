@@ -1,14 +1,14 @@
-package ee.ttu.objectdistribution.services;
+package ee.ttu.objectdistribution.services.mqtt;
 
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
-public class MqttClientService {
+public class ConnectionBinding {
 
-    IMqttClient publisher;
+    private final IMqttClient publisher;
 
-    public MqttClientService(IMqttClient publisher) {
+    public ConnectionBinding(IMqttClient publisher) {
         this.publisher = publisher;
     }
 

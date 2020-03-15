@@ -1,4 +1,4 @@
-package ee.ttu.objectdistribution.services;
+package ee.ttu.objectdistribution.services.mqtt;
 
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -6,18 +6,20 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-public class MqttReceiver {
+public class Subscriber {
 
-    IMqttClient client;
+    private final IMqttClient client;
+    private final String topic;
 
-    public MqttReceiver(IMqttClient client) {
+    public Subscriber(IMqttClient client, String topic) {
         this.client = client;
+        this.topic = topic;
     }
 
     public void receiveMessage() throws InterruptedException, MqttException {
         CountDownLatch receivedSignal = new CountDownLatch(10);
         System.out.println("RECEIVE MESSAGE");
-        client.subscribe(MqttService.TOPIC, (topic, message) -> {
+        client.subscribe(topic, (topic, message) -> {
             byte[] payload = message.getPayload();
             System.out.println(message);
             receivedSignal.countDown();
