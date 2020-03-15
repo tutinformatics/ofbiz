@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.apache.camel.Exchange;
 import org.apache.camel.component.sparkrest.SparkMessage;
+import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
@@ -26,6 +27,7 @@ public class PartyService {
     GenericDispatcherFactory genericDispatcherFactory;
     LocalDispatcher dispatcher;
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    public static final String module = PartyServices.class.getName();
     private DispatchContext dispatchCtx;
 
 
@@ -75,21 +77,33 @@ public class PartyService {
                 .queryOne();
         Map<String, Object> result;
         if (userParty != null) {
-            if (!"PERSON".equals(userParty.getString("partyTypeId"))){
-                return gson.toJson(Map.of("status","user already has party of another type"));
+            if (!"PERSON".equals(userParty.getString("partyTypeId"))) {
+                return gson.toJson(Map.of("status", "user already has party of another type"));
             }
-            return gson.toJson(Map.of("status","party of type Person already exists"));
-        } else {
-            Map<String, Object> personCreateContext = new HashMap<>();
-            personCreateContext.put("locale", locale);
-            personCreateContext.put("userLogin", currentUserLogin);
-            result = PartyServices.createPerson(dispatchCtx, personCreateContext);
         }
 
+        Map<String, Object> personCreateContext = new HashMap<>();
+        personCreateContext.put("locale", locale);
+        personCreateContext.put("userLogin", currentUserLogin);
+        result = PartyServices.createPerson(dispatchCtx, personCreateContext);
+
         // create affiliate by for created/existing party
-        affiliateCreateContext.put("partyId", result.get("partyId"));
+        affiliateCreateContext.put("partyId", userPartyId);
         affiliateCreateContext.put("locale", Locale.ENGLISH);
         PartyServices.createAffiliate(dispatchCtx, affiliateCreateContext);
+
+
+        String rootPartyId = parseJson("rootPartyId", exchange);
+        if (rootPartyId != null) {
+            try {
+                GenericValue genericValue = EntityQuery.use(delegator).from("Affiliate").where("partyId", userPartyId).queryOne();
+                genericValue.set("RootPartyId", rootPartyId);
+                delegator.store(genericValue);
+            } catch (GenericEntityException e) {
+                Debug.logWarning(e.getMessage(), module);
+            }
+        }
+
         return gson.toJson(Map.of("status", "ok"));
     }
 
