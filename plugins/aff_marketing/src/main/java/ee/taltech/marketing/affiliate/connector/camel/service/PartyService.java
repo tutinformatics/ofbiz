@@ -1,8 +1,9 @@
 package ee.taltech.marketing.affiliate.connector.camel.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import ee.taltech.marketing.affiliate.connector.camel.restResponse.RestResponse;
+import ee.taltech.marketing.affiliate.connector.camel.restResponse.AttributeWithId;
 import org.apache.camel.Exchange;
 import org.apache.camel.component.sparkrest.SparkMessage;
 import org.apache.ofbiz.entity.Delegator;
@@ -14,6 +15,7 @@ import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.GenericDispatcherFactory;
 import org.apache.ofbiz.service.LocalDispatcher;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +28,7 @@ public class PartyService {
     LocalDispatcher dispatcher;
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private DispatchContext myContext;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
 
     public PartyService(Delegator delegator) {
@@ -104,7 +107,12 @@ public class PartyService {
     private String getValueFromBody(String fieldName, Exchange exchange) {
 //        DOES NOT WORK YET
         SparkMessage msg = (SparkMessage) exchange.getIn();
-        RestResponse restResponse = exchange.getIn().getBody(RestResponse.class);
+        try {
+            AttributeWithId attributeWithId = objectMapper.readValue(msg.getBody().toString(), AttributeWithId.class);
+            String id = attributeWithId.getPartyId();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
