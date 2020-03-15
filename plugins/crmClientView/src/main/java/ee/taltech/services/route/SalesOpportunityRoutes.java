@@ -27,9 +27,17 @@ public class SalesOpportunityRoutes extends RouteBuilder {
 
         rest("/api")
                 .get("/salesopportunity")
+                .id("/get")
                 .produces("application/json")
                 .route()
                 .bean(salesOpportunityService, "getSalesOpportunityList()")
+                .endRest();
+        rest("/api")
+                .post("/salesopportunity")
+                .id("/post")
+                .produces("application/json")
+                .route()
+                .bean(salesOpportunityService, "createSale()")
                 .endRest();
     }
 }
