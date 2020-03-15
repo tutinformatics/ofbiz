@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.apache.camel:camel-spark-rest:2.16.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.camel/camel-spark-rest/2.16.1/e1401b8067c00cf5cdc2944f8a820a5ff8bd2b32/camel-spark-rest-2.16.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.camel/camel-spark-rest/2.16.1/f70162f83fbe1076e77dc1aeb3b56872ca2d5ca4/camel-spark-rest-2.16.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

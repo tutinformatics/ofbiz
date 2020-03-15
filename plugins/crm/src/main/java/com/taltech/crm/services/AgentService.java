@@ -7,21 +7,23 @@ import org.apache.ofbiz.service.DispatchContext;
 
 import java.util.List;
 
-public class PipelineService {
+public class AgentService {
+
+
     private DispatchContext dctx;
     private Delegator delegator;
 
-    public PipelineService(DispatchContext dctx) {
+    public AgentService(DispatchContext dctx) {
         this.dctx = dctx;
         delegator = dctx.getDelegator();
     }
-    public List<GenericValue> getPipelines() {
+
+    public List<GenericValue> getAgents() {
         try {
-            return delegator.findAll("pipeline", true);
+            return delegator.findAll("agent", true);
         } catch (GenericEntityException e) {
             e.printStackTrace();
         }
         return null;
     }
-
 }

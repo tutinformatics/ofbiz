@@ -1,4 +1,5 @@
-package ee.taltech.services;
+package com.taltech.crm.services;
+
 
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;

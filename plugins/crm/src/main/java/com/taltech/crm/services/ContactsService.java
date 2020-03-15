@@ -1,4 +1,4 @@
-package ee.taltech.services;
+package com.taltech.crm.services;
 
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.entity.Delegator;
