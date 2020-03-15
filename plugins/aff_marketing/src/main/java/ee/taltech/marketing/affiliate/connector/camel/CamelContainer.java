@@ -48,6 +48,7 @@ public class CamelContainer implements Container {
     private CamelContext context;
     private String name;
 
+
     @Override
     public void init(List<StartupCommand> ofbizCommands, String name, String configFile) throws ContainerException {
         this.name = name;
