@@ -145,7 +145,7 @@ public class GenericDelegator implements Delegator {
 
     public static String popUserIdentifier() {
         List<String> curValList = getUserIdentifierStack();
-        if (curValList.size() == 0) {
+        if (CollectionUtils.isEmpty(curValList)) {
             return null;
         }
         return curValList.remove(0);
@@ -175,7 +175,7 @@ public class GenericDelegator implements Delegator {
 
     public static String popSessionIdentifier() {
         List<String> curValList = getSessionIdentifierStack();
-        if (curValList.size() == 0) {
+        if (CollectionUtils.isNotEmpty(curValList)) {
             return null;
         }
         return curValList.remove(0);
@@ -227,7 +227,7 @@ public class GenericDelegator implements Delegator {
         List<String> warningList = new LinkedList<>();
         Debug.logInfo("Doing entity definition check...", module);
         ModelEntityChecker.checkEntities(this, warningList);
-        if (warningList.size() > 0) {
+        if (CollectionUtils.isNotEmpty(warningList)) {
             Debug.logWarning("=-=-=-=-= Found " + warningList.size() + " warnings when checking the entity definitions:", module);
             for (String warning: warningList) {
                 Debug.logWarning(warning, module);
