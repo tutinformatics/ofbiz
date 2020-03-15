@@ -29,5 +29,12 @@ public class InvoiceRoutes extends RouteBuilder {
                 .route()
                 .bean(invoiceService, "getContactList()")
                 .endRest();
+
+        rest("/api")
+                .delete("/invoice/{id}")
+                .produces("application/json")
+                .route()
+                .bean(invoiceService, "deleteInvoice")
+                .endRest();
     }
 }
