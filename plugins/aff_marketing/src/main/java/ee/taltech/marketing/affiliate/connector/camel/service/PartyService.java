@@ -2,6 +2,9 @@ package ee.taltech.marketing.affiliate.connector.camel.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import ee.taltech.marketing.affiliate.connector.camel.restResponse.RestResponse;
+import org.apache.camel.Exchange;
+import org.apache.camel.component.sparkrest.SparkMessage;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
@@ -20,23 +23,29 @@ public class PartyService {
 
     Delegator delegator;
     GenericDispatcherFactory genericDispatcherFactory;
-    LocalDispatcher dispather;
+    LocalDispatcher dispatcher;
+    private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private DispatchContext myContext;
+
 
     public PartyService(Delegator delegator) {
         this.delegator = delegator;
         this.genericDispatcherFactory = new GenericDispatcherFactory();
-        this.dispather = genericDispatcherFactory.createLocalDispatcher("myDispather", delegator);
+        this.dispatcher = genericDispatcherFactory.createLocalDispatcher("myDispatcher", delegator);
+        this.myContext = new DispatchContext("myContext", null, dispatcher);
     }
 
-    public static final String module = PartyService.class.getName();
 
-    // alternative way
-    public String getAdminParties() {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    /**
+     * @param exchange - request that is wrapped by camel with additional information added during routing
+     * @return JSON with all the parties found with a given partyId
+     */
+    public String getPartyById(Exchange exchange) {
+        String id = getParamValueFromExchange("id", exchange);
 
-        DispatchContext myContext = new DispatchContext("myContext", null, dispather);
+        DispatchContext myContext = new DispatchContext("myContext", null, dispatcher);
         Map<String, Object> context = new HashMap<>();
-        context.put("idToFind", "admin");
+        context.put("idToFind", id);
         context.put("partyIdentificationTypeId", null);
         context.put("searchPartyFirst", null);
         context.put("searchAllIdContext", null);
@@ -44,9 +53,15 @@ public class PartyService {
         return gson.toJson(PartyServices.findPartyById(myContext, context));
     }
 
+    public String createAffiliate(Exchange exchange) {
+        Map<String, Object> context = new HashMap<>();
+        context.put("partyId", getValueFromBody("partyId", exchange));
+        return gson.toJson(PartyServices.createAffiliate(myContext, context));
+    }
+
+    // an alternative way of fetching data
     public String getParties() {
         List<GenericValue> parties = new ArrayList<>();
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
             parties = EntityQuery.use(delegator)
                     .from("Party")
@@ -58,6 +73,39 @@ public class PartyService {
             parties.add(error);
         }
         return gson.toJson(parties);
+    }
+
+
+    /**
+     * handled map = Map<ParameterName, ParameterValue>
+     * this map can be found by the following path:
+     * exchange -> in -> request -> params
+     *
+     * @param paramName - name of parameter provided with query in requested url
+     * @param exchange  - request wrapped by camel
+     * @return value of parameter
+     */
+    private String getParamValueFromExchange(String paramName, Exchange exchange) {
+        SparkMessage msg = (SparkMessage) exchange.getIn();
+        Map<String, String> params = msg.getRequest().params();
+        String sparkParamName = ":" + paramName;
+        return params.get(sparkParamName);
+    }
+
+    /**
+     * handled map = Map<ParameterName, ParameterValue>
+     * this map can be found by the following path:
+     * exchange -> in -> request -> params
+     *
+     * @param fieldName - name of field needed to be retrieved from body
+     * @param exchange  - request wrapped by camel
+     * @return value of field
+     */
+    private String getValueFromBody(String fieldName, Exchange exchange) {
+//        DOES NOT WORK YET
+        SparkMessage msg = (SparkMessage) exchange.getIn();
+        RestResponse restResponse = exchange.getIn().getBody(RestResponse.class);
+        return null;
     }
 
 }
