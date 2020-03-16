@@ -34,7 +34,6 @@ public class SalesOpportunityService {
     public Response createInvoice() {
         try {
 //            delegator.create(new Converters.JSONToGenericValue().convert("", JSON.from(json)));
-
             delegator.create("SalesOpportunity", UtilMisc.toMap("salesOpportunityId","opportunityName","description", "estimatedAmount", "estimatedProbability"));
             return Response.ok().type("application/json").build();
         } catch (GenericEntityException e) {
