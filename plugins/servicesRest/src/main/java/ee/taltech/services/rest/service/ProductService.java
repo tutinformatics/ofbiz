@@ -3,8 +3,6 @@ package ee.taltech.services.rest.service;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
-import org.apache.ofbiz.entity.model.ModelEntity;
-import org.apache.ofbiz.entity.model.ModelRelation;
 import org.apache.ofbiz.service.DispatchContext;
 
 import java.util.*;
