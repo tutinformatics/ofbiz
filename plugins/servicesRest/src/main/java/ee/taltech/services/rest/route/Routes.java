@@ -1,6 +1,5 @@
 package ee.taltech.services.rest.route;
 
-import ee.taltech.services.rest.service.ProductService;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.ofbiz.service.LocalDispatcher;
@@ -8,11 +7,8 @@ import org.apache.ofbiz.service.LocalDispatcher;
 public class Routes extends RouteBuilder {
     LocalDispatcher localDispatcher;
 
-    private ProductService productService;
-
     public Routes(LocalDispatcher localDispatcher) {
         this.localDispatcher = localDispatcher;
-        productService = new ProductService(this.localDispatcher.getDispatchContext());
     }
 
     @Override
@@ -21,36 +17,21 @@ public class Routes extends RouteBuilder {
                 .component("spark-rest")
                 .host("localhost")
                 .port(9898)
+                .contextPath("/api")
                 .bindingMode(RestBindingMode.json)
                 .enableCORS(true)
                 .corsHeaderProperty("Access-Control-Allow-Origin","*");
 
-        rest("/api/products")
-                .get("/list")
+        rest("/products")
                 .produces("application/json")
-                .route()
-                .bean(productService, "getProductList")
-                .endRest();
-
-        rest("/api/products")
-                .post("/add")
-                .consumes("application/json")
-                .produces("application/json")
-                .route()
-                .bean(productService, "addProduct")
-                .endRest();
-
-        rest("/api/products")
-                .get("/id/{productId}")
-                .produces("application/json")
-                .route()
-                .bean(productService, "getProductById(${header.productId})")
-                .endRest();
-
-        rest("/api/products")
-                .delete("/id/{productId}")
-                .route()
-                .bean(productService, "deleteProduct(${header.productId})")
-                .endRest();
+                .get()
+                    .to("bean:productService?method=getProductList")
+                .post()
+                    .consumes("application/json")
+                    .to("bean:productService?method=addProduct")
+                .get("{id}")
+                    .to("bean:productService?method=getProductById(${header.id})")
+                .delete("{id}")
+                    .to("bean:productService?method=deleteProduct(${header.id})");
     }
 }
