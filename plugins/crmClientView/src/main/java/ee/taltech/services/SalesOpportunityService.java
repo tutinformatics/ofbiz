@@ -42,7 +42,5 @@ public class SalesOpportunityService {
             e.printStackTrace();
             return Response.serverError().entity("Error of some sort").build();
         }
-
-
     }
 }
