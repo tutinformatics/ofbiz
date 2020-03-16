@@ -30,6 +30,7 @@ public class SalesOpportunityService {
         }
         return null;
     }
+
     public Response createInvoice() {
         try {
 //            delegator.create(new Converters.JSONToGenericValue().convert("", JSON.from(json)));
