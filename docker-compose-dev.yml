@@ -6,6 +6,7 @@ services:
     container_name: ofbiz
     build:
       context: .
+      dockerfile: Dockerfile-dev
     restart: unless-stopped
     ports:
       - "8443:8443"
