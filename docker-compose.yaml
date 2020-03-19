@@ -1,14 +1,17 @@
-version: '3.4'
+version: '3.7'
 
 services:
-
   ofbiz:
-    container_name: ofbiz
+    container_name: ofbiz-api
     build:
       context: .
     restart: unless-stopped
-    ports:
-      - "8443:8443"
-      - "4567:4567"  # sparkle for REST api
     volumes:
       - ./:/ofbiz  # Volume mount to allow runtime changes to xml etc.
+    networks:
+      - ofbiz-api-network
+
+networks:
+  ofbiz-api-network:
+    name: ofbiz-api-network
+    driver: bridge

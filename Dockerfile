@@ -15,5 +15,7 @@ RUN ./gradlew cleanAll loadAll
 # Use volume mount for no restart xml changes etc.
 VOLUME /ofbiz
 
+EXPOSE 4567
+
 # Run ofbiz
 ENTRYPOINT ./gradlew ofbiz
