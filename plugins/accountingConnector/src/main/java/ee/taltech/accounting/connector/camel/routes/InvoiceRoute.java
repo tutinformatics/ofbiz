@@ -4,6 +4,7 @@ import ee.taltech.accounting.connector.camel.service.InvoiceService;
 import ee.taltech.accounting.connector.camel.service.PartyService;
 import ee.taltech.accounting.connector.camel.service.PaymentService;
 import ee.taltech.accounting.connector.camel.service.ProductService;
+import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.ofbiz.service.LocalDispatcher;
 
 public class InvoiceRoute extends BaseRoute {
@@ -28,11 +29,10 @@ public class InvoiceRoute extends BaseRoute {
                 .component("restlet")
                 .host("127.0.0.1")
                 .port("4567")
-                .setEnableCORS(true);
+                .bindingMode(RestBindingMode.auto);
 
         rest("/api")
                 .get("/invoices")
-                .enableCORS(true)
                 .id("api-users")
                 .produces("application/json")
                 .route()
@@ -41,7 +41,6 @@ public class InvoiceRoute extends BaseRoute {
 
         rest("/api")
                 .post("/invoice")
-                .enableCORS(true)
                 .id("invoice-post")
                 .produces("application/json")
                 .route()
@@ -50,7 +49,6 @@ public class InvoiceRoute extends BaseRoute {
 
         rest("/api")
                 .get("/parties")
-                .enableCORS(true)
                 .id("parties-get")
                 .produces("application/json")
                 .route()
@@ -59,7 +57,6 @@ public class InvoiceRoute extends BaseRoute {
 
         rest("/api")
                 .get("/products")
-                .enableCORS(true)
                 .id("product-get")
                 .produces("application/json")
                 .route()
@@ -68,7 +65,6 @@ public class InvoiceRoute extends BaseRoute {
 
         rest("/api")
                 .get("/payments")
-                .enableCORS(true)
                 .id("payments-get")
                 .produces("application/json")
                 .route()
