@@ -29,44 +29,51 @@ public class InvoiceRoute extends BaseRoute {
                 .component("restlet")
                 .host("127.0.0.1")
                 .port("4567")
+                .contextPath("/api")
                 .bindingMode(RestBindingMode.auto);
 
-        rest("/api")
-                .get("/invoices")
-                .id("api-users")
+        rest("/invoices")
                 .produces("application/json")
-                .route()
-                .bean(invoiceService, "getInvoices")
-                .endRest();
 
-        rest("/api")
-                .post("/invoice")
-                .id("invoice-post")
+                .get()
+                    .id("api-invoices-get-all")
+                    .route()
+                    .bean(invoiceService, "getInvoices")
+                    .endRest()
+
+                .get("{id}")
+                    .id("api-invoices-get-single")
+                    .route()
+                    .bean(invoiceService, "getInvoices(${header.id})") // TODO: create service @Kapa
+                    .endRest()
+
+                .post() // TODO: Test it, most likely  broken service etc. @Kapa
+                    .id("api-invoices-post")
+                    .consumes("application/json")
+                    .route()
+                    .bean(invoiceService, "createInvoice")
+                    .endRest();
+
+        rest("/parties")
                 .produces("application/json")
-                .route()
-                .bean(invoiceService, "createInvoice")
-                .endRest();
-
-        rest("/api")
-                .get("/parties")
+                .get()
                 .id("parties-get")
-                .produces("application/json")
                 .route()
                 .bean(partyService, "getParties")
                 .endRest();
 
-        rest("/api")
-                .get("/products")
-                .id("product-get")
+        rest("/products")
                 .produces("application/json")
+                .get()
+                .id("product-get")
                 .route()
                 .bean(productService, "getProducts")
                 .endRest();
 
-        rest("/api")
-                .get("/payments")
-                .id("payments-get")
+        rest("/payments")
                 .produces("application/json")
+                .get()
+                .id("payments-get")
                 .route()
                 .bean(paymentService, "getPayments")
                 .endRest();
