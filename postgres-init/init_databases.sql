@@ -1,0 +1,3 @@
+CREATE DATABASE ofbiztenant;
+CREATE DATABASE ofbizolap;
+CREATE DATABASE ofbiz;

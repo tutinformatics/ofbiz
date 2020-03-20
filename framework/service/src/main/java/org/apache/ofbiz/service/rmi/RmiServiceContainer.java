@@ -39,6 +39,8 @@ import org.apache.ofbiz.entity.DelegatorFactory;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ServiceContainer;
 
+import static org.apache.ofbiz.testtools.ModelTestSuite.DELEGATOR_NAME;
+
 /**
  * RMI Service Engine Container / Dispatcher
  */
@@ -66,7 +68,7 @@ public class RmiServiceContainer implements Container {
         Configuration.Property lookupHostProp = cfg.getProperty("bound-host");
         Configuration.Property lookupPortProp = cfg.getProperty("bound-port");
         Configuration.Property lookupNameProp = cfg.getProperty("bound-name");
-        Configuration.Property delegatorProp = cfg.getProperty("delegator-name");
+        Configuration.Property delegatorProp = cfg.getProperty(DELEGATOR_NAME);
         Configuration.Property clientProp = cfg.getProperty("client-factory");
         Configuration.Property serverProp = cfg.getProperty("server-factory");
 
