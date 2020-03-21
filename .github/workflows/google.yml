@@ -53,24 +53,13 @@ jobs:
         # Set up docker to authenticate
         # via gcloud command-line tool.
         gcloud auth configure-docker
-      
-    # Build the Docker image
-    - name: Build
-      run: |        
-        docker build -t "$REGISTRY_HOSTNAME"/"$GKE_PROJECT"/"$IMAGE":"$GITHUB_SHA" \
-          --build-arg GITHUB_SHA="$GITHUB_SHA" \
-          --build-arg GITHUB_REF="$GITHUB_REF" .
-
-    # Push the Docker image to Google Container Registry
-    - name: Publish
-      run: |
-        docker push $REGISTRY_HOSTNAME/$GKE_PROJECT/$IMAGE:$GITHUB_SHA
 
     # Deploy the Docker image to the GKE cluster
-    - name: Deploy
+    - name: build_and_deploy
       run: |
         gcloud config set project $GKE_PROJECT
         gcloud compute ssh ofbiz --zone europe-north1-a
-        docker pull $REGISTRY_HOSTNAME/$GKE_PROJECT/$IMAGE:$GITHUB_SHA
-        docker start $REGISTRY_HOSTNAME/$GKE_PROJECT/$IMAGE:$GITHUB_SHA
+        cd /ofbiz/ofbiz
+        git pull
+        docker-compose -p ofbiz -f docker-compose-ofbiz.yml up
         docker system prune -f
