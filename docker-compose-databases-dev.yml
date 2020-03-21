@@ -3,6 +3,9 @@ version: '3.7'
 networks:
   monitor-net:
     driver: bridge
+  db-network:
+    name: db-network
+    driver: bridge
 
 volumes:
   prometheus_data: {}
@@ -28,6 +31,7 @@ services:
       - 9090
     networks:
       - monitor-net
+      - db-network
     labels:
       org.label-schema.group: "monitoring"
 
@@ -44,6 +48,7 @@ services:
       - 9093
     networks:
       - monitor-net
+      - db-network
     labels:
       org.label-schema.group: "monitoring"
 
@@ -62,6 +67,7 @@ services:
       - 3000
     networks:
       - monitor-net
+      - db-network
     labels:
       org.label-schema.group: "monitoring"
 
@@ -73,6 +79,7 @@ services:
       - 9091
     networks:
       - monitor-net
+      - db-network
     labels:
       org.label-schema.group: "monitoring"
 
@@ -92,6 +99,7 @@ services:
     restart: unless-stopped
     networks:
       - monitor-net
+      - db-network
     labels:
       org.label-schema.group: "monitoring"
 
@@ -105,6 +113,8 @@ services:
     labels: ['com.citusdata.role=Master']
     volumes:
       - ./postgres-init:/docker-entrypoint-initdb.d
+    networks:
+      - db-network
     environment:
       - POSTGRES_USER=${POSTGRES_USER:-ofbiz}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-ofbiz}
@@ -123,6 +133,8 @@ services:
     depends_on:
       - worker
     image: 'citusdata/membership-manager:latest'
+    networks:
+      - db-network
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
@@ -133,11 +145,15 @@ services:
     container_name: adminer
     image: adminer
     restart: unless-stopped
+    networks:
+      - db-network
     ports:
       - "8190:8081" # 8080 is used by ofbiz
 
   couchDB:
     image: couchdb
+    networks:
+      - db-network
     ports:
       - "5984:5984"
     environment:
