@@ -13,11 +13,11 @@ name: Build and Deploy to GKE
 on:
   pull_request:
     branches: 
-      - master
+      - trunk
   push:
     branches: 
       - release/*
-      - master
+      - trunk
   release:
     types: [created]
 
