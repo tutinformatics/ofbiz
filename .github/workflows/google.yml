@@ -69,7 +69,7 @@ jobs:
     # Deploy the Docker image to the GKE cluster
     - name: Deploy
       run: |
-        gcloud compute ssh gcr.io/warm-drive-271714/ofbiz-back
+        gcloud compute ssh ofbiz-back
         docker pull $REGISTRY_HOSTNAME/$GKE_PROJECT/$IMAGE:$GITHUB_SHA
         docker start $REGISTRY_HOSTNAME/$GKE_PROJECT/$IMAGE:$GITHUB_SHA -d
         docker system prune -f
