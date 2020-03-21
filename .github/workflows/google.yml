@@ -59,7 +59,8 @@ jobs:
       run: |
         gcloud config set project $GKE_PROJECT
         gcloud compute ssh ofbiz --zone europe-north1-a
-        cd ~/ofbiz
+        sudo -i
+        cd /home/runner/ofbiz
         git pull
         docker-compose -p ofbiz -f docker-compose-ofbiz.yml up -d
         docker system prune -f
