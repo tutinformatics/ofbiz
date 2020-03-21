@@ -72,5 +72,5 @@ jobs:
         gcloud config set project $GKE_PROJECT
         gcloud compute ssh ofbiz-back --zone europe-north1-a
         docker pull $REGISTRY_HOSTNAME/$GKE_PROJECT/$IMAGE:$GITHUB_SHA
-        docker start $REGISTRY_HOSTNAME/$GKE_PROJECT/$IMAGE:$GITHUB_SHA -d
+        docker start $REGISTRY_HOSTNAME/$GKE_PROJECT/$IMAGE:$GITHUB_SHA
         docker system prune -f
