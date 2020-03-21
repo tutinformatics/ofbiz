@@ -26,10 +26,9 @@ ENV JAVA_OPTS="-Dfile.encoding=UTF-8"
 # Fix line endings
 RUN apt-get install dos2unix
 RUN dos2unix ./gradlew
-RUN ./gradlew cleanAll loadAll
 
 EXPOSE 4567
 
 # Run ofbiz
-ENTRYPOINT ./gradlew ofbiz
+ENTRYPOINT ./gradlew cleanAll loadAll ofbiz
 
