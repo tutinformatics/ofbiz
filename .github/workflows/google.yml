@@ -18,6 +18,7 @@ on:
     branches: 
       - release/*
       - trunk
+      - ci
   release:
     types: [created]
 
@@ -59,7 +60,7 @@ jobs:
       run: |
         gcloud config set project $GKE_PROJECT
         gcloud compute ssh --zone "europe-north1-a" "ofbiz" --project "warm-drive-271714"
-        whoami
+        groups
         sudo -i
         whoami
         cd /ofbiz/ofbiz
