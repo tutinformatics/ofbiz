@@ -39,4 +39,16 @@ under the License.
         <value xml:lang="zh">不允许你浏览这个页面。</value>
         <value xml:lang="zh-TW">不允許您檢視這個頁面.</value>
     </property>
+    <property key="OfbizDemoFind">
+        <value xml:lang="en">Find</value>
+    </property>
+    <property key="OfbizDemoFirstName">
+        <value xml:lang="en">First Name</value>
+    </property>
+    <property key="OfbizDemoId">
+        <value xml:lang="en">OFBiz Demo Id</value>
+    </property>
+    <property key="OfbizDemoLastName">
+        <value xml:lang="en">Last Name</value>
+    </property>
 </resource>

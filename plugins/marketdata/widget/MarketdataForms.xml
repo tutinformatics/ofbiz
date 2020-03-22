@@ -37,4 +37,38 @@ under the License.
         <field name="submitButton" title="${uiLabelMap.CommonAdd}"><submit button-type="button"/></field>
     </form>
 
+    <form name="FindOfbizDemo" type="single" target="FindOfbizDemo" default-entity-name="OfbizDemo">
+        <field name="noConditionFind"><hidden value="Y"/> <!-- if this isn't there then with all fields empty no query will be done --></field>
+        <field name="ofbizDemoId" title="${uiLabelMap.OfbizDemoId}"><text-find/></field>
+        <field name="firstName" title="${uiLabelMap.OfbizDemoFirstName}"><text-find/></field>
+        <field name="lastName" title="${uiLabelMap.OfbizDemoLastName}"><text-find/></field>
+        <field name="ofbizDemoTypeId" title="${uiLabelMap.OfbizDemoType}">
+            <drop-down allow-empty="true" current-description="">
+                <entity-options description="${description}" key-field-name="ofbizDemoTypeId" entity-name="OfbizDemoType">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="searchButton" title="${uiLabelMap.CommonFind}" widget-style="smallSubmit"><submit button-type="button" image-location="/images/icons/magnifier.png"/></field>
+    </form>
+
+    <form name="ListOfbizDemo" type="list" list-name="listIt" paginate-target="FindOfbizDemo" default-entity-name="OfbizDemo" separate-columns="true"
+          odd-row-style="alternate-row" header-row-style="header-row-2" default-table-style="basic-table hover-bar">
+        <actions>
+            <!-- Preparing search results for user query by using OFBiz stock service to perform find operations on a single entity or view entity -->
+            <service service-name="performFind" result-map="result" result-map-list="listIt">
+                <field-map field-name="inputFields" from-field="ofbizDemoCtx"/>
+                <field-map field-name="entityName" value="OfbizDemo"/>
+                <field-map field-name="orderBy" from-field="parameters.sortField"/>
+                <field-map field-name="viewIndex" from-field="viewIndex"/>
+                <field-map field-name="viewSize" from-field="viewSize"/>
+            </service>
+        </actions>
+        <field name="ofbizDemoId" title="${uiLabelMap.OfbizDemoId}"><display/></field>
+        <field name="ofbizDemoTypeId" title="${uiLabelMap.OfbizDemoType}"><display-entity entity-name="OfbizDemoType"/></field>
+        <field name="firstName" title="${uiLabelMap.OfbizDemoFirstName}" sort-field="true"><display/></field>
+        <field name="lastName" title="${uiLabelMap.OfbizDemoLastName}" sort-field="true"><display/></field>
+        <field name="comments" title="${uiLabelMap.OfbizDemoComment}"><display/></field>
+    </form>
+
 </forms>
