@@ -2,9 +2,6 @@ bin/
 build/
 applications/*/build
 framework/*/build
-plugins/
-!plugins/crmClientView
-!plugins/ofbiz-graphql
 runtime/git-rebase/*
 runtime/SvnInfo.ftl
 runtime/GitInfo.ftl
