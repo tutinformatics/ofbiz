@@ -107,7 +107,7 @@ services:
       - ./postgres-init:/docker-entrypoint-initdb.d
     environment:
       - POSTGRES_USER=${POSTGRES_USER:-ofbiz}
-      - POSTGRES_PASSWORD=${DATABASE_PASSWORD:-ofbiz}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-ofbiz}
 
   worker:
     image: 'citusdata/citus:9.2.2'
@@ -115,7 +115,7 @@ services:
     labels: ['com.citusdata.role=Worker']
     environment:
       - POSTGRES_USER=${POSTGRES_USER:-ofbiz}
-      - POSTGRES_PASSWORD=${DATABASE_PASSWORD:-ofbiz}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-ofbiz}
 
   manager:
     container_name: "${COMPOSE_PROJECT_NAME:-citus}_manager"
@@ -127,7 +127,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - POSTGRES_USER=${POSTGRES_USER:-ofbiz}
-      - POSTGRES_PASSWORD=${DATABASE_PASSWORD:-ofbiz}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-ofbiz}
 
   adminer:
     container_name: adminer
@@ -135,3 +135,11 @@ services:
     restart: unless-stopped
     ports:
       - "8190:8080"
+
+  couchDB:
+    image: couchdb
+    ports:
+      - "5984:5984"
+    environment:
+      - COUCHDB_USER=${COUCHDB_USER:-ofbiz}
+      - COUCHDB_PASSWORD=${COUCHDB_PASSWORD:-ofbiz}
