@@ -60,7 +60,9 @@ jobs:
         gcloud config set project $GKE_PROJECT
         gcloud compute ssh ofbiz --zone europe-north1-a
         whoami
-        sudo git clone https://github.com/tutinformatics/ofbiz
-        cd /ofbiz
-        sudo docker-compose -p ofbiz -f docker-compose-ofbiz.yml up -d
-        sudo docker system prune -f
+        sudo su root
+        whoami
+        cd /ofbiz/ofbiz
+        git pull
+        docker-compose -p ofbiz -f docker-compose-ofbiz.yml up -d
+        docker system prune -f
