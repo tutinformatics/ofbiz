@@ -53,7 +53,7 @@ public class CamelContainer implements Container {
     public void init(List<StartupCommand> ofbizCommands, String name, String configFile) throws ContainerException {
         this.name = name;
         context = createCamelContext();
-        ContainerConfig.Configuration cfg = ContainerConfig.getConfiguration(name, configFile);
+        ContainerConfig.Configuration cfg = ContainerConfig.getConfiguration(name);
         String packageName = ContainerConfig.getPropertyValue(cfg, "package", "ee.taltech.services.rest.route");
         PackageScanClassResolver packageResolver = new DefaultPackageScanClassResolver();
         Set<Class<?>> routesClassesSet = packageResolver.findImplementations(RouteBuilder.class, packageName);
