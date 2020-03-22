@@ -55,15 +55,15 @@ jobs:
         # via gcloud command-line tool.
         gcloud auth configure-docker
 
-    # Deploy the Docker image
-    - name: Deploy
+    # Build the Docker image
+    - name: Build
       run: |
-        gcloud config set project $GKE_PROJECT
-        gcloud compute ssh --zone "europe-north1-a" "ofbiz" --project "warm-drive-271714"
-        groups
-        sudo -i
-        whoami
-        cd /ofbiz/ofbiz
-        git pull
-        docker-compose -p ofbiz -f docker-compose-ofbiz.yml up
-        docker system prune -f
+        docker build -t "$REGISTRY_HOSTNAME"/"$GKE_PROJECT"/"$IMAGE":latest \
+          --build-arg GITHUB_SHA="$GITHUB_SHA" \
+          --build-arg GITHUB_REF="$GITHUB_REF" .
+
+    # Push the Docker image to Google Container Registry
+    - name: Publish
+      run: |
+        docker push $REGISTRY_HOSTNAME/$GKE_PROJECT/$IMAGE:latest
+
