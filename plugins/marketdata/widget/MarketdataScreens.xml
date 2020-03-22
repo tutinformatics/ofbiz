@@ -30,6 +30,11 @@ under the License.
                 <decorator-screen name="MarketdataCommonDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
                         <label text="Hello world!"/>
+
+                        <screenlet title="Add Marketdata Demo">
+                            <include-form name="AddOfbizDemo" location="component://marketdata/widget/MarketdataForms.xml"/>
+                        </screenlet>
+
                     </decorator-section>
                 </decorator-screen>
             </widgets>
