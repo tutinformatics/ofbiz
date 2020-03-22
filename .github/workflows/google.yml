@@ -70,5 +70,5 @@ jobs:
     - name: Deploy
       run: |
         gcloud config set project $GKE_PROJECT
-        gcloud compute ssh ofbiz --zone europe-north1-a
+        gcloud compute ssh root@ofbiz --zone europe-north1-a
         docker pull $REGISTRY_HOSTNAME/$GKE_PROJECT/$IMAGE:$GITHUB_SHA
