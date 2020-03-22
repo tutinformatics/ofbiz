@@ -23,11 +23,17 @@ ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/
 RUN export JAVA_HOME
 ENV JAVA_OPTS="-Dfile.encoding=UTF-8"
 
+# Setup backend connection
+RUN sed -i 's/citus_master/10.166.0.2/g' framework/entity/config/entityengine.xml
+
 # Fix line endings
 RUN apt-get install dos2unix
 RUN dos2unix ./gradlew
 
+EXPOSE 8443
+EXPOSE 8080
 EXPOSE 4567
+EXPOSE 1099
 
 # Run ofbiz
 ENTRYPOINT ./gradlew cleanAll loadAll ofbiz
