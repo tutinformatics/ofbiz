@@ -135,6 +135,7 @@ under the License.
                 <set field="layoutSettings.javaScripts[+0]" value="/common/js/util/setUserTimeZone.js"/>
                 <set field="layoutSettings.javaScripts[+0]" value="/common/js/plugins/moment-timezone/moment-timezone-with-data.min.js" global="true"/>
                 <set field="layoutSettings.javaScripts[+0]" value="/common/js/plugins/moment-timezone/moment-with-locales.min.js" global="true"/>
+                <set field="layoutSettings.javaScripts[+0]" value="/common/js/plugins/selenium.js" global="true"/>
             </actions>
             <widgets />
         </section>

@@ -587,13 +587,23 @@ under the License.
                 <xs:element minOccurs="0" ref="auto-parameters-service"/>
                 <xs:element minOccurs="0" ref="auto-parameters-entity"/>
                 <xs:element minOccurs="0" maxOccurs="unbounded" ref="parameter" />
+                <xs:element minOccurs="0" ref="auto-parameters-portlet"/>
             </xs:sequence>
             <xs:attribute name="event-type" use="required">
+                <xs:annotation>
+                    <xs:documentation>setArea and setWatcher are specifics for VueJs and are put onSubmitUpdateAreas list.
+                                      submit, setArea and setWatcher are activate when submit button is clicked.
+                    </xs:documentation>
+                </xs:annotation>
                 <xs:simpleType>
                     <xs:restriction base="xs:token">
                         <xs:enumeration value="paginate" />
                         <xs:enumeration value="sort-column" />
                         <xs:enumeration value="submit" />
+                        <xs:enumeration value="setArea" />
+                        <xs:enumeration value="setWatcher" />
+                        <xs:enumeration value="collapse" />
+                        <xs:enumeration value="closeModal" />
                     </xs:restriction>
                 </xs:simpleType>
             </xs:attribute>
@@ -1505,11 +1515,27 @@ under the License.
             <xs:documentation>Area to be updated when a field event occurs.</xs:documentation>
         </xs:annotation>
         <xs:complexType>
+            <xs:sequence>
+                <xs:element minOccurs="0" ref="auto-parameters-service"/>
+                <xs:element minOccurs="0" ref="auto-parameters-entity"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="parameter" />
+                <xs:element minOccurs="0" ref="auto-parameters-portlet"/>
+            </xs:sequence>
             <xs:attribute name="event-type" use="required">
+                <xs:annotation>
+                    <xs:documentation>post, setArea and setWatcher are specifics for VueJs on hyperlink (or link) and are put onClickUpdateAreas list.</xs:documentation>
+                </xs:annotation>
                 <xs:simpleType>
                     <xs:restriction base="xs:token">
                         <xs:enumeration value="change" />
                         <xs:enumeration value="click" />
+                        <xs:enumeration value="post" />
+                        <xs:enumeration value="setArea" />
+                        <xs:enumeration value="setWatcher" />
+                        <xs:enumeration value="submit" />
+                        <xs:enumeration value="setFieldInForm" />
+                        <xs:enumeration value="collapse" />
+                        <xs:enumeration value="closeModal" />
                     </xs:restriction>
                 </xs:simpleType>
             </xs:attribute>
