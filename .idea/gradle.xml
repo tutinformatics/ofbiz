@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/applications" />
+            <option value="$PROJECT_DIR$/applications/accounting" />
+            <option value="$PROJECT_DIR$/applications/commonext" />
+            <option value="$PROJECT_DIR$/applications/content" />
+            <option value="$PROJECT_DIR$/applications/datamodel" />
+            <option value="$PROJECT_DIR$/applications/humanres" />
+            <option value="$PROJECT_DIR$/applications/manufacturing" />
+            <option value="$PROJECT_DIR$/applications/marketing" />
+            <option value="$PROJECT_DIR$/applications/order" />
+            <option value="$PROJECT_DIR$/applications/party" />
+            <option value="$PROJECT_DIR$/applications/product" />
+            <option value="$PROJECT_DIR$/applications/securityext" />
+            <option value="$PROJECT_DIR$/applications/workeffort" />
+            <option value="$PROJECT_DIR$/framework" />
+            <option value="$PROJECT_DIR$/framework/base" />
+            <option value="$PROJECT_DIR$/framework/catalina" />
+            <option value="$PROJECT_DIR$/framework/common" />
+            <option value="$PROJECT_DIR$/framework/datafile" />
+            <option value="$PROJECT_DIR$/framework/entity" />
+            <option value="$PROJECT_DIR$/framework/entityext" />
+            <option value="$PROJECT_DIR$/framework/minilang" />
+            <option value="$PROJECT_DIR$/framework/security" />
+            <option value="$PROJECT_DIR$/framework/service" />
+            <option value="$PROJECT_DIR$/framework/start" />
+            <option value="$PROJECT_DIR$/framework/testtools" />
+            <option value="$PROJECT_DIR$/framework/webapp" />
+            <option value="$PROJECT_DIR$/framework/webtools" />
+            <option value="$PROJECT_DIR$/framework/widget" />
+            <option value="$PROJECT_DIR$/plugins" />
+            <option value="$PROJECT_DIR$/plugins/crm" />
+            <option value="$PROJECT_DIR$/plugins/ofbiz-graphql" />
+            <option value="$PROJECT_DIR$/themes" />
+            <option value="$PROJECT_DIR$/themes/bluelight" />
+            <option value="$PROJECT_DIR$/themes/common-theme" />
+            <option value="$PROJECT_DIR$/themes/flatgrey" />
+            <option value="$PROJECT_DIR$/themes/rainbowstone" />
+            <option value="$PROJECT_DIR$/themes/tomahawk" />
+          </set>
+        </option>
+        <option name="useAutoImport" value="true" />
+        <option name="useQualifiedModuleNames" value="true" />
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>
