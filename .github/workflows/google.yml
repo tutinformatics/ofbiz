@@ -69,15 +69,14 @@ jobs:
 
     - name: Deploy
       run: |
-        gcloud compute instances update-container $GKE_INSTANCE \
+        gcloud compute instances create-with-container $GKE_INSTANCE \
           --zone $GKE_ZONE \
           --container-image="$REGISTRY_HOSTNAME"/"$GKE_PROJECT"/"$GKE_INSTANCE":"$GITHUB_SHA" \
-          --project=$GKE_PROJECT
           --tags ofbiz-back
 
         gcloud compute firewall-rules create allow-http \
-            --allow tcp:8443 --target-tags ofbiz-back
-            --allow tcp:8080 --target-tags ofbiz-back
-            --allow tcp:1099 --target-tags ofbiz-back
+            --allow tcp:8443 --target-tags ofbiz-back \
+            --allow tcp:8080 --target-tags ofbiz-back \
+            --allow tcp:1099 --target-tags ofbiz-back \
             --allow tcp:4567 --target-tags ofbiz-back
 
