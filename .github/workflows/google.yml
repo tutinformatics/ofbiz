@@ -62,5 +62,5 @@ jobs:
         whoami
         sudo git clone https://github.com/tutinformatics/ofbiz
         cd /ofbiz
-        docker-compose -p ofbiz -f docker-compose-ofbiz.yml up -d
-        docker system prune -f
+        sudo docker-compose -p ofbiz -f docker-compose-ofbiz.yml up -d
+        sudo docker system prune -f
