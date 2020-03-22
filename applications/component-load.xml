@@ -28,6 +28,7 @@ under the License.
     <load-component component-location="product"/>
     <load-component component-location="manufacturing"/>
     <load-component component-location="accounting"/>
+    <load-component component-location="graphql"/>
     <load-component component-location="humanres"/>
     <load-component component-location="order"/>
     <load-component component-location="marketing"/>
