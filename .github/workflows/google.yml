@@ -70,7 +70,7 @@ jobs:
     - name: Deploy
       run: |
         gcloud compute instances update-container $GKE_INSTANCE \
-          --zone $GKE_INSTANCE_ZONE \
+          --zone $GKE_ZONE \
           --container-image="$REGISTRY_HOSTNAME"/"$GKE_PROJECT"/"$GKE_INSTANCE":$GITHUB_SHA \
-          --project=GKE_PROJECT
+          --project=$GKE_PROJECT
 
