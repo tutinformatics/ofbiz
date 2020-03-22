@@ -16,7 +16,7 @@ public class Routes extends RouteBuilder {
         restConfiguration("rest-api")
                 .component("spark-rest")
                 .host("localhost")
-                .port(9898)
+                .port(4567)
                 .contextPath("/api")
                 .bindingMode(RestBindingMode.json)
                 .enableCORS(true)
@@ -29,9 +29,12 @@ public class Routes extends RouteBuilder {
                 .post()
                     .consumes("application/json")
                     .to("bean:productService?method=addProduct")
+                .put("{id}")
+                    .consumes("application/json")
+                    .to("bean:productService?method=updateProduct(${header.id}, ${body})")
                 .get("{id}")
                     .to("bean:productService?method=getProductById(${header.id})")
-                .delete("{id}")
-                    .to("bean:productService?method=deleteProduct(${header.id})");
+                .get("/type/{typeId}")
+                    .to("bean:productService?method=getProductsByType(${header.typeId})");
     }
 }

@@ -26,39 +26,47 @@ public class ProductService {
     }
 
     public List<GenericValue> getProductById(String productId) {
+        Map<String, String> key = new HashMap<>();
+        key.put("productId", productId);
         try {
-            return delegator.findByAnd("Product",
-                    Map.of("productId", productId),
-                    List.of("productId"),
-                    true);
+            return delegator.findByAnd("Product", key, Arrays.asList("productId"), true);
         } catch (GenericEntityException e) {
             e.printStackTrace();
         }
         return new ArrayList<>();
     }
 
-    public GenericValue addProduct(Map<String, Object> data) {
+    public List<GenericValue> getProductsByType(String typeId) {
+        Map<String, String> key = new HashMap<>();
+        key.put("productTypeId", typeId);
+        try {
+            return delegator.findByAnd("Product", key, Arrays.asList("productName"), true);
+        } catch (GenericEntityException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
+    public void addProduct(Map<String, Object> data) {
         try {
             Optional<GenericValue> product = Converter.mapToGenericValue(delegator, "Product", data);
             if (product.isPresent()) {
-                product.get().setNextSeqId();
                 delegator.createOrStore(product.get());
-                return product.get();
             }
         } catch (GenericEntityException e) {
             e.printStackTrace();
         }
-        return null;
     }
 
-    public void deleteProduct(String productId) {
+    public void updateProduct(String productId, Map<String, Object> data) {
+        Map<String, String> key = new HashMap<>();
+        key.put("productId", productId);
         try {
-            List<GenericValue> result =  delegator.findByAnd("Product",
-                    Map.of("productId", productId),
-                    List.of("productId"),
-                    true);
-            // !TODO Doesn't work with foreign keys
-            delegator.removeByAnd("Product", Map.of("productId", productId));
+            List<GenericValue> target = delegator.findByAnd("Product", key, Arrays.asList("productId"), false);
+            for (GenericValue genericValue : target) {
+                genericValue.setNonPKFields(data);
+                genericValue.store();
+            }
         } catch (GenericEntityException e) {
             e.printStackTrace();
         }
