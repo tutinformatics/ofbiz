@@ -58,7 +58,10 @@ jobs:
     - name: Deploy
       run: |
         gcloud config set project $GKE_PROJECT
-        gcloud compute ssh root@ofbiz --zone europe-north1-a
+        gcloud compute ssh --zone "europe-north1-a" "ofbiz" --project "warm-drive-271714"
+        whoami
+        sudo -i
+        whoami
         cd /ofbiz/ofbiz
         git pull
         docker-compose -p ofbiz -f docker-compose-ofbiz.yml up
