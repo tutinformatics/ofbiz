@@ -40,11 +40,11 @@ under the License.
     -->
 
     <!-- Request Mappings -->
-<!--    <request-map uri="createOfbizDemo">-->
-<!--        <security https="true" auth="true"/>-->
-<!--        <event type="service" invoke="createOfbizDemo"/>-->
-<!--        <response name="success" type="view" value="main"/>-->
-<!--    </request-map>-->
+    <request-map uri="createOfbizDemo">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createOfbizDemo"/>
+        <response name="success" type="view" value="main"/>
+    </request-map>
 
 <!--    <request-map uri="createOfbizDemo">-->
 <!--        <security https="true" auth="true"/>-->
@@ -53,10 +53,17 @@ under the License.
 <!--    </request-map>-->
 
 
-    <request-map uri="createOfbizDemo">
+<!--    <request-map uri="createOfbizDemo">-->
+<!--        <security https="true" auth="true"/>-->
+<!--        <event type="service" invoke="createOfbizDemoByGroovyService"/>-->
+<!--        <response name="success" type="view" value="main"/>-->
+<!--    </request-map>-->
+
+    <request-map uri="createOfbizDemoEvent">
         <security https="true" auth="true"/>
-        <event type="service" invoke="createOfbizDemoByGroovyService"/>
+        <event type="java" path="com.companyname.ofbizdemo.events.OfbizDemoEvents" invoke="createOfbizDemoEvent"/>
         <response name="success" type="view" value="main"/>
+        <response name="error" type="view" value="main"/>
     </request-map>
 
     <!-- Request Mapping -->
