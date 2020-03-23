@@ -42,6 +42,7 @@ under the License.
         <section>
             <actions>
                 <set field="headerItem" value="WorkEfforts"/><!-- this highlights the selected menu-item with name "WorkEfforts" -->
+                <!--<service service-name="getWorkEffortsService"></service>-->
             </actions>
             <widgets>
                 <decorator-screen name="ManufacturingWarehouseCommonDecorator" location="${parameters.mainDecoratorLocation}">
@@ -50,7 +51,6 @@ under the License.
                         <screenlet title="All work efforts">
                             <include-form name="AllWorkEfforts" location="component://manufacturingWarehouse/widget/ManufacturingWarehouseForms.xml"/>
                         </screenlet>
-
                     </decorator-section>
                 </decorator-screen>
             </widgets>
