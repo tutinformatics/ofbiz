@@ -46,9 +46,16 @@ under the License.
 <!--        <response name="success" type="view" value="main"/>-->
 <!--    </request-map>-->
 
+<!--    <request-map uri="createOfbizDemo">-->
+<!--        <security https="true" auth="true"/>-->
+<!--        <event type="service" invoke="createOfbizDemoByJavaService"/>-->
+<!--        <response name="success" type="view" value="main"/>-->
+<!--    </request-map>-->
+
+
     <request-map uri="createOfbizDemo">
         <security https="true" auth="true"/>
-        <event type="service" invoke="createOfbizDemoByJavaService"/>
+        <event type="service" invoke="createOfbizDemoByGroovyService"/>
         <response name="success" type="view" value="main"/>
     </request-map>
 
