@@ -30,5 +30,13 @@ under the License.
         <auto-attributes include="nonpk" mode="IN" optional="false"/>
         <override name="comments" optional="true"/>
     </service>
+
+    <service name="createOfbizDemoByJavaService" default-entity-name="OfbizDemo" engine="java"
+             location="com.companyname.ofbizdemo.services.OfbizDemoServices" invoke="createOfbizDemo" auth="true">
+        <description>Create an Ofbiz Demo record using a service in Java</description>
+        <auto-attributes include="pk" mode="OUT" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="false"/>
+        <override name="comments" optional="true"/>
+    </service>
     
 </services>

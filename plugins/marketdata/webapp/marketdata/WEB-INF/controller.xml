@@ -40,9 +40,15 @@ under the License.
     -->
 
     <!-- Request Mappings -->
+<!--    <request-map uri="createOfbizDemo">-->
+<!--        <security https="true" auth="true"/>-->
+<!--        <event type="service" invoke="createOfbizDemo"/>-->
+<!--        <response name="success" type="view" value="main"/>-->
+<!--    </request-map>-->
+
     <request-map uri="createOfbizDemo">
         <security https="true" auth="true"/>
-        <event type="service" invoke="createOfbizDemo"/>
+        <event type="service" invoke="createOfbizDemoByJavaService"/>
         <response name="success" type="view" value="main"/>
     </request-map>
 
