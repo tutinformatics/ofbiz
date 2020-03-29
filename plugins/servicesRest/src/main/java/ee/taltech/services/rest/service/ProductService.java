@@ -3,22 +3,23 @@ package ee.taltech.services.rest.service;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
+import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.service.DispatchContext;
 
 import java.util.*;
 
 public class ProductService {
-    private DispatchContext dctx;
     private Delegator delegator;
 
     public ProductService(DispatchContext dctx) {
-        this.dctx = dctx;
         delegator = dctx.getDelegator();
     }
 
     public List<GenericValue> getProductList() {
         try {
-            return delegator.findAll("Product", true);
+            return EntityQuery.use(delegator)
+                    .from("Product")
+                    .queryList();
         } catch (GenericEntityException e) {
             e.printStackTrace();
         }
@@ -26,21 +27,34 @@ public class ProductService {
     }
 
     public List<GenericValue> getProductById(String productId) {
-        Map<String, String> key = new HashMap<>();
-        key.put("productId", productId);
         try {
-            return delegator.findByAnd("Product", key, Arrays.asList("productId"), true);
+            return EntityQuery.use(delegator)
+                    .from("Product")
+                    .where("productId", productId)
+                    .queryList();
         } catch (GenericEntityException e) {
             e.printStackTrace();
         }
         return new ArrayList<>();
     }
 
-    public List<GenericValue> getProductsByType(String typeId) {
-        Map<String, String> key = new HashMap<>();
-        key.put("productTypeId", typeId);
+    public List<GenericValue> getProductsByParentType(String typeId) {
         try {
-            return delegator.findByAnd("Product", key, Arrays.asList("productName"), true);
+            // !TODO how to query using multiple tables?
+            List<GenericValue> subTypes = EntityQuery.use(delegator)
+                    .from("ProductType")
+                    .where("parentTypeId", typeId)
+                    .queryList();
+            Set<GenericValue> result = new HashSet<>();
+            for (GenericValue subType : subTypes) {
+                result.addAll(
+                        EntityQuery.use(delegator)
+                                .from("Product")
+                                .where("productTypeId", subType.get("productTypeId"))
+                                .queryList()
+                );
+            }
+            return new ArrayList<>(result);
         } catch (GenericEntityException e) {
             e.printStackTrace();
         }
@@ -59,10 +73,11 @@ public class ProductService {
     }
 
     public void updateProduct(String productId, Map<String, Object> data) {
-        Map<String, String> key = new HashMap<>();
-        key.put("productId", productId);
         try {
-            List<GenericValue> target = delegator.findByAnd("Product", key, Arrays.asList("productId"), false);
+            List<GenericValue> target = EntityQuery.use(delegator)
+                    .from("Product")
+                    .where("productId", productId)
+                    .queryList();
             for (GenericValue genericValue : target) {
                 genericValue.setNonPKFields(data);
                 genericValue.store();

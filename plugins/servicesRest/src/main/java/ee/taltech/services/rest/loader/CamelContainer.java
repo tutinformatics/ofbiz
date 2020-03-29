@@ -18,6 +18,7 @@
  *******************************************************************************/
 package ee.taltech.services.rest.loader;
 
+import ee.taltech.services.rest.service.OrderService;
 import ee.taltech.services.rest.service.ProductService;
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
@@ -120,6 +121,7 @@ public class CamelContainer implements Container {
         LocalDispatcher dispatcher = createDispatcher();
         SimpleRegistry registry = new SimpleRegistry();
         registry.put("productService", new ProductService(dispatcher.getDispatchContext()));
+        registry.put("orderService", new OrderService(dispatcher.getDispatchContext()));
         registry.put("dispatcher", dispatcher);
         return new DefaultCamelContext(registry);
     }
