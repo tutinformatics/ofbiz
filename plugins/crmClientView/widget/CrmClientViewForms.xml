@@ -29,4 +29,9 @@ under the License.
         <field name="name" required-field="true"><text/></field>
         <field name="submitButton" title="${uiLabelMap.CommonAdd}"><submit button-type="button"/></field>
     </form>
+    <form name="CreateSale" type="single" target="createSaleOpportunity">
+        <auto-fields-service service-name="SalesOpportunityService"/>
+        <field name="name" required-field="true"><text/></field>
+        <field name="submitButton" title="${uiLabelMap.CommonAdd}"><submit button-type="button"/></field>
+    </form>
 </forms>

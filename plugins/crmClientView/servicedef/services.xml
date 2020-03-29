@@ -33,11 +33,31 @@ under the License.
 
 
     <!--    added-->
-
+    <!--   Contact  -->
     <service name="createContactService" default-entity-name="Contact" engine="entity-auto" invoke="create" auth="false">
         <description>Create a contact record</description>
         <override name="name" optional="true"/>
     </service>
+
+    <!--   Sales opportunity -->
+    <service name="getSalesOpportunityList" default-entity-name="SalesOpportunity" engine="java" invoke="getSalesOpportunityList" auth="false">
+        <description>Create a sale record</description>
+        <override name="name" optional="true"/>
+        <auto-attributes include="pk" mode="IN" entity-name="SalesOpportunity" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" entity-name="SalesOpportunity" optional="true"/>
+    </service>
+    <service name="createSaleOpportunity" default-entity-name="SalesOpportunity" engine="java" invoke="createSaleOpportunity" auth="false">
+        <description>Create a sale record</description>
+        <override name="name" optional="true"/>
+        <auto-attributes include="pk" mode="IN" entity-name="SalesOpportunity" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" entity-name="SalesOpportunity" optional="true"/>
+    </service>
+    <service name="deleteSaleOpportunity" default-entity-name="SalesOpportunity" engine="java" invoke="deleteSaleOpportunity" auth="false">
+        <description>Delete a sale record</description>
+        <override name="name" optional="true"/>
+        <auto-attributes include="pk" mode="IN" entity-name="SalesOpportunity" optional="false"/>
+    </service>
+
 
 
     <!--

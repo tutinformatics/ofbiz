@@ -37,7 +37,13 @@ public class SalesOpportunityRoutes extends RouteBuilder {
                 .id("/post")
                 .produces("application/json")
                 .route()
-                .bean(salesOpportunityService, "createSale()")
+                .bean(salesOpportunityService, "createSaleOpportunity()")
+                .endRest();
+        rest("/api")
+                .delete("/salesopportunity")
+                .id("/{id}")
+                .route()
+                .bean(salesOpportunityService, "deleteSaleOpportunity()")
                 .endRest();
     }
 }
