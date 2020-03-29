@@ -28,23 +28,35 @@ under the License.
     <copyright></copyright>
     <version></version>
 
-    <entity entity-name="ProductCustomConfig" package-name="org.apache.ofbiz.servicesRest" title="Product has configuration">
-        <field name="productId" type="id"></field>
-        <field name="configId" type="id"></field>
-        <prim-key field="productId"/>
-        <prim-key field="configId"/>
-        <relation type="one" fk-name="PRODCONF_PROD_ID" rel-entity-name="Product">
-            <key-map field-name="productId"/>
-        </relation>
-        <relation type="one" fk-name="PRODCONF_CONF_ID" rel-entity-name="CustomConfig">
-            <key-map field-name="configId"/>
+    <entity entity-name="CustomConfigItem" package-name="org.apache.ofbiz.servicesRest" title="Configuration parameter for product type.">
+        <field name="productTypeId" type="id"></field>
+        <field name="customConfigItemId" type="id"></field>
+        <field name="itemName" type="name"></field>
+        <field name="defaultValue" type="value"></field>
+        <prim-key field="customConfigItemId"/>
+        <prim-key field="productTypeId"/>
+        <relation type="one" fk-name="CCI_PROD_TYPE" rel-entity-name="ProductType">
+            <key-map field-name="productTypeId"/>
         </relation>
     </entity>
 
-    <entity entity-name="CustomConfig" package-name="org.apache.ofbiz.servicesRest" title="Configuration">
-        <field name="configId" type="id"></field>
-        <field name="path" type="url"></field>
-        <prim-key field="configId"/>
+    <entity entity-name="CustomConfigValue" package-name="org.apache.ofbiz.servicesRest" title="Configuration value for ordered product.">
+        <field name="customConfigItemId" type="id"></field>
+        <field name="orderId" type="id"></field>
+        <field name="productId" type="id"></field>
+        <field name="value" type="value"></field>
+        <prim-key field="customConfigItemId"/>
+        <prim-key field="orderId"/>
+        <prim-key field="productId"/>
+        <relation type="one" fk-name="CCV_CONF_ITEM" rel-entity-name="CustomConfigItem">
+            <key-map field-name="customConfigItemId"/>
+        </relation>
+        <relation type="one" fk-name="CCV_ORDER" rel-entity-name="OrderHeader">
+            <key-map field-name="orderId"/>
+        </relation>
+        <relation type="one" fk-name="CCV_PROD" rel-entity-name="Product">
+            <key-map field-name="productId"/>
+        </relation>
     </entity>
 
     <entity entity-name="ProductTemplate" package-name="org.apache.ofbiz.servicesRest" title="Product has template">
