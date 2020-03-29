@@ -31,6 +31,38 @@ public class Routes extends RouteBuilder {
                 .port(7463)
                 .bindingMode(RestBindingMode.json);
 
+        rest("/api").post("/agent")
+                .route()
+                .bean(agentService, "createAgent")
+                .endRest();
+
+        rest("/api").post("/customer")
+                .route()
+                .bean(customerService, "createCustomer")
+                .endRest();
+
+        rest("/api").post("/opportunity")
+                .route()
+                .bean(opportunityService, "createOpportunity")
+                .endRest();
+
+        rest("/api").post("/pipeline")
+                .route()
+                .bean(pipelineService, "createPipeline")
+                .endRest();
+
+
+        rest("/api").put("/contact")
+                .route()
+                .bean(contactsService, "getContactByFirstName")
+                .endRest();
+
+        rest("/api").get("/contact/firstName/{name}")
+                .produces("application/json")
+                .route()
+                .bean(contactsService, "getContactByFirstName")
+                .endRest();
+
         rest("/api")
                 .get("/contacts")
                 .produces("application/json")
@@ -62,6 +94,16 @@ public class Routes extends RouteBuilder {
                 .produces("application/json")
                 .route()
                 .bean(customerService, "getCustomers()")
+                .endRest();
+
+        rest("/api").delete("/customer/{customerId}")
+                .route()
+                .bean(customerService, "deleteCustomer")
+                .endRest();
+
+        rest("/api").delete("/opportunity/{opportunityId}")
+                .route()
+                .bean(opportunityService, "deleteOpportunity")
                 .endRest();
     }
 }
