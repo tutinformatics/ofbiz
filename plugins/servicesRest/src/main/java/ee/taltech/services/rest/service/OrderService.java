@@ -38,6 +38,11 @@ public class OrderService {
     }
 
     public void createOrder(String partyId, Map<String, Object> data) {
+/*        List<String> productIds = new ArrayList<>();
+        if (data.containsKey("productIds")) {
+            productIds = (ArrayList<String>) data.get("productIds");
+            data.remove("productIds");
+        }*/
         try {
             Optional<GenericValue> order = Converter.mapToGenericValue(delegator, "OrderHeader", data);
             if (order.isPresent()) {
@@ -53,6 +58,17 @@ public class OrderService {
                 if (orderRole.isPresent()) {
                     delegator.createOrStore(orderRole.get());
                 }
+/*              !TODO doesnt work, Cannot setNextSeqId for entity [OrderItem] that does not have a single primary key field
+                for (String productId : productIds) {
+                    Map<String, Object> itemData = new HashMap<>();
+                    itemData.put("productId", productId);
+                    itemData.put("orderId", order.get().get("orderId"));
+                    Optional<GenericValue> orderItem = Converter.mapToGenericValue(delegator, "OrderItem", itemData);
+                    if(orderItem.isPresent()) {
+                        orderItem.get().setNextSeqId();
+                        delegator.createOrStore(orderItem.get());
+                    }
+                }*/
             }
         } catch (GenericEntityException e) {
             e.printStackTrace();
