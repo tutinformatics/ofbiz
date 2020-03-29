@@ -17,7 +17,9 @@ import org.apache.ofbiz.service.GenericDispatcherFactory;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ServiceUtil;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -55,6 +57,44 @@ public class PartyService {
 
         return gson.toJson(PartyServices.findPartyById(myContext, context));
     }
+
+    /**
+     * Get unconfirmed affiliates (such that have no approval date)
+     *
+     * @return
+     * @throws GenericEntityException
+     */
+    public String getUnconfirmedAffiliates() throws GenericEntityException {
+        List<GenericValue> genericValues = EntityQuery.use(delegator).from("Affiliate").where("dateTimeApproved", null).queryList();
+        return gson.toJson(genericValues);
+    }
+
+    /**
+     * Get all affiliates
+     * @return
+     * @throws GenericEntityException
+     */
+    public String getAffiliates() throws GenericEntityException {
+        List<GenericValue> genericValues = EntityQuery.use(delegator).from("Affiliate").queryList();
+        return gson.toJson(genericValues);
+    }
+
+    public String approve(Exchange exchange) throws GenericEntityException {
+        String partyId = parseJson("partyId", exchange);
+        GenericValue genericValue = EntityQuery.use(delegator).from("Affiliate").where("partyId", partyId).queryOne();
+        genericValue.set("dateTimeApproved", new Timestamp(System.currentTimeMillis()));
+        delegator.store(genericValue);
+        return gson.toJson(genericValue);
+    }
+
+    public String disapprove(Exchange exchange) throws GenericEntityException {
+        String partyId = parseJson("partyId", exchange);
+        GenericValue genericValue = EntityQuery.use(delegator).from("Affiliate").where("partyId", partyId).queryOne();
+        genericValue.set("dateTimeApproved", null);
+        delegator.store(genericValue);
+        return gson.toJson(genericValue);
+    }
+
 
     /**
      * @param exchange - http request wrapped by Camel
