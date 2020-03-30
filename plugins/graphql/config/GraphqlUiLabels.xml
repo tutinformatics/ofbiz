@@ -19,22 +19,22 @@ under the License.
 -->
 
 <resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-properties.xsd">
-    <property key="AccountingConnectorApplication">
-        <value xml:lang="en">AccountingConnector Application</value>
-        <value xml:lang="zh">AccountingConnector应用程序</value>
-        <value xml:lang="zh-TW">AccountingConnector應用程式</value>
+    <property key="GraphqlApplication">
+        <value xml:lang="en">Graphql Application</value>
+        <value xml:lang="zh">Graphql应用程序</value>
+        <value xml:lang="zh-TW">Graphql應用程式</value>
     </property>
-    <property key="AccountingConnectorCompanyName">
-        <value xml:lang="en">OFBiz: AccountingConnector</value>
-        <value xml:lang="zh-TW">OFBiz: AccountingConnector</value>
+    <property key="GraphqlCompanyName">
+        <value xml:lang="en">OFBiz: Graphql</value>
+        <value xml:lang="zh-TW">OFBiz: Graphql</value>
     </property>
-    <property key="AccountingConnectorCompanySubtitle">
+    <property key="GraphqlCompanySubtitle">
         <value xml:lang="en">Part of the Apache OFBiz Family of Open Source Software</value>
         <value xml:lang="it">Un modulo della famiglia di software open source Apache OFBiz</value>
         <value xml:lang="zh">开源软件OFBiz的组成部分</value>
         <value xml:lang="zh-TW">開源軟體OFBiz的組成部分</value>
     </property>
-    <property key="AccountingConnectorViewPermissionError">
+    <property key="GraphqlViewPermissionError">
         <value xml:lang="en">You are not allowed to view this page.</value>
         <value xml:lang="zh">不允许你浏览这个页面。</value>
         <value xml:lang="zh-TW">不允許您檢視這個頁面.</value>
