@@ -36,6 +36,20 @@ public class PartyRoute extends BaseRoute {
                 .endRest();
 
         rest("/api")
+                .post("/parties/createCode")
+                .produces("application/json")
+                .route()
+                .bean(partyService, "createAffiliateCode")
+                .endRest();
+
+        rest("/api")
+                .get("/parties/getCodes")
+                .produces("application/json")
+                .route()
+                .bean(partyService, "getAffiliateCodes")
+                .endRest();
+
+        rest("/api")
                 .get("/parties/unconfirmedAffiliates")
                 .produces("application/json")
                 .route()

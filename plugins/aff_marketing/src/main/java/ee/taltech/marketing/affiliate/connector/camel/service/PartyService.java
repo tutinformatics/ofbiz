@@ -7,6 +7,7 @@ import com.google.gson.JsonParser;
 import org.apache.camel.Exchange;
 import org.apache.camel.component.sparkrest.SparkMessage;
 import org.apache.ofbiz.base.util.Debug;
+import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
@@ -71,6 +72,7 @@ public class PartyService {
 
     /**
      * Get all affiliates
+     *
      * @return
      * @throws GenericEntityException
      */
@@ -92,6 +94,21 @@ public class PartyService {
         GenericValue genericValue = EntityQuery.use(delegator).from("Affiliate").where("partyId", partyId).queryOne();
         genericValue.set("dateTimeApproved", null);
         delegator.store(genericValue);
+        return gson.toJson(genericValue);
+    }
+
+    public String createAffiliateCode(Exchange exchange) throws GenericEntityException {
+        String partyId = parseJson("partyId", exchange);
+        checkApprovedAffiliate(partyId);
+        GenericValue genericValue = delegator.makeValue("AffiliateCode", UtilMisc.toMap("partyId", partyId, "affiliateCodeId", delegator.getNextSeqId("AffiliateCode")));
+        delegator.create(genericValue);
+        return gson.toJson(genericValue);
+    }
+
+    public String getAffiliateCodes(Exchange exchange) throws GenericEntityException {
+        String partyId = parseJson("partyId", exchange);
+        checkApprovedAffiliate(partyId);
+        List<GenericValue> genericValue = EntityQuery.use(delegator).from("AffiliateCode").where("partyId", partyId).queryList();
         return gson.toJson(genericValue);
     }
 
@@ -142,6 +159,18 @@ public class PartyService {
         }
 
         return gson.toJson(Map.of("status", "ok"));
+    }
+
+    private void checkApprovedAffiliate(String partyId) throws GenericEntityException {
+        GenericValue userParty = EntityQuery
+                .use(delegator)
+                .from("Affiliate")
+                .where("partyId", partyId)
+                .queryOne();
+        boolean isApproved = userParty.get("dateTimeApproved") != null;
+        if (!isApproved) {
+            ServiceUtil.returnError("You are not approved yet!");
+        }
     }
 
     /**
