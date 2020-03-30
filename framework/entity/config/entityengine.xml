@@ -454,7 +454,7 @@ access. For a detailed description see the core/docs/entityconfig.html file.
         <read-data reader-name="ext-demo"/>
         <inline-jdbc
                 jdbc-driver="org.postgresql.Driver"
-                jdbc-uri="jdbc:postgresql://localhost:8000/ofbiz"
+                jdbc-uri="jdbc:postgresql://localhost:5432/ofbiz"
                 jdbc-username="postgres"
                 jdbc-password="password"
                 isolation-level="ReadCommitted"
@@ -489,7 +489,7 @@ access. For a detailed description see the core/docs/entityconfig.html file.
         <read-data reader-name="ext-demo"/>
         <inline-jdbc
                 jdbc-driver="org.postgresql.Driver"
-                jdbc-uri="jdbc:postgresql://localhost:8000/ofbizolap"
+                jdbc-uri="jdbc:postgresql://localhost:5432/ofbizolap"
                 jdbc-username="postgres"
                 jdbc-password="password"
                 isolation-level="ReadCommitted"
@@ -525,7 +525,7 @@ access. For a detailed description see the core/docs/entityconfig.html file.
         <read-data reader-name="ext-demo"/>
         <inline-jdbc
                 jdbc-driver="org.postgresql.Driver"
-                jdbc-uri="jdbc:postgresql://localhost:8000/ofbiztenant"
+                jdbc-uri="jdbc:postgresql://localhost:5432/ofbiztenant"
                 jdbc-username="postgres"
                 jdbc-password="password"
                 isolation-level="ReadCommitted"
