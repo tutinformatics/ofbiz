@@ -28,6 +28,13 @@ under the License.
         <description>
             Dummy service to prevent empty files and syntax error - Remove when the 1st real service will be added here 
         </description>
-    </service> 
+    </service>
+
+<!--    <service name="getInvoicesService" default-entity-name="Invoice" engine="java"-->
+<!--             location="ee.taltech.accounting.connector.camel.service.TemplateService" invoke="getInvoices" auth="true">-->
+<!--        <description>Get Invoices</description>-->
+<!--        <attribute mode="IN" name="body" optional="true" type="Object"/>-->
+<!--        <override name="comments" optional="true"/>-->
+<!--    </service>-->
     
 </services>

@@ -36,4 +36,15 @@ under the License.
         location="webapp/genericRestEndpoint"
         base-permission="OFBTOOLS,GENERICRESTENDPOINT"
         mount-point="/genericRestEndpoint"/>
+
+    <container name="camel-container" loaders="main,rmi" class="ee.taltech.softwareengineering.ofbiz.bigdata.rest.camel.CamelContainer">
+        <!--<property name="dispatcher-factory" value="org.apache.ofbiz.service.GenericDispatcherFactory"/>-->
+
+        <property name="routes.package" value="ee.taltech.softwareengineering.ofbiz.bigdata.rest.camel.routes"/>
+        <!-- Possible future implementation might read from an XML DSL -->
+        <property name="routeConfigFile" value="config/camel-routes.xml"/>
+        <property name="dispatcher-name" value="camel-dispatcher"/>
+        <property name="delegator-name" value="default"/>
+    </container>
+
 </ofbiz-component>

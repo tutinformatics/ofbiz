@@ -1,21 +1,21 @@
-package ee.taltech.accounting.connector.camel.service;
+package ee.taltech.softwareengineering.ofbiz.bigdata.rest.camel.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.camel.Exchange;
 import org.apache.ofbiz.base.conversion.ConversionException;
 import org.apache.ofbiz.base.lang.JSON;
-import org.apache.ofbiz.base.util.collections.MapComparator;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
-import org.apache.ofbiz.entity.config.model.EntityModelReader;
 import org.apache.ofbiz.entity.model.ModelReader;
 import org.apache.ofbiz.entity.util.Converters;
 import org.apache.ofbiz.entity.util.EntityQuery;
 
 import javax.ws.rs.core.Response;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class TemplateService {
@@ -24,9 +24,9 @@ public class TemplateService {
 	// there probably is a slightly better way to do them
 	public static final Converters.JSONToGenericValue jsonToGenericConverter = new Converters.JSONToGenericValue();
 	public static final Converters.GenericValueToJSON genericToJsonConverter = new Converters.GenericValueToJSON();
-	Delegator delegator;
 	public static Map<String, String> entityMap;
 	protected static ModelReader modelReader;
+	Delegator delegator;
 
 
 	public TemplateService(Delegator delegator) throws GenericEntityException {
@@ -91,6 +91,24 @@ public class TemplateService {
 		}
 		// convert to json and send them off
 		return gson.toJson(orderItems);
+	}
+
+	public Response insert(Exchange exchange) {
+		String entity = exchange.getIn().getHeader("entity").toString();
+		entity = entityMap.get(entity);
+		if (entity == null) {
+			return Response.serverError().entity("Error of some sort").build();
+		}
+
+		try {
+			GenericValue object = jsonToGenericConverter.convert(delegator.getDelegatorName(), entity, JSON.from(exchange.getIn().getBody().toString()));
+			object.setNextSeqId();
+			delegator.create(object);
+			return Response.ok().type("application/json").build();
+		} catch (GenericEntityException | ConversionException e) {
+			e.printStackTrace();
+			return Response.serverError().entity("Error of some sort").build();
+		}
 	}
 
 	/**
