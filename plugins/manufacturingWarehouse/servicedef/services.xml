@@ -27,7 +27,7 @@ under the License.
     <service name="getWorkEffortsService" default-entity-name="WorkEffort" engine="java"
              location="ee.taltech.manufacturing.connector.camel.service.WorkEffortService" invoke="getWorkEfforts" auth="true">
         <description>Get WorkEfforts</description>
-        <attribute mode="IN" name="body" optional="true" type="Object"/>
+        <attribute mode="OUT" name="body" optional="true" type="Object"/>
         <override name="comments" optional="true"/>
     </service> 
     

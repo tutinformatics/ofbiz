@@ -50,7 +50,14 @@ under the License.
         <param-name>compressHTML</param-name>
         <param-value>false</param-value>
     </context-param>
-
+    <filter>
+        <filter-name>CorsFilter</filter-name>
+        <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CorsFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
     <filter>
         <display-name>ControlFilter</display-name>
         <filter-name>ControlFilter</filter-name>
