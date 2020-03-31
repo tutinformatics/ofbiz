@@ -19,25 +19,24 @@ under the License.
 -->
 
 <resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-properties.xsd">
-    <property key="ManufacturingWarehouseApplication">
-        <value xml:lang="en">ManufacturingWarehouse Application</value>
-        <value xml:lang="zh">ManufacturingWarehouse应用程序</value>
-        <value xml:lang="zh-TW">ManufacturingWarehouse應用程式</value>
+    <property key="Aff_marketingApplication">
+        <value xml:lang="en">Aff_marketing Application</value>
+        <value xml:lang="zh">Aff_marketing应用程�?</value>
+        <value xml:lang="zh-TW">Aff_marketing應用程�?</value>
     </property>
-    <property key="ManufacturingWarehouseCompanyName">
-        <value xml:lang="en">OFBiz: ManufacturingWarehouse</value>
-        <value xml:lang="zh-TW">OFBiz: ManufacturingWarehouse</value>
+    <property key="Aff_marketingCompanyName">
+        <value xml:lang="en">OFBiz: Aff_marketing</value>
+        <value xml:lang="zh-TW">OFBiz: Aff_marketing</value>
     </property>
-    <property key="ManufacturingWarehouseCompanySubtitle">
+    <property key="Aff_marketingCompanySubtitle">
         <value xml:lang="en">Part of the Apache OFBiz Family of Open Source Software</value>
         <value xml:lang="it">Un modulo della famiglia di software open source Apache OFBiz</value>
-        <value xml:lang="zh">开源软件OFBiz的组成部分</value>
-        <value xml:lang="zh-TW">開源軟體OFBiz的組成部分</value>
+        <value xml:lang="zh">开�?软件OFBiz的组�?部分</value>
+        <value xml:lang="zh-TW">開�?軟體OFBiz的組�?部分</value>
     </property>
-    <property key="ManufacturingWarehouseViewPermissionError">
+    <property key="Aff_marketingViewPermissionError">
         <value xml:lang="en">You are not allowed to view this page.</value>
-        <value xml:lang="zh">不允许你浏览这个页面。</value>
-        <value xml:lang="zh-TW">不允許您檢視這個頁面.</value>
+        <value xml:lang="zh">�?�?许你�?览这个页�?�。</value>
+        <value xml:lang="zh-TW">�?�?許您檢視這個�?�?�.</value>
     </property>
-
 </resource>

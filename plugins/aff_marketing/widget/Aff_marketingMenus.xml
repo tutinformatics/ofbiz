@@ -19,10 +19,7 @@ under the License.
 -->
 
 <menus xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ofbiz.apache.org/Widget-Menu" xsi:schemaLocation="http://ofbiz.apache.org/Widget-Menu http://ofbiz.apache.org/dtds/widget-menu.xsd">
-    <menu name="MainAppBar" title="${uiLabelMap.ManufacturingWarehouseApplication}" extends="CommonAppBarMenu" extends-resource="component://common/widget/CommonMenus.xml">
+    <menu name="MainAppBar" title="${uiLabelMap.Aff_marketingApplication}" extends="CommonAppBarMenu" extends-resource="component://common/widget/CommonMenus.xml">
         <menu-item name="main" title="${uiLabelMap.CommonMain}"><link target="main"/></menu-item>
-
-        <menu-item name="workEfforts" title="${uiLabelMap.WorkEfforts}"><link target="WorkEfforts"/></menu-item>
-
     </menu>
 </menus>

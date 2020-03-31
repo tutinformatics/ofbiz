@@ -58,12 +58,16 @@ under the License.
                         <estimatedSetupMillis>0</estimatedSetupMillis>
                 </label>
         </decorator-section>
+
+
+                        <label></label>
+
+                    </decorator-section>
                 </decorator-screen>
             </widgets>
         </section>
     </screen>
-
-    <screen name="">
+ <screen name="">
         <section>
             <actions>
                 <set field="" value ="main"/>
@@ -71,8 +75,25 @@ under the License.
             <widgets>
                 <decorator-screen name="" location="">
                     <decorator-section name=""></decorator-section>
+    <screen name="WorkEfforts">
+        <section>
+            <actions>
+                <set field="headerItem" value="WorkEfforts"/><!-- this highlights the selected menu-item with name "WorkEfforts" -->
+            </actions>
+            <widgets>
+                <decorator-screen name="ManufacturingWarehouseCommonDecorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+
+                        <screenlet title="All work efforts">
+                            <include-form name="AllWorkEfforts" location="component://manufacturingWarehouse/widget/ManufacturingWarehouseForms.xml"/>
+                        </screenlet>
+
+                    </decorator-section>
                 </decorator-screen>
             </widgets>
         </section>
     </screen>
+</screens>
+
+
 </screens>
