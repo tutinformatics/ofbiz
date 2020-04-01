@@ -28,29 +28,38 @@ public class GenericService {
     public static final String module = GenericService.class.getName();
 
     public String getAll(String table) {
-        List<GenericValue> orderItems = new ArrayList<>();
+        List<GenericValue> items = new ArrayList<>();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
-            orderItems = EntityQuery.use(delegator)
+            items = EntityQuery.use(delegator)
                     .from(table)
                     .queryList();
         } catch (GenericEntityException e) {
             e.printStackTrace();
             GenericValue error = new GenericValue();
             error.put("Error", e);
-            orderItems.add(error);
+            items.add(error);
         }
-        return gson.toJson(orderItems);
+        System.out.println("Test");
+        items.forEach(this::fetchWithChildren);
+        System.out.println("Test end");
+
+        return gson.toJson(items);
+    }
+
+    private GenericValue fetchWithChildren(GenericValue item) {
+        item.getAllKeys().forEach(System.out::println);
+        return item;
     }
 
     public String getSingle(String table, String id, String idColumn) {
         if (StringUtils.isEmpty(idColumn))
             idColumn = table + "Id";
 
-        List<GenericValue> orderItems = new ArrayList<>();
+        List<GenericValue> items = new ArrayList<>();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
-            orderItems = EntityQuery.use(delegator)
+            items = EntityQuery.use(delegator)
                     .from(table)
                     .where(EntityCondition.makeCondition(idColumn, id))
                     .queryList();
@@ -58,9 +67,9 @@ public class GenericService {
             e.printStackTrace();
             GenericValue error = new GenericValue();
             error.put("Error", e);
-            orderItems.add(error);
+            items.add(error);
         }
-        return gson.toJson(orderItems);
+        return gson.toJson(items);
     }
 
     /**
