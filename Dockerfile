@@ -24,7 +24,7 @@ RUN export JAVA_HOME
 ENV JAVA_OPTS="-Dfile.encoding=UTF-8"
 
 # Setup backend connection
-RUN sed -i 's/citus_master/10.166.0.2/g' framework/entity/config/entityengine.xml
+RUN cat deploy/entity/entityengine.xml > framework/entity/config/entityengine.xml
 
 # Fix line endings
 RUN apt-get install dos2unix
