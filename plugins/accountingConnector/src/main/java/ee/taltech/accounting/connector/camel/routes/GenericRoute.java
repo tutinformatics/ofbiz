@@ -32,13 +32,13 @@ public class GenericRoute extends BaseRoute {
                     .bean(genericService, "getAll(${header.table})")
                     .endRest()
 
-                .get("{id}")
+                .get("{id}?=idColumn={idColumn}") // TODO: Test it
                     .id("api-get-single")
                     .route()
-                    .bean(genericService, "getSingle(${header.table}, ${header.id})")
+                    .bean(genericService, "getSingle(${header.table}, ${header.id}, ${header.idColumn})")
                     .endRest()
 
-                .post() // TODO: Test it, most likely  broken service etc. @Kapa
+                .post() // TODO: Test it
                     .id("api-post")
                     .consumes("application/json")
                     .route()
