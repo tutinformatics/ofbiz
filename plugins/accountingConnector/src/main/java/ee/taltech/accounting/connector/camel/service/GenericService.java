@@ -9,12 +9,15 @@ import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.condition.EntityCondition;
+import org.apache.ofbiz.entity.model.ModelRelation;
 import org.apache.ofbiz.entity.util.Converters;
 import org.apache.ofbiz.entity.util.EntityQuery;
 
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GenericService {
 
@@ -40,15 +43,23 @@ public class GenericService {
             error.put("Error", e);
             items.add(error);
         }
-        System.out.println("Test");
-        items.forEach(this::fetchWithChildren);
-        System.out.println("Test end");
+
+        items.forEach(i -> System.out.println(fetchWithChildren(i)));
 
         return gson.toJson(items);
     }
 
     private GenericValue fetchWithChildren(GenericValue item) {
-        item.getAllKeys().forEach(System.out::println);
+        Iterator<ModelRelation> iterator = item.getModelEntity().getRelationsIterator();
+        while (iterator.hasNext()) {
+            ModelRelation relation = iterator.next();
+            try {
+                System.out.println(item.getRelated(relation.getCombinedName(), null, null, false));
+                item.set(Character.toLowerCase(relation.getCombinedName().charAt(0)) + relation.getCombinedName().substring(1) + "Id", item.getRelated(relation.getCombinedName(), null, null, false));
+            } catch (GenericEntityException e) {
+                e.printStackTrace();
+            }
+        }
         return item;
     }
 
@@ -74,9 +85,9 @@ public class GenericService {
 
     /**
      * @param table Table name as string
-     * @param json String form of an entity
-     * @author big_data / REST api team
+     * @param json  String form of an entity
      * @return response to say if success or not
+     * @author big_data / REST api team
      */
     public Response create(String table, String json) {
         try {
