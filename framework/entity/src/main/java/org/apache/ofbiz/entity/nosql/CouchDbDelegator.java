@@ -11,7 +11,7 @@ import org.apache.ofbiz.entity.util.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import org.apache.commons.lang.NotImplementedException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
