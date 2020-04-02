@@ -14,14 +14,14 @@ import org.apache.ofbiz.entity.util.Converters;
 import org.apache.ofbiz.entity.util.EntityQuery;
 
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class GenericService {
 
-    Delegator delegator;
+    private Delegator delegator;
+    private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
     public static final Converters.JSONToGenericValue jsonToGenericConverter = new Converters.JSONToGenericValue();
 
     public GenericService(Delegator delegator) {
@@ -32,7 +32,6 @@ public class GenericService {
 
     public String getAll(String table) {
         List<GenericValue> items = new ArrayList<>();
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
             items = EntityQuery.use(delegator)
                     .from(table)
@@ -44,23 +43,28 @@ public class GenericService {
             items.add(error);
         }
 
-        items.forEach(i -> System.out.println(fetchWithChildren(i)));
+        List<Map<String, ?>> dtoItems = items.stream()
+                .map(this::fetchWithChildren)
+                .collect(Collectors.toList());
 
-        return gson.toJson(items);
+        return gson.toJson(dtoItems);
     }
 
-    private GenericValue fetchWithChildren(GenericValue item) {
+    private Map<String, Object> fetchWithChildren(GenericValue item) {
         Iterator<ModelRelation> iterator = item.getModelEntity().getRelationsIterator();
+        Map<String, Object> dtoItem = new HashMap<>(item.getAllFields());
+
         while (iterator.hasNext()) {
             ModelRelation relation = iterator.next();
             try {
-                System.out.println(item.getRelated(relation.getCombinedName(), null, null, false));
-                item.set(Character.toLowerCase(relation.getCombinedName().charAt(0)) + relation.getCombinedName().substring(1) + "Id", item.getRelated(relation.getCombinedName(), null, null, false));
+                String name = Character.toLowerCase(relation.getCombinedName().charAt(0)) + relation.getCombinedName().substring(1) + "Id";
+                if (!item.getAllFields().containsKey(name)) continue;
+                dtoItem.put(name, item.getRelated(relation.getCombinedName(), null, null, false));
             } catch (GenericEntityException e) {
                 e.printStackTrace();
             }
         }
-        return item;
+        return dtoItem;
     }
 
     public String getSingle(String table, String id, String idColumn) {
