@@ -30,6 +30,12 @@ public class GenericService {
 
     public static final String module = GenericService.class.getName();
 
+    /**
+     * Fetch all entities from table
+     * @param table Name of the table
+     * @return JSON string
+     * @author accounting team
+     */
     public String getAll(String table) {
         List<GenericValue> items = new ArrayList<>();
         try {
@@ -50,6 +56,12 @@ public class GenericService {
         return gson.toJson(dtoItems);
     }
 
+    /**
+     * Fetch children for GenericValue
+     * @param item GenericValue that needs children fetched
+     * @return Map with object values and keys replaced with children (list of children)
+     * @author accounting team
+     */
     private Map<String, Object> fetchWithChildren(GenericValue item) {
         Iterator<ModelRelation> iterator = item.getModelEntity().getRelationsIterator();
         Map<String, Object> dtoItem = new HashMap<>(item.getAllFields());
@@ -67,12 +79,19 @@ public class GenericService {
         return dtoItem;
     }
 
+    /**
+     * Get single entity
+     * @param table table name
+     * @param id id of the entity
+     * @param idColumn name of the id column, can be null
+     * @return JSON string
+     * @author accounting team
+     */
     public String getSingle(String table, String id, String idColumn) {
         if (StringUtils.isEmpty(idColumn))
-            idColumn = table + "Id";
+            idColumn = Character.toLowerCase(table.charAt(0)) + table.substring(1) + "Id";
 
         List<GenericValue> items = new ArrayList<>();
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
             items = EntityQuery.use(delegator)
                     .from(table)
@@ -84,7 +103,11 @@ public class GenericService {
             error.put("Error", e);
             items.add(error);
         }
-        return gson.toJson(items);
+        List<Map<String, ?>> dtoItems = items.stream()
+                .map(this::fetchWithChildren)
+                .collect(Collectors.toList());
+
+        return gson.toJson(dtoItems);
     }
 
     /**

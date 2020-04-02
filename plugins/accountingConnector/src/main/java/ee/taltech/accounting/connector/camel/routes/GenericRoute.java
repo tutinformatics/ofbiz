@@ -32,13 +32,13 @@ public class GenericRoute extends BaseRoute {
                     .bean(genericService, "getAll(${header.table})")
                     .endRest()
 
-                .get("{id}?=idColumn={idColumn}") // TODO: Test it
+                .get("{id}?idColumn={idColumn}") // TODO: Query pram not recognised, otherwise works
                     .id("api-get-single")
                     .route()
                     .bean(genericService, "getSingle(${header.table}, ${header.id}, ${header.idColumn})")
                     .endRest()
 
-                .post() // TODO: Test it
+                .post() // TODO: Broken, Big data is working on it?
                     .id("api-post")
                     .consumes("application/json")
                     .route()

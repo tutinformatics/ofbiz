@@ -47,7 +47,7 @@ public class InvoiceRoute extends BaseRoute {
                     .bean(invoiceService, "getInvoiceById(${header.id})")
                     .endRest()
 
-                .post() // TODO: Test it, most likely  broken service etc. @Kapa
+                .post() // TODO: Big data is working on it
                     .id("api-invoices-post")
                     .consumes("application/json")
                     .route()
