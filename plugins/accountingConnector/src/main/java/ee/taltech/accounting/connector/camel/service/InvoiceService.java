@@ -19,7 +19,7 @@ import javax.ws.rs.core.Response;
 
 public class InvoiceService {
 
-    Delegator delegator;
+    private Delegator delegator;
     public static final Converters.JSONToGenericValue jsonToGenericConverter = new Converters.JSONToGenericValue();
 
     public InvoiceService(Delegator delegator) {
@@ -27,21 +27,6 @@ public class InvoiceService {
     }
 
     public static final String module = InvoiceService.class.getName();
-
-    //@Deprecated
-    /*public Map<String, Object> getInvoices(DispatchContext dctx, Map<String, ?> context) {
-        Delegator delegator = dctx.getDelegator();
-        try {
-            List<GenericValue> orderItems = EntityQuery.use(delegator)
-                    .from("Invoice")
-                    .queryList();
-            System.out.println(orderItems);
-        } catch (GenericEntityException e) {
-            e.printStackTrace();
-        }
-
-        return ServiceUtil.returnSuccess();
-    }*/
 
     public String getInvoices() {
         List<GenericValue> orderItems = new ArrayList<>();

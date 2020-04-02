@@ -64,14 +64,15 @@ public class GenericService {
      */
     private Map<String, Object> fetchWithChildren(GenericValue item) {
         Iterator<ModelRelation> iterator = item.getModelEntity().getRelationsIterator();
-        Map<String, Object> dtoItem = new HashMap<>(item.getAllFields());
+        Map<String, Object> dtoItem = new HashMap<>(item.getAllFields());  // To bypass type and name conflicts
 
+        ModelRelation relation;
         while (iterator.hasNext()) {
-            ModelRelation relation = iterator.next();
+            relation = iterator.next();
             try {
                 String name = Character.toLowerCase(relation.getCombinedName().charAt(0)) + relation.getCombinedName().substring(1) + "Id";
-                if (!item.getAllFields().containsKey(name)) continue;
-                dtoItem.put(name, item.getRelated(relation.getCombinedName(), null, null, false));
+                // if (!item.getAllFields().containsKey(name)) continue;
+                dtoItem.put(name + "Values", item.getRelated(relation.getCombinedName(), null, null, false));
             } catch (GenericEntityException e) {
                 e.printStackTrace();
             }
