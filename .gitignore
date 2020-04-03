@@ -38,3 +38,5 @@ desktop.ini
 .*.swp
 .*.swo
 *.patch
+
+plugins/*/.svn/
