@@ -1,3 +1,27 @@
+Project frontend: https://github.com/tutinformatics/ofbiz-ui && https://github.com/MartenJurg/accounting_frontend
+
+== How to run for development
+
+*For developing frontend:*
+
+[source,bash]
+----
+./deploy.sh
+----
+
+*For developing backend:*
+
+[source,bash]
+----
+./deploy-dev.sh
+# Or
+docker-composed -f docker-compose-databases.yml up
+./gradlew cleanAll loadAll ofbiz
+----
+
+_Note that loadAll requires databases to be running!_
+
+
 ////
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file

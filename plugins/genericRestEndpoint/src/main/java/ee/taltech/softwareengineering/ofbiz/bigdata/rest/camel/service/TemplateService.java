@@ -9,6 +9,7 @@ import org.apache.ofbiz.base.util.UtilGenerics;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
+import org.apache.ofbiz.entity.model.ModelEntity;
 import org.apache.ofbiz.entity.model.ModelReader;
 import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.entity.util.ExtendedConverters;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class TemplateService {
@@ -32,7 +34,7 @@ public class TemplateService {
 	public static final ExtendedConverters.ExtendedGenericValueToJSON genericToJsonConverter = new ExtendedConverters.ExtendedGenericValueToJSON();
 	public static Map<String, String> entityMap;
 	public static Map<String, String> serviceMap;
-	protected static ModelReader modelReader;
+  protected static ModelReader modelReader;
 	private Delegator delegator;
 	private LocalDispatcher dispatcher;
 	private DispatchContext dpc;
@@ -45,6 +47,26 @@ public class TemplateService {
 		entityMap = modelReader.getEntityCache().entrySet().stream().collect(Collectors.toMap(x -> x.getKey().toLowerCase(), Map.Entry::getKey));
 		dpc = dispatcher.getDispatchContext();
 		serviceMap = dpc.getAllServiceNames().stream().collect(Collectors.toMap(String::toLowerCase, x -> x));
+	}
+
+	/**
+	 * Generate GraphQL Schema
+	 * <p>
+	 * modelReader.getEntityCache().entrySet() - entity set
+	 *
+	 * @return*/
+	public Object getSchema(Exchange exchange) {
+		try {
+			List<String> keys = new ArrayList<>();
+			Set<Map.Entry<String, ModelEntity>> entries = modelReader.getEntityCache().entrySet();
+			return entries;
+//            for (Map.Entry<String, ModelEntity> map : new ArrayList<>(entries)) {
+//                keys.add(map.getKey());
+//            }
+//            return keys;
+		} catch (Exception e) {
+			return e.getMessage();
+		}
 	}
 
 	public String getAll(Exchange exchange) {

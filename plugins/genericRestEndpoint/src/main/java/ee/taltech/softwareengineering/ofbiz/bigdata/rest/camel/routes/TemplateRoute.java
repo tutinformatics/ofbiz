@@ -27,10 +27,19 @@ public class TemplateRoute extends BaseRoute {
 
 		rest("/api/v1/entity")
 				.get("/{entity}")
-				.id("get-all-entity")
+				.id("test-get-entity")
 				.produces("application/json")
 				.route()
 				.bean(templateService, "getAll")
+				.endRest();
+
+		// enables GET on /api/test/{something}, on that URL GET, the "getInvoices" method is called out on templateService
+		rest("/api/v1")
+				.get("/test")
+				.id("get-all-entity")
+				.produces("application/json")
+				.route()
+				.bean(templateService, "getSchema")
 				.endRest();
 
 		rest("/api/v1/entity")
@@ -50,3 +59,4 @@ public class TemplateRoute extends BaseRoute {
 				.endRest();
 	}
 }
+

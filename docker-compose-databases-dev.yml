@@ -1,0 +1,161 @@
+version: '3.7'
+
+networks:
+  monitor-net:
+    driver: bridge
+  db-network:
+    name: db-network
+    driver: bridge
+
+volumes:
+  prometheus_data: {}
+  grafana_data: {}
+
+services:
+
+  prometheus:
+    image: prom/prometheus:v2.16.0
+    container_name: prometheus
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    restart: unless-stopped
+    expose:
+      - 9090
+    networks:
+      - monitor-net
+      - db-network
+    labels:
+      org.label-schema.group: "monitoring"
+
+  alertmanager:
+    image: prom/alertmanager:v0.20.0
+    container_name: alertmanager
+    volumes:
+      - ./alertmanager:/etc/alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/config.yml'
+      - '--storage.path=/alertmanager'
+    restart: unless-stopped
+    expose:
+      - 9093
+    networks:
+      - monitor-net
+      - db-network
+    labels:
+      org.label-schema.group: "monitoring"
+
+  grafana:
+    image: grafana/grafana:6.6.2
+    container_name: grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_SECURITY_ADMIN_USER=${ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    restart: unless-stopped
+    expose:
+      - 3000
+    networks:
+      - monitor-net
+      - db-network
+    labels:
+      org.label-schema.group: "monitoring"
+
+  pushgateway:
+    image: prom/pushgateway:v1.1.0
+    container_name: pushgateway
+    restart: unless-stopped
+    expose:
+      - 9091
+    networks:
+      - monitor-net
+      - db-network
+    labels:
+      org.label-schema.group: "monitoring"
+
+  caddy:
+    image: stefanprodan/caddy
+    container_name: caddy
+    ports:
+      - "3000:3000"
+      - "9090:9090"
+      - "9093:9093"
+      - "9091:9091"
+    volumes:
+      - ./caddy:/etc/caddy
+    environment:
+      - ADMIN_USER=${ADMIN_USER:-admin}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
+    restart: unless-stopped
+    networks:
+      - monitor-net
+      - db-network
+    labels:
+      org.label-schema.group: "monitoring"
+
+  master:
+    container_name: "${COMPOSE_PROJECT_NAME:-citus}_master"
+    restart: unless-stopped
+    depends_on:
+      - manager
+    image: 'citusdata/citus:9.2.2'
+    ports: ["${MASTER_EXTERNAL_PORT:-5432}:5432"]
+    labels: ['com.citusdata.role=Master']
+    volumes:
+      - ./postgres-init:/docker-entrypoint-initdb.d
+    networks:
+      - db-network
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-ofbiz}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-ofbiz}
+
+  worker:
+    image: 'citusdata/citus:9.2.2'
+    restart: unless-stopped
+    labels: ['com.citusdata.role=Worker']
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-ofbiz}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-ofbiz}
+
+  manager:
+    container_name: "${COMPOSE_PROJECT_NAME:-citus}_manager"
+    restart: unless-stopped
+    depends_on:
+      - worker
+    image: 'citusdata/membership-manager:latest'
+    networks:
+      - db-network
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-ofbiz}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-ofbiz}
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: unless-stopped
+    networks:
+      - db-network
+    ports:
+      - "8190:8080"
+
+  couchDB:
+    image: couchdb
+    networks:
+      - db-network
+    ports:
+      - "5984:5984"
+    environment:
+      - COUCHDB_USER=${COUCHDB_USER:-ofbiz}
+      - COUCHDB_PASSWORD=${COUCHDB_PASSWORD:-ofbiz}
