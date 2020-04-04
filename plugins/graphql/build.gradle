@@ -20,9 +20,6 @@
 dependencies {
     //Examples of compile-time and runtime dependencies
 
-    // https://mvnrepository.com/artifact/javax.inject/javax.inject
-    pluginLibsCompile group: 'javax.inject', name: 'javax.inject', version: '1'
-
     //pluginLibsCompile 'junit:junit-dep:4.10'
     //pluginLibsRuntime 'junit:junit-dep:4.10'
 	pluginLibsCompile 'com.graphql-java:graphql-java:13.0'
@@ -42,4 +39,3 @@ task uninstall {
         // uninstall logic for this plugin
     }
 }
-
