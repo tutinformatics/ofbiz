@@ -1,1 +1,0 @@
-The GenericRestEndpoint Help file template.
