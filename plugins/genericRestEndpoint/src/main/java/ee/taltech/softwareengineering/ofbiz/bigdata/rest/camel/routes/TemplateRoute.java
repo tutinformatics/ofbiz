@@ -25,7 +25,6 @@ public class TemplateRoute extends BaseRoute {
 				.port("4567")
 				.bindingMode(RestBindingMode.auto);
 
-		// enables GET on /api/{something}, on that URL GET, the "getInvoices" method is called out on templateService
 		rest("/api/v1/entity")
 				.get("/{entity}")
 				.id("get-all-entity")
@@ -42,15 +41,12 @@ public class TemplateRoute extends BaseRoute {
 				.bean(templateService, "insert")
 				.endRest();
 
-		// enables POST on /api/invoice, could write POJOs for entities if needed for some reason
-		// just convert it to genericvalue
-//		rest("/api")
-//				.post("/invoices")
-////                .type(InvoicePojo.class)
-//				.id("invoice-post")
-//				.produces("application/json")
-//				.route()
-//				.bean(templateService, "createInvoice")
-//				.endRest();
+		rest("/api/v1/service")
+				.post("/{service}")
+				.id("call-service")
+				.produces("application/json")
+				.route()
+				.bean(templateService, "service")
+				.endRest();
 	}
 }
