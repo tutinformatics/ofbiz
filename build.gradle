@@ -200,6 +200,7 @@ dependencies {
     // Remember to change the version number in FreeMarkerWorker class when upgrading. See OFBIZ-10019 if >= 2.4
     implementation 'org.owasp.esapi:esapi:2.2.0.0'
     implementation 'org.springframework:spring-test:5.2.0.RELEASE'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.3'
     implementation 'org.zapodot:jackson-databind-java-optional:2.6.1'
     implementation 'oro:oro:2.0.8'
     implementation 'wsdl4j:wsdl4j:1.6.3'
