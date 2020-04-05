@@ -158,7 +158,8 @@
         </if>
     </simple-method>
 
-    <simple-method method-name="createProjectTask" short-description="Create a project task and optionally assign">
+    <!-- TODO: turn on login-required for this method and all submethods when auth will be implemented-->
+    <simple-method method-name="createProjectTask" short-description="Create a project task and optionally assign" login-required="false">
         <!-- create task -->
         <if-empty field="parameters.statusId">
             <set field="parameters.statusId" value="PTS_CREATED"/>
@@ -774,7 +775,8 @@
         <field-to-result field="parameters.projectId" result-name="projectId"/>
     </simple-method>
 
-    <simple-method method-name="getProjectTaskList" short-description="get Project Phase/task information" login-required="true">
+    <!-- TODO: turn on login-required for this method and all submethods when auth will be implemented-->
+    <simple-method method-name="getProjectTaskList" short-description="get Project Phase/task information" login-required="false">
         <if-empty field="parameters.projectId">
             <return/>
         </if-empty>
@@ -935,7 +937,7 @@
     </simple-method>
 
     <!-- Internal functions  -->
-    <simple-method method-name="combineStatusInfo" short-description="combine lower level status">
+    <simple-method method-name="combineStatusInfo" short-description="combine lower level status" login-required="false">
         <!-- the status for a project or phase is
          IN_PROGRESS if at least one task still in progress
          COMPLETED if all task are either completed or cancelled
@@ -1034,7 +1036,8 @@
         </if>
     </simple-method>
 
-    <simple-method method-name="combineDatesAndPlannedHoursInfo" short-description="combine lower level start end dates and planned hours for a project, phase or task">
+
+    <simple-method method-name="combineDatesAndPlannedHoursInfo" short-description="combine lower level start end dates and planned hours for a project, phase or task" login-required="false">
         <entity-condition  entity-name="ProjectPhaseTaskSklSumView" list="summaryInfos">
             <condition-list>
                 <condition-expr field-name="projectId" from-field="highInfo.projectId" ignore-if-empty="true"/>
@@ -1087,13 +1090,14 @@
         </if-not-empty>
     </simple-method>
 
-    <simple-method method-name="combineInfo" short-description="combine lower level status, dates of tasks.">
+    <!-- TODO: turn on login-required for this method and submethods when auth will be implemented-->
+    <simple-method method-name="combineInfo" short-description="combine lower level status, dates of tasks." login-required="false">
         <call-simple-method method-name="combineStatusInfo"/>
         <call-simple-method method-name="combineDatesAndPlannedHoursInfo"/>
         <call-simple-method method-name="combineActualHours"/>
     </simple-method>
 
-    <simple-method method-name="combineActualHours" short-description="combine lower level Actual hours info.">
+    <simple-method method-name="combineActualHours" short-description="combine lower level Actual hours info." login-required="false">
         <!-- 
         -to calculate actual hours : the declared number of hours in time entry should be multiplied by the 
          max percentage declared in PartyRate if a valid party rate can be found for the party associated to a
@@ -1303,7 +1307,7 @@
         </if-empty>
     </simple-method>
 
-    <simple-method method-name="createDates" short-description="merge the estimated and actual dates">
+    <simple-method method-name="createDates" short-description="merge the estimated and actual dates" login-required="false">
         <!-- input/output is 'highInfo map -->
         <!-- create dates taking the last known one to save space on the list -->
         <if-not-empty field="highInfo.actualStartDate">
