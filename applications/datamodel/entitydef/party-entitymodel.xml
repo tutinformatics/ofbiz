@@ -1147,8 +1147,8 @@ under the License.
         <key-map field-name="partyId"/>
       </relation>
       <relation type="one-nofk" rel-entity-name="Person">
-        <key-map field-name="partyId"/>
-      </relation>
+      <key-map field-name="partyId"/>
+    </relation>
       <relation type="one-nofk" rel-entity-name="PartyGroup">
         <key-map field-name="partyId"/>
       </relation>
@@ -3062,8 +3062,8 @@ under the License.
         <alias entity-alias="C" name="partyId"/>
         <alias entity-alias="CD" name="firstName"/>
         <view-link entity-alias="C" rel-entity-alias="CD">
-        <key-map field-name="partyId"/>
-      </view-link>
+          <key-map field-name="partyId"/>
+        </view-link>
     </view-entity>
 
 </entitymodel>

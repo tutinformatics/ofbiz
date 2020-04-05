@@ -9,7 +9,7 @@ import org.apache.ofbiz.service.LocalDispatcher;
 public class SalesOpportunityRoutes extends RouteBuilder {
     LocalDispatcher localDispatcher;
 
-    private ContactsListService contactsListService;
+
     private SalesOpportunityService salesOpportunityService;
 
     public SalesOpportunityRoutes(LocalDispatcher localDispatcher) {
@@ -23,27 +23,32 @@ public class SalesOpportunityRoutes extends RouteBuilder {
                 .component("spark-rest")
                 .host("localhost")
                 .port(7463)
-                .bindingMode(RestBindingMode.json);
+                .bindingMode(RestBindingMode.json)
+                .enableCORS(true)
+                .corsHeaderProperty("Access-Control-Allow-Origin","*");
 
         rest("/api")
                 .get("/salesopportunity")
-                .id("/get")
                 .produces("application/json")
                 .route()
-                .bean(salesOpportunityService, "getSalesOpportunityList()")
+                .bean(salesOpportunityService, "getSalesOpportunityList")
                 .endRest();
         rest("/api")
                 .post("/salesopportunity")
-                .id("/post")
                 .produces("application/json")
                 .route()
-                .bean(salesOpportunityService, "createSaleOpportunity()")
+                .bean(salesOpportunityService, "createSaleOpportunity")
                 .endRest();
         rest("/api")
-                .delete("/salesopportunity")
-                .id("/{id}")
+                .delete("/salesopportunity/{id}")
                 .route()
-                .bean(salesOpportunityService, "deleteSaleOpportunity()")
+                .bean(salesOpportunityService, "deleteSaleOpportunity")
+                .endRest();
+        rest("/api")
+                .put("/salesopportunity/update")
+                .route()
+                .bean(salesOpportunityService, "updateSaleOpportunity")
                 .endRest();
     }
+
 }

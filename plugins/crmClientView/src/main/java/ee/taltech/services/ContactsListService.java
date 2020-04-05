@@ -71,7 +71,7 @@ public class ContactsListService {
         return null;
     }
 
-    public List<GenericValue> getContactList() {
+       public List<GenericValue> getContactList() {
         try {
             return delegator.findAll("ClientView", true);
         } catch (GenericEntityException e) {
@@ -100,7 +100,7 @@ public class ContactsListService {
             String name = getParamValueFromExchange("name", exchange);
             //EntityEcaRuleRunner<?> ecaRunner = this.getEcaRuleRunner(modelEntity.getEntityName());
             String capitalizedName = name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
-            System.out.println(name);
+
 
             List<GenericValue> result = delegator.findByAnd("Person",  UtilMisc.toMap("firstName", capitalizedName),null , true);
             if (result.size() >= 1) {

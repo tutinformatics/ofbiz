@@ -21,7 +21,9 @@ public class InvoiceRoutes extends RouteBuilder {
                 .component("spark-rest")
                 .host("localhost")
                 .port(7463)
-                .bindingMode(RestBindingMode.json);
+                .bindingMode(RestBindingMode.json)
+                .enableCORS(true)
+                .corsHeaderProperty("Access-Control-Allow-Origin","*");
 
         rest("/api")
                 .get("/invoice")
