@@ -38,6 +38,19 @@ public class TemplateService {
     }
 
 
+    public String generateDepthOneTempJsonFromModelEntity(ModelEntity value, HashSet<String> knownKeys) {
+//        if (knownKeys.contains(value.getPackageName())) {
+            return generateDepthOneJsonFromModelEntity(value);
+//        } else {
+//            knownKeys.add(value.getPackageName());
+//            return "{\"" +
+//                    value.getPackageName() +
+//                    "\":\".\"" +
+//                    "}";
+//        }
+    }
+
+
     public String generateDepthOneJsonFromModelEntity(ModelEntity value) {
         StringBuilder json = new StringBuilder();
         json.append("{");
@@ -51,7 +64,29 @@ public class TemplateService {
                     .append("\"");
 
             if (it.hasNext()) {
-                json.append(",\n");
+                json.append(",");
+            } else {
+                json.append("}");
+            }
+        }
+        return json.toString();
+    }
+
+
+    public String generateDepthTwoJsonFromModelEntity(ModelEntity value) {
+        StringBuilder json = new StringBuilder();
+        json.append("{");
+        HashSet<String> knownKeys = new HashSet<>();
+        for (Iterator<ModelField> it = value.getFieldsIterator(); it.hasNext(); ) {
+            ModelField field = it.next();
+            json
+                    .append("\"")
+                    .append(field.getColName())
+                    .append("\":")
+                    .append(generateDepthOneTempJsonFromModelEntity(field.getModelEntity(), knownKeys));
+
+            if (it.hasNext()) {
+                json.append(",");
             } else {
                 json.append("}");
             }
@@ -78,7 +113,7 @@ public class TemplateService {
                         .append("\"")
                         .append(map.getKey())
                         .append("\":")
-                        .append(generateDepthOneJsonFromModelEntity(map.getValue()));
+                        .append(generateDepthTwoJsonFromModelEntity(map.getValue()));
 
                 if (iterator.hasNext()) {
                     json.append(",\n");
