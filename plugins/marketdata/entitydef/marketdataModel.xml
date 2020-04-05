@@ -19,7 +19,7 @@ under the License.
 -->
 
 <entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
+             xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/marketdataModel.xsd">
     <!-- ========================================================= -->
     <!-- ======================== Defaults ======================= -->
     <!-- ========================================================= -->
@@ -28,23 +28,11 @@ under the License.
     <copyright></copyright>
     <version>1.0</version>
 
-    <entity entity-name="OfbizDemoType" package-name="org.apache.ofbiz.ofbizdemo" title="OfbizDemo Type Entity">
-        <field name="ofbizDemoTypeId" type="id"><description>primary sequenced ID</description></field>
-        <field name="description" type="description"></field>
-        <prim-key field="ofbizDemoTypeId"/>
-    </entity>
-
-    <entity entity-name="OfbizDemo" package-name="org.apache.ofbiz.ofbizdemo" title="OfbizDemo Entity">
-        <field name="ofbizDemoId" type="id"><description>primary sequenced ID</description></field>
-        <field name="ofbizDemoTypeId" type="id"></field>
-        <field name="firstName" type="name"></field>
-        <field name="lastName" type="name"></field>
-        <field name="comments" type="comment"></field>
-        <prim-key field="ofbizDemoId"/>
-        <relation type="one" fk-name="ODEM_OD_TYPE_ID" rel-entity-name="OfbizDemoType">
-            <key-map field-name="ofbizDemoTypeId"/>
-        </relation>
-    </entity>
+<!--    <entity entity-name="MarketdataCompany" package-name="org.apache.ofbiz.marketdata" title="Marketdata Company Type Entity">-->
+<!--        <field name="ofbizDemoTypeId" type="id"><description>primary sequenced ID</description></field>-->
+<!--        <field name="description" type="description"></field>-->
+<!--        <prim-key field="ofbizDemoTypeId"/>-->
+<!--    </entity>-->
 
     <entity entity-name="MarketdataModel" package-name="org.apache.ofbiz.marketdata" title="Marketdata Company Type Entity">
         <field name="companyId" type="id"><description>primary sequenced ID</description></field>
@@ -55,9 +43,9 @@ under the License.
         <field name="firstEntryDate" type="name"></field>
         <field name="companyAddress" type="name"></field>
         <prim-key field="companyId"/>
-        <!--        <relation type="one" fk-name="ODEM_OD_TYPE_ID" rel-entity-name="OfbizDemoType">-->
-        <!--            <key-map field-name="ofbizDemoTypeId"/>-->
-        <!--        </relation>-->
+<!--        <relation type="one" fk-name="ODEM_OD_TYPE_ID" rel-entity-name="OfbizDemoType">-->
+<!--            <key-map field-name="ofbizDemoTypeId"/>-->
+<!--        </relation>-->
     </entity>
 
 </entitymodel>
