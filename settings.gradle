@@ -31,7 +31,3 @@ activeComponents().each { File component ->
         include subProject.replaceAll(fileSep, ':')
     
 }
-include 'graphql'
-include 'applications:graphql'
-findProject(':applications:graphql')?.name = 'graphql'
-

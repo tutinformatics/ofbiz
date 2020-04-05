@@ -11,9 +11,6 @@
 name: Build and Deploy to GKE
 
 on:
-  pull_request:
-    branches: 
-      - trunk
   push:
     branches: 
       - release/*

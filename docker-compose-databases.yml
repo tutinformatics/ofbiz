@@ -140,8 +140,6 @@ services:
     image: couchdb
     ports:
       - "5984:5984"
-    volumes:
-      - ./config/couchdb:/opt/couchdb/etc/default.d
     environment:
       - COUCHDB_USER=${COUCHDB_USER:-ofbiz}
       - COUCHDB_PASSWORD=${COUCHDB_PASSWORD:-ofbiz}

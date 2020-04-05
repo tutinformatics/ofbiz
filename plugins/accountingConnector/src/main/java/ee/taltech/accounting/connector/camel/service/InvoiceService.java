@@ -2,20 +2,24 @@ package ee.taltech.accounting.connector.camel.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.apache.commons.math3.genetics.GeneticAlgorithm;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
+import org.apache.ofbiz.entity.condition.EntityCondition;
 import org.apache.ofbiz.entity.util.Converters;
 import org.apache.ofbiz.entity.util.EntityQuery;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.apache.ofbiz.base.conversion.ConversionException;
 import org.apache.ofbiz.base.lang.JSON;
 import javax.ws.rs.core.Response;
 
 public class InvoiceService {
 
-    Delegator delegator;
+    private Delegator delegator;
     public static final Converters.JSONToGenericValue jsonToGenericConverter = new Converters.JSONToGenericValue();
 
     public InvoiceService(Delegator delegator) {
@@ -24,27 +28,30 @@ public class InvoiceService {
 
     public static final String module = InvoiceService.class.getName();
 
-    //@Deprecated
-    /*public Map<String, Object> getInvoices(DispatchContext dctx, Map<String, ?> context) {
-        Delegator delegator = dctx.getDelegator();
-        try {
-            List<GenericValue> orderItems = EntityQuery.use(delegator)
-                    .from("Invoice")
-                    .queryList();
-            System.out.println(orderItems);
-        } catch (GenericEntityException e) {
-            e.printStackTrace();
-        }
-
-        return ServiceUtil.returnSuccess();
-    }*/
-
     public String getInvoices() {
         List<GenericValue> orderItems = new ArrayList<>();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try {
             orderItems = EntityQuery.use(delegator)
                     .from("Invoice")
+                    .queryList();
+            System.out.println(orderItems);
+        } catch (GenericEntityException e) {
+            e.printStackTrace();
+            GenericValue error = new GenericValue();
+            error.put("Error", e);
+            orderItems.add(error);
+        }
+        return gson.toJson(orderItems);
+    }
+
+    public String getInvoiceById(String id) {
+        List<GenericValue> orderItems = new ArrayList<>();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try {
+            orderItems = EntityQuery.use(delegator)
+                    .from("Invoice")
+                    .where(EntityCondition.makeCondition("invoiceId", id))
                     .queryList();
             System.out.println(orderItems);
         } catch (GenericEntityException e) {
