@@ -16,6 +16,7 @@ on:
       - trunk
   push:
     branches: 
+      - manufacturing_warehouse_rest_plugin
       - release/*
       - trunk
       - ci
