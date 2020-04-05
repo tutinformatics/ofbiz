@@ -18,8 +18,6 @@
  *******************************************************************************/
 package org.apache.ofbiz.entity.util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.openjson.JSONObject;
 import org.apache.ofbiz.base.conversion.AbstractConverter;
 import org.apache.ofbiz.base.conversion.ConversionException;
 import org.apache.ofbiz.base.conversion.ConverterLoader;
@@ -36,29 +34,12 @@ import org.apache.ofbiz.entity.model.ModelFieldType;
 import java.io.IOException;
 import java.util.*;
 
-/**
- * Entity Engine <code>Converter</code> classes.
- */
+/** Entity Engine <code>Converter</code> classes. */
 public class Converters implements ConverterLoader {
-    private static final ObjectMapper mapper = new ObjectMapper();
-
-    @Override
-    public void loadConverters() {
-        org.apache.ofbiz.base.conversion.Converters.loadContainedConverters(Converters.class);
-    }
 
     public static class JSONToGenericValue extends AbstractConverter<JSON, GenericValue> {
         public JSONToGenericValue() {
             super(JSON.class, GenericValue.class);
-        }
-
-        public GenericValue convert(String delegatorName, String entityName, JSON obj) throws ConversionException {
-            JSONObject node;
-            node = new JSONObject(obj.toString());
-            node.put("_DELEGATOR_NAME_", delegatorName);
-            node.put("_ENTITY_NAME_", entityName);
-            System.out.println(node.toString());
-            return convert(JSON.from(node.toString()));
         }
 
         @Override
@@ -92,15 +73,6 @@ public class Converters implements ConverterLoader {
     public static class GenericValueToJSON extends AbstractConverter<GenericValue, JSON> {
         public GenericValueToJSON() {
             super(GenericValue.class, JSON.class);
-        }
-
-        public JSON convertNoNames(GenericValue obj) throws ConversionException {
-            Map<String, Object> fieldMap = new HashMap<>(obj);
-            try {
-                return JSON.from(fieldMap);
-            } catch (IOException e) {
-                throw new ConversionException(e);
-            }
         }
 
         @Override
@@ -173,5 +145,10 @@ public class Converters implements ConverterLoader {
         public GenericEntity.NullField convert(Object obj) throws ConversionException {
             return GenericEntity.NULL_FIELD;
         }
+    }
+
+    @Override
+    public void loadConverters() {
+        org.apache.ofbiz.base.conversion.Converters.loadContainedConverters(Converters.class);
     }
 }

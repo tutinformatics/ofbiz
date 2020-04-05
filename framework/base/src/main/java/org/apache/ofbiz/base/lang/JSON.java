@@ -18,21 +18,21 @@
  *******************************************************************************/
 package org.apache.ofbiz.base.lang;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
-
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.apache.ofbiz.base.util.Assert;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 
 /** A JSON object. */
 @ThreadSafe
 public final class JSON {
 
     // TODO: Find a generic way to modify mapper options
-    private static final ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper mapper = new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
     /**
      * Creates a <code>JSON</code> instance from an <code>InputStream</code>.
