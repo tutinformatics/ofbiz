@@ -114,7 +114,7 @@ public class TemplateService {
      *
      * @return
      */
-    public Object getSchema(Exchange exchange) {
+    public Object getGraphQLSchemas(Exchange exchange) {
         try {
             Set<Map.Entry<String, ModelEntity>> entries = modelReader.getEntityCache().entrySet();
             StringBuilder json = new StringBuilder();

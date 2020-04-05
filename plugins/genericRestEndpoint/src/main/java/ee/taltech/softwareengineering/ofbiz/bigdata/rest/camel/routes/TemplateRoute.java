@@ -33,13 +33,12 @@ public class TemplateRoute extends BaseRoute {
 				.bean(templateService, "getAll")
 				.endRest();
 
-		// enables GET on /api/test/{something}, on that URL GET, the "getInvoices" method is called out on templateService
-		rest("/api/v1")
-				.get("/test")
-				.id("get-all-entity")
+		rest("/api/v1/graphql")
+				.get("/{entity}")
+				.id("test-graphql-endpoints")
 				.produces("application/json")
 				.route()
-				.bean(templateService, "getSchema")
+				.bean(templateService, "getGraphQLSchemas")
 				.endRest();
 
 		rest("/api/v1/entity")
