@@ -4,6 +4,7 @@ package com.taltech.crm.services;
 import com.taltech.crm.services.converter.Converter;
 import org.apache.camel.Exchange;
 import org.apache.camel.component.sparkrest.SparkMessage;
+import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
@@ -15,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class OpportunityService {
     private DispatchContext dctx;
@@ -41,6 +43,18 @@ public class OpportunityService {
         return null;
     }
 
+    public List<GenericValue> getOpportunitiesByStage(Exchange exchange) {
+        try {
+            //String id = getParamValueFromExchange("id", exchange);
+            String stage = getParamValueFromExchange("stage", exchange);
+            return delegator.findByAnd("opportunity",  UtilMisc.toMap("stage", stage),null , true);
+            //return delegator.findByAnd("opportunity",  UtilMisc.toMap("opportunityId", id),null , true)
+            //        .stream().filter(s->s.get("stage").equals(stage)).collect(Collectors.toList());
+        } catch (GenericEntityException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public void deleteOpportunity(Exchange exchange) {
         try {
@@ -68,7 +82,7 @@ public class OpportunityService {
                 roleData.put("pipelineId", order.get().get("pipelineId"));
                 roleData.put("customerId", order.get().get("customerId"));
                 roleData.put("contactId", order.get().get("contactId"));
-                roleData.put("agentId", order.get().get("agentId"));
+                roleData.put("price", order.get().get("price"));
                 roleData.put("name", order.get().get("name"));
                 roleData.put("description", order.get().get("description"));
                 roleData.put("stage", order.get().get("stage"));

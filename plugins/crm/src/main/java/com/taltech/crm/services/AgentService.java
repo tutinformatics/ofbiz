@@ -40,6 +40,7 @@ public class AgentService {
                 delegator.createOrStore(order.get());
                 Map<String, Object> roleData = new HashMap<>();
                 roleData.put("agentId", order.get().get("agentId"));
+                roleData.put("customerId", order.get().get("customerId"));
                 roleData.put("name", order.get().get("name"));
                 roleData.put("telecomNumber", order.get().get("telecomNumber"));
                 roleData.put("emailAddress", order.get().get("emailAddress"));
