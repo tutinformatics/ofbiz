@@ -55,9 +55,6 @@ under the License.
         <field name="firstEntryDate" type="name"></field>
         <field name="companyAddress" type="name"></field>
         <prim-key field="companyId"/>
-        <!--        <relation type="one" fk-name="ODEM_OD_TYPE_ID" rel-entity-name="OfbizDemoType">-->
-        <!--            <key-map field-name="ofbizDemoTypeId"/>-->
-        <!--        </relation>-->
     </entity>
 
 </entitymodel>
