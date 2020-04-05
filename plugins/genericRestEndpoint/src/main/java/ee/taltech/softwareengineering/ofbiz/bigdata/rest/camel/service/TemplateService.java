@@ -1,5 +1,6 @@
 package ee.taltech.softwareengineering.ofbiz.bigdata.rest.camel.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.camel.Exchange;
@@ -9,15 +10,13 @@ import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.model.ModelEntity;
+import org.apache.ofbiz.entity.model.ModelField;
 import org.apache.ofbiz.entity.model.ModelReader;
 import org.apache.ofbiz.entity.util.Converters;
 import org.apache.ofbiz.entity.util.EntityQuery;
 
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TemplateService {
@@ -26,6 +25,7 @@ public class TemplateService {
     // there probably is a slightly better way to do them
     public static final Converters.JSONToGenericValue jsonToGenericConverter = new Converters.JSONToGenericValue();
     public static final Converters.GenericValueToJSON genericToJsonConverter = new Converters.GenericValueToJSON();
+    private static final ObjectMapper mapper = new ObjectMapper();
     public static Map<String, String> entityMap;
     protected static ModelReader modelReader;
     Delegator delegator;
@@ -37,21 +37,58 @@ public class TemplateService {
         entityMap = modelReader.getEntityCache().entrySet().stream().collect(Collectors.toMap(x -> x.getKey().toLowerCase(), Map.Entry::getKey));
     }
 
+
+    public String generateDepthOneJsonFromModelEntity(ModelEntity value) {
+        StringBuilder json = new StringBuilder();
+        json.append("{");
+        for (Iterator<ModelField> it = value.getFieldsIterator(); it.hasNext(); ) {
+            ModelField field = it.next();
+            json
+                    .append("\"")
+                    .append(field.getColName())
+                    .append("\":\"")
+                    .append(field.getType())
+                    .append("\"");
+
+            if (it.hasNext()) {
+                json.append(",\n");
+            } else {
+                json.append("}");
+            }
+        }
+        return json.toString();
+    }
+
+
     /**
      * Generate GraphQL Schema
      * <p>
      * modelReader.getEntityCache().entrySet() - entity set
      *
-     * @return*/
+     * @return
+     */
     public Object getSchema(Exchange exchange) {
         try {
-            List<String> keys = new ArrayList<>();
             Set<Map.Entry<String, ModelEntity>> entries = modelReader.getEntityCache().entrySet();
-            return entries;
-//            for (Map.Entry<String, ModelEntity> map : new ArrayList<>(entries)) {
-//                keys.add(map.getKey());
-//            }
-//            return keys;
+            StringBuilder json = new StringBuilder();
+            json.append("{");
+            for (Iterator<Map.Entry<String, ModelEntity>> iterator = new ArrayList<>(entries).iterator(); iterator.hasNext(); ) {
+                Map.Entry<String, ModelEntity> map = iterator.next();
+                json
+                        .append("\"")
+                        .append(map.getKey())
+                        .append("\":")
+                        .append(generateDepthOneJsonFromModelEntity(map.getValue()));
+
+                if (iterator.hasNext()) {
+                    json.append(",\n");
+                } else {
+                    json.append("}");
+                }
+
+            }
+
+            return json.toString();
         } catch (Exception e) {
             return e.getMessage();
         }
