@@ -14,6 +14,7 @@ Project frontend: https://github.com/tutinformatics/ofbiz-ui && https://github.c
 [source,bash]
 ----
 ./deploy-dev.sh
+
 # Or
 docker-composed -f docker-compose-databases.yml up
 ./gradlew cleanAll loadAll ofbiz
