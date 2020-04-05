@@ -153,6 +153,7 @@ configurations {
 }
 
 dependencies {
+    compile group: 'javax.inject', name: 'javax.inject', version: '1'
     compileOnly 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
 
@@ -503,7 +504,7 @@ task createTenant(group: ofbizServer, description: 'Create a new tenant in your 
     }
 }
 
-// ========== Documentation tasks ==========
+/*// ========== Documentation tasks ==========
 tasks.withType(AsciidoctorTask) { task ->
     backends 'html5', 'pdf'
     attributes  \
@@ -514,7 +515,7 @@ tasks.withType(AsciidoctorTask) { task ->
     'chapter-label' : '' ,
     'toc' : '' ,
     'toclevels' : '3'
-}
+}*/
 
 task deleteOfbizDocumentation {
     doFirst { delete "${buildDir}/asciidoc/ofbiz" }
