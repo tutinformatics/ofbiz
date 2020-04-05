@@ -31,6 +31,7 @@ import org.apache.ofbiz.service.ModelParam;
 import org.apache.ofbiz.service.ModelService;
 import org.apache.ofbiz.widget.WidgetWorker;
 import org.apache.ofbiz.widget.renderer.FormStringRenderer;
+import org.apache.ofbiz.widget.renderer.VisualTheme;
 import org.codehaus.groovy.control.CompilationFailedException;
 import org.w3c.dom.Element;
 
@@ -177,10 +178,11 @@ public abstract class ModelForm extends ModelWidget {
     private final Set<String> useWhenFields;
 
     /** XML Constructor */
-    protected ModelForm(Element formElement, String formLocation, ModelReader entityModelReader, DispatchContext dispatchContext, String defaultType) {
+    protected ModelForm(Element formElement, String formLocation, ModelReader entityModelReader,
+                        VisualTheme visualTheme, DispatchContext dispatchContext, String defaultType) {
         super(formElement);
         this.formLocation = formLocation;
-        parentModel = getParentModel(formElement, entityModelReader, dispatchContext);
+        parentModel = getParentModel(formElement, entityModelReader, visualTheme, dispatchContext);
         int defaultViewSizeInt = DEFAULT_PAGE_SIZE;
         String viewSize = formElement.getAttribute("view-size");
         if (viewSize.isEmpty()) {
@@ -1226,7 +1228,8 @@ public abstract class ModelForm extends ModelWidget {
         return field;
     }
 
-    protected abstract ModelForm getParentModel(Element formElement, ModelReader entityModelReader, DispatchContext dispatchContext);
+    protected abstract ModelForm getParentModel(Element formElement, ModelReader entityModelReader,
+                                                VisualTheme visualTheme, DispatchContext dispatchContext);
 
     public String getParentFormLocation() {
         return this.parentModel == null ? null : this.parentModel.getFormLocation();
@@ -1317,7 +1320,7 @@ public abstract class ModelForm extends ModelWidget {
     }
 
     public String getTarget() {
-        return target.getOriginal();
+        return target != null ? target.getOriginal() : null;
     }
 
     /** iterate through altTargets list to see if any should be used, if not return original target
