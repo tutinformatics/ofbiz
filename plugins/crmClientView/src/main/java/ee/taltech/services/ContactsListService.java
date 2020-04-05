@@ -73,7 +73,7 @@ public class ContactsListService {
 
     public List<GenericValue> getContactList() {
         try {
-            return delegator.findAll("Person", true);
+            return delegator.findAll("ClientView", true);
         } catch (GenericEntityException e) {
             e.printStackTrace();
         }
