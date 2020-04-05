@@ -52,7 +52,7 @@ public class ProjectResource {
             result = dispatcher.runSync("createProjectTask", context);
         } catch (GenericServiceException e) {
             Debug.logError(e, "Exception thrown while running createProjectTask service: ", MODULE);
-            String errMsg = UtilProperties.getMessage("JerseyUiLabels", "api.error.create-task", httpRequest.getLocale());
+            String errMsg = UtilProperties.getMessage("JerseyUiLabels", "api.error.create_task", httpRequest.getLocale());
             throw new RuntimeException(errMsg);
         }
 
