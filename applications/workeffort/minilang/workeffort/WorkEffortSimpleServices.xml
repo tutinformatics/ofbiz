@@ -39,7 +39,8 @@ under the License.
         <field-to-result field="workEffortId"/>
     </simple-method>
 
-    <simple-method method-name="createWorkEffort" short-description="Create Work Effort">
+    <!-- TODO: turn on login-required for this method and all submethods when auth will be implemented-->
+    <simple-method method-name="createWorkEffort" short-description="Create Work Effort" login-required="false">
         <make-value entity-name="WorkEffort" value-field="newEntity"/>
         <if-empty field="parameters.workEffortId">
             <sequenced-id sequence-name="WorkEffort" field="newEntity.workEffortId"/>
@@ -331,7 +332,7 @@ under the License.
 
 
     <!-- WorkEffortPartyAssignment -->
-    <simple-method method-name="assignPartyToWorkEffort" short-description="Assign Party to Work Effort">
+    <simple-method method-name="assignPartyToWorkEffort" short-description="Assign Party to Work Effort" login-required="false">
         <!-- check if the requested party Assignment already exist -->
         <entity-and entity-name="WorkEffortPartyAssignment" list="currentAssignments" filter-by-date="true">
             <field-map field-name="workEffortId" from-field="parameters.workEffortId"/>

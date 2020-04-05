@@ -1363,7 +1363,8 @@ under the License.
     </service>
 
     <!-- WorkEffort Skill Standard Services -->
-    <service name="createWorkEffortSkillStandard" engine="entity-auto" default-entity-name="WorkEffortSkillStandard" invoke="create" auth="true">
+    <!-- TODO: revert auth=false-->
+    <service name="createWorkEffortSkillStandard" engine="entity-auto" default-entity-name="WorkEffortSkillStandard" invoke="create" auth="false">
         <description>Create WorkEffortSkillStandard</description>
         <auto-attributes mode="IN" include="pk" optional="false"/>
         <auto-attributes mode="IN" include="nonpk" optional="true"/>
