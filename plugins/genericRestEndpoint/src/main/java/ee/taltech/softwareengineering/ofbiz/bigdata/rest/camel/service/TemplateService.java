@@ -69,11 +69,11 @@ public class TemplateService {
         for (Iterator<ModelField> it = value.getFieldsIterator(); it.hasNext(); ) {
             ModelField field = it.next();
             json
-                .append("\"")
-                .append(field.getColName())
-                .append("\":\"")
-                .append(field.getType())
-                .append("\"");
+                    .append("\"")
+                    .append(field.getColName())
+                    .append("\":\"")
+                    .append(field.getType())
+                    .append("\"");
 
             if (it.hasNext()) {
                 json.append(",");
@@ -92,10 +92,10 @@ public class TemplateService {
         for (Iterator<ModelField> it = value.getFieldsIterator(); it.hasNext(); ) {
             ModelField field = it.next();
             json
-                .append("\"")
-                .append(field.getColName())
-                .append("\":")
-                .append(generateDepthOneTempJsonFromModelEntity(field.getModelEntity(), knownKeys));
+                    .append("\"")
+                    .append(field.getColName())
+                    .append("\":")
+                    .append(generateDepthOneTempJsonFromModelEntity(field.getModelEntity(), knownKeys));
 
             if (it.hasNext()) {
                 json.append(",");
@@ -107,14 +107,7 @@ public class TemplateService {
     }
 
 
-    /**
-     * Generate GraphQL Schema
-     * <p>
-     * modelReader.getEntityCache().entrySet() - entity set
-     *
-     * @return
-     */
-    public Object getGraphQLSchemas(Exchange exchange) {
+    public Object getJSONSchemas(Exchange exchange) {
         try {
             Set<Map.Entry<String, ModelEntity>> entries = modelReader.getEntityCache().entrySet();
             StringBuilder json = new StringBuilder();
@@ -122,10 +115,10 @@ public class TemplateService {
             for (Iterator<Map.Entry<String, ModelEntity>> iterator = new ArrayList<>(entries).iterator(); iterator.hasNext(); ) {
                 Map.Entry<String, ModelEntity> map = iterator.next();
                 json
-                    .append("\"")
-                    .append(map.getKey())
-                    .append("\":")
-                    .append(generateDepthTwoJsonFromModelEntity(map.getValue()));
+                        .append("\"")
+                        .append(map.getKey())
+                        .append("\":")
+                        .append(generateDepthTwoJsonFromModelEntity(map.getValue()));
 
                 if (iterator.hasNext()) {
                     json.append(",\n");
@@ -141,6 +134,7 @@ public class TemplateService {
         }
     }
 
+
     public String getAll(Exchange exchange) {
         String entity = exchange.getIn().getHeader("entity").toString();
         entity = entityMap.get(entity);
@@ -153,8 +147,8 @@ public class TemplateService {
 
         try {
             orderItems = EntityQuery.use(delegator)
-                .from(entity)    // "Invoice" is name of the entity defined in datamodel component under applications/
-                .queryList();       // execute
+                    .from(entity)    // "Invoice" is name of the entity defined in datamodel component under applications/
+                    .queryList();       // execute
         } catch (GenericEntityException e) {
             e.printStackTrace();
             GenericValue error = new GenericValue();

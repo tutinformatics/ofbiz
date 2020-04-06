@@ -39,65 +39,63 @@ import java.io.IOException;
 @SuppressWarnings("serial")
 public class GraphQLEndpointServletImpl extends SimpleGraphQLHttpServlet {
 
-	private static final String APPLICATION_GRAPHQL = "application/graphql";
-	private GraphQLConfiguration configuration;
-	private GraphQLObjectMapper mapper;
-	
-	@Override
-	protected GraphQLConfiguration getConfiguration() {
-		mapper = GraphQLObjectMapper.newBuilder().withObjectMapperConfigurer(new OFBizGraphQLObjectMapperConfigurer()).build();
-		GraphQLSchemaDefinition schemaDef= new GraphQLSchemaDefinition();
-		configuration = GraphQLConfiguration.with(schemaDef.newDynamicSchema()).with(false).with(mapper).build();
-		return configuration;
-	}
-	
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) {	
-		if (isContentTypeGraphQL(request)) {
-			response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
-			response.setContentType(MediaType.APPLICATION_JSON);
-			GraphQLError error = GraphqlErrorBuilder.newError().message("Content Type application/graphql is only allowed on POST", (Object[]) null).build();
-			ExecutionResultImpl result = new ExecutionResultImpl(error);
-			try {
-				configuration.getObjectMapper().serializeResultAsJson(response.getWriter(), result);
-				response.flushBuffer();
-			} catch (IOException e) {
-				response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
-			}
-		}
-		super.doGet(request, response);
-	}
+    private static final String APPLICATION_GRAPHQL = "application/graphql";
+    private GraphQLConfiguration configuration;
+    private GraphQLObjectMapper mapper;
 
-	@Override
-	protected void doOptions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		setupCORSHeaders(req, resp);
-		resp.flushBuffer();
-	}
-	
+    @Override
+    protected GraphQLConfiguration getConfiguration() {
+        mapper = GraphQLObjectMapper.newBuilder().withObjectMapperConfigurer(new OFBizGraphQLObjectMapperConfigurer()).build();
+        GraphQLSchemaDefinition schemaDef = new GraphQLSchemaDefinition();
+        configuration = GraphQLConfiguration.with(schemaDef.newSDLSchema()).with(false).with(mapper).build();
+        return configuration;
+    }
 
-	private boolean isContentTypeGraphQL(HttpServletRequest request) {
-		String contentType = request.getHeader(HttpHeaders.CONTENT_TYPE);
-		return contentType != null && contentType.equals(APPLICATION_GRAPHQL);
-	}
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+        if (isContentTypeGraphQL(request)) {
+            response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+            response.setContentType(MediaType.APPLICATION_JSON);
+            GraphQLError error = GraphqlErrorBuilder.newError().message("Content Type application/graphql is only allowed on POST", (Object[]) null).build();
+            ExecutionResultImpl result = new ExecutionResultImpl(error);
+            try {
+                configuration.getObjectMapper().serializeResultAsJson(response.getWriter(), result);
+                response.flushBuffer();
+            } catch (IOException e) {
+                response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+            }
+        }
+        super.doGet(request, response);
+    }
 
-	/**
-	 *
-	 * @param httpServletRequest
-	 * @param response
-	 * @throws IOException
-	 */
-	public void setupCORSHeaders(HttpServletRequest httpServletRequest, ServletResponse response) throws IOException {
-		if (response instanceof HttpServletResponse) {
-			HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-			if (httpServletRequest != null && httpServletRequest.getHeader("Origin") != null) {
-				httpServletResponse.setHeader("Access-Control-Allow-Origin", httpServletRequest.getHeader("Origin"));
-			} else {
-				httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
-			}
-			httpServletResponse.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-			httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
-			httpServletResponse.setHeader("Access-Control-Allow-Methods", "OPTIONS, POST, GET");
-		}
-	}
+    @Override
+    protected void doOptions(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        setupCORSHeaders(req, resp);
+        resp.flushBuffer();
+    }
+
+
+    private boolean isContentTypeGraphQL(HttpServletRequest request) {
+        String contentType = request.getHeader(HttpHeaders.CONTENT_TYPE);
+        return contentType != null && contentType.equals(APPLICATION_GRAPHQL);
+    }
+
+    /**
+     * @param httpServletRequest
+     * @param response
+     */
+    public void setupCORSHeaders(HttpServletRequest httpServletRequest, ServletResponse response) {
+        if (response instanceof HttpServletResponse) {
+            HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+            if (httpServletRequest != null && httpServletRequest.getHeader("Origin") != null) {
+                httpServletResponse.setHeader("Access-Control-Allow-Origin", httpServletRequest.getHeader("Origin"));
+            } else {
+                httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
+            }
+            httpServletResponse.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
+            httpServletResponse.setHeader("Access-Control-Allow-Methods", "OPTIONS, POST, GET");
+        }
+    }
 
 }

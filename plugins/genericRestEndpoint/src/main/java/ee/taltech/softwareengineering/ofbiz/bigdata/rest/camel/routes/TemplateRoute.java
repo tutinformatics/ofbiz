@@ -33,13 +33,13 @@ public class TemplateRoute extends BaseRoute {
 				.bean(templateService, "getAll")
 				.endRest();
 
-		rest("/api/v1/graphql")
-				.get("/{entity}")
-				.id("test-graphql-endpoints")
-				.produces("application/json")
-				.route()
-				.bean(templateService, "getGraphQLSchemas")
-				.endRest();
+//		rest("/api/v1/graphql")
+//				.get("/{entity}")
+//				.id("test-graphql-endpoints")
+//				.produces("application/json")
+//				.route()
+//				.bean(templateService, "getGraphQLSchemas")
+//				.endRest();
 
 		rest("/api/v1/entity")
 				.post("/{entity}")

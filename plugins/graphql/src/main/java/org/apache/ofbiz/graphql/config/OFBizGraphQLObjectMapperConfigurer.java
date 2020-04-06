@@ -27,6 +27,7 @@ import graphql.kickstart.execution.config.ObjectMapperConfigurer;
 public class OFBizGraphQLObjectMapperConfigurer implements ObjectMapperConfigurer {
 	@Override
 	public void configure(ObjectMapper mapper) {
+
 		mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 		mapper.registerModule(new Jdk8Module());
 		mapper.setDefaultPropertyInclusion(JsonInclude.Include.ALWAYS);
