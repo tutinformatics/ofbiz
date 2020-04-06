@@ -19,7 +19,7 @@ public class ObjectDistributionServices {
 
     public static final String module = ObjectDistributionServices.class.getName();
 
-    public static Map<String, Object> createObjectDistribution(DispatchContext dctx, Map<String, ? extends Object> context) {
+    public Map<String, Object> createObjectDistribution(DispatchContext dctx, Map<String, ? extends Object> context) {
         Map<String, Object> result = ServiceUtil.returnSuccess();
         Delegator delegator = dctx.getDelegator();
         try {
@@ -32,7 +32,12 @@ public class ObjectDistributionServices {
             // Creating record in database for ObjectDistribution entity for prepared value
             objectDistribution = delegator.create(objectDistribution);
             result.put("ObjectDistributionId", objectDistribution.getString("ObjectDistributionId"));
+
             Debug.log("Started ObjectDistributionService...");
+            getData();
+            DataTransformer dataTransformer = new DataTransformer();
+            dataTransformer.addPublisher();
+            dataTransformer.getSubscriptionData();
         } catch (GenericEntityException e) {
             Debug.logError(e, module);
             Debug.log("Starting ObjectDistributionService Failed...");
@@ -44,7 +49,7 @@ public class ObjectDistributionServices {
     }
 
     public void getData() throws IOException {
-        int serverPort = 8443;
+        int serverPort = 8000;
         HttpServer server = HttpServer.create(new InetSocketAddress(serverPort), 0);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("President of the United States", "God-Emperor Trump");
