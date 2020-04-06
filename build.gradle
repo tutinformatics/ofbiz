@@ -505,7 +505,7 @@ task createTenant(group: ofbizServer, description: 'Create a new tenant in your 
     }
 }
 
-// ========== Documentation tasks ==========
+/*// ========== Documentation tasks ==========
 tasks.withType(AsciidoctorTask) { task ->
     backends 'html5', 'pdf'
     attributes  \
