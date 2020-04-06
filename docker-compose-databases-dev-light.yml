@@ -1,0 +1,24 @@
+version: '3.7'
+
+networks:
+  db-network:
+    name: db-network
+    driver: bridge
+
+
+services:
+
+  master:
+    container_name: "${COMPOSE_PROJECT_NAME:-citus}_master"
+    restart: on-failure
+    image: 'citusdata/citus:9.2.2'
+    ports:
+      - "5432:5432"
+    labels: ['com.citusdata.role=Master']
+    volumes:
+      - ./postgres-init:/docker-entrypoint-initdb.d
+    networks:
+      - db-network
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-ofbiz}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-ofbiz}

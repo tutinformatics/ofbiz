@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-dev
-    restart: unless-stopped
+    restart: on-failure
     volumes:
       - ./:/ofbiz  # Volume mount to allow runtime changes to xml etc.
     networks:
