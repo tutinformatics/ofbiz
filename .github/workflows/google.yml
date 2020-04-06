@@ -13,6 +13,7 @@ name: Build and Deploy to GKE
 on:
   push:
     branches: 
+      - manufacturing_warehouse_rest_plugin
       - release/*
       - trunk
       - ci
