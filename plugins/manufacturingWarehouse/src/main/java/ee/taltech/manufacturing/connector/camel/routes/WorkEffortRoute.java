@@ -18,14 +18,20 @@ public class WorkEffortRoute extends BaseRoute {
     public void configure() {
         restConfiguration("rest-api")
                 .component("restlet")
-                .host("localhost")
+                .host("127.0.0.1")
                 .port("4567")
+                .contextPath("/api")
                 .bindingMode(RestBindingMode.auto);
 
         rest("/api")
                 .get("/workefforts")
-                .id("api-users")
+                    .id("api-users")
+                    .produces("application/json");
+
+        rest("/payments")
                 .produces("application/json")
+                .get()
+                .id("payments-get")
                 .route()
                 .bean(workEffortService, "getWorkEfforts")
                 .endRest();
