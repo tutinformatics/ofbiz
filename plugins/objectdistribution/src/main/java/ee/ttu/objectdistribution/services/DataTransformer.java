@@ -50,7 +50,6 @@ public class DataTransformer {
                     subscriber.receiveMessage();
             }
         }
-
     }
 
     public void getSubscriptionData() throws IOException {
