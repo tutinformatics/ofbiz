@@ -24,11 +24,11 @@ under the License.
     <vendor></vendor>
     <version>1.0</version>
 
-    <service name="getPartiesService" default-entity-name="Party" engine="java"
-             location="PartyService" invoke="getAdminParties" auth="true">
-        <description>Get Parties</description>
-        <attribute mode="IN" name="body" optional="true" type="Object"/>
-        <override name="comments" optional="true"/>
-    </service>
+<!--    <service name="getPartiesService" default-entity-name="Party" engine="java"-->
+<!--             location="PartyService" invoke="getAdminParties" auth="true">-->
+<!--        <description>Get Parties</description>-->
+<!--        <attribute mode="IN" name="body" optional="true" type="Object"/>-->
+<!--        <override name="comments" optional="true"/>-->
+<!--    </service>-->
 
 </services>

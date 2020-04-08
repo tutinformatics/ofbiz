@@ -1,5 +1,6 @@
 package org.apache.ofbiz.entity.nosql;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.ofbiz.entity.*;
 import org.apache.ofbiz.entity.cache.Cache;
 import org.apache.ofbiz.entity.condition.EntityCondition;
@@ -11,7 +12,6 @@ import org.apache.ofbiz.entity.util.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;

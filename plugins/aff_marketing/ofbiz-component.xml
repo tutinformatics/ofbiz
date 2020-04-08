@@ -44,21 +44,21 @@ under the License.
     <test-suite loader="main" location="testdef/Aff_marketingTests.xml"/>
 
     <!-- web applications; will be mounted when using the embedded container -->
-    <webapp name="aff_marketing"
-        title="Aff_marketing"
-        server="default-server"
-        location="webapp/aff_marketing"
-        base-permission="OFBTOOLS,AFF_MARKETING"
-        mount-point="/aff_marketing"/>
+<!--    <webapp name="aff_marketing"-->
+<!--        title="Aff_marketing"-->
+<!--        server="default-server"-->
+<!--        location="webapp/aff_marketing"-->
+<!--        base-permission="OFBTOOLS,AFF_MARKETING"-->
+<!--        mount-point="/aff_marketing"/>-->
 
-    <container name="camel-container" loaders="main,rmi" class="ee.taltech.marketing.affiliate.connector.camel.CamelContainer">
-        <!--<property name="dispatcher-factory" value="org.apache.ofbiz.service.GenericDispatcherFactory"/>-->
+<!--    <container name="camel-container" loaders="main,rmi" class="ee.taltech.marketing.affiliate.connector.camel.CamelContainer">-->
+<!--        &lt;!&ndash;<property name="dispatcher-factory" value="org.apache.ofbiz.service.GenericDispatcherFactory"/>&ndash;&gt;-->
 
-        <property name="routes.package" value="ee.taltech.accounting.connector.camel.routes"/>
-        <!-- Possible future implementation might read from an XML DSL -->
-        <property name="routeConfigFile" value="config/camel-routes.xml"/>
-        <property name="dispatcher-name" value="camel-dispatcher"/>
-        <property name="delegator-name" value="default"/>
-    </container>
+<!--        <property name="routes.package" value="ee.taltech.accounting.connector.camel.routes"/>-->
+<!--        &lt;!&ndash; Possible future implementation might read from an XML DSL &ndash;&gt;-->
+<!--        <property name="routeConfigFile" value="config/camel-routes.xml"/>-->
+<!--        <property name="dispatcher-name" value="camel-dispatcher"/>-->
+<!--        <property name="delegator-name" value="default"/>-->
+<!--    </container>-->
 
 </ofbiz-component>
