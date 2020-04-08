@@ -18,6 +18,9 @@
  *******************************************************************************/
 package org.apache.ofbiz.jersey.resource;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.ofbiz.base.conversion.ConversionException;
+import org.apache.ofbiz.base.lang.JSON;
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.base.util.UtilProperties;
@@ -53,6 +56,17 @@ import java.util.stream.Collectors;
 public class EntityResource {
 
 	public static final String MODULE = EntityResource.class.getName();
+	public static final ExtendedConverters.ExtendedJSONToGenericValue jsonToGenericConverter = new ExtendedConverters.ExtendedJSONToGenericValue();
+	public static final ExtendedConverters.ExtendedGenericValueToJSON genericToJsonConverter = new ExtendedConverters.ExtendedGenericValueToJSON();
+	private static final ObjectMapper mapper = new ObjectMapper();
+	public static Map<String, String> entityMap;
+	public static Map<String, String> serviceMap;
+	protected static ModelReader modelReader;
+	private Delegator delegator;
+	private LocalDispatcher dispatcher;
+	private DispatchContext dpc;
+
+
 
 	@Context
 	private HttpServletRequest httpRequest;
@@ -96,7 +110,7 @@ public class EntityResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response listEntities() throws IOException, GenericEntityException {
+	public Response getEntityNames() throws GenericEntityException {
 		ResponseBuilder builder = null;
 		Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
 		ModelReader reader = delegator.getModelReader();
@@ -121,4 +135,22 @@ public class EntityResource {
 		return builder.build();
 	}
 
+	@PUT
+	@Path("/{name}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response addEntity(@PathParam(value = "name") String entityName, String jsonBody) throws GenericServiceException, GenericEntityException, ConversionException {
+		Response.ResponseBuilder builder = null;
+		Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
+		GenericValue object = jsonToGenericConverter.convert(delegator.getDelegatorName(), entityName, JSON.from(jsonBody));
+		ModelEntity model = delegator.getModelEntity(entityName);
+		if (model.getPksSize() == 1) {
+			// because can only sequence if one PK field
+			if (object.get(model.getFirstPkFieldName()) == null) {
+				object.setNextSeqId();
+			}
+		}
+		delegator.create(object);
+		builder = Response.status(Response.Status.OK);
+		return builder.build();
+	}
 }
