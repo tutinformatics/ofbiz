@@ -44,31 +44,33 @@ public class ExtendedConverters implements ConverterLoader {
 
 	public static class ExtendedGenericValueToJSON extends Converters.GenericValueToJSON {
 
-		private Map<String, Object> getObjMap(GenericValue obj) throws GenericEntityException {
+		private static final int MAX_DEPTH = 1;
+
+		private Map<String, Object> getObjMap(GenericValue obj, int d) throws GenericEntityException {
 			Map<String, Object> fieldMap = new HashMap<>(obj);
 			fieldMap.put("_DELEGATOR_NAME_", obj.getDelegator().getDelegatorName());
 			fieldMap.put("_ENTITY_NAME_", obj.getEntityName());
-			List<ModelRelation> itSingular = obj.getModelEntity().getRelationsList(true, true, false);
-			List<ModelRelation> itMultitude = obj.getModelEntity().getRelationsList(false, false, true);
 
-			for (ModelRelation rel : itSingular) {
-				List<GenericValue> relList = obj.getRelated(rel.getCombinedName(), null, null, false);
-				if (relList.size() > 0) {
-					if (relList.size() > 1) {
-						System.out.println("What the fuck?");
+			if (d != 0) {
+				List<ModelRelation> itSingular = obj.getModelEntity().getRelationsList(true, true, false);
+				List<ModelRelation> itMultitude = obj.getModelEntity().getRelationsList(false, false, true);
+
+				for (ModelRelation rel : itSingular) {
+					List<GenericValue> relList = obj.getRelated(rel.getCombinedName(), null, null, false);
+					if (relList.size() > 0) {
+						fieldMap.put("_Related_" + rel.getCombinedName(), getObjMap(relList.get(0), d - 1));
 					}
-					fieldMap.put(rel.getCombinedName() + "Obj", relList.get(0));
 				}
-			}
 
-			for (ModelRelation rel : itMultitude) {
-				List<GenericValue> relList = obj.getRelated(rel.getCombinedName(), null, null, false);
-				if (relList.size() > 0) {
-					List<Map<String, Object>> relMaps = new ArrayList<>();
-					for (GenericValue relObj : relList) {
-						relMaps.add(getObjMap(relObj));
+				for (ModelRelation rel : itMultitude) {
+					List<GenericValue> relList = obj.getRelated(rel.getCombinedName(), null, null, false);
+					if (relList.size() > 0) {
+						List<Map<String, Object>> relMaps = new ArrayList<>();
+						for (GenericValue relObj : relList) {
+							relMaps.add(getObjMap(relObj, d - 1));
+						}
+						fieldMap.put("_RelatedList_" + rel.getCombinedName(), relMaps);
 					}
-					fieldMap.put(rel.getCombinedName() + "ObjList", relMaps);
 				}
 			}
 			return fieldMap;
@@ -85,17 +87,17 @@ public class ExtendedConverters implements ConverterLoader {
 
 		public JSON convertWithChildren(GenericValue obj) throws ConversionException {
 			try {
-				return JSON.from(getObjMap(obj));
+				return JSON.from(getObjMap(obj, MAX_DEPTH));
 			} catch (IOException | GenericEntityException e) {
 				throw new ConversionException(e);
 			}
 		}
 
-		public JSON convertListWithChildren(List<GenericValue> obj) throws ConversionException {
+		public JSON convertListWithChildren(List<GenericValue> obj, Integer d) throws ConversionException {
 			try {
 				return JSON.from(obj.stream().map(x -> {
 					try {
-						return getObjMap(x);
+						return getObjMap(x, d > MAX_DEPTH ? MAX_DEPTH : d);
 					} catch (GenericEntityException e) {
 						e.printStackTrace();
 						return null;
@@ -104,6 +106,10 @@ public class ExtendedConverters implements ConverterLoader {
 			} catch (IOException e) {
 				throw new ConversionException(e);
 			}
+		}
+
+		public JSON convertListWithChildren(List<GenericValue> obj) throws ConversionException {
+			return this.convertListWithChildren(obj, MAX_DEPTH);
 		}
 	}
 

@@ -18,7 +18,6 @@
  *******************************************************************************/
 package org.apache.ofbiz.jersey.resource;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.ofbiz.base.conversion.ConversionException;
 import org.apache.ofbiz.base.lang.JSON;
 import org.apache.ofbiz.base.util.Debug;
@@ -35,13 +34,19 @@ import org.apache.ofbiz.jersey.core.HttpResponseStatus;
 import org.apache.ofbiz.jersey.response.Error;
 import org.apache.ofbiz.jersey.response.Success;
 import org.apache.ofbiz.jersey.util.QueryParamStringConverter;
-import org.apache.ofbiz.service.*;
+import org.apache.ofbiz.service.GenericServiceException;
+import org.apache.ofbiz.service.LocalDispatcher;
+import org.apache.ofbiz.service.ModelService;
+import org.apache.ofbiz.service.ServiceUtil;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
-import javax.ws.rs.core.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 import java.util.AbstractMap;
@@ -58,14 +63,6 @@ public class EntityResource {
 	public static final String MODULE = EntityResource.class.getName();
 	public static final ExtendedConverters.ExtendedJSONToGenericValue jsonToGenericConverter = new ExtendedConverters.ExtendedJSONToGenericValue();
 	public static final ExtendedConverters.ExtendedGenericValueToJSON genericToJsonConverter = new ExtendedConverters.ExtendedGenericValueToJSON();
-	private static final ObjectMapper mapper = new ObjectMapper();
-	public static Map<String, String> entityMap;
-	public static Map<String, String> serviceMap;
-	protected static ModelReader modelReader;
-	private Delegator delegator;
-	private LocalDispatcher dispatcher;
-	private DispatchContext dpc;
-
 
 
 	@Context
@@ -73,7 +70,7 @@ public class EntityResource {
 
 	@Context
 	private ServletContext servletContext;
-	
+
 	@Path("/import")
 	@PUT
 	@Consumes(MediaType.APPLICATION_XML)
@@ -87,7 +84,7 @@ public class EntityResource {
 		} else {
 			fullText = "<entity-engine-xml>" + importXml + "</entity-engine-xml>";
 		}
-		GenericValue userLogin = (GenericValue)httpRequest.getAttribute("userLogin");
+		GenericValue userLogin = (GenericValue) httpRequest.getAttribute("userLogin");
 		Map<String, Object> result = null;
 		try {
 			result = dispatcher.runSync("entityImport", UtilMisc.toMap("fulltext", fullText, "userLogin", userLogin));
@@ -96,9 +93,9 @@ public class EntityResource {
 			String errMsg = UtilProperties.getMessage("JerseyUiLabels", "api.error.import_entity", httpRequest.getLocale());
 			throw new RuntimeException(errMsg);
 		}
-		
+
 		if (ServiceUtil.isError(result)) {
-			Error error = new Error(HttpResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), HttpResponseStatus.UNPROCESSABLE_ENTITY.getReasonPhrase(), (String)result.get(ModelService.ERROR_MESSAGE));
+			Error error = new Error(HttpResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), HttpResponseStatus.UNPROCESSABLE_ENTITY.getReasonPhrase(), (String) result.get(ModelService.ERROR_MESSAGE));
 			builder = Response.status(HttpResponseStatus.UNPROCESSABLE_ENTITY).type(MediaType.APPLICATION_JSON).entity(error);
 		} else {
 			String msg = UtilProperties.getMessage("JerseyUiLabels", "api.success.import_entity", httpRequest.getLocale());
@@ -118,20 +115,25 @@ public class EntityResource {
 		builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entities);
 		return builder.build();
 	}
-	
+
 	@GET
 	@Path("/{name}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getEntity(@PathParam(value = "name") String entityName, @Context UriInfo allUri) throws GenericEntityException {
+	public Response getEntity(@PathParam(value = "name") String entityName, @Context UriInfo allUri) throws GenericEntityException, ConversionException {
 		ResponseBuilder builder = null;
-		MultivaluedMap<String, String> mpAllQueParams = allUri.getQueryParameters();
+		Map<String, List<String>> mpAllQueParams = allUri.getQueryParameters().entrySet().stream().collect(Collectors.toMap(x -> x.getKey(), x -> x.getValue()));
+		List<String> depthStringList = mpAllQueParams.remove("_depth");
+		Integer depth = 0;
+		if (depthStringList != null && depthStringList.size() > 0) {
+			depth = Integer.parseInt(depthStringList.get(0));
+		}
 		Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
 		ModelEntity model = delegator.getModelReader().getModelEntity(entityName);
 		Map<String, Object> secondary = mpAllQueParams.entrySet().stream()
 				.map(x -> new AbstractMap.SimpleEntry<>(x.getKey(), QueryParamStringConverter.convert(x.getValue().get(0), model.getField(x.getKey()).getType())))
 				.collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue));
 		List<GenericValue> allEntities = EntityQuery.use(delegator).from(entityName).where(secondary).queryList();
-		builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(allEntities);
+		builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(genericToJsonConverter.convertListWithChildren(allEntities, depth).toString());
 		return builder.build();
 	}
 
