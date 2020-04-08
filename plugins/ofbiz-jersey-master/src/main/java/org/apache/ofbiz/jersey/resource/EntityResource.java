@@ -108,13 +108,14 @@ public class EntityResource {
 	@GET
 	@Path("/{name}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getEntity(@PathParam(value = "name") String entityName, @Context UriInfo allUri) throws IOException, GenericEntityException {
+	public Response getEntity(@PathParam(value = "name") String entityName, @Context UriInfo allUri) throws GenericEntityException {
 		ResponseBuilder builder = null;
 		MultivaluedMap<String, String> mpAllQueParams = allUri.getQueryParameters();
 		Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
 		ModelEntity model = delegator.getModelReader().getModelEntity(entityName);
-		Map<String, Object> secondary = mpAllQueParams.entrySet().stream().map(x -> new AbstractMap.SimpleEntry<>(x.getKey(), QueryParamStringConverter.convert(x.getValue().get(0), model.getField(x.getKey()).getType()))).collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue));
-//		model.getField("placeholder").getType()
+		Map<String, Object> secondary = mpAllQueParams.entrySet().stream()
+				.map(x -> new AbstractMap.SimpleEntry<>(x.getKey(), QueryParamStringConverter.convert(x.getValue().get(0), model.getField(x.getKey()).getType())))
+				.collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue));
 		List<GenericValue> allEntities = EntityQuery.use(delegator).from(entityName).where(secondary).queryList();
 		builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(allEntities);
 		return builder.build();
