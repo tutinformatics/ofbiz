@@ -1,4 +1,4 @@
-package ee.taltech.services.rest.service;
+package ee.taltech.marketing.affiliate.service;
 
 import org.apache.ofbiz.base.conversion.ConversionException;
 import org.apache.ofbiz.base.lang.JSON;

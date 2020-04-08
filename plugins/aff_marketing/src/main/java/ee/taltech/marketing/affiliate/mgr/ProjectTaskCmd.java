@@ -1,4 +1,4 @@
-package ee.taltech.services.rest.mgr;
+package ee.taltech.marketing.affiliate.mgr;
 
 import lombok.Getter;
 import lombok.Setter;

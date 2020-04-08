@@ -1,4 +1,4 @@
-package ee.taltech.services.rest.route;
+package ee.taltech.marketing.affiliate.route;
 
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;

@@ -16,10 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package ee.taltech.services.rest.mgr;
-
-import java.sql.Timestamp;
-import java.util.List;
+package ee.taltech.marketing.affiliate.mgr;
 
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilDateTime;
@@ -28,6 +25,9 @@ import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.util.EntityQuery;
+
+import java.sql.Timestamp;
+import java.util.List;
 
 public class Various {
 

@@ -17,12 +17,12 @@
  * under the License.
  */
 
- 
+
 project.rootProject.configurations.all {
 	  exclude module: 'jsr311-api'
-	 
+
 }
- 
+
 dependencies {
 	pluginLibsCompile 'org.glassfish.jersey.containers:jersey-container-servlet:2.30'
 	pluginLibsCompile 'org.glassfish.jersey.media:jersey-media-multipart:2.30'
@@ -31,16 +31,4 @@ dependencies {
 	pluginLibsCompile 'io.swagger.core.v3:swagger-jaxrs2:2.1.1'
 	pluginLibsCompile 'io.swagger.core.v3:swagger-jaxrs2-servlet-initializer:2.1.1'
 	pluginLibsCompile 'io.swagger.core.v3:swagger-annotations:2.1.1'
-}
-
-task install {
-    doLast {
-        // Install logic for this plugin
-    }
-}
-
-task uninstall {
-    doLast {
-        // uninstall logic for this plugin
-    }
 }

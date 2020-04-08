@@ -1,21 +1,16 @@
 package org.apache.ofbiz.jersey.resource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ee.taltech.marketing.affiliate.mgr.ProjectTaskCmd;
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilProperties;
-import ee.taltech.services.rest.mgr.ProjectTaskCmd;
 import org.apache.ofbiz.service.GenericServiceException;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ServiceUtil;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;

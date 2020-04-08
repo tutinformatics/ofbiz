@@ -1,4 +1,4 @@
-package ee.taltech.services.rest.service;
+package ee.taltech.marketing.affiliate.service;
 
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;

@@ -16,10 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package ee.taltech.services.rest.loader;
+package ee.taltech.marketing.affiliate.loader;
 
-import ee.taltech.services.rest.service.OrderService;
-import ee.taltech.services.rest.service.ProductService;
+import ee.taltech.marketing.affiliate.service.OrderService;
+import ee.taltech.marketing.affiliate.service.ProductService;
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
@@ -34,7 +34,6 @@ import org.apache.ofbiz.base.start.StartupCommand;
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.DelegatorFactory;
-import org.apache.ofbiz.order.order.OrderServices;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ServiceContainer;
 
@@ -56,7 +55,7 @@ public class CamelContainer implements Container {
         this.name = name;
         context = createCamelContext();
         ContainerConfig.Configuration cfg = ContainerConfig.getConfiguration(name);
-        String packageName = ContainerConfig.getPropertyValue(cfg, "package", "ee.taltech.services.rest.route");
+        String packageName = ContainerConfig.getPropertyValue(cfg, "package", "ee.taltech.marketing.affiliate.route");
         PackageScanClassResolver packageResolver = new DefaultPackageScanClassResolver();
         Set<Class<?>> routesClassesSet = packageResolver.findImplementations(RouteBuilder.class, packageName);
         routesClassesSet.forEach(key -> {
