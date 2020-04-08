@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<entity-engine-xml>
+    <Party partyId="DEMO_CUSTOMER" description="Demo customer for testing purposes." statusId="PARTY_ENABLED"/>
+    <PartyRole partyId="DEMO_CUSTOMER" roleTypeId="CUSTOMER"/>
+    <PartyStatus partyId="DEMO_CUSTOMER" statusId="PARTY_ENABLED" statusDate="2020-03-29 12:00:00.0"/>
+
+    <ProductType productTypeId="DIGITAL_OFBIZ" parentTypeId="DIGITAL_GOOD"/>
+    <ProductType productTypeId="DIGITAL_FRONTEND" parentTypeId="DIGITAL_GOOD"/>
+    <ProductType productTypeId="DIGITAL_DATABASE" parentTypeId="DIGITAL_GOOD"/>
+
+    <Product productId="OFBIZ-01" productTypeId="DIGITAL_OFBIZ" productName="Basic OFBiz Installation" description="A basic OFBiz installation." longDescription="This is a demo product." isVirtual="Y" isVariant="N"/>
+    <Product productId="FRONT-01" productTypeId="DIGITAL_FRONTEND" productName="Aurelia Frontend" description="Frontend for an OFBiz installation." longDescription="This is a demo product." isVirtual="Y" isVariant="N"/>
+    <Product productId="DATABASE-01" productTypeId="DIGITAL_DATABASE" productName="CouchDB database" description="Database for an OFBiz installation." longDescription="This is a demo product." isVirtual="Y" isVariant="N"/>
+
+    <CustomConfigItem productTypeId="DIGITAL_OFBIZ" customConfigItemId="DOMAIN" itemName="Domain Name" defaultValue=""/>
+    <CustomConfigItem productTypeId="DIGITAL_OFBIZ" customConfigItemId="RAM" itemName="Memory (GB)" defaultValue="1"/>
+    <CustomConfigItem productTypeId="DIGITAL_OFBIZ" customConfigItemId="CPU" itemName="vCPUs" defaultValue="1"/>
+    <CustomConfigItem productTypeId="DIGITAL_OFBIZ" customConfigItemId="DISK" itemName="Disk Space (GB)" defaultValue="25"/>
+    <CustomConfigItem productTypeId="DIGITAL_OFBIZ" customConfigItemId="START" itemName="Start Date" defaultValue="now"/>
+    <CustomConfigItem productTypeId="DIGITAL_OFBIZ" customConfigItemId="END" itemName="End Date" defaultValue="now + 1 month"/>
+
+    <!-- Example order -->
+    <UserLogin userLoginId="DEMO_CUSTOMER" currentPassword="{SHA}47b56994cbc2b6d10aa1be30f70165adb305a41a"/>
+    <PartyRole partyId="DEMO_CUSTOMER" roleTypeId="END_USER_CUSTOMER"/>
+
+    <OrderHeader orderId="OFBIZ123" orderTypeId="SALES_ORDER" salesChannelEnumId="WEB_SALES_CHANNEL" orderDate="2020-03-28 16:49:27.392" entryDate="2020-03-28 16:49:27.392" priority="2" statusId="ORDER_APPROVED" createdBy="DEMO_CUSTOMER" currencyUom="EUR"/>
+    <OrderItem orderId="OFBIZ123" orderItemSeqId="00231" orderItemTypeId="PRODUCT_ORDER_ITEM" productId="FRONT-01" statusId="ITEM_APPROVED"/>
+    <OrderRole orderId="OFBIZ123" partyId="DEMO_CUSTOMER" roleTypeId="END_USER_CUSTOMER"/>
+
+</entity-engine-xml>
