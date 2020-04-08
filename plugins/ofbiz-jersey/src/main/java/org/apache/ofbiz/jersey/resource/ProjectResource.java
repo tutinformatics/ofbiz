@@ -3,7 +3,7 @@ package org.apache.ofbiz.jersey.resource;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilProperties;
-import org.apache.ofbiz.project.model.ProjectTaskCmd;
+import ee.taltech.services.rest.mgr.ProjectTaskCmd;
 import org.apache.ofbiz.service.GenericServiceException;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ServiceUtil;
