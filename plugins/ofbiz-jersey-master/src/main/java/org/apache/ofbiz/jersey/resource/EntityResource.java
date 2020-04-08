@@ -25,31 +25,31 @@ import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.model.ModelEntity;
-import org.apache.ofbiz.entity.model.ModelField;
 import org.apache.ofbiz.entity.model.ModelReader;
-import org.apache.ofbiz.jersey.annotation.Secured;
+import org.apache.ofbiz.entity.util.EntityQuery;
+import org.apache.ofbiz.entity.util.ExtendedConverters;
 import org.apache.ofbiz.jersey.core.HttpResponseStatus;
 import org.apache.ofbiz.jersey.response.Error;
 import org.apache.ofbiz.jersey.response.Success;
-import org.apache.ofbiz.service.GenericServiceException;
-import org.apache.ofbiz.service.LocalDispatcher;
-import org.apache.ofbiz.service.ModelService;
-import org.apache.ofbiz.service.ServiceUtil;
+import org.apache.ofbiz.jersey.util.QueryParamStringConverter;
+import org.apache.ofbiz.service.*;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
-@Path("/entities")
+@Path("/v1/entities")
 @Provider
-@Secured
+//@Secured
 public class EntityResource {
 
 	public static final String MODULE = EntityResource.class.getName();
@@ -108,23 +108,15 @@ public class EntityResource {
 	@GET
 	@Path("/{name}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getEntity(@PathParam(value = "name") String entityName) throws IOException, GenericEntityException {
+	public Response getEntity(@PathParam(value = "name") String entityName, @Context UriInfo allUri) throws IOException, GenericEntityException {
 		ResponseBuilder builder = null;
-		List<Map<String, Object>> response = new ArrayList<Map<String, Object>>();
+		MultivaluedMap<String, String> mpAllQueParams = allUri.getQueryParameters();
 		Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
-		ModelEntity entity = delegator.getModelEntity(entityName);
-		List<String> fieldNames = entity.getAllFieldNames();
-		fieldNames.forEach((fieldName) -> {
-			ModelField field = entity.getField(fieldName);
-			String fType = field.getType();
-			boolean isPk = field.getIsPk();
-			LinkedHashMap<String, Object> map = new LinkedHashMap<String, Object>();
-			map.put("name", fieldName);
-			map.put("type", fType);
-			map.put("is_pk", isPk);
-			response.add(map);
-		});
-		builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(response);
+		ModelEntity model = delegator.getModelReader().getModelEntity(entityName);
+		Map<String, Object> secondary = mpAllQueParams.entrySet().stream().map(x -> new AbstractMap.SimpleEntry<>(x.getKey(), QueryParamStringConverter.convert(x.getValue().get(0), model.getField(x.getKey()).getType()))).collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue));
+//		model.getField("placeholder").getType()
+		List<GenericValue> allEntities = EntityQuery.use(delegator).from(entityName).where(secondary).queryList();
+		builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(allEntities);
 		return builder.build();
 	}
 
