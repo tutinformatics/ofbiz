@@ -58,6 +58,7 @@ public class Routes extends RouteBuilder {
                 .bean(partyService, "getPartyById")
                 .endRest();
 
+        // affiliate part
         rest("/api")
                 .post("/parties/affiliate/create")
                 .produces("application/json")
