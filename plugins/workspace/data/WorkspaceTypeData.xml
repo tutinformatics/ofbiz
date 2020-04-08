@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<entity-engine-xml>
+    <WorkspaceGroup workspaceGroupId="1" code="FAVORITE" name="Favourites"/>
+    <WorkspaceGroup workspaceGroupId="2" code="RECENT" name="Recent"/>
+</entity-engine-xml>
