@@ -18,7 +18,6 @@
  *******************************************************************************/
 package org.apache.ofbiz.base.lang;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.apache.ofbiz.base.util.Assert;
@@ -32,7 +31,8 @@ import java.io.Reader;
 public final class JSON {
 
     // TODO: Find a generic way to modify mapper options
-    private static final ObjectMapper mapper = new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
+//    private static final ObjectMapper mapper = new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    private static final ObjectMapper mapper = new ObjectMapper();
 
     /**
      * Creates a <code>JSON</code> instance from an <code>InputStream</code>.
