@@ -8,7 +8,8 @@ Currently the following /v1 endpoints are implemented:
 * PUT /entities/{case sensitive entity name}
     * Make a new entity, doesn't support subobjects or adding relations. For those use existing or own services or assist with implementing them on a generic level.
     Fails if you try to add something with lacking PK fields or PKs that are in conflict with an existing entity.
-
+* POST /entities/{case sensitive entity name}
+    * Updates an existing entity. Fails if no entity with chosen PKs found.
 * GET /services
     * Gets list of all service names
 * GET /services/{case sensitive service name}

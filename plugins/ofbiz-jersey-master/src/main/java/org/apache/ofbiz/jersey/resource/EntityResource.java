@@ -153,4 +153,22 @@ public class EntityResource {
 		builder = Response.status(Response.Status.OK);
 		return builder.build();
 	}
+
+	@POST
+	@Path("/{name}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateEntity(@PathParam(value = "name") String entityName, String jsonBody) throws GenericServiceException, GenericEntityException, ConversionException {
+		Response.ResponseBuilder builder = null;
+		Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
+		GenericValue object = jsonToGenericConverter.convert(delegator.getDelegatorName(), entityName, JSON.from(jsonBody));
+		GenericValue check = delegator.findOne(entityName, object.getPrimaryKey(), false);
+		// if there indeed is an entity in db with such PKs
+		if (check != null) {
+			delegator.store(object);
+			builder = Response.status(Response.Status.OK);
+		} else {
+			builder = Response.status(Response.Status.BAD_REQUEST);
+		}
+		return builder.build();
+	}
 }
