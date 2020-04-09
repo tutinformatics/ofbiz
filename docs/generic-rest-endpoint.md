@@ -1,6 +1,8 @@
-Generic REST endpoint is at :8443/api/
+Generic REST endpoint is at :8443/api/generic/
 
-Currently the following /v1 endpoints (meaning /api/v1/*) are implemented:
+Currently the following /v1 endpoints (meaning /api/generic/v1/*) are implemented:
+* GET /structure/entities/{case sensitive entity name}
+    * Returns some general info about queried entity.
 * GET /entities
     * Returns list of all entity names
 * GET /entities/{case sensitive entity name}?field1=value&field2=value

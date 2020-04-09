@@ -20,9 +20,6 @@ package org.apache.ofbiz.jersey.resource;
 
 import org.apache.ofbiz.base.conversion.ConversionException;
 import org.apache.ofbiz.base.lang.JSON;
-import org.apache.ofbiz.base.util.Debug;
-import org.apache.ofbiz.base.util.UtilMisc;
-import org.apache.ofbiz.base.util.UtilProperties;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
@@ -30,14 +27,8 @@ import org.apache.ofbiz.entity.model.ModelEntity;
 import org.apache.ofbiz.entity.model.ModelReader;
 import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.entity.util.ExtendedConverters;
-import org.apache.ofbiz.jersey.core.HttpResponseStatus;
-import org.apache.ofbiz.jersey.response.Error;
-import org.apache.ofbiz.jersey.response.Success;
 import org.apache.ofbiz.jersey.util.QueryParamStringConverter;
 import org.apache.ofbiz.service.GenericServiceException;
-import org.apache.ofbiz.service.LocalDispatcher;
-import org.apache.ofbiz.service.ModelService;
-import org.apache.ofbiz.service.ServiceUtil;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -48,19 +39,18 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Provider;
-import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-@Path("/v1/entities")
+@Path("/generic/v1/entities")
 @Provider
 //@Secured
-public class EntityResource {
+public class GenericEntityResource {
 
-	public static final String MODULE = EntityResource.class.getName();
+	public static final String MODULE = GenericEntityResource.class.getName();
 	public static final ExtendedConverters.ExtendedJSONToGenericValue jsonToGenericConverter = new ExtendedConverters.ExtendedJSONToGenericValue();
 	public static final ExtendedConverters.ExtendedGenericValueToJSON genericToJsonConverter = new ExtendedConverters.ExtendedGenericValueToJSON();
 
@@ -70,40 +60,6 @@ public class EntityResource {
 
 	@Context
 	private ServletContext servletContext;
-
-	@Path("/import")
-	@PUT
-	@Consumes(MediaType.APPLICATION_XML)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response entityImport(String importXml) throws IOException {
-		ResponseBuilder builder = null;
-		LocalDispatcher dispatcher = (LocalDispatcher) servletContext.getAttribute("dispatcher");
-		String fullText = null;
-		if (importXml != null && importXml.startsWith("<entity-engine-xml>") && importXml.endsWith("</entity-engine-xml>")) {
-			fullText = importXml;
-		} else {
-			fullText = "<entity-engine-xml>" + importXml + "</entity-engine-xml>";
-		}
-		GenericValue userLogin = (GenericValue) httpRequest.getAttribute("userLogin");
-		Map<String, Object> result = null;
-		try {
-			result = dispatcher.runSync("entityImport", UtilMisc.toMap("fulltext", fullText, "userLogin", userLogin));
-		} catch (GenericServiceException e) {
-			Debug.logError(e, "Exception thrown while running entityImport service: ", MODULE);
-			String errMsg = UtilProperties.getMessage("JerseyUiLabels", "api.error.import_entity", httpRequest.getLocale());
-			throw new RuntimeException(errMsg);
-		}
-
-		if (ServiceUtil.isError(result)) {
-			Error error = new Error(HttpResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), HttpResponseStatus.UNPROCESSABLE_ENTITY.getReasonPhrase(), (String) result.get(ModelService.ERROR_MESSAGE));
-			builder = Response.status(HttpResponseStatus.UNPROCESSABLE_ENTITY).type(MediaType.APPLICATION_JSON).entity(error);
-		} else {
-			String msg = UtilProperties.getMessage("JerseyUiLabels", "api.success.import_entity", httpRequest.getLocale());
-			Success success = new Success(Response.Status.OK.getStatusCode(), Response.Status.OK.getReasonPhrase(), msg);
-			builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(success);
-		}
-		return builder.build();
-	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

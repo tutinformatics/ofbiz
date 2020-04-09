@@ -38,12 +38,12 @@ import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 import java.util.*;
 
-@Path("/v1/structure/entities")
+@Path("/generic/v1/structure/entities")
 @Provider
 //@Secured
-public class EntityStructureResource {
+public class GenericEntityStructureResource {
 
-	public static final String MODULE = EntityStructureResource.class.getName();
+	public static final String MODULE = GenericEntityStructureResource.class.getName();
 
 	@Context
 	private HttpServletRequest httpRequest;

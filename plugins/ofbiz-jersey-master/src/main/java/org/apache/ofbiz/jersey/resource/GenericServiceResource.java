@@ -19,12 +19,12 @@ import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 import java.util.Map;
 
-@Path("/v1/services")
+@Path("/generic/v1/services")
 @Provider
 //@Secured
-public class ServiceResource {
+public class GenericServiceResource {
 
-	public static final String MODULE = ServiceResource.class.getName();
+	public static final String MODULE = GenericServiceResource.class.getName();
 	public static final ExtendedConverters.ExtendedJSONToGenericValue jsonToGenericConverter = new ExtendedConverters.ExtendedJSONToGenericValue();
 
 	@Context
