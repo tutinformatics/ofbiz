@@ -377,7 +377,7 @@ if (selectedService) {
         curServiceMap.defaultEntityName = defaultEntityName
         curServiceMap.invoke = invoke
         curServiceMap.location = location
-        curServiceMap.definitionLocation = curServiceModel.definitionLocation.replaceFirst("file:/" + System.getProperty("ofbiz.home") + "/", "")
+        curServiceMap.definitionLocation =  StringUtils.replaceOnce(curServiceModel.definitionLocation, "file:/" + System.getProperty("ofbiz.home") + "/", "")
         curServiceMap.requireNewTransaction = requireNewTransaction
         curServiceMap.export = export
         curServiceMap.exportBool = exportBool
