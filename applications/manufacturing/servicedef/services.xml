@@ -27,6 +27,16 @@ under the License.
     <service name="createShipmentPackages" engine="java" auth="true"
             location="org.apache.ofbiz.manufacturing.bom.BOMServices" invoke="createShipmentPackages">
         <description>Runs the package configurator.</description>
-        <attribute mode="IN" name="shipmentId" optional="false" type="String"/>
+        <attribute mode="IN" name="shipmentId" type="String"/>
+    </service>
+
+    <service name="testingRest" engine="java" default-entity-name="test"
+             location="org.apache.ofbiz.accounting.Test" invoke="testTest"
+
+    >
+        <description>test</description>
+        <attribute name="lol1" type="String" mode="IN"/>
+        <attribute name="lol2" type="String" mode="IN"/>
+        <!--<attribute name="lol3" type="String" mode="OUT"/>-->
     </service>
 </services>
