@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<entitymodel>
+    <entity entity-name="TestEntity"
+            package-name="org.ofbiz.applications.accounting"
+            never-cache="true"
+            title="Testing">
+        <field name="field1" col-name="fld1" type="id-ne"/>
+        <field name="field2" col-name="fld2" type="id"/>
+        <prim-key field="field1"/>
+        <prim-key field="field2"/>
+        <relation type="one" fk-name="TEST_FK_NAME" rel-entity-name="OrderHeader">
+            <key-map field-name="field1" rel-field-name="orderId"/>
+        </relation>
+    </entity>
+</entitymodel>

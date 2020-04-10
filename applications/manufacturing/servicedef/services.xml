@@ -30,13 +30,13 @@ under the License.
         <attribute mode="IN" name="shipmentId" type="String"/>
     </service>
 
-    <service name="testingRest" engine="java" default-entity-name="test"
+    <service name="testingRest" engine="java"
              location="org.apache.ofbiz.accounting.Test" invoke="testTest"
 
     >
         <description>test</description>
         <attribute name="lol1" type="String" mode="IN"/>
         <attribute name="lol2" type="String" mode="IN"/>
-        <!--<attribute name="lol3" type="String" mode="OUT"/>-->
+        <attribute name="lol3" type="String" mode="OUT"/>
     </service>
 </services>

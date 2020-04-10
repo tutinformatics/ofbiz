@@ -20,7 +20,7 @@ public class Test {
         } catch (GenericEntityException e) {
             ServiceUtil.returnError("Error: " + e.toString());
         }
-        suc.put("outValue", "Hello" + par2.get("lol1"));
+        suc.put("lol3", "Hello" + par2.get("lol1"));
         return suc;
     }
 }
