@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<services>
+    <service name="testingRest" engine="java" default-entity-name="test"
+             location="org.apache.ofbiz.accounting.Test" invoke="testTest"
+
+    >
+        <description>test</description>
+        <attribute name="lol1" type="String" mode="IN"/>
+        <attribute name="lol2" type="String" mode="IN"/>
+        <attribute name="lol3" type="String" mode="OUT"/>
+    </service>
+</services>
+
