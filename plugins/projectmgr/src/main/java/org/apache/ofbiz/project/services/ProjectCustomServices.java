@@ -34,7 +34,7 @@ public class ProjectCustomServices {
         List<GenericValue> projects;
 
         try {
-            projects = delegator.findList("WorkEffort", buildProjectListCondition(), Collections.singleton("workEffortId"), Collections.emptyList(), null, false);
+            projects = delegator.findList("WorkEffort", buildWorkEffortQuery(), Collections.singleton("workEffortId"), Collections.emptyList(), null, false);
             for (GenericValue project : projects) {
                 Map<String, Object> subResult = dispatcher.runSync("getProject", Collections.singletonMap("projectId", project.get("workEffortId")));
                 projectList.add(MapUtils.getMap(subResult, "projectInfo"));
@@ -47,11 +47,11 @@ public class ProjectCustomServices {
         return result;
     }
 
-    private static EntityConditionList<EntityExpr> buildProjectListCondition() {
-        return makeCondition(getProjectListConditionList(), EntityJoinOperator.AND);
+    private static EntityConditionList<EntityExpr> buildWorkEffortQuery() {
+        return makeCondition(getWorkEffortConditions(), EntityJoinOperator.AND);
     }
 
-    private static List<EntityExpr> getProjectListConditionList() {
+    private static List<EntityExpr> getWorkEffortConditions() {
         return Arrays.asList(
                 makeCondition("workEffortTypeId", EntityOperator.EQUALS, "PROJECT"),
                 makeCondition("currentStatusId", EntityOperator.NOT_EQUAL, "PRJ_CLOSED"));
