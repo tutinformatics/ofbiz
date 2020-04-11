@@ -1,13 +1,25 @@
 package org.apache.ofbiz.jersey.resource;
 
+
+
+import static javax.ws.rs.core.Response.Status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilProperties;
+import org.apache.ofbiz.entity.DelegatorFactory;
+import org.apache.ofbiz.entity.GenericDelegator;
+import org.apache.ofbiz.entity.GenericEntityException;
+import org.apache.ofbiz.entity.GenericValue;
+import org.apache.ofbiz.entity.condition.EntityCondition;
+import org.apache.ofbiz.entity.condition.EntityConditionList;
+import org.apache.ofbiz.entity.condition.EntityExpr;
+import org.apache.ofbiz.entity.condition.EntityJoinOperator;
+import org.apache.ofbiz.entity.condition.EntityOperator;
 import org.apache.ofbiz.project.model.ProjectTaskCmd;
 import org.apache.ofbiz.service.GenericServiceException;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ServiceUtil;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -20,10 +32,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
-import java.util.Collections;
-import java.util.Map;
-
-import static javax.ws.rs.core.Response.Status;
+import java.util.*;
 
 @Provider
 @Path("project")
@@ -84,6 +93,46 @@ public class ProjectResource {
 
         if (ServiceUtil.isError(result)) {
             ServiceUtil.returnError(ServiceUtil.getErrorMessage(result));
+        }
+
+        return Response
+                .status(Status.OK)
+                .type(MediaType.APPLICATION_JSON)
+                .entity(result)
+                .build();
+    }
+
+    @GET
+    @Path("project-list")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getProjectList() {
+
+        GenericDelegator delegator = (GenericDelegator) DelegatorFactory.getDelegator("default");
+        LocalDispatcher dispatcher = (LocalDispatcher) servletContext.getAttribute("dispatcher");
+
+        EntityConditionList<EntityExpr> condition =
+                EntityCondition.makeCondition(
+                        Arrays.asList(
+                                EntityCondition.makeCondition("workEffortTypeId", EntityOperator.EQUALS, "PROJECT"),
+                                EntityCondition.makeCondition("currentStatusId", EntityOperator.NOT_EQUAL, "PRJ_CLOSED")),
+                        EntityJoinOperator.AND);
+        List<GenericValue> projects = null;
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        try {
+            projects = delegator.findList("WorkEffort", condition, Collections.singleton("workEffortId"), Collections.emptyList(), null, false);
+            projects.forEach(project -> {
+                try {
+                    Map<String, Object> subResult = dispatcher.runSync("getProject", Collections.singletonMap("projectId", project.get("workEffortId")));
+                    result.add((Map<String, Object>) subResult.get("projectInfo"));
+                } catch (GenericServiceException e) {
+                    e.printStackTrace();
+
+                }
+            });
+
+        } catch (GenericEntityException e) {
+            e.printStackTrace();
         }
 
         return Response

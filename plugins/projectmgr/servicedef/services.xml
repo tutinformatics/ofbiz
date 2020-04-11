@@ -84,7 +84,8 @@ under the License.
     <service name="getProject" engine="simple"
         location="component://projectmgr/minilang/ProjectServices.xml" invoke="getProject">
         <description>Get project information and related phase and task info.</description>
-        <permission-service service-name="projectMgrPermission" main-action="VIEW"/>
+<!--        TODO: uncomment-->
+<!--        <permission-service service-name="projectMgrPermission" main-action="VIEW"/>-->
         <attribute name="projectId" type="String" mode="INOUT" optional="true"/>
         <attribute name="partyId" type="String" mode="INOUT" optional="true"/>
         <attribute name="projectInfo" type="java.util.Map" mode="OUT" optional="true"/>

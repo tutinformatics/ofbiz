@@ -685,8 +685,8 @@
         </if-not-empty>
         <field-to-result field="newProjectId" result-name="projectId"/>
     </simple-method>
-
-    <simple-method method-name="getProject" short-description="get Project information" login-required="true">
+<!--    todo: getProject login-required false to true-->
+    <simple-method method-name="getProject" short-description="get Project information" login-required="false">
         <if-empty field="parameters.projectId">
             <return/>
         </if-empty>
