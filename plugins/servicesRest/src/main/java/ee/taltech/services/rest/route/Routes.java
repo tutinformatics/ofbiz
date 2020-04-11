@@ -48,5 +48,10 @@ public class Routes extends RouteBuilder {
                     .to("bean:orderService?method=getOrderById(${header.orderId})")
                 .put("/id/{orderId}")
                     .to("bean:orderService?method=updateOrder(${header.orderId}, ${body})");
+
+        rest("/contact")
+                .produces("application/json")
+                .get().to("bean:contactService?method=getContactMechs")
+                .post().consumes("application/json").to("bean:contactService?method=addTelecomNumber");
     }
 }

@@ -26,16 +26,16 @@ public class ProductService {
         return new ArrayList<>();
     }
 
-    public List<GenericValue> getProductById(String productId) {
+    public GenericValue getProductById(String productId) {
         try {
             return EntityQuery.use(delegator)
                     .from("Product")
                     .where("productId", productId)
-                    .queryList();
+                    .queryOne();
         } catch (GenericEntityException e) {
             e.printStackTrace();
         }
-        return new ArrayList<>();
+        return null;
     }
 
     public List<GenericValue> getProductsByParentType(String typeId) {
@@ -62,11 +62,12 @@ public class ProductService {
     }
 
     public void addProduct(Map<String, Object> data) {
+        GenericValue toAdd = delegator.makeValue("Product", data);
+        if (!data.containsKey("productId")) {
+            toAdd.setNextSeqId();
+        }
         try {
-            Optional<GenericValue> product = Converter.mapToGenericValue(delegator, "Product", data);
-            if (product.isPresent()) {
-                delegator.createOrStore(product.get());
-            }
+            delegator.create(toAdd);
         } catch (GenericEntityException e) {
             e.printStackTrace();
         }
@@ -74,14 +75,9 @@ public class ProductService {
 
     public void updateProduct(String productId, Map<String, Object> data) {
         try {
-            List<GenericValue> target = EntityQuery.use(delegator)
-                    .from("Product")
-                    .where("productId", productId)
-                    .queryList();
-            for (GenericValue genericValue : target) {
-                genericValue.setNonPKFields(data);
-                genericValue.store();
-            }
+            GenericValue target = EntityQuery.use(delegator).from("Product").where("productId", productId).queryOne();
+            target.setNonPKFields(data);
+            target.store();
         } catch (GenericEntityException e) {
             e.printStackTrace();
         }

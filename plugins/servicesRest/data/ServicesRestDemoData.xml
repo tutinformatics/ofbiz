@@ -39,7 +39,7 @@ under the License.
     <CustomConfigItem productTypeId="DIGITAL_OFBIZ" customConfigItemId="END" itemName="End Date" defaultValue="now + 1 month"/>
 
     <!-- Example order -->
-    <UserLogin userLoginId="DEMO_CUSTOMER" currentPassword="{SHA}47b56994cbc2b6d10aa1be30f70165adb305a41a"/>
+    <UserLogin partyId="DEMO_CUSTOMER" userLoginId="DEMO_CUSTOMER" currentPassword="{SHA}47b56994cbc2b6d10aa1be30f70165adb305a41a"/>
     <PartyRole partyId="DEMO_CUSTOMER" roleTypeId="END_USER_CUSTOMER"/>
 
     <OrderHeader orderId="OFBIZ123" orderTypeId="SALES_ORDER" salesChannelEnumId="WEB_SALES_CHANNEL" orderDate="2020-03-28 16:49:27.392" entryDate="2020-03-28 16:49:27.392" priority="2" statusId="ORDER_APPROVED" createdBy="DEMO_CUSTOMER" currencyUom="EUR"/>
