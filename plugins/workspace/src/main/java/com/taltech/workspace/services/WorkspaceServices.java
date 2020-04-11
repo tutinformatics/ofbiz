@@ -26,7 +26,7 @@ public class WorkspaceServices {
             Debug.log("Workspace record created successfully with workspaceId:" + workspace.getString("workspaceId"));
         } catch (GenericEntityException e) {
             Debug.logError(e, module);
-            return ServiceUtil.returnError("Error in creating record in Workspace entity ......." + "." + module);
+            return ServiceUtil.returnError("Exception thrown while running createWorkspace service: " + module);
         }
         return result;
     }
