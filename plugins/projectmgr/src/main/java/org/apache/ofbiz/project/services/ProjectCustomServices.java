@@ -33,14 +33,8 @@ public class ProjectCustomServices {
         List<Map> projectList = new ArrayList<>();
         List<GenericValue> projects;
 
-        EntityConditionList<EntityExpr> condition = makeCondition(
-                Arrays.asList(
-                        makeCondition("workEffortTypeId", EntityOperator.EQUALS, "PROJECT"),
-                        makeCondition("currentStatusId", EntityOperator.NOT_EQUAL, "PRJ_CLOSED")),
-                EntityJoinOperator.AND);
-
         try {
-            projects = delegator.findList("WorkEffort", condition, Collections.singleton("workEffortId"), Collections.emptyList(), null, false);
+            projects = delegator.findList("WorkEffort", buildProjectListCondition(), Collections.singleton("workEffortId"), Collections.emptyList(), null, false);
             for (GenericValue project : projects) {
                 Map<String, Object> subResult = dispatcher.runSync("getProject", Collections.singletonMap("projectId", project.get("workEffortId")));
                 projectList.add(MapUtils.getMap(subResult, "projectInfo"));
@@ -51,6 +45,16 @@ public class ProjectCustomServices {
             return ServiceUtil.returnError("Exception thrown while running getProjectList service: " + module);
         }
         return result;
+    }
+
+    private static EntityConditionList<EntityExpr> buildProjectListCondition() {
+        return makeCondition(getProjectListConditionList(), EntityJoinOperator.AND);
+    }
+
+    private static List<EntityExpr> getProjectListConditionList() {
+        return Arrays.asList(
+                makeCondition("workEffortTypeId", EntityOperator.EQUALS, "PROJECT"),
+                makeCondition("currentStatusId", EntityOperator.NOT_EQUAL, "PRJ_CLOSED"));
     }
 
 }
