@@ -70,7 +70,8 @@ public class InvoiceService {
      * @return response to say if success or not
      */
     public Response createInvoice(String json) {
-        try {
+     /*   TODO BROKEN AF
+           try {
             // uses custom method in the converter class that takes in delegator name, entity name and json
             // and spits out a GenericValue.
             // The converter "default" method with just GenericValue input wants the object to contain
@@ -85,6 +86,7 @@ public class InvoiceService {
         } catch (GenericEntityException | ConversionException e) {
             e.printStackTrace();
             return Response.serverError().entity("Error of some sort").build();
-        }
+        }*/
+    return null;
     }
 }

@@ -118,7 +118,9 @@ public class GenericService {
      * @author big_data / REST api team
      */
     public Response create(String table, String json) {
-        try {
+       /* TODO THIS IS BROKEN AF
+
+       try {
             // uses custom method in the converter class that takes in delegator name, entity name and json
             // and spits out a GenericValue.
             // The converter "default" method with just GenericValue input wants the object to contain
@@ -133,6 +135,7 @@ public class GenericService {
         } catch (GenericEntityException | ConversionException e) {
             e.printStackTrace();
             return Response.serverError().entity("Error of some sort").build();
-        }
+        }*/
+       return null;
     }
 }
