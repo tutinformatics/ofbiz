@@ -52,4 +52,7 @@ under the License.
     <property key="api.error.create_task">
         <value xml:lang="en">Error creating task.</value>
     </property>
+    <property key="api.error.get_project_list">
+        <value xml:lang="en">Error retrieving project list.</value>
+    </property>
 </resource>

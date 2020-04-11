@@ -56,12 +56,12 @@ under the License.
         <attribute name="timesheetId" type="String" mode="IN" optional="true"/>
         <attribute name="timeEntryId" type="String" mode="IN" optional="true"/>
     </service>
-    
+
     <service name="projectMgrRequestPermission" engine="simple"
         location="component://projectmgr/minilang/ProjectPermissionServices.xml" invoke="projectMgrRequestPermission">
         <implements service="permissionInterface"/>
     </service>
-    
+
     <service name="updateTimeEntryByWorkeffort" engine="simple"
         location="component://projectmgr/minilang/ProjectServices.xml" invoke="updateTimeEntryByWorkeffort">
         <description>Update workeffort by workeffortId and timesheetId </description>
@@ -242,7 +242,7 @@ under the License.
         <attribute name="skillTypeId" mode="IN" type="String" optional="true"/>
         <attribute name="estimatedDuration" mode="IN" type="Double" optional="true"/>
     </service>
- 
+
      <service name="updateTaskAssigment" default-entity-name="WorkEffortPartyAssignment" engine="simple"
         location="component://projectmgr/minilang/ProjectServices.xml" invoke="updateTaskAssigment">
         <description>Update a WorkEffortPartyAssignment Entity, including set enddate and create new</description>
@@ -283,6 +283,12 @@ under the License.
         <attribute name="partyId" type="String" mode="IN" optional="true"/>
         <attribute name="roleTypeId" type="String" mode="IN" optional="true"/>
         <attribute name="statusId" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="getAllProjectList" default-entity-name="WorkEffort" engine="java"
+        location="org.apache.ofbiz.project.services.ProjectCustomServices" invoke="getProjectList" auth="false">
+        <description>Get All Projects</description>
+        <attribute name="projectList" type="List" mode="OUT" optional="true"/>
     </service>
 
 </services>
