@@ -5,6 +5,7 @@ import org.apache.ofbiz.base.lang.JSON;
 import org.apache.ofbiz.base.util.UtilGenerics;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.util.ExtendedConverters;
+import org.apache.ofbiz.jersey.annotation.Secured;
 import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.GenericServiceException;
 import org.apache.ofbiz.service.LocalDispatcher;
@@ -22,7 +23,7 @@ import java.util.Map;
 
 @Path("/object-dist/v1/services")
 @Provider
-//@Secured
+@Secured
 public class ObjectDistService {
 
     public static final String MODULE = ObjectDistService.class.getName();
