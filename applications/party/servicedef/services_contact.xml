@@ -75,9 +75,9 @@ under the License.
         <attribute name="contactMechId" type="String" mode="INOUT" optional="false"/>
         <attribute name="oldContactMechId" type="String" mode="OUT" optional="false"/>
     </service>
-
+<!--TODO: Change auth from false -->
     <service name="createEmailAddress" engine="groovy"
-             location="component://party/groovyScripts/contact/ContactMechServices.groovy" invoke="createEmailAddress" auth="true">
+             location="component://party/groovyScripts/contact/ContactMechServices.groovy" invoke="createEmailAddress" auth="false">
         <description>Create an Email Address</description>
         <auto-attributes entity-name="ContactMech" include="nonpk" mode="IN" optional="true"/>
         <auto-attributes entity-name="ContactMech" include="pk" mode="OUT" optional="false"/>

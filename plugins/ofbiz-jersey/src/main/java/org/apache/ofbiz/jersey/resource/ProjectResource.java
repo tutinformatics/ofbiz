@@ -4,6 +4,7 @@ package org.apache.ofbiz.jersey.resource;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilProperties;
+import org.apache.ofbiz.project.model.ProjectCmd;
 import org.apache.ofbiz.project.model.ProjectTaskCmd;
 import org.apache.ofbiz.service.GenericServiceException;
 import org.apache.ofbiz.service.LocalDispatcher;
@@ -118,4 +119,32 @@ public class ProjectResource {
                 .build();
     }
 
+    @POST
+    @Path("create-project")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createProject(ProjectCmd projectCmd) {
+        LocalDispatcher dispatcher = (LocalDispatcher) servletContext.getAttribute("dispatcher");
+        Map<String, Object> result;
+
+        try {
+            Map<String, Object> context = mapper.convertValue(projectCmd, Map.class);
+            result = dispatcher.runSync("createProject", context);
+        } catch (GenericServiceException e) {
+            Debug.logError(e, "Exception thrown while running createProject service: ", module);
+            String errMsg = UtilProperties.getMessage("JerseyUiLabels", "api.error.create_project", httpRequest.getLocale());
+            throw new RuntimeException(errMsg);
+        }
+
+        if (ServiceUtil.isError(result)) {
+            ServiceUtil.returnError(ServiceUtil.getErrorMessage(result));
+        }
+
+        return Response
+                .status(Status.OK)
+                .type(MediaType.APPLICATION_JSON)
+                .entity(result)
+                .build();
+
+    }
 }
