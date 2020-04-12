@@ -46,9 +46,55 @@ under the License.
         <field name="postalCode" type="short-varchar"></field>
         <field name="houseNumber" type="numeric"></field>
         <field name="description" type="description"></field>
-        <prim-key field="partyId"/>
+        <prim-key field="memberId"/>
+        <relation type="one" fk-name="Party_partyId" rel-entity-name="Party">
+            <key-map field-name="partyId"/>
+        </relation>
 
     </entity>
+
+    <entity entity-name="Lead" title="Lead" package-name="org.apache.ofbiz.party.party">
+        <field name="partyId" type="id"/>
+        <field name="memberId" type="id"/>
+        <field name="leadId" type="id"/>
+        <field name="description" type="description"/>
+        <field name="internalNotes" type="description"/>
+        <field name="creationDate" type="date-time"/>
+        <field name="active" type="indicator"/>
+
+        <prim-key field="leadId"/>
+        <relation type="one" fk-name="PersonData_memberId" rel-entity-name="PersonData">
+            <key-map field-name="memberId"/>
+        </relation>
+        <relation type="one" fk-name="Party_partyId" rel-entity-name="Party">
+            <key-map field-name="partyId"/>
+        </relation>
+
+    </entity>
+
+<!--    <entity entity-name="Opportunity" title="Lead" package-name="org.apache.ofbiz.party.party">-->
+<!--        <field name="partyId" type="id"></field>-->
+<!--        <field name="memberId" type="id"></field>-->
+<!--        <field name="description" type="description"></field>-->
+<!--        <field name="creationDate" type="date-time"></field>-->
+<!--        <prim-key field="partyId"/>-->
+<!--    </entity>-->
+
+<!--    <entity entity-name="Proposition" title="Lead" package-name="org.apache.ofbiz.party.party">-->
+<!--        <field name="partyId" type="id"></field>-->
+<!--        <field name="memberId" type="id"></field>-->
+<!--        <field name="description" type="description"></field>-->
+<!--        <field name="creationDate" type="date-time"></field>-->
+<!--        <prim-key field="partyId"/>-->
+<!--    </entity>-->
+
+<!--    <entity entity-name="Deal" title="Lead" package-name="org.apache.ofbiz.party.party">-->
+<!--        <field name="partyId" type="id"></field>-->
+<!--        <field name="memberId" type="id"></field>-->
+<!--        <field name="description" type="description"></field>-->
+<!--        <field name="creationDate" type="date-time"></field>-->
+<!--        <prim-key field="partyId"/>-->
+<!--    </entity>-->
 
 <!--    <view-entity  entity-name="ClientView" package-name="org.apache.ofbiz.party.party" title="Client Data aggregator">-->
 <!--        <member-entity entity-alias="C" entity-name="Party"/>-->
@@ -59,6 +105,7 @@ under the License.
 <!--            <key-map field-name="partyId"/>-->
 <!--        </view-link>-->
 <!--    </view-entity>-->
+
 
 
 
