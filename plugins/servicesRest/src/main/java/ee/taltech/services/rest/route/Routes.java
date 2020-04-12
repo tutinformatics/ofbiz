@@ -51,7 +51,26 @@ public class Routes extends RouteBuilder {
 
         rest("/contact")
                 .produces("application/json")
-                .get().to("bean:contactService?method=getContactMechs")
-                .post().consumes("application/json").to("bean:contactService?method=addTelecomNumber");
+
+                .get().to("bean:contactService?method=getAllContactData")
+
+                .get("mech").to("bean:contactService?method=getContactMechs")
+                .get("mech/{typeId}").to("bean:contactService?method=getContactMechsByType(${header.typeId})")
+                .delete("mech").to("bean:contactService?method=deleteContactMech")
+
+                .get("person").to("bean:contactService?method=getPersonData")
+                .put("person").to("bean:contactService?method=updatePersonData")
+
+                .get("email").to("bean:contactService?method=getPartyEmails")
+                .post("email").to("bean:contactService?method=createPartyEmail")
+                .put("email").to("bean:contactService?method=updatePartyEmail")
+
+                .get("telephone").to("bean:contactService?method=getPartyTelephones")
+                .post("telephone").to("bean:contactService?method=createPartyTelephone")
+                .put("telephone").to("bean:contactService?method=updatePartyTelephone")
+
+                .get("address").to("bean:contactService?method=getPostalAddresses")
+                .post("address").to("bean:contactService?method=createPostalAddress")
+                .put("address").to("bean:contactService?method=updatePostalAddress");
     }
 }
