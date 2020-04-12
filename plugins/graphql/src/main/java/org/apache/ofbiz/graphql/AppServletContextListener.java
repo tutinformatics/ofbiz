@@ -74,8 +74,14 @@ public class AppServletContextListener implements ServletContextListener {
 
             for (Map.Entry<String, ModelEntity> map : new ArrayList<>(entries)) {
                 String key = map.getKey();
-                schema.append("\t").append(key.toLowerCase());
 
+
+                ///// GET all
+                schema.append("\t").append(key.toLowerCase()).append("_ : [").append(key).append("]\n");
+
+
+                /////  GET by PK
+                schema.append("\t").append(key.toLowerCase());
                 if (map.getValue().getPkFieldNames().size() != 0) {
                     schema.append("(");
                     for (Iterator<String> iter = map.getValue().getPkFieldNames().iterator(); iter.hasNext(); ) {
@@ -88,11 +94,80 @@ public class AppServletContextListener implements ServletContextListener {
                         }
                     }
                 }
-
                 schema.append(" : ").append(key).append("\n");
 
-                schema.append("\t").append(key.toLowerCase()).append("_ : [").append(key).append("]\n");
 
+                /////  DELETE by PK
+                schema.append("\t").append("delete").append(key.toLowerCase());
+                if (map.getValue().getPkFieldNames().size() != 0) {
+                    schema.append("(");
+                    for (Iterator<String> iter = map.getValue().getPkFieldNames().iterator(); iter.hasNext(); ) {
+                        String pk = iter.next();
+                        schema.append(pk).append(" : ").append(getNewType(map.getValue().getField(pk).getType()));
+                        if (iter.hasNext()) {
+                            schema.append(", ");
+                        } else {
+                            schema.append(")");
+                        }
+                    }
+                }
+                schema.append(" : ").append(key).append("\n");
+
+
+                ///// POST body
+                if (map.getValue().getPkFieldNames().size() == 1) {
+                    schema.append("\t").append("post").append(key.toLowerCase()).append("_");
+                    if (map.getValue().getAllFieldNames().size() != 0) {
+                        schema.append("(");
+                        List<String> vals = map.getValue().getAllFieldNames();
+                        vals.remove(map.getValue().getPkFieldNames().get(0));
+                        for (Iterator<String> iter = vals.iterator(); iter.hasNext(); ) {
+                            String k = iter.next();
+                            schema.append(k).append(" : ").append(getNewType(map.getValue().getField(k).getType()));
+                            if (iter.hasNext()) {
+                                schema.append(", ");
+                            } else {
+                                schema.append(")");
+                            }
+
+                        }
+                    }
+                    schema.append(" : ").append(key).append("\n");
+                }
+
+                ///// POST body
+                schema.append("\t").append("post").append(key.toLowerCase());
+                if (map.getValue().getAllFieldNames().size() != 0) {
+                    schema.append("(");
+                    for (Iterator<String> iter = map.getValue().getAllFieldNames().iterator(); iter.hasNext(); ) {
+                        String k = iter.next();
+                        schema.append(k).append(" : ").append(getNewType(map.getValue().getField(k).getType()));
+                        if (iter.hasNext()) {
+                            schema.append(", ");
+                        } else {
+                            schema.append(")");
+                        }
+                    }
+                }
+                schema.append(" : ").append(key).append("\n");
+
+                ///// PUT body
+                schema.append("\t").append("put").append(key.toLowerCase());
+                if (map.getValue().getAllFieldNames().size() != 0) {
+                    schema.append("(");
+                    for (Iterator<String> iter = map.getValue().getAllFieldNames().iterator(); iter.hasNext(); ) {
+                        String k = iter.next();
+                        schema.append(k).append(" : ").append(getNewType(map.getValue().getField(k).getType()));
+                        if (iter.hasNext()) {
+                            schema.append(", ");
+                        } else {
+                            schema.append(")");
+                        }
+                    }
+                }
+                schema.append(" : ").append(key).append("\n");
+
+                schema.append("\n");
             }
 
             schema.append("}\n\n");
