@@ -3,6 +3,7 @@ package org.apache.ofbiz.jersey.resource;
 import org.apache.ofbiz.base.conversion.ConversionException;
 import org.apache.ofbiz.base.lang.JSON;
 import org.apache.ofbiz.entity.Delegator;
+import org.apache.ofbiz.entity.GenericEntity;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.model.ModelEntity;
@@ -87,12 +88,13 @@ public class MarketdataResources {
     public Response getAllMarketdataEntities() throws GenericEntityException {
         Response.ResponseBuilder builder = null;
         Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
-        ModelEntity reader = delegator.getModelEntity("MarketdataModel");
-        List<String> fieldNames = reader.getAllFieldNames();
-//        TreeSet<String> entities = new TreeSet<String>(reader.getEntityNames());
-        builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(fieldNames);
+        List<GenericValue> allEntries = delegator.findAll("MarketdataModel", true);
+        //ModelEntity reader = delegator.getModelEntity("MarketdataModel");
+        //List<String> fieldNames = reader.getAllFieldNames();
+        builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(allEntries);
         return builder.build();
     }
+
 
     @POST
     @Path("/{name}")
