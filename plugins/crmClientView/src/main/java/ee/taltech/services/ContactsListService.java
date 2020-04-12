@@ -6,9 +6,7 @@ import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.condition.EntityCondition;
 import org.apache.ofbiz.entity.condition.EntityOperator;
-import org.apache.ofbiz.entity.util.Converters;
 import org.apache.ofbiz.entity.util.EntityFindOptions;
-import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.service.DispatchContext;
 
 import java.util.HashMap;
@@ -56,7 +54,7 @@ public class ContactsListService {
             String invoiceId = Utils.getParamValueFromExchange("id", exchange);
             EntityCondition condition = EntityCondition.makeCondition(
                     "memberId", EntityOperator.EQUALS, invoiceId);
-            List<GenericValue> result = delegator.findList("PersonData", condition, null, List.of("creationDate"), new EntityFindOptions(), true);
+            List<GenericValue> result = delegator.findList("PersonData", condition, null, List.of("firstName"), new EntityFindOptions(), true);
             if (result.size() > 0) {
                 return String.valueOf(result.get(0));
             }
@@ -70,8 +68,8 @@ public class ContactsListService {
         try {
             Optional<GenericValue> contactList = Utils.mapToGenericValue(delegator, "PersonData", data);
             if (contactList.isPresent()) {
-//                contactList.get().setNextSeqId();
-//                delegator.createOrStore(contactList.get());
+                contactList.get().setNextSeqId();
+                delegator.createOrStore(contactList.get());
                 Map<String, Object> dataMap = new HashMap<>();
                 dataMap.put("partyId", contactList.get().get("partyId"));
                 dataMap.put("memberId", contactList.get().get("memberId"));

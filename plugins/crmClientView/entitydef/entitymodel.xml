@@ -46,10 +46,11 @@ under the License.
         <field name="postalCode" type="short-varchar"></field>
         <field name="houseNumber" type="numeric"></field>
         <field name="description" type="description"></field>
-        <prim-key field="memberId"/>
-        <relation type="one" fk-name="Party_partyId" rel-entity-name="Party">
-            <key-map field-name="partyId"/>
-        </relation>
+        <prim-key field="partyId"/>
+<!--        <prim-key field="memberId"/>-->
+<!--        <relation type="one" fk-name="Party_partyId" rel-entity-name="Party">-->
+<!--            <key-map field-name="partyId"/>-->
+<!--        </relation>-->
 
     </entity>
 
