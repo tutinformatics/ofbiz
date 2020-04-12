@@ -80,8 +80,7 @@ public class ProjectResource {
         try {
             result = dispatcher.runSync("getProjectTaskList", Collections.singletonMap("projectId", projectId));
         } catch (GenericServiceException e) {
-            Debug.logError(e, "Exception thrown while running getProjectTaskList service: ",
-                    module);
+            Debug.logError(e, "Exception thrown while running getProjectTaskList service: ", module);
             String errMsg = UtilProperties.getMessage("JerseyUiLabels", "api.error.get_task_list", httpRequest.getLocale());
             throw new RuntimeException(errMsg);
         }
