@@ -18,14 +18,6 @@
  */
 package org.apache.ofbiz.entity;
 
-import java.net.URL;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.apache.ofbiz.entity.cache.Cache;
 import org.apache.ofbiz.entity.condition.EntityCondition;
 import org.apache.ofbiz.entity.datasource.GenericHelper;
@@ -47,6 +39,13 @@ import org.apache.ofbiz.entity.util.SequenceUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.net.URL;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public interface Delegator {
 

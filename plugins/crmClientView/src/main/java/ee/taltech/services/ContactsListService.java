@@ -14,8 +14,12 @@ import org.apache.ofbiz.entity.condition.EntityOperator;
 import org.apache.ofbiz.service.DispatchContext;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
+import static ee.taltech.services.utils.Utils.mapToGenericValue;
 
 public class ContactsListService {
 
@@ -57,23 +61,29 @@ public class ContactsListService {
     }
     */
 
-    public GenericValue createContact(Map<String, Object> data) {
-//        try {
-//            Optional<GenericValue> product = Converter.mapToGenericValue(delegator, "Product", data);
-//            if (product.isPresent()) {
-//                product.get().setNextSeqId();
-//                delegator.createOrStore(product.get());
-//                return product.get();
-//            }
-//        } catch (GenericEntityException e) {
-//            e.printStackTrace();
-//        }
-        return null;
+    public void createContact(Map<String, Object> data) {
+        System.out.println("TESTDEMO");
+        try {
+            Optional<GenericValue> person = mapToGenericValue(delegator, "Person", data);
+            if (person.isPresent()) {
+//                person.get().setNextSeqId();
+//                delegator.createOrStore(person.get());
+                Map<String, Object> role = new HashMap<>();
+                role.put("firstName", person.get().get("firstName"));
+                role.put("lastName", person.get().get("lastName"));
+                role.put("partyId", person.get().get("partyId"));
+                Optional<GenericValue> personRole = mapToGenericValue(delegator, "Person", role);
+                if (personRole.isPresent()) {
+                    delegator.createOrStore(personRole.get());
+                }
+            }
+        } catch (GenericEntityException e) {
+            e.printStackTrace();
+        }
     }
 
-       public List<GenericValue> getContactList() {
+    public List<GenericValue> getContactList() {
         try {
-
             return delegator.findAll("PartyExport", true);
         } catch (GenericEntityException e) {
             e.printStackTrace();

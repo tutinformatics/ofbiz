@@ -28,24 +28,15 @@ under the License.
     <copyright/>
     <version/>
 
-    <entity entity-name="OfbizDemoType" package-name="org.apache.ofbiz.ofbizdemo" title="OfbizDemo Type Entity">
-        <field name="ofbizDemoTypeId" type="id"><description>primary sequenced ID</description></field>
-        <field name="description" type="description"></field>
-        <prim-key field="ofbizDemoTypeId"/>
-    </entity>
-
-    <entity entity-name="OfbizDemo" package-name="org.apache.ofbiz.ofbizdemo" title="OfbizDemo Entity">
-        <field name="ofbizDemoId" type="id"><description>primary sequenced ID</description></field>
-        <field name="ofbizDemoTypeId" type="id"/>
-        <field name="id" type="id"/>
-        <field name="firstName" type="name"/>
-        <field name="lastName" type="name"/>
-        <field name="comments" type="comment"/>
-        <prim-key field="ofbizDemoId"/>
-        <relation type="one" fk-name="ODEM_OD_TYPE_ID" rel-entity-name="OfbizDemoType">
-            <key-map field-name="ofbizDemoTypeId"/>
-        </relation>
-    </entity>
+    <view-entity  entity-name="ClientView" package-name="org.apache.ofbiz.party.party" title="Client Data aggregator">
+        <member-entity entity-alias="C" entity-name="Party"/>
+        <member-entity entity-alias="CD" entity-name="Person"/>
+        <alias entity-alias="C" name="partyId"/>
+        <alias entity-alias="CD" name="firstName"/>
+        <view-link entity-alias="C" rel-entity-alias="CD">
+            <key-map field-name="partyId"/>
+        </view-link>
+    </view-entity>
 
 
 </entitymodel>
