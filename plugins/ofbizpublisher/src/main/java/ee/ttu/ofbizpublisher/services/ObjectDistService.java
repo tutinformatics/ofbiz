@@ -20,12 +20,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@Path("/generic/v5/services")
+@Path("/object-dist/v1/services")
 @Provider
 //@Secured
-public class GenericServiceResource {
+public class ObjectDistService {
 
-    public static final String MODULE = GenericServiceResource.class.getName();
+    public static final String MODULE = ObjectDistService.class.getName();
     public static final ExtendedConverters.ExtendedJSONToGenericValue jsonToGenericConverter = new ExtendedConverters.ExtendedJSONToGenericValue();
 
     @Context
@@ -94,5 +94,4 @@ public class GenericServiceResource {
         }
         return builder.build();
     }
-
 }
