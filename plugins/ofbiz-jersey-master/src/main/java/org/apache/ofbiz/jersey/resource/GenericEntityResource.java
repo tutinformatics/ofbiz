@@ -93,11 +93,11 @@ public class GenericEntityResource {
 		return builder.build();
 	}
 
-	@PUT
+	@POST
 	@Path("/{name}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addEntity(@PathParam(value = "name") String entityName, String jsonBody) throws GenericServiceException, GenericEntityException, ConversionException {
-		Response.ResponseBuilder builder = null;
+	public Response addEntity(@PathParam(value = "name") String entityName, String jsonBody) throws GenericEntityException, ConversionException {
+		Response.ResponseBuilder builder;
 		Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
 		GenericValue object = jsonToGenericConverter.convert(delegator.getDelegatorName(), entityName, JSON.from(jsonBody));
 		ModelEntity model = delegator.getModelEntity(entityName);
@@ -107,22 +107,27 @@ public class GenericEntityResource {
 				object.setNextSeqId();
 			}
 		}
-		delegator.create(object);
+		delegator.create(object); // TODO: catch exception
 		builder = Response.status(Response.Status.OK);
 		return builder.build();
 	}
 
-	@POST
+	@PUT
 	@Path("/{name}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response updateEntity(@PathParam(value = "name") String entityName, String jsonBody) throws GenericServiceException, GenericEntityException, ConversionException {
-		Response.ResponseBuilder builder = null;
+	public Response updateEntity(@PathParam(value = "name") String entityName, String jsonBody) throws GenericEntityException, ConversionException {
+		Response.ResponseBuilder builder;
 		Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
 		GenericValue object = jsonToGenericConverter.convert(delegator.getDelegatorName(), entityName, JSON.from(jsonBody));
 		GenericValue check = delegator.findOne(entityName, object.getPrimaryKey(), false);
 		// if there indeed is an entity in db with such PKs
 		if (check != null) {
-			delegator.store(object);
+			try {
+				delegator.store(object);
+			} catch (GenericEntityException e) {
+				e.printStackTrace();
+				// TODO: some error to json
+			}
 			builder = Response.status(Response.Status.OK);
 		} else {
 			builder = Response.status(Response.Status.BAD_REQUEST);

@@ -17,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 @Path("/generic/v1/services")
@@ -82,7 +83,15 @@ public class GenericServiceResource {
 			} catch (IOException | ConversionException ignored) {
 			}
 		}
-		builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(dispatcher.runSync(serviceName, fieldMap));
+		try {
+			Map<String, ?> entity = dispatcher.runSync(serviceName, fieldMap);
+			builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
+		} catch (GenericServiceException e)  {
+			e.printStackTrace();
+			Map<String, Object> errors = new HashMap<>();
+			errors.put("Error", e.getMessage());
+			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON).entity(errors);
+		}
 		return builder.build();
 	}
 
