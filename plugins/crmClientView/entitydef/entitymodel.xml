@@ -47,12 +47,7 @@ under the License.
         <field name="houseNumber" type="numeric"></field>
         <field name="description" type="description"></field>
         <prim-key field="partyId"/>
-        <relation type="one" fk-name="PERSON_PARTY_ID" rel-entity-name="Party">
-            <key-map field-name="partyId"/>
-        </relation>
-        <relation type="one" fk-name="MEMBER_PARTY_ID" rel-entity-name="Person">
-            <key-map field-name="memberId"/>
-        </relation>
+
     </entity>
 
 <!--    <view-entity  entity-name="ClientView" package-name="org.apache.ofbiz.party.party" title="Client Data aggregator">-->
