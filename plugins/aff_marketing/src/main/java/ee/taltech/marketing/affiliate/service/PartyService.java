@@ -2,10 +2,6 @@ package ee.taltech.marketing.affiliate.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import org.apache.camel.Exchange;
-import org.apache.camel.component.sparkrest.SparkMessage;
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.entity.Delegator;
@@ -14,7 +10,6 @@ import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.party.party.PartyServices;
 import org.apache.ofbiz.service.DispatchContext;
-import org.apache.ofbiz.service.GenericDispatcherFactory;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ServiceUtil;
 
@@ -27,18 +22,14 @@ import java.util.Map;
 public class PartyService {
 
     Delegator delegator;
-    GenericDispatcherFactory genericDispatcherFactory;
     LocalDispatcher dispatcher;
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
     public static final String module = PartyServices.class.getName();
     private DispatchContext dispatchCtx;
 
-
-    public PartyService(Delegator delegator) {
-        this.delegator = delegator;
-        this.genericDispatcherFactory = new GenericDispatcherFactory();
-        this.dispatcher = genericDispatcherFactory.createLocalDispatcher("myDispatcher", delegator);
-        this.dispatchCtx = new DispatchContext("myContext", null, dispatcher);
+    public PartyService(DispatchContext dctx) {
+        delegator = dctx.getDelegator();
+        dispatchCtx = dctx;
     }
 
 
@@ -46,8 +37,8 @@ public class PartyService {
      * @param exchange - request that is wrapped by camel with additional information added during routing
      * @return JSON with all the parties found with a given partyId
      */
-    public String getPartyById(Exchange exchange) {
-        String id = getParamValueFromExchange("id", exchange);
+    public Map<String, Object> getPartyById(Map<String, Object> data) {
+        String id = (String) data.get("id");
 
         DispatchContext myContext = new DispatchContext("myContext", null, dispatcher);
         Map<String, Object> context = new HashMap<>();
@@ -56,7 +47,7 @@ public class PartyService {
         context.put("searchPartyFirst", null);
         context.put("searchAllIdContext", null);
 
-        return gson.toJson(PartyServices.findPartyById(myContext, context));
+        return PartyServices.findPartyById(myContext, context);
     }
 
     /**
@@ -65,9 +56,9 @@ public class PartyService {
      * @return
      * @throws GenericEntityException
      */
-    public String getUnconfirmedAffiliates() throws GenericEntityException {
+    public List<GenericValue> getUnconfirmedAffiliates() throws GenericEntityException {
         List<GenericValue> genericValues = EntityQuery.use(delegator).from("Affiliate").where("dateTimeApproved", null).queryList();
-        return gson.toJson(genericValues);
+        return genericValues;
     }
 
     /**
@@ -76,52 +67,51 @@ public class PartyService {
      * @return
      * @throws GenericEntityException
      */
-    public String getAffiliates() throws GenericEntityException {
+    public List<GenericValue> getAffiliates() throws GenericEntityException {
         List<GenericValue> genericValues = EntityQuery.use(delegator).from("Affiliate").queryList();
-        return gson.toJson(genericValues);
+        return genericValues;
     }
 
-    public String approve(Exchange exchange) throws GenericEntityException {
-        String partyId = parseJson("partyId", exchange);
+    public GenericValue approve(Map<String, Object> data) throws GenericEntityException {
+        String partyId = (String) data.get("partyId");
         GenericValue genericValue = EntityQuery.use(delegator).from("Affiliate").where("partyId", partyId).queryOne();
         genericValue.set("dateTimeApproved", new Timestamp(System.currentTimeMillis()));
         delegator.store(genericValue);
-        return gson.toJson(genericValue);
+        return genericValue;
     }
 
-    public String disapprove(Exchange exchange) throws GenericEntityException {
-        String partyId = parseJson("partyId", exchange);
+    public GenericValue disapprove(Map<String, Object> data) throws GenericEntityException {
+        String partyId = (String) data.get("partyId");
         GenericValue genericValue = EntityQuery.use(delegator).from("Affiliate").where("partyId", partyId).queryOne();
         genericValue.set("dateTimeApproved", null);
         delegator.store(genericValue);
-        return gson.toJson(genericValue);
+        return genericValue;
     }
 
-    public String createAffiliateCode(Exchange exchange) throws GenericEntityException {
-        String partyId = parseJson("partyId", exchange);
+    public GenericValue createAffiliateCode(Map<String, Object> data) throws GenericEntityException {
+        String partyId = (String) data.get("partyId");
         checkApprovedAffiliate(partyId);
         GenericValue genericValue = delegator.makeValue("AffiliateCode", UtilMisc.toMap("partyId", partyId, "affiliateCodeId", delegator.getNextSeqId("AffiliateCode")));
         delegator.create(genericValue);
-        return gson.toJson(genericValue);
+        return genericValue;
     }
 
-    public String getAffiliateCodes(Exchange exchange) throws GenericEntityException {
-        String partyId = parseJson("partyId", exchange);
+    public List<GenericValue> getAffiliateCodes(Map<String, Object> data) throws GenericEntityException {
+        String partyId = (String) data.get("partyId");
         checkApprovedAffiliate(partyId);
         List<GenericValue> genericValue = EntityQuery.use(delegator).from("AffiliateCode").where("partyId", partyId).queryList();
-        return gson.toJson(genericValue);
+        return genericValue;
     }
 
 
     /**
-     * @param exchange - http request wrapped by Camel
      * @return - status of operation
      */
-    public String createAffiliateForUserLogin(Exchange exchange) throws GenericEntityException {
+    public Map<String, String> createAffiliateForUserLogin(Map<String, Object> data) throws GenericEntityException {
         Map<String, Object> affiliateCreateContext = new HashMap<>();
 
         //Retrieve UserLogin via userLoginId
-        String userLoginId = parseJson("userLoginId", exchange);
+        String userLoginId = (String) data.get("userLoginId");
         GenericValue currentUserLogin = ServiceUtil.getUserLogin(dispatchCtx, affiliateCreateContext, userLoginId);
 
         // check type of user's party via partyId
@@ -135,7 +125,7 @@ public class PartyService {
 
         if (userParty != null) {
             if (!"PERSON".equals(userParty.getString("partyTypeId"))) {
-                return gson.toJson(Map.of("status", "user already has party of another type"));
+                return Map.of("status", "user already has party of another type");
             }
         }
 
@@ -150,7 +140,7 @@ public class PartyService {
         PartyServices.createAffiliate(dispatchCtx, affiliateCreateContext);
 
         try {
-            String rootPartyId = parseJson("rootPartyId", exchange);
+            String rootPartyId = (String) data.get("rootPartyId");
             GenericValue genericValue = EntityQuery.use(delegator).from("Affiliate").where("partyId", userPartyId).queryOne();
             genericValue.set("RootPartyId", rootPartyId);
             delegator.store(genericValue);
@@ -158,7 +148,7 @@ public class PartyService {
             Debug.logWarning(e.getMessage(), module);
         }
 
-        return gson.toJson(Map.of("status", "ok"));
+        return Map.of("status", "ok");
     }
 
     private void checkApprovedAffiliate(String partyId) throws GenericEntityException {
@@ -167,38 +157,12 @@ public class PartyService {
                 .from("Affiliate")
                 .where("partyId", partyId)
                 .queryOne();
+        if (userParty == null) {
+            ServiceUtil.returnError("You are not an affiliate yet!");
+        }
         boolean isApproved = userParty.get("dateTimeApproved") != null;
         if (!isApproved) {
             ServiceUtil.returnError("You are not approved yet!");
         }
     }
-
-    /**
-     * handled map = Map<ParameterName, ParameterValue>
-     * this map can be found by the following path:
-     * exchange -> in -> request -> params
-     *
-     * @param paramName - name of parameter provided with query in requested url
-     * @param exchange  - request wrapped by camel
-     * @return value of parameter
-     */
-    private String getParamValueFromExchange(String paramName, Exchange exchange) {
-        SparkMessage msg = (SparkMessage) exchange.getIn();
-        Map<String, String> params = msg.getRequest().params();
-        String sparkParamName = ":" + paramName;
-        return params.get(sparkParamName);
-    }
-
-    /**
-     * @param property - name of property to retrieve from json
-     * @param exchange - object populated by Camel
-     * @return string value of json property
-     */
-    private String parseJson(String property, Exchange exchange) {
-        SparkMessage msg = (SparkMessage) exchange.getIn();
-        JsonParser parser = new JsonParser();
-        JsonObject obj = parser.parse(msg.getBody().toString()).getAsJsonObject();
-        return obj.get(property).getAsString();
-    }
-
 }

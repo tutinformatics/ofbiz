@@ -7,11 +7,10 @@ import org.apache.ofbiz.service.LocalDispatcher;
 
 public class Routes extends RouteBuilder {
     LocalDispatcher localDispatcher;
-    private PartyService partyService;
+//    private PartyService partyService;
 
     public Routes(LocalDispatcher localDispatcher) {
         this.localDispatcher = localDispatcher;
-        partyService = new PartyService(localDispatcher.getDelegator());
     }
 
     @Override
@@ -51,61 +50,30 @@ public class Routes extends RouteBuilder {
                     .to("bean:orderService?method=getOrderById(${header.orderId})")
                 .put("/id/{orderId}")
                     .to("bean:orderService?method=updateOrder(${header.orderId}, ${body})");
-        rest("/api")
-                .get("/parties/find-by-id/{id}")
-                .produces("application/json")
-                .route()
-                .bean(partyService, "getPartyById")
-                .endRest();
+
 
         // affiliate part
-        rest("/api")
-                .post("/parties/affiliate/create")
-                .produces("application/json")
-                .route()
-                .bean(partyService, "createAffiliateForUserLogin")
-                .endRest();
 
-        rest("/api")
-                .post("/parties/createCode")
+        rest("/parties")
                 .produces("application/json")
-                .route()
-                .bean(partyService, "createAffiliateCode")
-                .endRest();
-
-        rest("/api")
-                .get("/parties/getCodes")
-                .produces("application/json")
-                .route()
-                .bean(partyService, "getAffiliateCodes")
-                .endRest();
-
-        rest("/api")
-                .get("/parties/unconfirmedAffiliates")
-                .produces("application/json")
-                .route()
-                .bean(partyService, "getUnconfirmedAffiliates")
-                .endRest();
-
-        rest("/api")
-                .get("/parties/affiliates")
-                .produces("application/json")
-                .route()
-                .bean(partyService, "getAffiliates")
-                .endRest();
-
-        rest("/api")
-                .put("/parties/affiliate/approve")
-                .produces("application/json")
-                .route()
-                .bean(partyService, "approve")
-                .endRest();
-
-        rest("/api")
-                .put("/parties/affiliate/disapprove")
-                .produces("application/json")
-                .route()
-                .bean(partyService, "disapprove")
-                .endRest();
+                .get("/affiliates")
+                    .to("bean:partyService?method=getAffiliates")
+                .post("/getCodes")
+                    .consumes("application/json")
+                    .to("bean:partyService?method=getAffiliateCodes(${body})")
+                .get("/unconfirmedAffiliates")
+                    .to("bean:partyService?method=getUnconfirmedAffiliates")
+                .put("/affiliate/approve")
+                    .consumes("application/json")
+                    .to("bean:partyService?method=approve(${body})")
+                .put("/affiliate/disapprove")
+                    .consumes("application/json")
+                    .to("bean:partyService?method=disapprove(${body})")
+                .post("/affiliate/create")
+                    .consumes("application/json")
+                    .to("bean:partyService?method=createAffiliateForUserLogin(${body})")
+                .post("/createCode")
+                    .consumes("application/json")
+                    .to("bean:partyService?method=createAffiliateCode(${body})");
     }
 }
