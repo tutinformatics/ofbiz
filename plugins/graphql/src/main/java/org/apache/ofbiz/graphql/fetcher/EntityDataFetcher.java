@@ -7,6 +7,7 @@ import org.apache.ofbiz.base.util.UtilValidate;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
+import org.apache.ofbiz.entity.model.ModelEntity;
 import org.apache.ofbiz.entity.model.ModelField;
 import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.graphql.utils.QueryParamStringConverter;
@@ -21,6 +22,17 @@ import java.util.stream.Collectors;
 
 public class EntityDataFetcher implements DataFetcher<Object> {
 
+    /**
+     * @Author: Enrico Vompa
+     *
+     * GET - gets row from database
+     * POST - Puts a new row into the database
+     * POST_ - Puts a new row into the database while generating a PK for it automatically
+     * PUT - Updates an existing row in database
+     * DELETE - Removes an existing row from database
+     *
+     * @return - returns the value specified in arguments
+     * **/
     @Override
     public Object get(DataFetchingEnvironment dataFetchingEnvironment) throws GenericEntityException {
 
@@ -33,26 +45,66 @@ public class EntityDataFetcher implements DataFetcher<Object> {
             delegator = (Delegator) servContext.getAttribute("delegator");
         }
 
-        String entity;
+        String operation = dataFetchingEnvironment.getField().getName();
 
-        if (dataFetchingEnvironment.getArguments().size() != 0) { // Get by primary keys
-            entity = dataFetchingEnvironment.getFieldType().getName();
-
+        if (operation.startsWith("delete")) { // DELETE
+            String entity = dataFetchingEnvironment.getFieldType().getName();
             GenericValue genericValue = EntityQuery.use(delegator).from(entity)
                     .where(dataFetchingEnvironment.getArguments())
                     .cache()
                     .queryOne();
-
+            delegator.removeValue(GenericValue.create(genericValue));
             return getStringObjectMap(genericValue);
 
-        } else { // Get all from table
-            entity = dataFetchingEnvironment.getFieldType().getChildren().get(0).getName();
+        } else if (operation.startsWith("post")) { // POST
+            if (operation.endsWith("_")) { // auto generate pk
+                String entity = dataFetchingEnvironment.getFieldType().getName();
+                Map<String, Object> argum = dataFetchingEnvironment.getArguments().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                ModelEntity modelEntity = delegator.getModelEntity(entity);
+                List<String> pks = modelEntity.getPkFieldNames();
+                GenericValue value = new GenericValue().create(delegator, modelEntity, argum);
+                value.setNextSeqId();
+                delegator.create(value);
+                argum.put(pks.get(0), value.get(pks.get(0)));
+                return argum;
 
-            List<GenericValue> genericValue = EntityQuery.use(delegator).from(entity)
-                    .cache()
-                    .queryList();
+            } else {
+                String entity = dataFetchingEnvironment.getFieldType().getName();
+                ModelEntity modelEntity = delegator.getModelEntity(entity);
+                GenericValue value = new GenericValue().create(delegator, modelEntity, dataFetchingEnvironment.getArguments());
+                delegator.create(value);
+                return dataFetchingEnvironment.getArguments();
+            }
 
-            return genericValue.stream().map(this::getStringObjectMap).collect(Collectors.toList());
+
+        } else if (operation.startsWith("put")) { // PUT
+            String entity = dataFetchingEnvironment.getFieldType().getName();
+            ModelEntity modelEntity = delegator.getModelEntity(entity);
+            GenericValue genericValue = GenericValue.create(delegator, modelEntity, dataFetchingEnvironment.getArguments());
+            delegator.store(genericValue);
+            return dataFetchingEnvironment.getArguments();
+
+
+        } else { // GET
+            if (dataFetchingEnvironment.getArguments().size() != 0) { // Get by primary keys
+                String entity = dataFetchingEnvironment.getFieldType().getName();
+
+                GenericValue genericValue = EntityQuery.use(delegator).from(entity)
+                        .where(dataFetchingEnvironment.getArguments())
+                        .cache()
+                        .queryOne();
+
+                return getStringObjectMap(genericValue);
+
+            } else { // Get all from table
+                String entity = dataFetchingEnvironment.getFieldType().getChildren().get(0).getName();
+
+                List<GenericValue> genericValue = EntityQuery.use(delegator).from(entity)
+                        .cache()
+                        .queryList();
+
+                return genericValue.stream().map(this::getStringObjectMap).collect(Collectors.toList());
+            }
         }
     }
 
