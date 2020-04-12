@@ -30,7 +30,7 @@ public class TestService {
 
     public void create(Map<String, Object> data) {
         try {
-            Optional<GenericValue> salesOpportunity = UtilTest.mapToGenericValue(delegator, "SalesOpportunity", data);
+            Optional<GenericValue> salesOpportunity = Utils.mapToGenericValue(delegator, "SalesOpportunity", data);
             if (salesOpportunity.isPresent()) {
                 salesOpportunity.get().setNextSeqId();
                 delegator.createOrStore(salesOpportunity.get());
@@ -40,7 +40,7 @@ public class TestService {
                 dataMap.put("description", salesOpportunity.get().get("description"));
                 dataMap.put("estimatedAmount", salesOpportunity.get().get("estimatedAmount"));
                 dataMap.put("estimatedProbability", salesOpportunity.get().get("estimatedProbability"));
-                Optional<GenericValue> saleRole = UtilTest.mapToGenericValue(delegator, "SalesOpportunity", dataMap);
+                Optional<GenericValue> saleRole = Utils.mapToGenericValue(delegator, "SalesOpportunity", dataMap);
                 if (saleRole.isPresent()) {
                     delegator.createOrStore(saleRole.get());
                 }
@@ -65,7 +65,7 @@ public class TestService {
 
     public String delete(Exchange exchange) {
         try {
-            String saleId = UtilTest.getParamValueFromExchange("id", exchange);
+            String saleId = Utils.getParamValueFromExchange("id", exchange);
             EntityCondition condition = EntityCondition.makeCondition(
                     "salesOpportunityId", EntityOperator.EQUALS, saleId);
             delegator.removeByCondition("SalesOpportunity", condition);

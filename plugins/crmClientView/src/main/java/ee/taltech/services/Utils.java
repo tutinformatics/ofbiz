@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 
-public class UtilTest {
+public class Utils {
 
     public static final Converters.JSONToGenericValue convert = new Converters.JSONToGenericValue();
 
@@ -31,5 +31,9 @@ public class UtilTest {
         Map<String, String> params = msg.getRequest().params();
         String sparkParamName = ":" + paramName;
         return params.get(sparkParamName);
+    }
+
+    public static String capitalize(String string) {
+        return string.substring(0,1).toUpperCase() + string.substring(1).toLowerCase();
     }
 }

@@ -23,20 +23,33 @@ public class InvoiceRoutes extends RouteBuilder {
                 .port(7463)
                 .bindingMode(RestBindingMode.json)
                 .enableCORS(true)
-                .corsHeaderProperty("Access-Control-Allow-Origin","*");
+                .corsHeaderProperty("Access-Control-Allow-Origin", "*");
 
-        rest("/api")
-                .get("/invoice")
+        rest("/api").get("/invoice/")
                 .produces("application/json")
                 .route()
-                .bean(invoiceService, "getContactList()")
+                .bean(invoiceService, "get")
                 .endRest();
 
-        rest("/api")
-                .delete("/invoice/{id}")
+        rest("/api").get("/invoice/partyId/{id}")
                 .produces("application/json")
                 .route()
-                .bean(invoiceService, "deleteInvoice")
+                .bean(invoiceService, "getByPartyId")
                 .endRest();
+
+//        rest("/api").post("/invoice")
+//                .route()
+//                .bean(invoiceService, "create")
+//                .endRest();
+//
+//        rest("/api").put("/invoice")
+//                .route()
+//                .bean(invoiceService, "update")
+//                .endRest();
+//
+//        rest("/api").delete("/invoice")
+//                .route()
+//                .bean(invoiceService, "delete")
+//                .endRest();
     }
 }
