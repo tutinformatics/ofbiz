@@ -1,18 +1,17 @@
 package ee.taltech.services.route;
 
-import ee.taltech.services.InvoiceService;
+import ee.taltech.services.ProductService;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
 import org.apache.ofbiz.service.LocalDispatcher;
 
-public class InvoiceRoutes extends RouteBuilder {
+public class ProductRoutes extends RouteBuilder {
     LocalDispatcher localDispatcher;
+    ProductService productService;
 
-    private InvoiceService invoiceService;
-
-    public InvoiceRoutes(LocalDispatcher localDispatcher) {
+    public ProductRoutes(LocalDispatcher localDispatcher) {
         this.localDispatcher = localDispatcher;
-        invoiceService = new InvoiceService(this.localDispatcher.getDispatchContext());
+        productService = new ProductService(this.localDispatcher.getDispatchContext());
     }
 
     @Override
@@ -25,37 +24,31 @@ public class InvoiceRoutes extends RouteBuilder {
                 .enableCORS(true)
                 .corsHeaderProperty("Access-Control-Allow-Origin", "*");
 
-        rest("/api").get("/invoice/")
+        rest("/api").get("/product")
                 .produces("application/json")
                 .route()
-                .bean(invoiceService, "get")
+                .bean(productService, "get")
                 .endRest();
 
-        rest("/api").get("/invoice/partyId/{id}")
+        rest("/api").get("/product/productName/{name}")
                 .produces("application/json")
                 .route()
-                .bean(invoiceService, "getByPartyId")
+                .bean(productService, "getByProductName")
                 .endRest();
 
-        rest("/api").get("/invoice/{id}")
-                .produces("application/json")
-                .route()
-                .bean(invoiceService, "getById")
-                .endRest();
-
-//        rest("/api").post("/invoice")
+//        rest("/api").post("/product")
 //                .route()
-//                .bean(invoiceService, "create")
+//                .bean(productService, "create")
 //                .endRest();
 //
-//        rest("/api").put("/invoice")
+//        rest("/api").put("/product")
 //                .route()
-//                .bean(invoiceService, "update")
+//                .bean(productService, "update")
 //                .endRest();
 //
-//        rest("/api").delete("/invoice")
+//        rest("/api").delete("/product")
 //                .route()
-//                .bean(invoiceService, "delete")
+//                .bean(productService, "delete")
 //                .endRest();
     }
 }

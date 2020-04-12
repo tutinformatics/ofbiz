@@ -35,7 +35,7 @@ public class InvoiceService {
         try {
             String partyId = Utils.getParamValueFromExchange("id", exchange);
             EntityCondition condition = EntityCondition.makeCondition(
-                    "partyId", EntityOperator.LIKE, Utils.capitalize(partyId));
+                    "partyId", EntityOperator.EQUALS, Utils.capitalize(partyId));
             return delegator.findList("Invoice", condition, null, List.of("invoiceDate"), new EntityFindOptions(), true);
         } catch (GenericEntityException e) {
             e.printStackTrace();
@@ -43,5 +43,18 @@ public class InvoiceService {
         return null;
     }
 
-
+    public GenericValue getById(Exchange exchange) {
+        try {
+            String invoiceId = Utils.getParamValueFromExchange("id", exchange);
+            EntityCondition condition = EntityCondition.makeCondition(
+                    "invoiceId", EntityOperator.EQUALS, invoiceId.toLowerCase());
+            List<GenericValue> result = delegator.findList("Invoice", condition, null, List.of("invoiceDate"), new EntityFindOptions(), true);
+            if (result.size() > 0) {
+                return result.get(0);
+            }
+        } catch (GenericEntityException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
