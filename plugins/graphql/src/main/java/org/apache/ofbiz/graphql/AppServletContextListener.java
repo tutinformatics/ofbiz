@@ -67,7 +67,7 @@ public class AppServletContextListener implements ServletContextListener {
             ///////////////////////////////// GENERATE TOP THINGY /////////////////////////////////////////////////////
             Set<Map.Entry<String, ModelEntity>> entries = delegator.getModelReader().getEntityCache().entrySet();
             StringBuilder schema = new StringBuilder();
-            schema.append("scalar Timestamp\n\n"); // TODO: This breaks stuff ATM
+//            schema.append("scalar Timestamp\n\n"); // TODO: This breaks stuff ATM
             schema.append("schema {\n    query: Query\n}\n\n");
 
             ///////////////////////////////// GENERATE QUERIES ////////////////////////////////////////////////////////
@@ -121,10 +121,10 @@ public class AppServletContextListener implements ServletContextListener {
             return "Int";
         } else if (new ArrayList<>(Arrays.asList()).contains(type)) {
             return "Boolean";
-        } else if (new ArrayList<>(Arrays.asList("numeric", "floating-point")).contains(type)) {
+        } else if (new ArrayList<>(Arrays.asList("floating-point")).contains(type)) {
             return "Float";
-        } else if (new ArrayList<>(Arrays.asList("date", "time", "date-time")).contains(type)) {
-            return "Timestamp";
+        } else if (new ArrayList<>(Arrays.asList("numeric", "date", "time", "date-time")).contains(type)) {
+            return "Long";
         } else {
             return "String";
         }

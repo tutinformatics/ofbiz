@@ -21,12 +21,7 @@ package org.apache.ofbiz.graphql.filter;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
@@ -50,13 +45,18 @@ import graphql.kickstart.execution.GraphQLObjectMapper;
 public class AuthenticationFilter implements Filter {
 
 	private static final String MODULE = AuthenticationFilter.class.getName();
-	private GraphQLObjectMapper mapper;
+	private final GraphQLObjectMapper mapper;
 	private static final String AUTHENTICATION_SCHEME = "Bearer";
 	private static final String REALM = "OFBiz-GraphQl";
 	private static final String INTROSPECTION_QUERY_PATH = "/schema.json";
 	
 	{
 		mapper = GraphQLObjectMapper.newBuilder().withObjectMapperConfigurer(new OFBizGraphQLObjectMapperConfigurer()).build();
+	}
+
+	@Override
+	public void init(FilterConfig filterConfig) throws ServletException {
+
 	}
 
 	@Override
@@ -89,7 +89,12 @@ public class AuthenticationFilter implements Filter {
 		}
 		chain.doFilter(request, response);
 	}
-	
+
+	@Override
+	public void destroy() {
+
+	}
+
 	/**
 	 * 
 	 * @param request
