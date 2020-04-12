@@ -10,11 +10,14 @@ import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.model.ModelField;
 import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.graphql.utils.QueryParamStringConverter;
+import org.jetbrains.annotations.NotNull;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class EntityDataFetcher implements DataFetcher<Object> {
 
@@ -30,13 +33,31 @@ public class EntityDataFetcher implements DataFetcher<Object> {
             delegator = (Delegator) servContext.getAttribute("delegator");
         }
 
-        String entity = dataFetchingEnvironment.getFieldType().getName();
+        String entity;
 
-        GenericValue genericValue = EntityQuery.use(delegator).from(entity)
-                .where(dataFetchingEnvironment.getArguments())
-                .cache()
-                .queryOne();
+        if (dataFetchingEnvironment.getArguments().size() != 0) { // Get by primary keys
+            entity = dataFetchingEnvironment.getFieldType().getName();
 
+            GenericValue genericValue = EntityQuery.use(delegator).from(entity)
+                    .where(dataFetchingEnvironment.getArguments())
+                    .cache()
+                    .queryOne();
+
+            return getStringObjectMap(genericValue);
+
+        } else { // Get all from table
+            entity = dataFetchingEnvironment.getFieldType().getChildren().get(0).getName();
+
+            List<GenericValue> genericValue = EntityQuery.use(delegator).from(entity)
+                    .cache()
+                    .queryList();
+
+            return genericValue.stream().map(this::getStringObjectMap).collect(Collectors.toList());
+        }
+    }
+
+    @NotNull
+    private Map<String, Object> getStringObjectMap(GenericValue genericValue) {
         Map<String, Object> secondary = new HashMap<>();
 
         for (String key : genericValue.getAllKeys()) {
@@ -47,8 +68,6 @@ public class EntityDataFetcher implements DataFetcher<Object> {
                 secondary.put(key, QueryParamStringConverter.convert(genericValue.get(key).toString(), field.getType()));
             }
         }
-
         return secondary;
-
     }
 }

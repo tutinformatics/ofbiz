@@ -67,7 +67,6 @@ public class AppServletContextListener implements ServletContextListener {
             ///////////////////////////////// GENERATE TOP THINGY /////////////////////////////////////////////////////
             Set<Map.Entry<String, ModelEntity>> entries = delegator.getModelReader().getEntityCache().entrySet();
             StringBuilder schema = new StringBuilder();
-//            schema.append("scalar Timestamp\n\n"); // TODO: This breaks stuff ATM
             schema.append("schema {\n    query: Query\n}\n\n");
 
             ///////////////////////////////// GENERATE QUERIES ////////////////////////////////////////////////////////
@@ -91,6 +90,8 @@ public class AppServletContextListener implements ServletContextListener {
                 }
 
                 schema.append(" : ").append(key).append("\n");
+
+                schema.append("\t").append(key.toLowerCase()).append("_ : [").append(key).append("]\n");
 
             }
 
