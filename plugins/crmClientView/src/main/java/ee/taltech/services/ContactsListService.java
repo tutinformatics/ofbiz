@@ -1,20 +1,16 @@
 package ee.taltech.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.apache.camel.Exchange;
-import org.apache.camel.component.sparkrest.SparkMessage;
-import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.condition.EntityCondition;
 import org.apache.ofbiz.entity.condition.EntityOperator;
+import org.apache.ofbiz.entity.util.Converters;
+import org.apache.ofbiz.entity.util.EntityFindOptions;
 import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.service.DispatchContext;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +21,7 @@ public class ContactsListService {
 
     private DispatchContext dctx;
     private Delegator delegator;
+
 
 
     public ContactsListService(DispatchContext dctx) {
@@ -39,15 +36,45 @@ public class ContactsListService {
         }
         return null;
     }
+    public String getByName(Exchange exchange) {
+        try {
+            String invoiceId = Utils.getParamValueFromExchange("name", exchange);
+            EntityCondition condition = EntityCondition.makeCondition(
+                    "firstName", EntityOperator.EQUALS, invoiceId);
+            List<GenericValue> result = delegator.findList("PersonData", condition, null, List.of("creationDate"), new EntityFindOptions(), true);
+            if (result.size() > 0) {
+
+                return String.valueOf(result.get(0));
+            }
+        } catch (GenericEntityException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public String getById(Exchange exchange) {
+        try {
+            String invoiceId = Utils.getParamValueFromExchange("id", exchange);
+            EntityCondition condition = EntityCondition.makeCondition(
+                    "memberId", EntityOperator.EQUALS, invoiceId);
+            List<GenericValue> result = delegator.findList("PersonData", condition, null, List.of("creationDate"), new EntityFindOptions(), true);
+            if (result.size() > 0) {
+                return String.valueOf(result.get(0));
+            }
+        } catch (GenericEntityException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public void createContact(Map<String, Object> data) {
         try {
             Optional<GenericValue> contactList = Utils.mapToGenericValue(delegator, "PersonData", data);
             if (contactList.isPresent()) {
-                contactList.get().setNextSeqId();
-                delegator.createOrStore(contactList.get());
+//                contactList.get().setNextSeqId();
+//                delegator.createOrStore(contactList.get());
                 Map<String, Object> dataMap = new HashMap<>();
                 dataMap.put("partyId", contactList.get().get("partyId"));
+                dataMap.put("memberId", contactList.get().get("memberId"));
                 dataMap.put("firstName", contactList.get().get("firstName"));
                 dataMap.put("lastName", contactList.get().get("lastName"));
                 Optional<GenericValue> saleRole = Utils.mapToGenericValue(delegator, "PersonData", dataMap);
