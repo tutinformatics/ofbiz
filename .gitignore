@@ -38,3 +38,4 @@ desktop.ini
 .*.swp
 .*.swo
 *.patch
+schema.graphqls
