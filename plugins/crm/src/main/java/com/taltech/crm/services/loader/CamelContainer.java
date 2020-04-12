@@ -35,6 +35,7 @@ import org.apache.ofbiz.entity.DelegatorFactory;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ServiceContainer;
 
+import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Set;
 
@@ -57,13 +58,16 @@ public class CamelContainer implements Container {
         PackageScanClassResolver packageResolver = new DefaultPackageScanClassResolver();
         Set<Class<?>> routesClassesSet = packageResolver.findImplementations(RouteBuilder.class, packageName);
         routesClassesSet.forEach(key -> {
-            RouteBuilder routeBuilder;
-            try {
-                routeBuilder = createRoutes(key.getName());
-                addRoutesToContext(routeBuilder);
-            } catch (ContainerException e) {
-
+            if (!Modifier.isAbstract(key.getModifiers())) {
+                RouteBuilder routeBuilder;
+                try {
+                    routeBuilder = createRoutes(key.getName());
+                    addRoutesToContext(routeBuilder);
+                } catch (ContainerException e) {
+                    e.printStackTrace();
+                }
             }
+
         });
 
         producerTemplate = context.createProducerTemplate();
