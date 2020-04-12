@@ -15,4 +15,14 @@ public class ProjectCmd {
 
     private String currentStatusId = "_NA_";
 
+    private String scopeEnumId;
+
+    private String workEffortParentId;
+
+    private String description;
+
+    private Integer priority;
+
+    private String emailAddress;
+
 }

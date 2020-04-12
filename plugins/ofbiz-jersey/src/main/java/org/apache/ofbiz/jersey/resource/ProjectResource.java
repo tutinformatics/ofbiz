@@ -120,7 +120,7 @@ public class ProjectResource {
     }
 
     @POST
-    @Path("create-project")
+    @Path("new-project")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createProject(ProjectCmd projectCmd) {
