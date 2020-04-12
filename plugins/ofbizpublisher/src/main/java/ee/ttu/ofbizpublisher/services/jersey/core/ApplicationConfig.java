@@ -18,35 +18,27 @@
  *******************************************************************************/
 package ee.ttu.ofbizpublisher.services.jersey.core;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status.Family;
+import org.apache.ofbiz.base.util.Debug;
+import org.glassfish.jersey.logging.LoggingFeature;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.glassfish.jersey.server.ResourceConfig;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
-public enum HttpResponseStatus implements Response.StatusType {
+public class ApplicationConfig extends ResourceConfig {
+	public ApplicationConfig() {
+		packages("org.apache.ofbiz.jersey.resource");
+		packages("org.apache.ofbiz.jersey.providers");
+		packages("com.fasterxml.jackson.jaxrs");
+		packages("io.swagger.v3.jaxrs2.integration.resources");
+		register(MultiPartFeature.class);
+		if (Debug.verboseOn()) {
+			register(new LoggingFeature(Logger.getLogger(LoggingFeature.DEFAULT_LOGGER_NAME), Level.INFO,
+					LoggingFeature.Verbosity.PAYLOAD_ANY, 10000));
+		}
 
-	UNPROCESSABLE_ENTITY(422, "Unprocessable Entity");
-
-	private HttpResponseStatus(int statusCode, String reasonPhrase) {
-		this.statusCode = statusCode;
-		this.reasonPhrase = reasonPhrase;
-	}
-
-	private int statusCode;
-	private String reasonPhrase;
-
-	@Override
-	public int getStatusCode() {
-		return statusCode;
-	}
-
-	@Override
-	public Family getFamily() {
-		return Family.CLIENT_ERROR;
-	}
-
-	@Override
-	public String getReasonPhrase() {
-		return reasonPhrase;
 	}
 
 }

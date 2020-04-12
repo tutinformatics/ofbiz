@@ -18,6 +18,8 @@
  *******************************************************************************/
 package ee.ttu.ofbizpublisher.services.jersey.core;
 
+import org.apache.ofbiz.jersey.core.HttpResponseStatus;
+
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;

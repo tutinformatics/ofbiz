@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package ee.ttu.ofbizpublisher.services.jersey.listerner;
+package ee.ttu.ofbizpublisher.services.jersey.listener;
 
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.entity.Delegator;

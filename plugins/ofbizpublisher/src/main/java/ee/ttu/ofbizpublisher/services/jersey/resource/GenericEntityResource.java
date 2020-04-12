@@ -1,6 +1,23 @@
+/*******************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *******************************************************************************/
 package ee.ttu.ofbizpublisher.services.jersey.resource;
 
-import ee.ttu.ofbizpublisher.services.jersey.util.QueryParamStringConverter;
 import org.apache.ofbiz.base.conversion.ConversionException;
 import org.apache.ofbiz.base.lang.JSON;
 import org.apache.ofbiz.entity.Delegator;
@@ -10,6 +27,7 @@ import org.apache.ofbiz.entity.model.ModelEntity;
 import org.apache.ofbiz.entity.model.ModelReader;
 import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.entity.util.ExtendedConverters;
+import org.apache.ofbiz.jersey.util.QueryParamStringConverter;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -78,7 +96,7 @@ public class GenericEntityResource {
 	@Path("/{name}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addEntity(@PathParam(value = "name") String entityName, String jsonBody) throws GenericEntityException, ConversionException {
-		ResponseBuilder builder;
+		Response.ResponseBuilder builder;
 		Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
 		GenericValue object = jsonToGenericConverter.convert(delegator.getDelegatorName(), entityName, JSON.from(jsonBody));
 		ModelEntity model = delegator.getModelEntity(entityName);
@@ -97,7 +115,7 @@ public class GenericEntityResource {
 	@Path("/{name}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateEntity(@PathParam(value = "name") String entityName, String jsonBody) throws GenericEntityException, ConversionException {
-		ResponseBuilder builder;
+		Response.ResponseBuilder builder;
 		Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
 		GenericValue object = jsonToGenericConverter.convert(delegator.getDelegatorName(), entityName, JSON.from(jsonBody));
 		GenericValue check = delegator.findOne(entityName, object.getPrimaryKey(), false);

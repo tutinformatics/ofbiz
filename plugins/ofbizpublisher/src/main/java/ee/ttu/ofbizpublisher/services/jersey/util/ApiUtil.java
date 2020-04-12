@@ -18,8 +18,8 @@
  *******************************************************************************/
 package ee.ttu.ofbizpublisher.services.jersey.util;
 
-import ee.ttu.ofbizpublisher.services.jersey.response.Error;
-import ee.ttu.ofbizpublisher.services.jersey.response.Success;
+import org.apache.ofbiz.jersey.response.Error;
+import org.apache.ofbiz.jersey.response.Success;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
