@@ -18,9 +18,7 @@
  *******************************************************************************/
 package ee.taltech.marketing.affiliate.loader;
 
-import ee.taltech.marketing.affiliate.service.OrderService;
 import ee.taltech.marketing.affiliate.service.PartyService;
-import ee.taltech.marketing.affiliate.service.ProductService;
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
@@ -121,8 +119,6 @@ public class CamelContainer implements Container {
         dispatcher = createDispatcher();
         LocalDispatcher dispatcher = createDispatcher();
         SimpleRegistry registry = new SimpleRegistry();
-        registry.put("productService", new ProductService(dispatcher.getDispatchContext()));
-        registry.put("orderService", new OrderService(dispatcher.getDispatchContext()));
         registry.put("partyService", new PartyService(dispatcher.getDispatchContext()));
         registry.put("dispatcher", dispatcher);
         return new DefaultCamelContext(registry);
