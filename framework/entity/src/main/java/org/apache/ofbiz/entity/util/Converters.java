@@ -76,7 +76,7 @@ public class Converters implements ConverterLoader {
     }
 
     public static class GenericValueToJSON extends AbstractConverter<GenericValue, JSON> {
-        public GenericValueToJSON() {
+        public GenericValueToJSON(GenericValue genericValue) {
             super(GenericValue.class, JSON.class);
         }
 

@@ -33,6 +33,7 @@ public class ProductService {
             String partyId = Utils.getParamValueFromExchange("name", exchange);
             EntityCondition condition = EntityCondition.makeCondition(
                     "productName", EntityOperator.EQUALS, Utils.capitalize("name"));
+
             return delegator.findList("Product", condition, null, List.of("introductionDate"), new EntityFindOptions(), true);
         } catch (GenericEntityException e) {
             e.printStackTrace();

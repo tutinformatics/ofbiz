@@ -46,7 +46,9 @@ under the License.
         <field name="postalCode" type="short-varchar"></field>
         <field name="houseNumber" type="numeric"></field>
         <field name="description" type="description"></field>
+        <field name="creationDate" type="date-time"></field>
         <prim-key field="partyId"/>
+        <prim-key field="memberId"/>
 
     </entity>
 
