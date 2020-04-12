@@ -19,37 +19,13 @@ under the License.
 -->
 
 <ofbiz-component name="accountingConnector"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-component.xsd">
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-component.xsd">
     <!-- define resource loaders; most common is to use the component resource loader -->
     <resource-loader name="main" type="component"/>
 
     <!-- place the config directory on the classpath to access configuration files -->
     <classpath type="dir" location="config"/>
-    <!-- entity resources: model(s), eca(s), group, and data definitions -->
-    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel.xml"/>
-    <!-- <entity-resource type="eca" reader-name="main" loader="main" location="entitydef/eecas.xml"/> -->
-    <entity-resource type="data" reader-name="seed" loader="main" location="data/AccountingConnectorTypeData.xml"/>
-    <entity-resource type="data" reader-name="seed" loader="main" location="data/AccountingConnectorSecurityPermissionSeedData.xml"/>
-    <entity-resource type="data" reader-name="demo" loader="main" location="data/AccountingConnectorSecurityGroupDemoData.xml"/>
-    <entity-resource type="data" reader-name="demo" loader="main" location="data/AccountingConnectorDemoData.xml"/>
-
-    <!-- service resources: model(s), eca(s) and group definitions -->
-    <service-resource type="model" loader="main" location="servicedef/services.xml"/>
-    <!--
-    <service-resource type="eca" loader="main" location="servicedef/secas.xml"/>
-    <service-resource type="group" loader="main" location="servicedef/groups.xml"/>
-    -->
-
-    <test-suite loader="main" location="testdef/AccountingConnectorTests.xml"/>
-
-    <!-- web applications; will be mounted when using the embedded container -->
-    <webapp name="accountingConnector"
-        title="AccountingConnector"
-        server="default-server"
-        location="webapp/accountingConnector"
-        base-permission="OFBTOOLS,ACCOUNTINGCONNECTOR"
-        mount-point="/accountingConnector"/>
 
     <container name="camel-container" loaders="main,rmi" class="ee.taltech.accounting.connector.camel.CamelContainer">
         <!--<property name="dispatcher-factory" value="org.apache.ofbiz.service.GenericDispatcherFactory"/>-->
