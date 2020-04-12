@@ -28,7 +28,6 @@ import org.apache.ofbiz.entity.model.ModelReader;
 import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.entity.util.ExtendedConverters;
 import org.apache.ofbiz.jersey.util.QueryParamStringConverter;
-import org.apache.ofbiz.service.GenericServiceException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -119,6 +118,7 @@ public class GenericEntityResource {
 		Response.ResponseBuilder builder;
 		Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
 		GenericValue object = jsonToGenericConverter.convert(delegator.getDelegatorName(), entityName, JSON.from(jsonBody));
+
 		GenericValue check = delegator.findOne(entityName, object.getPrimaryKey(), false);
 		// if there indeed is an entity in db with such PKs
 		if (check != null) {
@@ -131,6 +131,32 @@ public class GenericEntityResource {
 			builder = Response.status(Response.Status.OK);
 		} else {
 			builder = Response.status(Response.Status.BAD_REQUEST);
+		}
+		return builder.build();
+	}
+
+
+	@DELETE
+	@Path("/{name}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response deleteEntity(@PathParam(value = "name") String entityName, @Context UriInfo allUri) throws GenericEntityException, ConversionException {
+		ResponseBuilder builder = null;
+		Map<String, List<String>> mpAllQueParams = allUri.getQueryParameters().entrySet().stream().collect(Collectors.toMap(x -> x.getKey(), x -> x.getValue()));
+		Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
+		ModelEntity model = delegator.getModelReader().getModelEntity(entityName);
+		Map<String, Object> searchParams = mpAllQueParams.entrySet().stream()
+				.map(x -> new AbstractMap.SimpleEntry<>(x.getKey(), QueryParamStringConverter.convert(x.getValue().get(0), model.getField(x.getKey()).getType())))
+				.collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue));
+		List<GenericValue> allEntities = EntityQuery.use(delegator).from(entityName).where(searchParams).queryList();
+		if (allEntities.size() > 1) {
+			builder = Response.status(Response.Status.BAD_REQUEST);
+		}
+		else if (allEntities.size() == 0) {
+			builder = Response.status(Response.Status.NOT_FOUND);
+		}
+		else {
+			delegator.removeValue(allEntities.get(0));
+			builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(genericToJsonConverter.convertWithChildren(allEntities.get(0)).toString());
 		}
 		return builder.build();
 	}
