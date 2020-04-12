@@ -11,6 +11,7 @@ import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.condition.EntityCondition;
 import org.apache.ofbiz.entity.condition.EntityOperator;
+import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.service.DispatchContext;
 
 import java.io.IOException;
@@ -19,62 +20,39 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static ee.taltech.services.utils.Utils.mapToGenericValue;
-
 public class ContactsListService {
 
 
     private DispatchContext dctx;
     private Delegator delegator;
-    private ObjectMapper objectMapper = new ObjectMapper();
-    private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
 
     public ContactsListService(DispatchContext dctx) {
         this.dctx = dctx;
         delegator = dctx.getDelegator();
     }
-
-    private String getParamValueFromExchange(String paramName, Exchange exchange) {
-        SparkMessage msg = (SparkMessage) exchange.getIn();
-        Map<String, String> params = msg.getRequest().params();
-        String sparkParamName = ":" + paramName;
-        return params.get(sparkParamName);
-    }
-
-    private <T> T getValueFromBody(Exchange exchange, Class<T> valueType) {
-        SparkMessage msg = (SparkMessage) exchange.getIn();
-        T o = null;
+    public List<GenericValue> getContactList() {
         try {
-            o = objectMapper.readValue(msg.getBody().toString(), valueType);
-        } catch (IOException e) {
+            return delegator.findAll("PersonData", true);
+        } catch (GenericEntityException e) {
             e.printStackTrace();
         }
-        return o;
+        return null;
     }
-
-    /*
-    public String createContact(Exchange exchange) {
-        Map<String, Object> context = new HashMap<>();
-        AttributeWithId attributeWithId = getValueFromBody(exchange, AttributeWithId.class);
-        context.put("partyId", attributeWithId.getPartyId());
-        return gson.toJson(PartyServices.createAffiliate(dctx, context));
-    }
-    */
 
     public void createContact(Map<String, Object> data) {
-        System.out.println("TESTDEMO");
         try {
-            Optional<GenericValue> person = mapToGenericValue(delegator, "Person", data);
-            if (person.isPresent()) {
-//                person.get().setNextSeqId();
-//                delegator.createOrStore(person.get());
-                Map<String, Object> role = new HashMap<>();
-                role.put("firstName", person.get().get("firstName"));
-                role.put("lastName", person.get().get("lastName"));
-                role.put("partyId", person.get().get("partyId"));
-                Optional<GenericValue> personRole = mapToGenericValue(delegator, "Person", role);
-                if (personRole.isPresent()) {
-                    delegator.createOrStore(personRole.get());
+            Optional<GenericValue> contactList = Utils.mapToGenericValue(delegator, "PersonData", data);
+            if (contactList.isPresent()) {
+                contactList.get().setNextSeqId();
+                delegator.createOrStore(contactList.get());
+                Map<String, Object> dataMap = new HashMap<>();
+                dataMap.put("partyId", contactList.get().get("partyId"));
+                dataMap.put("firstName", contactList.get().get("firstName"));
+                dataMap.put("lastName", contactList.get().get("lastName"));
+                Optional<GenericValue> saleRole = Utils.mapToGenericValue(delegator, "PersonData", dataMap);
+                if (saleRole.isPresent()) {
+                    delegator.createOrStore(saleRole.get());
                 }
             }
         } catch (GenericEntityException e) {
@@ -82,46 +60,8 @@ public class ContactsListService {
         }
     }
 
-    public List<GenericValue> getContactList() {
-        try {
-            return delegator.findAll("PartyExport", true);
-        } catch (GenericEntityException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public void deleteContact(Exchange exchange) {
-        try {
-            String name = getParamValueFromExchange("name", exchange);
-            String capitalizedName = name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
-
-            EntityCondition condition = EntityCondition.makeCondition(
-                    "firstName", EntityOperator.EQUALS, capitalizedName);
-            //delegator.removeByAnd("Person",  UtilMisc.toMap("firstName", capitalizedName));
-            delegator.removeByCondition("Person", condition);
-
-        } catch (GenericEntityException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public List<GenericValue> getContactByFirstName(Exchange exchange) {
-        try {
-            String name = getParamValueFromExchange("name", exchange);
-            //EntityEcaRuleRunner<?> ecaRunner = this.getEcaRuleRunner(modelEntity.getEntityName());
-            String capitalizedName = name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
 
 
-            List<GenericValue> result = delegator.findByAnd("Person",  UtilMisc.toMap("firstName", capitalizedName),null , true);
-            if (result.size() >= 1) {
-                return result;
-            }
-            return null;
-        } catch (GenericEntityException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+
 
 }

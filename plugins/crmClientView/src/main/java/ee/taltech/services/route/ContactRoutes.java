@@ -36,21 +36,7 @@ public class ContactRoutes extends RouteBuilder {
                 .bean(contactsListService, "getContactList")
                 .endRest();
 
-            rest("/api").put("/contact")
-                .route()
-                .bean(contactsListService, "getContactByFirstName")
-                .endRest();
 
-            rest("/api").get("/contact/firstName/{name}")
-                .produces("application/json")
-                .route()
-                .bean(contactsListService, "getContactByFirstName")
-                .endRest();
-
-            rest("/api").delete("/contact/firstName/{name}")
-                .route()
-                .bean(contactsListService, "deleteContact")
-                .endRest();
 }
 
 }

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static ee.taltech.services.Utils.getParamValueFromExchange;
 import static ee.taltech.services.utils.Utils.mapToGenericValue;
 
 public class SalesOpportunityService {
@@ -86,11 +87,6 @@ public class SalesOpportunityService {
         return "failed";
     }
 
-    private String getParamValueFromExchange(String paramName, Exchange exchange) {
-        SparkMessage msg = (SparkMessage) exchange.getIn();
-        Map<String, String> params = msg.getRequest().params();
-        String sparkParamName = ":" + paramName;
-        return params.get(sparkParamName);
-    }
+
 
 }

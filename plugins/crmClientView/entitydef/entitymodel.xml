@@ -28,15 +28,44 @@ under the License.
     <copyright/>
     <version/>
 
-    <view-entity  entity-name="ClientView" package-name="org.apache.ofbiz.party.party" title="Client Data aggregator">
-        <member-entity entity-alias="C" entity-name="Party"/>
-        <member-entity entity-alias="CD" entity-name="Person"/>
-        <alias entity-alias="C" name="partyId"/>
-        <alias entity-alias="CD" name="firstName"/>
-        <view-link entity-alias="C" rel-entity-alias="CD">
+    <entity entity-name="PersonData" title="Person data" package-name="org.apache.ofbiz.party.party">
+        <field name="partyId" type="id"></field>
+        <field name="memberId" type="id"></field>
+        <field name="firstName" type="name"></field>
+        <field name="lastName" type="name"></field>
+        <field name="nickname" type="name"></field>
+        <field name="gender" type="indicator"></field>
+        <field name="birthDate" type="date"></field>
+        <field name="deceasedDate" type="date"></field>
+        <field name="companyName" type="name"></field>
+        <field name="position" type="name"></field>
+        <field name="emailAddress" type="id-vlong"></field>
+        <field name="telContactNumber" type="short-varchar"></field>
+        <field name="address" type="long-varchar"></field>
+        <field name="city" type="name"></field>
+        <field name="postalCode" type="short-varchar"></field>
+        <field name="houseNumber" type="numeric"></field>
+        <field name="description" type="description"></field>
+        <prim-key field="partyId"/>
+        <relation type="one" fk-name="PERSON_PARTY_ID" rel-entity-name="Party">
             <key-map field-name="partyId"/>
-        </view-link>
-    </view-entity>
+        </relation>
+        <relation type="one" fk-name="MEMBER_PARTY_ID" rel-entity-name="Person">
+            <key-map field-name="memberId"/>
+        </relation>
+    </entity>
+
+<!--    <view-entity  entity-name="ClientView" package-name="org.apache.ofbiz.party.party" title="Client Data aggregator">-->
+<!--        <member-entity entity-alias="C" entity-name="Party"/>-->
+<!--        <member-entity entity-alias="CD" entity-name="Person"/>-->
+<!--        <alias entity-alias="C" name="partyId"/>-->
+<!--        <alias entity-alias="CD" name="firstName"/>-->
+<!--        <view-link entity-alias="C" rel-entity-alias="CD">-->
+<!--            <key-map field-name="partyId"/>-->
+<!--        </view-link>-->
+<!--    </view-entity>-->
+
+
 
 
 </entitymodel>
