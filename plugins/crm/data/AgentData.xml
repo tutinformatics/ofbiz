@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<entity-engine-xml>
-    <agent agentId="SAMPLE_ID1" name="Siret Jorro" telecomNumber="55555555" emailAddress="siretjorro@gmail.com"/>
-    <agent agentId="SAMPLE_ID2" name="Agris Janisk" telecomNumber="77777777" emailAddress="agrisjanisk@gmail.com"/>
-    <agent agentId="SAMPLE_ID3" name="Tanel Ehatamm" telecomNumber="99999999" emailAddress="tanelehatamm@gmail.com"/>
-</entity-engine-xml>
