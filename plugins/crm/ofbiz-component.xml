@@ -22,15 +22,7 @@ under the License.
     <!-- define resource loaders; most common is to use the component resource loader -->
     <resource-loader name="main" type="component"/>
 
-    <container name="camel-container" loaders="main,rmi" class="com.taltech.crm.services.loader.CamelContainer">
-        <!--<property name="dispatcher-factory" value="org.apache.ofbiz.service.GenericDispatcherFactory"/>-->
 
-        <property name="routes.package" value="org.apache.ofbiz.camel.route"/>
-        <!-- Possible future implementation might read from an XML DSL -->
-        <property name="routeConfigFile" value="config/camel-routes.xml"/>
-        <property name="dispatcher-name" value="camel-dispatcher"/>
-        <property name="delegator-name" value="default"/>
-    </container>
 
     <!-- place the config directory on the classpath to access configuration files -->
     <classpath type="dir" location="config"/>
