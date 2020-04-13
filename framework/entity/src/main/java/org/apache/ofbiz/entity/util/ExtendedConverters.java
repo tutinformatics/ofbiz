@@ -58,7 +58,7 @@ public class ExtendedConverters implements ConverterLoader {
 				for (ModelRelation rel : itSingular) {
 					List<GenericValue> relList = obj.getRelated(rel.getCombinedName(), null, null, false);
 					if (relList.size() > 0) {
-						fieldMap.put("_Related_" + rel.getCombinedName(), getObjMap(relList.get(0), d - 1));
+						fieldMap.put("_toOne_" + rel.getCombinedName(), getObjMap(relList.get(0), d - 1));
 					}
 				}
 
@@ -69,7 +69,7 @@ public class ExtendedConverters implements ConverterLoader {
 						for (GenericValue relObj : relList) {
 							relMaps.add(getObjMap(relObj, d - 1));
 						}
-						fieldMap.put("_RelatedList_" + rel.getCombinedName(), relMaps);
+						fieldMap.put("_toMany_" + rel.getCombinedName(), relMaps);
 					}
 				}
 			}
