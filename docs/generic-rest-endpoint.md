@@ -7,6 +7,8 @@ Currently the following /v1 endpoints (meaning /api/generic/v1/*) are implemente
     * Returns list of all entity names
 * GET /entities/{case sensitive entity name}?field1=value&field2=value
     * Returns all entities (with no related / sub entities) that match the query parameters. Custom parameter "_query" accepts an int to say how many subleves you want. Currently limited to 1 as this makes request grow in size super fast. Related single items are with prefix "_Related\_", related lists of items are with prefix "_RelatedList\_". It being list or single is taken from entity declaration.
+* DELETE /entities/{case sensitive entity name}?field1=val1&field2=val2
+    * Deletes entity matching those fields if and only if there is just one such entity. For more extensive deletes it would probably make more sense to use a service.
 * POST /entities/{case sensitive entity name}
     * Make a new entity, doesn't support subobjects or adding relations. For those use existing or own services or assist with implementing them on a generic level.
     Fails if you try to add something with lacking PK fields or PKs that are in conflict with an existing entity.
