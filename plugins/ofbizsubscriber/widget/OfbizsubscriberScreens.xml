@@ -29,7 +29,7 @@ under the License.
             <widgets>
                 <decorator-screen name="OfbizsubscriberCommonDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
-                        <screenlet title="Add Ofbiz Publisher">
+                        <screenlet title="Add Ofbiz Subscriber">
                             <include-form name="AddOfbizSubscriberServices" location="component://ofbizsubscriber/widget/OfbizsubscriberForms.xml"/>
                         </screenlet>
                     </decorator-section>
