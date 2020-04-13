@@ -21,6 +21,7 @@ package org.apache.ofbiz.graphql;
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.model.ModelEntity;
+import org.apache.ofbiz.entity.model.ModelRelation;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.webapp.WebAppUtil;
 
@@ -179,6 +180,15 @@ public class AppServletContextListener implements ServletContextListener {
                 for (String field : map.getValue().getAllFieldNames()) {
                     schema.append("\t").append(field).append(": ").append(getNewType(map.getValue().getField(field).getType())).append("\n");
                 }
+
+                for (ModelRelation toOne: map.getValue().getRelationsOneList()) {
+                    schema.append("\t").append("_toOne_").append(toOne.getCombinedName().replace(" ", "")).append(": ").append(toOne.getRelEntityName()).append("\n");
+                }
+
+                for (ModelRelation toMany: map.getValue().getRelationsManyList()) {
+                    schema.append("\t").append("_toMany_").append(toMany.getCombinedName().replace(" ", "")).append(": [").append(toMany.getRelEntityName()).append("]\n");
+                }
+
                 schema.append("}\n\n");
 
             }

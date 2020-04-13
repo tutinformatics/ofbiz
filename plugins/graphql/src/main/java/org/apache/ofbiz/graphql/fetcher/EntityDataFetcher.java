@@ -1,5 +1,8 @@
 package org.apache.ofbiz.graphql.fetcher;
 
+import graphql.language.Field;
+import graphql.language.Selection;
+import graphql.language.SelectionSet;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.servlet.context.DefaultGraphQLServletContext;
@@ -15,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,16 +27,15 @@ import java.util.stream.Collectors;
 public class EntityDataFetcher implements DataFetcher<Object> {
 
     /**
-     * @Author: Enrico Vompa
+     * @return - returns the value specified in arguments
      *
+     * <p>
      * GET - gets row from database
      * POST - Puts a new row into the database
      * POST_ - Puts a new row into the database while generating a PK for it automatically
      * PUT - Updates an existing row in database
      * DELETE - Removes an existing row from database
-     *
-     * @return - returns the value specified in arguments
-     * **/
+     **/
     @Override
     public Object get(DataFetchingEnvironment dataFetchingEnvironment) throws GenericEntityException {
 
@@ -62,7 +65,7 @@ public class EntityDataFetcher implements DataFetcher<Object> {
                 Map<String, Object> argum = dataFetchingEnvironment.getArguments().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
                 ModelEntity modelEntity = delegator.getModelEntity(entity);
                 List<String> pks = modelEntity.getPkFieldNames();
-                GenericValue value = new GenericValue().create(delegator, modelEntity, argum);
+                GenericValue value = GenericValue.create(delegator, modelEntity, argum);
                 value.setNextSeqId();
                 delegator.create(value);
                 argum.put(pks.get(0), value.get(pks.get(0)));
@@ -71,7 +74,7 @@ public class EntityDataFetcher implements DataFetcher<Object> {
             } else {
                 String entity = dataFetchingEnvironment.getFieldType().getName();
                 ModelEntity modelEntity = delegator.getModelEntity(entity);
-                GenericValue value = new GenericValue().create(delegator, modelEntity, dataFetchingEnvironment.getArguments());
+                GenericValue value = GenericValue.create(delegator, modelEntity, dataFetchingEnvironment.getArguments());
                 delegator.create(value);
                 return dataFetchingEnvironment.getArguments();
             }
@@ -94,7 +97,10 @@ public class EntityDataFetcher implements DataFetcher<Object> {
                         .cache()
                         .queryOne();
 
-                return getStringObjectMap(genericValue);
+                Map<String, Object> returnable = new HashMap<>();
+                fillSubfieldsRecursively(returnable, genericValue, (SelectionSet) dataFetchingEnvironment.getDocument().getDefinitions().get(0).getChildren().get(0));
+
+                return returnable;
 
             } else { // Get all from table
                 String entity = dataFetchingEnvironment.getFieldType().getChildren().get(0).getName();
@@ -103,11 +109,95 @@ public class EntityDataFetcher implements DataFetcher<Object> {
                         .cache()
                         .queryList();
 
-                return genericValue.stream().map(this::getStringObjectMap).collect(Collectors.toList());
+                List<Map<String, Object>> returnable = new ArrayList<>();
+
+                for (int i = 0; i < genericValue.size(); i++) {
+                    returnable.add(new HashMap<>());
+                    for (Object va : dataFetchingEnvironment.getDocument().getDefinitions().get(0).getChildren()) {
+                        fillSubfieldsRecursively(returnable.get(i), genericValue.get(i), (SelectionSet) va);
+                    }
+                }
+                return returnable;
             }
         }
     }
 
+    /**
+     * Wrapper for graphQL datatype that makes recursive calls happen.
+     **/
+    private void fillSubfieldsRecursively(Map<String, Object> returnable, GenericValue genericValue, SelectionSet fields) {
+        if (fields == null) {
+            return;
+        }
+
+        for (Selection selection : fields.getSelections()) {
+            getStringObjectMap(genericValue).forEach(returnable::put);
+
+            try {
+                goDeeper(returnable, genericValue, (Field) selection);
+                return;
+            } catch (Exception e) {
+            }
+
+            try {
+                for (Object a : selection.getChildren()) {
+                    SelectionSet se = (SelectionSet) a;
+                    for (Selection selection_ : se.getSelections()) {
+                        goDeeper(returnable, genericValue, (Field) selection_);
+                    }
+                }
+            } catch (Exception e) {
+            }
+
+        }
+    }
+
+    /**
+     * Fills toOne and toMany subqueries recursively
+     *
+     * @param returnable:   returable map - edited inplace.
+     * @param genericValue: genericValue used to fill the fields.
+     * @param field:        graphQL field from where recursive calls are called from
+     **/
+    private void goDeeper(Map<String, Object> returnable, GenericValue genericValue, Field field) {
+        if (field.getName().startsWith("_toOne_")) {
+            try {
+                GenericValue child = genericValue.getRelated(field.getName().replace("_toOne_", "")).get(0);
+                Map<String, Object> returnable_ = new HashMap<>();
+                fillSubfieldsRecursively(returnable_, child, (SelectionSet) field.getChildren().get(0));
+                returnable.put(field.getName(), returnable_);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                returnable.put(field.getName(), null);
+            }
+        }
+
+        if (field.getName().startsWith("_toMany_")) {
+            try {
+
+                List<GenericValue> children = genericValue.getRelated(field.getName().replace("_toMany_", ""));
+                returnable.put(field.getName(), children);
+                List<Map<String, Object>> returnable_ = new ArrayList<>();
+
+                for (int i = 0; i < children.size(); i++) {
+                    returnable_.add(new HashMap<>());
+                    fillSubfieldsRecursively(returnable_.get(i), children.get(i), (SelectionSet) field.getChildren().get(0));
+                }
+
+                returnable.put(field.getName(), returnable_);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                returnable.put(field.getName(), new ArrayList<>());
+            }
+        }
+    }
+
+
+    /**
+     * Parses genericValue to hashMap with null fields within.
+     **/
     @NotNull
     private Map<String, Object> getStringObjectMap(GenericValue genericValue) {
         Map<String, Object> secondary = new HashMap<>();
@@ -120,6 +210,7 @@ public class EntityDataFetcher implements DataFetcher<Object> {
                 secondary.put(key, QueryParamStringConverter.convert(genericValue.get(key).toString(), field.getType()));
             }
         }
+
         return secondary;
     }
 }
