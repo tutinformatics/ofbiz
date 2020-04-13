@@ -25,7 +25,7 @@ Jooksutamiseks on 2 võimalust. Kas dockeris või otse masinas.
 Minge kausta: framework/entity/config/entityengine.xml
 Ning seejärel muutke järgnevad stringid (ärge seda muudatus üles pushige)
 
-![replace](/replace.png)
+image::replace.png[]
 
 Jooksutage järgnevaid käske
 
