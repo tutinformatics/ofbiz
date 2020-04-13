@@ -1,11 +1,13 @@
 package org.apache.ofbiz.jersey.resource;
 
+import org.apache.ofbiz.base.conversion.ConversionException;
 import org.apache.ofbiz.base.util.*;
+import org.apache.ofbiz.base.lang.JSON;
+import org.apache.ofbiz.entity.model.ModelEntity;
 import org.apache.ofbiz.entity.*;
 import org.apache.ofbiz.entity.condition.EntityCondition;
 import org.apache.ofbiz.entity.condition.EntityOperator;
 import org.apache.ofbiz.entity.util.ExtendedConverters;
-
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -61,26 +63,25 @@ public class MarketdataResources {
         return builder.build();
     }
 
-//    @POST
-//    @Path("/{name}")
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public Response addMarketdataEntity(@PathParam(value = "name") String entityName, String jsonBody)
-//            throws GenericEntityException, ConversionException {
-//        Response.ResponseBuilder builder;
-//        Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
-//        GenericValue object = jsonToGenericConverter.convert(delegator.getDelegatorName(), entityName,
-//                JSON.from(jsonBody));
-//        ModelEntity model = delegator.getModelEntity(entityName);
-//        if (model.getPksSize() == 1) {
-//            // because can only sequence if one PK field
-//            if (object.get(model.getFirstPkFieldName()) == null) {
-//                object.setNextSeqId();
-//            }
-//        }
-//        delegator.create(object); // TODO: catch exception
-//        builder = Response.status(Response.Status.OK);
-//        return builder.build();
-//    }
+    @POST
+    @Path("/{companyName}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addMarketdataEntity(@PathParam(value = "companyName") String entityName, String jsonBody)
+            throws GenericEntityException, ConversionException {
+        Response.ResponseBuilder builder = null;
+        Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
+        GenericValue object = jsonToGenericConverter.convert(delegator.getDelegatorName(), entityName,
+                JSON.from(jsonBody));
+        ModelEntity model = delegator.getModelEntity(entityName);
+        if (model.getPksSize() == 1) {
+            if (object.get(model.getFirstPkFieldName()) == null) {
+                object.setNextSeqId();
+            }
+        }
+        delegator.create(object);
+        builder = Response.status(Response.Status.OK);
+        return builder.build();
+    }
 
 
 //    @POST
