@@ -35,7 +35,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.ext.Provider;
-import java.io.IOException;
 import java.util.*;
 
 @Path("/generic/v1/structure/entities")
@@ -53,11 +52,19 @@ public class GenericEntityStructureResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response listEntities() throws IOException, GenericEntityException {
-		ResponseBuilder builder = null;
+	public Response listEntities() {
+		ResponseBuilder builder;
 		Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
 		ModelReader reader = delegator.getModelReader();
-		TreeSet<String> entities = new TreeSet<String>(reader.getEntityNames());
+		Set<String> entityNames;
+		try {
+			entityNames = reader.getEntityNames();
+		} catch (GenericEntityException e) {
+			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity("{\"error\": \"Error getting entity names from delegator.\"}");
+			e.printStackTrace();
+			return builder.build();
+		}
+		TreeSet<String> entities = new TreeSet<String>(entityNames);
 		builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entities);
 		return builder.build();
 	}
@@ -65,7 +72,7 @@ public class GenericEntityStructureResource {
 	@GET
 	@Path("/{name}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getEntity(@PathParam(value = "name") String entityName) throws IOException, GenericEntityException {
+	public Response getEntity(@PathParam(value = "name") String entityName) {
 		ResponseBuilder builder = null;
 		List<Map<String, Object>> response = new ArrayList<Map<String, Object>>();
 		Delegator delegator = (Delegator) servletContext.getAttribute("delegator");

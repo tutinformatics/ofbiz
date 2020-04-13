@@ -47,11 +47,18 @@ public class GenericServiceResource {
 	@GET
 	@Path("/{name}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getServiceDetails(@PathParam(value = "name") String serviceName) throws GenericServiceException {
-		Response.ResponseBuilder builder = null;
+	public Response getServiceDetails(@PathParam(value = "name") String serviceName) {
+		Response.ResponseBuilder builder;
 		LocalDispatcher dispatcher = (LocalDispatcher) servletContext.getAttribute("dispatcher");
 		DispatchContext dpc = dispatcher.getDispatchContext();
-		Object obj = dpc.getModelService(serviceName).getModelParamList();
+		Object obj;
+		try {
+			obj = dpc.getModelService(serviceName).getModelParamList();
+		} catch (GenericServiceException e) {
+			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity("{\"error\": \"Error getting service.\"}");
+			e.printStackTrace();
+			return builder.build();
+		}
 		builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(obj);
 		return builder.build();
 	}
@@ -60,8 +67,8 @@ public class GenericServiceResource {
 	@Path("/{name}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response callService(@PathParam(value = "name") String serviceName, String jsonBody) throws GenericServiceException, IOException {
-		Response.ResponseBuilder builder = null;
+	public Response callService(@PathParam(value = "name") String serviceName, String jsonBody) {
+		Response.ResponseBuilder builder;
 		LocalDispatcher dispatcher = (LocalDispatcher) servletContext.getAttribute("dispatcher");
 		Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
 
@@ -69,8 +76,14 @@ public class GenericServiceResource {
 
 		Map<String, Object> fieldMap;
 
-		fieldMap = UtilGenerics.<Map<String, Object>>cast(body.toObject(Map.class));
-
+		try {
+			fieldMap = UtilGenerics.<Map<String, Object>>cast(body.toObject(Map.class));
+		} catch (IOException e) {
+			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity("{\"error\": \"Error converting Json body to Map.\"}");
+			e.printStackTrace();
+			return builder.build();
+		}
+		// TODO: recursive converting to support multi level objects
 		for (String key : fieldMap.keySet()) {
 			Object obj = fieldMap.get(key);
 			try {
@@ -81,12 +94,13 @@ public class GenericServiceResource {
 					fieldMap.put(key, test);
 				}
 			} catch (IOException | ConversionException ignored) {
+				// Ignore as it just means the value isn't a separate object
 			}
 		}
 		try {
 			Map<String, ?> entity = dispatcher.runSync(serviceName, fieldMap);
 			builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
-		} catch (GenericServiceException e)  {
+		} catch (GenericServiceException e) {
 			e.printStackTrace();
 			Map<String, Object> errors = new HashMap<>();
 			errors.put("Error", e.getMessage());
