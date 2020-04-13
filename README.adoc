@@ -1,6 +1,6 @@
 Project frontend: https://github.com/tutinformatics/ofbiz-ui && https://github.com/MartenJurg/accounting_frontend
 
-== How to run for development
+== Lokaalne jooksutamine
 
 *For developing frontend:*
 
@@ -11,16 +11,44 @@ Project frontend: https://github.com/tutinformatics/ofbiz-ui && https://github.c
 
 *For developing backend:*
 
+Jooksutamiseks on 2 võimalust. Kas dockeris või otse masinas.
+
+=== Docker
+
 [source,bash]
 ----
-./deploy-dev.sh
-# Or
-docker-composed -f docker-compose-databases.yml up
+./deploy.sh
+----
+
+=== Masinas
+
+1. minge kausta: framework/entity/config/entityengine.xml
+2. seejärel muutke järgnevad stringid (ärge seda muudatus üles pushige)
+
+![replace](https://lh3.googleusercontent.com/bwDeWmWKt3UDxuwQg1ViEyXUXXU_svHhvGxgx2hpKUzY5DRYVS3zzvndyuqoIvKq9nRJgIZyn39V5lkXscQWR6RkKkazqnUw-uEThtRB-_yAKZAMiM4W8GsBhrNi4Q3Ta3__NtXYDGxF5bpnAlWaLhyqPa8ct4g6ZHL78Kdq9xmGhbmXCCQP1HnWmyVypTwlI30CbKNYqbCcXLI1Z-ezXiUs4XoXwM6r6eVqggJkp2KBS29Z4cOoWZVyuWEO1m-dfqU0ngQxDz9Pdp6L9yoqjsDCVbOdUBzjavyU2hG6sACMO7w5pI40l8E3fWRPMcxobJlaMouVejPRn9lxVmft_24hjP5tW8hzw05Dx84QPcx_jCQI0nDvk6ipUMPNhtbZRtQg24TFF1nHSw5DqoYAgA8clPcDm2ZHPsIV6Bd6iA2sJ_nDHfRhzGmcxp6Lf249JJrcbiLXmuzmrjHERHLFFi1aElqB9FWff0MHiogOIy1tYC1zkqERG1KmosLF8Lii1nMH1kRs3uboF1fqMg0rHIOIm3z29Arxh7k8aFtm7A1J42D-TMAJ61rNOzLYZ3fDA0d8bOVFbNhjIEU8zjPjbbHnkpAWaV_5jXWhccaOPTFVwwNGBdOHN5o825N1TC79qqVrpo4eve_Z_JT3Rv9zapwJQ4eInd41yBp66dAChF9tEzbvDm2AfNLvdEwx=w570-h95-no)
+
+3. Jooksutage järgnevaid käske
+
+[source,bash]
+----
+docker-compose -f docker-compose-databases-dev.yml up -d
 ./gradlew cleanAll loadAll ofbiz
 ----
 
+Windowsi puhul kasutada gradlew.bat
+
 _Note that loadAll requires databases to be running!_
 
+4. Kui muudate midagi ning soovite uuesti jooksutada ofbiz’i, siis tehke: 
+Ctrl + C terminalis + Y
+
+5. See hot reload’ib ~10 sekundiga uue koodi
+
+[source,bash]
+----
+docker-compose -f docker-compose-databases-dev.yml up -d
+./gradlew ofbiz
+----
 
 ////
 Licensed to the Apache Software Foundation (ASF) under one
