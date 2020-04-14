@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class PartyService {
 
@@ -58,7 +59,7 @@ public class PartyService {
      */
     public List<GenericValue> getUnconfirmedAffiliates() throws GenericEntityException {
         List<GenericValue> genericValues = EntityQuery.use(delegator).from("Affiliate").where("dateTimeApproved", null).queryList();
-        return genericValues;
+        return genericValues.stream().map(x -> getPerson((String) x.get("partyId"))).collect(Collectors.toList());
     }
 
     /**
@@ -69,7 +70,7 @@ public class PartyService {
      */
     public List<GenericValue> getAffiliates() throws GenericEntityException {
         List<GenericValue> genericValues = EntityQuery.use(delegator).from("Affiliate").queryList();
-        return genericValues;
+        return genericValues.stream().map(x -> getPerson((String) x.get("partyId"))).collect(Collectors.toList());
     }
 
     public GenericValue approve(Map<String, Object> data) throws GenericEntityException {
@@ -77,7 +78,7 @@ public class PartyService {
         GenericValue genericValue = EntityQuery.use(delegator).from("Affiliate").where("partyId", partyId).queryOne();
         genericValue.set("dateTimeApproved", new Timestamp(System.currentTimeMillis()));
         delegator.store(genericValue);
-        return genericValue;
+        return getPerson((String) genericValue.get("partyId"));
     }
 
     public GenericValue disapprove(Map<String, Object> data) throws GenericEntityException {
@@ -85,7 +86,7 @@ public class PartyService {
         GenericValue genericValue = EntityQuery.use(delegator).from("Affiliate").where("partyId", partyId).queryOne();
         genericValue.set("dateTimeApproved", null);
         delegator.store(genericValue);
-        return genericValue;
+        return getPerson((String) genericValue.get("partyId"));
     }
 
     public GenericValue createAffiliateCode(Map<String, Object> data) throws GenericEntityException {
@@ -107,7 +108,7 @@ public class PartyService {
     /**
      * @return - status of operation
      */
-    public Map<String, String> createAffiliateForUserLogin(Map<String, Object> data) throws GenericEntityException {
+    public GenericValue createAffiliateForUserLogin(Map<String, Object> data) throws GenericEntityException {
         Map<String, Object> affiliateCreateContext = new HashMap<>();
 
         //Retrieve UserLogin via userLoginId
@@ -123,9 +124,11 @@ public class PartyService {
                 .where("partyId", userPartyId)
                 .queryOne();
 
+
         if (userParty != null) {
             if (!"PERSON".equals(userParty.getString("partyTypeId"))) {
-                return Map.of("status", "user already has party of another type");
+                // TODO throw error
+//                return Map.of("status", "user already has party of another type");
             }
         }
 
@@ -148,7 +151,7 @@ public class PartyService {
             Debug.logWarning(e.getMessage(), module);
         }
 
-        return Map.of("status", "ok");
+        return getPerson(userPartyId);
     }
 
     private void checkApprovedAffiliate(String partyId) throws GenericEntityException {
@@ -164,5 +167,21 @@ public class PartyService {
         if (!isApproved) {
             ServiceUtil.returnError("You are not approved yet!");
         }
+    }
+
+
+    private GenericValue getPerson(String partyId) {
+        GenericValue person = null;
+        try {
+            person = EntityQuery
+                    .use(delegator)
+                    .from("Person")
+                    .where("partyId", partyId)
+                    .queryOne();
+        } catch (GenericEntityException e) {
+            e.printStackTrace();
+        }
+
+        return person;
     }
 }
