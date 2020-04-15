@@ -45,6 +45,7 @@ public class ProjectResource {
     @Path("new-task")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @SuppressWarnings("unchecked")
     public Response createTask(ProjectTaskCmd projectTaskCmd) {
         LocalDispatcher dispatcher = (LocalDispatcher) servletContext.getAttribute("dispatcher");
         Map<String, Object> result;
@@ -122,6 +123,7 @@ public class ProjectResource {
     @Path("new-project")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @SuppressWarnings("unchecked")
     public Response createProject(ProjectCmd projectCmd) {
         LocalDispatcher dispatcher = (LocalDispatcher) servletContext.getAttribute("dispatcher");
         Map<String, Object> result;
