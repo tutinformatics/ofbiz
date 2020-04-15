@@ -2,6 +2,7 @@ package ee.taltech.marketing.affiliate.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import ee.taltech.marketing.affiliate.model.AffiliateDTO;
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.entity.Delegator;
@@ -57,9 +58,9 @@ public class PartyService {
      * @return
      * @throws GenericEntityException
      */
-    public List<GenericValue> getUnconfirmedAffiliates() throws GenericEntityException {
+    public List<AffiliateDTO> getUnconfirmedAffiliates() throws GenericEntityException {
         List<GenericValue> genericValues = EntityQuery.use(delegator).from("Affiliate").where("dateTimeApproved", null).queryList();
-        return genericValues.stream().map(x -> getPerson((String) x.get("partyId"))).collect(Collectors.toList());
+        return genericValues.stream().map(x -> getAffiliateDTO((String) x.get("partyId"))).collect(Collectors.toList());
     }
 
     /**
@@ -68,25 +69,25 @@ public class PartyService {
      * @return
      * @throws GenericEntityException
      */
-    public List<GenericValue> getAffiliates() throws GenericEntityException {
+    public List<AffiliateDTO> getAffiliates() throws GenericEntityException {
         List<GenericValue> genericValues = EntityQuery.use(delegator).from("Affiliate").queryList();
-        return genericValues.stream().map(x -> getPerson((String) x.get("partyId"))).collect(Collectors.toList());
+        return genericValues.stream().map(x -> getAffiliateDTO((String) x.get("partyId"))).collect(Collectors.toList());
     }
 
-    public GenericValue approve(Map<String, Object> data) throws GenericEntityException {
+    public AffiliateDTO approve(Map<String, Object> data) throws GenericEntityException {
         String partyId = (String) data.get("partyId");
         GenericValue genericValue = EntityQuery.use(delegator).from("Affiliate").where("partyId", partyId).queryOne();
         genericValue.set("dateTimeApproved", new Timestamp(System.currentTimeMillis()));
         delegator.store(genericValue);
-        return getPerson((String) genericValue.get("partyId"));
+        return getAffiliateDTO((String) genericValue.get("partyId"));
     }
 
-    public GenericValue disapprove(Map<String, Object> data) throws GenericEntityException {
+    public AffiliateDTO disapprove(Map<String, Object> data) throws GenericEntityException {
         String partyId = (String) data.get("partyId");
         GenericValue genericValue = EntityQuery.use(delegator).from("Affiliate").where("partyId", partyId).queryOne();
         genericValue.set("dateTimeApproved", null);
         delegator.store(genericValue);
-        return getPerson((String) genericValue.get("partyId"));
+        return getAffiliateDTO((String) genericValue.get("partyId"));
     }
 
     public GenericValue createAffiliateCode(Map<String, Object> data) throws GenericEntityException {
@@ -108,7 +109,7 @@ public class PartyService {
     /**
      * @return - status of operation
      */
-    public GenericValue createAffiliateForUserLogin(Map<String, Object> data) throws GenericEntityException {
+    public AffiliateDTO createAffiliateForUserLogin(Map<String, Object> data) throws GenericEntityException {
         Map<String, Object> affiliateCreateContext = new HashMap<>();
 
         //Retrieve UserLogin via userLoginId
@@ -151,7 +152,7 @@ public class PartyService {
             Debug.logWarning(e.getMessage(), module);
         }
 
-        return getPerson(userPartyId);
+        return getAffiliateDTO(userPartyId);
     }
 
     private void checkApprovedAffiliate(String partyId) throws GenericEntityException {
@@ -183,5 +184,62 @@ public class PartyService {
         }
 
         return person;
+    }
+
+    public AffiliateDTO getAffiliateDTO(Map<String, Object> data) throws GenericEntityException {
+        return getAffiliateDTO((String) data.get("partyId"));
+    }
+
+    public AffiliateDTO getAffiliateDTO(String partyId) {
+        AffiliateDTO affiliateDTO = new AffiliateDTO();
+        GenericValue person = getPerson(partyId);
+
+        GenericValue affiliate = null;
+        try {
+            affiliate = EntityQuery
+                    .use(delegator)
+                    .from("Affiliate")
+                    .where("partyId", partyId)
+                    .queryOne();
+        } catch (GenericEntityException e) {
+            e.printStackTrace();
+        }
+
+        affiliateDTO.setEmail(getEmail(partyId));
+
+        affiliateDTO.setFirstName((String) person.get("firstName"));
+        affiliateDTO.setLastName((String) person.get("lastName"));
+
+        if (affiliate.get("dateTimeApproved") != null) {
+            affiliateDTO.setDate((Timestamp) affiliate.get("dateTimeApproved"));
+            affiliateDTO.setStatus(AffiliateDTO.Status.ACTIVE);
+        } else {
+            affiliateDTO.setStatus(AffiliateDTO.Status.NOT_APPROVED);
+        }
+
+
+        return affiliateDTO;
+    }
+
+    private String getEmail(String partyId) {
+        GenericValue partyContactMechPurpose = null;
+        GenericValue contactMech = null;
+        try {
+            partyContactMechPurpose = EntityQuery
+                    .use(delegator)
+                    .from("PartyContactMechPurpose")
+                    .where("partyId", partyId, "contactMechPurposeTypeId", "PRIMARY_EMAIL")
+                    .queryOne();
+
+            contactMech = EntityQuery
+                    .use(delegator)
+                    .from("ContactMech")
+                    .where("contactMechId", partyContactMechPurpose.get("contactMechId"), "contactMechTypeId", "EMAIL_ADDRESS")
+                    .queryOne();
+        } catch (GenericEntityException e) {
+            e.printStackTrace();
+        }
+
+        return (String) contactMech.get("infoString");
     }
 }
