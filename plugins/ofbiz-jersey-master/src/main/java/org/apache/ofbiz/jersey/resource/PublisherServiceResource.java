@@ -13,6 +13,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
@@ -21,6 +22,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Path("/objectdist/v1/services")
 @Provider
@@ -63,6 +65,16 @@ public class PublisherServiceResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPublishers() throws GenericEntityException {
         List<PublisherDTO> entity = publisherService.getPublishers();
+        Response.ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
+        return builder.build();
+    }
+
+    @POST()
+    @Path("/publishers/create")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createPublisher(String jsonBody) throws Exception {
+        Map<String, Object> data = JsonUtils.parseJson(jsonBody);
+        ObfizPublisherDTO entity = publisherService.createPublisher(data);
         Response.ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
         return builder.build();
     }
