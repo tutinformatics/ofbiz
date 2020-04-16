@@ -1,6 +1,5 @@
 package org.apache.ofbiz.jersey.resource;
 
-import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.util.ExtendedConverters;
 import org.apache.ofbiz.jersey.resource.ofbizpublisher.OblizPublisherDTO;
@@ -8,6 +7,7 @@ import org.apache.ofbiz.jersey.resource.ofbizpublisher.PublisherService;
 import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.LocalDispatcher;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -34,7 +34,15 @@ public class ObjectDistService {
     @Context
     private ServletContext servletContext;
 
-    private PublisherService publisherService = new PublisherService((Delegator) servletContext.getAttribute("delegator"));
+    private PublisherService publisherService;
+
+    @PostConstruct
+    public void init() {
+        LocalDispatcher dispatcher = (LocalDispatcher) servletContext.getAttribute("dispatcher");
+        DispatchContext dpc = dispatcher.getDispatchContext();
+        publisherService = new PublisherService(dpc);
+    }
+
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

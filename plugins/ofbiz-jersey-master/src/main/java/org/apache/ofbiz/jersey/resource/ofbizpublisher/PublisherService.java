@@ -4,6 +4,7 @@ import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.util.EntityQuery;
+import org.apache.ofbiz.service.DispatchContext;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,9 +12,11 @@ import java.util.stream.Collectors;
 public class PublisherService {
 
     Delegator delegator;
+    DispatchContext dispatchContext;
 
-    public PublisherService(Delegator delegator) {
-        this.delegator = delegator;
+    public PublisherService(DispatchContext dpc) {
+        dispatchContext = dpc;
+        delegator = dpc.getDelegator();
     }
 
 
