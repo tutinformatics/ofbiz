@@ -21,7 +21,8 @@
 <simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="http://ofbiz.apache.org/Simple-Method" xsi:schemaLocation="http://ofbiz.apache.org/Simple-Method http://ofbiz.apache.org/dtds/simple-methods.xsd">
 
-    <simple-method method-name="createProject" short-description="Create a project">
+<!--    TODO: Remove login-required false-->
+    <simple-method method-name="createProject" short-description="Create a project" login-required="false">
         <if-not-empty field="parameters.templateId">
             <set field="parameters.projectId" from-field="parameters.templateId"/>
             <call-simple-method method-name="copyProject"/>
@@ -46,7 +47,7 @@
                 <else><add-error><fail-property resource="PartyUiLabels" property="PartyEmailAddressNotFormattedCorrectly"/></add-error></else>
             </if-validate-method>
             <check-errors/>
-            
+
             <!-- create new work effort's e-mail address -->
             <set field="emailAddressIn.emailAddress" from-field="parameters.emailAddress"/>
             <set field="emailAddressIn.contactMechTypeId" value="EMAIL_ADDRESS"/>
@@ -79,7 +80,7 @@
                 <else><add-error><fail-property resource="PartyUiLabels" property="PartyEmailAddressNotFormattedCorrectly"/></add-error></else>
             </if-validate-method>
             <check-errors/>
-            
+
             <!-- find exist e-mail address. if have not exist then create new-->
             <entity-condition entity-name="WorkEffortContactMechView" list="existEmailAddresses">
                 <condition-list combine="and">
@@ -105,7 +106,7 @@
                     <now-timestamp field="oldWorkEffortContactMech.thruDate"/>
                     <store-value value-field="oldWorkEffortContactMech"/>
                 </iterate>
-                
+
                 <!-- create new work effort's e-mail address -->
                 <set field="emailAddressIn.emailAddress" from-field="parameters.emailAddress"/>
                 <set field="emailAddressIn.contactMechTypeId" value="EMAIL_ADDRESS"/>
@@ -121,9 +122,10 @@
         </if-not-empty>
     </simple-method>
 
+<!--    TODO: Remove login-required false -->
     <simple-method method-name="updProjectRole"
         short-description="update/create a specif role and type for a project
-                            input map: updProjectRole.newPartyId, updProjectRole.roleTypeId">
+                            input map: updProjectRole.newPartyId, updProjectRole.roleTypeId" login-required="false">
         <entity-and entity-name="WorkEffortPartyAssignment" list="workEffortPartyAssignments" filter-by-date="true">
             <field-map field-name="workEffortId" from-field="parameters.workEffortId"/>
             <field-map field-name="roleTypeId" from-field="updProjectRole.roleTypeId"/>
@@ -158,7 +160,8 @@
         </if>
     </simple-method>
 
-    <simple-method method-name="createProjectTask" short-description="Create a project task and optionally assign">
+    <!-- TODO: turn on login-required for this method and all submethods when auth will be implemented-->
+    <simple-method method-name="createProjectTask" short-description="Create a project task and optionally assign" login-required="false">
         <!-- create task -->
         <if-empty field="parameters.statusId">
             <set field="parameters.statusId" value="PTS_CREATED"/>
@@ -210,7 +213,7 @@
         </if-not-empty>
         <!-- if required can update more task related info here -->
     </simple-method>
-    
+
     <simple-method method-name="updateTaskAssigment"
         short-description="Update task to resource assignment, if required create a new one by re-assigment">
         <field-to-result field="parameters.workEffortId" result-name="workEffortId"/>
@@ -684,8 +687,8 @@
         </if-not-empty>
         <field-to-result field="newProjectId" result-name="projectId"/>
     </simple-method>
-
-    <simple-method method-name="getProject" short-description="get Project information" login-required="true">
+<!--    todo: getProject login-required false to true-->
+    <simple-method method-name="getProject" short-description="get Project information" login-required="false">
         <if-empty field="parameters.projectId">
             <return/>
         </if-empty>
@@ -774,7 +777,8 @@
         <field-to-result field="parameters.projectId" result-name="projectId"/>
     </simple-method>
 
-    <simple-method method-name="getProjectTaskList" short-description="get Project Phase/task information" login-required="true">
+    <!-- TODO: turn on login-required for this method and all submethods when auth will be implemented-->
+    <simple-method method-name="getProjectTaskList" short-description="get Project Phase/task information" login-required="false">
         <if-empty field="parameters.projectId">
             <return/>
         </if-empty>
@@ -935,7 +939,7 @@
     </simple-method>
 
     <!-- Internal functions  -->
-    <simple-method method-name="combineStatusInfo" short-description="combine lower level status">
+    <simple-method method-name="combineStatusInfo" short-description="combine lower level status" login-required="false">
         <!-- the status for a project or phase is
          IN_PROGRESS if at least one task still in progress
          COMPLETED if all task are either completed or cancelled
@@ -1034,7 +1038,8 @@
         </if>
     </simple-method>
 
-    <simple-method method-name="combineDatesAndPlannedHoursInfo" short-description="combine lower level start end dates and planned hours for a project, phase or task">
+
+    <simple-method method-name="combineDatesAndPlannedHoursInfo" short-description="combine lower level start end dates and planned hours for a project, phase or task" login-required="false">
         <entity-condition  entity-name="ProjectPhaseTaskSklSumView" list="summaryInfos">
             <condition-list>
                 <condition-expr field-name="projectId" from-field="highInfo.projectId" ignore-if-empty="true"/>
@@ -1059,7 +1064,7 @@
         <set field="highInfo.priority" from-field="summaryInfo.priority"/>
         <set field="highInfo.plannedHours" from-field="summaryInfo.plannedHours"/>
         <!-- <log level="info" message="projectId=${highInfo.projectId} phaseId=${highInfo.phaseId} taskId=${highInfo.taskId} highInfo.plannedHours=${highInfo.plannedHours}"/>-->
-        <!-- update actual start date by the min date form sub tasks associated TimeEntries 
+        <!-- update actual start date by the min date form sub tasks associated TimeEntries
         (if before actualStartDate field) -->
         <entity-condition  entity-name="ProjectPhaseTaskActualEntrySumView" list="summaryEntriesInfos">
             <condition-list>
@@ -1087,17 +1092,18 @@
         </if-not-empty>
     </simple-method>
 
-    <simple-method method-name="combineInfo" short-description="combine lower level status, dates of tasks.">
+    <!-- TODO: turn on login-required for this method and submethods when auth will be implemented-->
+    <simple-method method-name="combineInfo" short-description="combine lower level status, dates of tasks." login-required="false">
         <call-simple-method method-name="combineStatusInfo"/>
         <call-simple-method method-name="combineDatesAndPlannedHoursInfo"/>
         <call-simple-method method-name="combineActualHours"/>
     </simple-method>
 
-    <simple-method method-name="combineActualHours" short-description="combine lower level Actual hours info.">
-        <!-- 
-        -to calculate actual hours : the declared number of hours in time entry should be multiplied by the 
+    <simple-method method-name="combineActualHours" short-description="combine lower level Actual hours info." login-required="false">
+        <!--
+        -to calculate actual hours : the declared number of hours in time entry should be multiplied by the
          max percentage declared in PartyRate if a valid party rate can be found for the party associated to a
-         the timesheet associated to this time entry and has the same rateType as this timeEntry 
+         the timesheet associated to this time entry and has the same rateType as this timeEntry
         -actualHoursOriginal is the total of hours in time entries without application of percentage declared in partyRate
          -->
         <clear-field field="originalHours"/>
@@ -1303,7 +1309,7 @@
         </if-empty>
     </simple-method>
 
-    <simple-method method-name="createDates" short-description="merge the estimated and actual dates">
+    <simple-method method-name="createDates" short-description="merge the estimated and actual dates" login-required="false">
         <!-- input/output is 'highInfo map -->
         <!-- create dates taking the last known one to save space on the list -->
         <if-not-empty field="highInfo.actualStartDate">
