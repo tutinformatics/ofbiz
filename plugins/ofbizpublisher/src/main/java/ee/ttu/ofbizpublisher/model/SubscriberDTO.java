@@ -1,11 +1,11 @@
-package org.apache.ofbiz.jersey.resource.ofbizsubscriber;
+package ee.ttu.ofbizpublisher.model;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class ObfizSubscriberDTO {
+public class SubscriberDTO {
     String subscriberId;
     String topic;
     String description;

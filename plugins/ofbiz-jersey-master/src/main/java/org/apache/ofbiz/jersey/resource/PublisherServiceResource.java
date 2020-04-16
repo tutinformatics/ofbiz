@@ -4,8 +4,8 @@ import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.util.ExtendedConverters;
 import ee.ttu.ofbizpublisher.model.PublisherDTO;
 import ee.ttu.ofbizpublisher.services.PublisherService;
-import org.apache.ofbiz.jersey.resource.ofbizsubscriber.ObfizSubscriberDTO;
-import org.apache.ofbiz.jersey.resource.ofbizsubscriber.SubscriberService;
+import ee.ttu.ofbizpublisher.model.SubscriberDTO;
+import ee.ttu.ofbizpublisher.services.SubscriberService;
 import org.apache.ofbiz.jersey.util.JsonUtils;
 import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.LocalDispatcher;
@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-@Path("/objectdist/v1/services")
+@Path("/objectdist")
 @Provider
 //@Secured
 public class PublisherServiceResource {
@@ -49,7 +49,6 @@ public class PublisherServiceResource {
         publisherService = new PublisherService(dpc);
         subscriberService = new SubscriberService(dpc);
     }
-
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -84,7 +83,7 @@ public class PublisherServiceResource {
     @Path("/subscribers")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSubscribers() throws GenericEntityException {
-        List<ObfizSubscriberDTO> entity = subscriberService.getSubscribers();
+        List<SubscriberDTO> entity = subscriberService.getSubscribers();
         Response.ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
         return builder.build();
     }

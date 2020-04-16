@@ -1,9 +1,10 @@
-package org.apache.ofbiz.jersey.resource.ofbizsubscriber;
+package ee.ttu.ofbizpublisher.services;
 
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.util.EntityQuery;
+import ee.ttu.ofbizpublisher.model.SubscriberDTO;
 import org.apache.ofbiz.service.DispatchContext;
 import services.OfbizSubscriberServices;
 
@@ -23,17 +24,17 @@ public class SubscriberService {
     }
 
 
-    public List<ObfizSubscriberDTO> getSubscribers() throws GenericEntityException {
+    public List<SubscriberDTO> getSubscribers() throws GenericEntityException {
         List<GenericValue> genericValues = EntityQuery.use(delegator).from("OfbizSubscriber").queryList();
         return genericValues.stream().map(x -> getOfbizSubscribersDTO((String) x.get("OfbizSubscriberId"))).collect(Collectors.toList());
     }
 
-    public ObfizSubscriberDTO getOfbizSubscribersDTO(String ofbizSubscriberId) {
-        ObfizSubscriberDTO obfizSubscriberDTO = new ObfizSubscriberDTO();
+    public SubscriberDTO getOfbizSubscribersDTO(String ofbizSubscriberId) {
+        SubscriberDTO subscriberDTO = new SubscriberDTO();
 
-        GenericValue ofbizSubscriber = null;
+        GenericValue subscriber = null;
         try {
-            ofbizSubscriber = EntityQuery
+            subscriber = EntityQuery
                     .use(delegator)
                     .from("OfbizSubscriber")
                     .where("OfbizSubscriberId", ofbizSubscriberId)
@@ -42,11 +43,11 @@ public class SubscriberService {
             e.printStackTrace();
         }
 
-        obfizSubscriberDTO.setSubscriberId((String) ofbizSubscriber.get("OfbizSubscriberId"));
-        obfizSubscriberDTO.setTopic((String) ofbizSubscriber.get("topic"));
-        obfizSubscriberDTO.setDescription((String) ofbizSubscriber.get("description"));
-        obfizSubscriberDTO.setFilter((String) ofbizSubscriber.get("filter"));
-        return obfizSubscriberDTO;
+        subscriberDTO.setSubscriberId((String) subscriber.get("OfbizSubscriberId"));
+        subscriberDTO.setTopic((String) subscriber.get("topic"));
+        subscriberDTO.setDescription((String) subscriber.get("description"));
+        subscriberDTO.setFilter((String) subscriber.get("filter"));
+        return subscriberDTO;
     }
 
     public void createSubscriber(Map<String, Object> data) {
