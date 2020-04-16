@@ -1,26 +1,21 @@
-package ee.ttu.ofbizpublisher.services.jersey;
+package org.apache.ofbiz.jersey.resource;
 
-import org.apache.ofbiz.base.conversion.ConversionException;
-import org.apache.ofbiz.base.lang.JSON;
-import org.apache.ofbiz.base.util.UtilGenerics;
-import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.util.ExtendedConverters;
 import org.apache.ofbiz.service.DispatchContext;
-import org.apache.ofbiz.service.GenericServiceException;
 import org.apache.ofbiz.service.LocalDispatcher;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
-@Path("/generic/v1/services")
+@Path("/objectdist/v1/services")
 @Provider
 //@Secured
 public class ObjectDistService {
