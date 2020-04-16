@@ -1,12 +1,11 @@
 package ee.ttu.ofbizpublisher.services;
 
-import ee.ttu.ofbizpublisher.services.OfbizPublisherServices;
+import ee.ttu.ofbizpublisher.OfbizPublisherServices;
+import ee.ttu.ofbizpublisher.model.PublisherDTO;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.util.EntityQuery;
-import ee.ttu.ofbizpublisher.model.PublisherDTO;
-import org.apache.ofbiz.party.party.PartyServices;
 import org.apache.ofbiz.service.DispatchContext;
 
 import java.util.HashMap;
@@ -51,7 +50,7 @@ public class PublisherService {
         return obfizPublisherDTO;
     }
 
-    public ObfizPublisherDTO createPublisher(Map<String, Object> data) {
+    public PublisherDTO createPublisher(Map<String, Object> data) {
         Map<String, Object> publisherContext = new HashMap<>();
 
         // create affiliate by for created/existing party
