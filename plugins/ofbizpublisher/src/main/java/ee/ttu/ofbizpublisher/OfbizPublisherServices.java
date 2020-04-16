@@ -1,4 +1,4 @@
-package ee.ttu.ofbizpublisher.services;
+package ee.ttu.ofbizpublisher;
 
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.entity.Delegator;

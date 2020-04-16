@@ -2,8 +2,8 @@ package org.apache.ofbiz.jersey.resource;
 
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.util.ExtendedConverters;
-import org.apache.ofbiz.jersey.resource.ofbizpublisher.ObfizPublisherDTO;
-import org.apache.ofbiz.jersey.resource.ofbizpublisher.PublisherService;
+import ee.ttu.ofbizpublisher.model.PublisherDTO;
+import ee.ttu.ofbizpublisher.services.PublisherService;
 import org.apache.ofbiz.jersey.resource.ofbizsubscriber.ObfizSubscriberDTO;
 import org.apache.ofbiz.jersey.resource.ofbizsubscriber.SubscriberService;
 import org.apache.ofbiz.service.DispatchContext;
@@ -25,9 +25,9 @@ import java.util.List;
 @Path("/objectdist/v1/services")
 @Provider
 //@Secured
-public class ObjectDistService {
+public class PublisherServiceResource {
 
-    public static final String MODULE = ObjectDistService.class.getName();
+    public static final String MODULE = PublisherServiceResource.class.getName();
     public static final ExtendedConverters.ExtendedJSONToGenericValue jsonToGenericConverter = new ExtendedConverters.ExtendedJSONToGenericValue();
 
     @Context
@@ -62,7 +62,7 @@ public class ObjectDistService {
     @Path("/publishers")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPublishers() throws GenericEntityException {
-        List<ObfizPublisherDTO> entity = publisherService.getPublishers();
+        List<PublisherDTO> entity = publisherService.getPublishers();
         Response.ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
         return builder.build();
     }

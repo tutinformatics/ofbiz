@@ -1,11 +1,11 @@
-package org.apache.ofbiz.jersey.resource.ofbizpublisher;
+package ee.ttu.ofbizpublisher.model;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class ObfizPublisherDTO {
+public class PublisherDTO {
     String publisherId;
     String topic;
     String description;
