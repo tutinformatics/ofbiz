@@ -19,6 +19,8 @@
 
 import java.util.*
 import javax.wsdl.WSDLException
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ofbiz.base.util.Debug
 import org.apache.ofbiz.base.util.UtilXml
 import org.apache.ofbiz.base.util.UtilProperties
@@ -29,7 +31,6 @@ import org.apache.ofbiz.service.ServiceContainer
 import org.apache.ofbiz.base.util.UtilHttp
 import org.apache.ofbiz.base.util.UtilProperties
 import org.apache.ofbiz.entity.util.EntityUtilProperties
-import org.apache.commons.lang3.StringUtils;
 
 List getEcaListForService(String selectedService) {
     ecaMap = org.apache.ofbiz.service.eca.ServiceEcaUtil.getServiceEventMap(selectedService)
@@ -565,7 +566,7 @@ if (!selectedService) {
             curServiceMap.defaultEntityName = defaultEntityName
             curServiceMap.invoke = invoke
             curServiceMap.location = location
-            curServiceMap.definitionLocation = StringUtils.replaceOnce(curServiceModel.definitionLocation, "file:/" + System.getProperty("ofbiz.home") + "/", "")
+            curServiceMap.definitionLocation =  StringUtils.replaceOnce(curServiceModel.definitionLocation, "file:/" + System.getProperty("ofbiz.home") + "/", "")
             curServiceMap.requireNewTransaction = requireNewTransaction
             curServiceMap.deprecated = curServiceModel.deprecatedUseInstead
 
