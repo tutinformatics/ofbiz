@@ -7,6 +7,7 @@ import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.service.DispatchContext;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class PublisherService {
@@ -44,5 +45,8 @@ public class PublisherService {
         obfizPublisherDTO.setDescription((String) ofbizPublisher.get("description"));
         obfizPublisherDTO.setFilter((String) ofbizPublisher.get("filter"));
         return obfizPublisherDTO;
+    }
+
+    public ObfizPublisherDTO createPublisher(Map<String, Object> data) {
     }
 }
