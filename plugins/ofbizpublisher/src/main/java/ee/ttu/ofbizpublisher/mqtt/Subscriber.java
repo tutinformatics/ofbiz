@@ -1,4 +1,4 @@
-package ee.ttu.ofbizpublisher.services.mqtt;
+package ee.ttu.ofbizpublisher.mqtt;
 
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;

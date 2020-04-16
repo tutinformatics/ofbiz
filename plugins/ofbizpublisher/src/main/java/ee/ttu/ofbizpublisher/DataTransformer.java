@@ -1,9 +1,9 @@
-package ee.ttu.ofbizpublisher.services;
+package ee.ttu.ofbizpublisher;
 
 import ee.taltech.accounting.connector.camel.service.InvoiceService;
-import ee.ttu.ofbizpublisher.services.mqtt.ConnectionBinding;
-import ee.ttu.ofbizpublisher.services.mqtt.Publisher;
-import ee.ttu.ofbizpublisher.services.mqtt.Subscriber;
+import ee.ttu.ofbizpublisher.mqtt.ConnectionBinding;
+import ee.ttu.ofbizpublisher.mqtt.Publisher;
+import ee.ttu.ofbizpublisher.mqtt.Subscriber;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.DelegatorFactory;
 import org.apache.ofbiz.service.LocalDispatcher;
