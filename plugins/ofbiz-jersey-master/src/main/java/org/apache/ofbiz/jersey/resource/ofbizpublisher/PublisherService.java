@@ -1,11 +1,14 @@
 package org.apache.ofbiz.jersey.resource.ofbizpublisher;
 
+import ee.ttu.ofbizpublisher.services.OfbizPublisherServices;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.util.EntityQuery;
+import org.apache.ofbiz.party.party.PartyServices;
 import org.apache.ofbiz.service.DispatchContext;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -48,5 +51,16 @@ public class PublisherService {
     }
 
     public ObfizPublisherDTO createPublisher(Map<String, Object> data) {
+        Map<String, Object> publisherContext = new HashMap<>();
+
+        // create affiliate by for created/existing party
+        publisherContext.put("OfbizPublisherId", data.get("OfbizPublisherId"));
+        publisherContext.put("topic", data.get("topic"));
+        publisherContext.put("description", data.get("description"));
+        publisherContext.put("filter", data.get("filter"));
+        OfbizPublisherServices ofbizPublisherServices = new OfbizPublisherServices();
+        ofbizPublisherServices.createOfbizPublisher(dispatchContext, publisherContext);
+
+        return getOfbizPublisherDTO((String) data.get("OfbizPublisherId"));
     }
 }

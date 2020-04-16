@@ -6,6 +6,7 @@ import org.apache.ofbiz.jersey.resource.ofbizpublisher.ObfizPublisherDTO;
 import org.apache.ofbiz.jersey.resource.ofbizpublisher.PublisherService;
 import org.apache.ofbiz.jersey.resource.ofbizsubscriber.ObfizSubscriberDTO;
 import org.apache.ofbiz.jersey.resource.ofbizsubscriber.SubscriberService;
+import org.apache.ofbiz.jersey.util.JsonUtils;
 import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.LocalDispatcher;
 
