@@ -16,19 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package org.apache.ofbiz.jersey.listerner;
+package ee.taltech.marketing.affiliate.route;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.webapp.WebAppUtil;
 
-public class AppServletContextListener implements ServletContextListener {
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
-	public static final String MODULE = AppServletContextListener.class.getName();
+public class AffAppServletContextListener implements ServletContextListener {
+
+	public static final String MODULE = AffAppServletContextListener.class.getName();
 
 	public void contextInitialized(ServletContextEvent sce) {
 		ServletContext servletContext = sce.getServletContext();

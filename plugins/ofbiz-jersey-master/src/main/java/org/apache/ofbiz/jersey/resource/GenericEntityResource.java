@@ -18,6 +18,7 @@
  *******************************************************************************/
 package org.apache.ofbiz.jersey.resource;
 
+import ee.taltech.marketing.affiliate.service.PartyService;
 import org.apache.ofbiz.base.conversion.ConversionException;
 import org.apache.ofbiz.base.lang.JSON;
 import org.apache.ofbiz.entity.Delegator;

@@ -119,7 +119,7 @@ public class CamelContainer implements Container {
         dispatcher = createDispatcher();
         LocalDispatcher dispatcher = createDispatcher();
         SimpleRegistry registry = new SimpleRegistry();
-        registry.put("partyService", new PartyService(dispatcher.getDispatchContext()));
+//        registry.put("partyService", new PartyService(dispatcher.getDispatchContext()));
         registry.put("dispatcher", dispatcher);
         return new DefaultCamelContext(registry);
     }

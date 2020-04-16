@@ -14,6 +14,7 @@ import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ServiceUtil;
 
+import javax.ws.rs.ext.Provider;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
@@ -21,36 +22,19 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Provider
 public class PartyService {
 
-    Delegator delegator;
-    LocalDispatcher dispatcher;
+    private Delegator delegator;
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
     public static final String module = PartyServices.class.getName();
     private DispatchContext dispatchCtx;
 
-    public PartyService(DispatchContext dctx) {
-        delegator = dctx.getDelegator();
-        dispatchCtx = dctx;
+    public PartyService(DispatchContext dpc) {
+        dispatchCtx = dpc;
+        delegator = dpc.getDelegator();
     }
 
-
-    /**
-     * @param exchange - request that is wrapped by camel with additional information added during routing
-     * @return JSON with all the parties found with a given partyId
-     */
-    public Map<String, Object> getPartyById(Map<String, Object> data) {
-        String id = (String) data.get("id");
-
-        DispatchContext myContext = new DispatchContext("myContext", null, dispatcher);
-        Map<String, Object> context = new HashMap<>();
-        context.put("idToFind", id);
-        context.put("partyIdentificationTypeId", null);
-        context.put("searchPartyFirst", null);
-        context.put("searchAllIdContext", null);
-
-        return PartyServices.findPartyById(myContext, context);
-    }
 
     /**
      * Get unconfirmed affiliates (such that have no approval date)
