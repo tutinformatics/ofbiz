@@ -75,8 +75,8 @@ public class PublisherServiceResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response createPublisher(String jsonBody) throws Exception {
         Map<String, Object> data = JsonUtils.parseJson(jsonBody);
-        ObfizPublisherDTO entity = publisherService.createPublisher(data);
-        Response.ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
+        publisherService.createPublisher(data);
+        Response.ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON);
         return builder.build();
     }
 
@@ -86,6 +86,16 @@ public class PublisherServiceResource {
     public Response getSubscribers() throws GenericEntityException {
         List<ObfizSubscriberDTO> entity = subscriberService.getSubscribers();
         Response.ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
+        return builder.build();
+    }
+
+    @POST()
+    @Path("/subscribers/create")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createSubscriber(String jsonBody) throws Exception {
+        Map<String, Object> data = JsonUtils.parseJson(jsonBody);
+        subscriberService.createSubscriber(data);
+        Response.ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON);
         return builder.build();
     }
 }

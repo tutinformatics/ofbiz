@@ -50,17 +50,14 @@ public class PublisherService {
         return obfizPublisherDTO;
     }
 
-    public PublisherDTO createPublisher(Map<String, Object> data) {
+    public void createPublisher(Map<String, Object> data) {
         Map<String, Object> publisherContext = new HashMap<>();
 
-        // create affiliate by for created/existing party
         publisherContext.put("OfbizPublisherId", data.get("OfbizPublisherId"));
         publisherContext.put("topic", data.get("topic"));
         publisherContext.put("description", data.get("description"));
         publisherContext.put("filter", data.get("filter"));
         OfbizPublisherServices ofbizPublisherServices = new OfbizPublisherServices();
         ofbizPublisherServices.createOfbizPublisher(dispatchContext, publisherContext);
-
-        return getOfbizPublisherDTO((String) data.get("OfbizPublisherId"));
     }
 }

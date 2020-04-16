@@ -5,8 +5,11 @@ import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.service.DispatchContext;
+import services.OfbizSubscriberServices;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class SubscriberService {
@@ -44,5 +47,15 @@ public class SubscriberService {
         obfizSubscriberDTO.setDescription((String) ofbizSubscriber.get("description"));
         obfizSubscriberDTO.setFilter((String) ofbizSubscriber.get("filter"));
         return obfizSubscriberDTO;
+    }
+
+    public void createSubscriber(Map<String, Object> data) {
+        Map<String, Object> subscriberContext = new HashMap<>();
+        subscriberContext.put("OfbizSubscriberId", data.get("OfbizSubscriberId"));
+        subscriberContext.put("topic", data.get("topic"));
+        subscriberContext.put("description", data.get("description"));
+        subscriberContext.put("filter", data.get("filter"));
+        OfbizSubscriberServices ofbizSubscriberServices = new OfbizSubscriberServices();
+        ofbizSubscriberServices.createOfbizSubscriber(dispatchContext, subscriberContext);
     }
 }
