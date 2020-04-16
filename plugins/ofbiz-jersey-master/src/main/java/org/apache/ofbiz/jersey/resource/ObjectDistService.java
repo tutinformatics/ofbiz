@@ -2,8 +2,10 @@ package org.apache.ofbiz.jersey.resource;
 
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.util.ExtendedConverters;
-import org.apache.ofbiz.jersey.resource.ofbizpublisher.OblizPublisherDTO;
+import org.apache.ofbiz.jersey.resource.ofbizpublisher.ObfizPublisherDTO;
 import org.apache.ofbiz.jersey.resource.ofbizpublisher.PublisherService;
+import org.apache.ofbiz.jersey.resource.ofbizsubscriber.ObfizSubscriberDTO;
+import org.apache.ofbiz.jersey.resource.ofbizsubscriber.SubscriberService;
 import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.LocalDispatcher;
 
@@ -35,12 +37,14 @@ public class ObjectDistService {
     private ServletContext servletContext;
 
     private PublisherService publisherService;
+    private SubscriberService subscriberService;
 
     @PostConstruct
     public void init() {
         LocalDispatcher dispatcher = (LocalDispatcher) servletContext.getAttribute("dispatcher");
         DispatchContext dpc = dispatcher.getDispatchContext();
         publisherService = new PublisherService(dpc);
+        subscriberService = new SubscriberService(dpc);
     }
 
 
@@ -58,7 +62,16 @@ public class ObjectDistService {
     @Path("/publishers")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPublishers() throws GenericEntityException {
-        List<OblizPublisherDTO> entity = publisherService.getPublishers();
+        List<ObfizPublisherDTO> entity = publisherService.getPublishers();
+        Response.ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
+        return builder.build();
+    }
+
+    @GET
+    @Path("/subscribers")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSubscribers() throws GenericEntityException {
+        List<ObfizSubscriberDTO> entity = subscriberService.getSubscribers();
         Response.ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
         return builder.build();
     }

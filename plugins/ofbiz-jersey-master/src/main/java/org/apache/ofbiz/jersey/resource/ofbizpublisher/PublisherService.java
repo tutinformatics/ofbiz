@@ -20,13 +20,13 @@ public class PublisherService {
     }
 
 
-    public List<OblizPublisherDTO> getPublishers() throws GenericEntityException {
+    public List<ObfizPublisherDTO> getPublishers() throws GenericEntityException {
         List<GenericValue> genericValues = EntityQuery.use(delegator).from("OfbizPublisher").queryList();
         return genericValues.stream().map(x -> getOfbizPublisherDTO((String) x.get("OfbizPublisherId"))).collect(Collectors.toList());
     }
 
-    public OblizPublisherDTO getOfbizPublisherDTO(String ofbizPublisherId) {
-        OblizPublisherDTO oblizPublisherDTO = new OblizPublisherDTO();
+    public ObfizPublisherDTO getOfbizPublisherDTO(String ofbizPublisherId) {
+        ObfizPublisherDTO obfizPublisherDTO = new ObfizPublisherDTO();
 
         GenericValue ofbizPublisher = null;
         try {
@@ -39,10 +39,10 @@ public class PublisherService {
             e.printStackTrace();
         }
 
-        oblizPublisherDTO.setPublisherId((String) ofbizPublisher.get("OfbizPublisherId"));
-        oblizPublisherDTO.setTopic((String) ofbizPublisher.get("topic"));
-        oblizPublisherDTO.setDescription((String) ofbizPublisher.get("description"));
-        oblizPublisherDTO.setFilter((String) ofbizPublisher.get("filter"));
-        return oblizPublisherDTO;
+        obfizPublisherDTO.setPublisherId((String) ofbizPublisher.get("OfbizPublisherId"));
+        obfizPublisherDTO.setTopic((String) ofbizPublisher.get("topic"));
+        obfizPublisherDTO.setDescription((String) ofbizPublisher.get("description"));
+        obfizPublisherDTO.setFilter((String) ofbizPublisher.get("filter"));
+        return obfizPublisherDTO;
     }
 }

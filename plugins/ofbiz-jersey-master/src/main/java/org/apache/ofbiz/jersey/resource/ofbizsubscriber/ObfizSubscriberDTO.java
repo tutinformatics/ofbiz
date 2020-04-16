@@ -1,22 +1,22 @@
-package org.apache.ofbiz.jersey.resource.ofbizpublisher;
+package org.apache.ofbiz.jersey.resource.ofbizsubscriber;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class OblizPublisherDTO {
-    String publisherId;
+public class ObfizSubscriberDTO {
+    String subscriberId;
     String topic;
     String description;
     String filter;
 
-    public String getPublisherId() {
-        return publisherId;
+    public String getSubscriberId() {
+        return subscriberId;
     }
 
-    public void setPublisherId(String publisherId) {
-        this.publisherId = publisherId;
+    public void setSubscriberId(String subscriberId) {
+        this.subscriberId = subscriberId;
     }
 
     public String getTopic() {
