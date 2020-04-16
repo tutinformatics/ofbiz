@@ -39,3 +39,5 @@ desktop.ini
 .*.swo
 *.patch
 schema.graphqls
+
+plugins/*/.svn/
