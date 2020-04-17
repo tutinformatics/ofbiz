@@ -30,7 +30,7 @@ public class PublisherService {
     }
 
     public PublisherDTO getOfbizPublisherDTO(String ofbizPublisherId) {
-        PublisherDTO obfizPublisherDTO = new PublisherDTO();
+        PublisherDTO ofbizPublisherDTO = new PublisherDTO();
 
         GenericValue ofbizPublisher = null;
         try {
@@ -43,17 +43,18 @@ public class PublisherService {
             e.printStackTrace();
         }
 
-        obfizPublisherDTO.setPublisherId((String) ofbizPublisher.get("OfbizPublisherId"));
-        obfizPublisherDTO.setTopic((String) ofbizPublisher.get("topic"));
-        obfizPublisherDTO.setDescription((String) ofbizPublisher.get("description"));
-        obfizPublisherDTO.setFilter((String) ofbizPublisher.get("filter"));
-        return obfizPublisherDTO;
+        ofbizPublisherDTO.setPublisherId((String) ofbizPublisher.get("OfbizPublisherId"));
+        ofbizPublisherDTO.setPublisherName((String) ofbizPublisher.get("OfbizPublisherName"));
+        ofbizPublisherDTO.setTopic((String) ofbizPublisher.get("topic"));
+        ofbizPublisherDTO.setDescription((String) ofbizPublisher.get("description"));
+        ofbizPublisherDTO.setFilter((String) ofbizPublisher.get("filter"));
+        return ofbizPublisherDTO;
     }
 
     public void createPublisher(Map<String, Object> data) {
         Map<String, Object> publisherContext = new HashMap<>();
-
         publisherContext.put("OfbizPublisherId", data.get("OfbizPublisherId"));
+        publisherContext.put("OfbizPublisherName", data.get("OfbizPublisherName"));
         publisherContext.put("topic", data.get("topic"));
         publisherContext.put("description", data.get("description"));
         publisherContext.put("filter", data.get("filter"));

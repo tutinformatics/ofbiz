@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PublisherDTO {
     String publisherId;
+    String publisherName;
     String topic;
     String description;
     String filter;
@@ -17,6 +18,14 @@ public class PublisherDTO {
 
     public void setPublisherId(String publisherId) {
         this.publisherId = publisherId;
+    }
+
+    public String getPublisherName() {
+        return publisherName;
+    }
+
+    public void setPublisherName(String publisherName) {
+        this.publisherName = publisherName;
     }
 
     public String getTopic() {

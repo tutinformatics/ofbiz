@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SubscriberDTO {
     String subscriberId;
+    String subscriberName;
     String topic;
     String description;
     String filter;
@@ -17,6 +18,14 @@ public class SubscriberDTO {
 
     public void setSubscriberId(String subscriberId) {
         this.subscriberId = subscriberId;
+    }
+
+    public String getSubscriberName() {
+        return subscriberName;
+    }
+
+    public void setSubscriberName(String subscriberName) {
+        this.subscriberName = subscriberName;
     }
 
     public String getTopic() {

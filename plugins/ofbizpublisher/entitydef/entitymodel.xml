@@ -30,6 +30,7 @@ under the License.
 
     <entity entity-name="OfbizPublisher" package-name="org.apache.ofbiz.ofbizpublisher" title="OfbizPublisher Entity">
         <field name="OfbizPublisherId" type="id"><description>primary sequenced ID</description></field>
+        <field name="OfbizPublisherName" type="name"/>
         <field name="topic" type="name"/>
         <field name="description" type="description"/>
         <field name="filter" type="name"/>
