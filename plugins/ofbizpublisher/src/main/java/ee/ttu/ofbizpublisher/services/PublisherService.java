@@ -44,7 +44,7 @@ public class PublisherService {
         }
 
         ofbizPublisherDTO.setPublisherId((String) ofbizPublisher.get("OfbizPublisherId"));
-        ofbizPublisherDTO.setPublisherName((String) ofbizPublisher.get("OfbizPublisherName"));
+        ofbizPublisherDTO.setPublisherName((String) ofbizPublisher.get("OfbizEntityName"));
         ofbizPublisherDTO.setTopic((String) ofbizPublisher.get("topic"));
         ofbizPublisherDTO.setDescription((String) ofbizPublisher.get("description"));
         ofbizPublisherDTO.setFilter((String) ofbizPublisher.get("filter"));
@@ -54,7 +54,7 @@ public class PublisherService {
     public void createPublisher(Map<String, Object> data) {
         Map<String, Object> publisherContext = new HashMap<>();
         publisherContext.put("OfbizPublisherId", data.get("OfbizPublisherId"));
-        publisherContext.put("OfbizPublisherName", data.get("OfbizPublisherName"));
+        publisherContext.put("OfbizEntityName", data.get("OfbizEntityName"));
         publisherContext.put("topic", data.get("topic"));
         publisherContext.put("description", data.get("description"));
         publisherContext.put("filter", data.get("filter"));

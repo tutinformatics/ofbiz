@@ -28,7 +28,7 @@ under the License.
     <copyright/>
     <entity entity-name="OfbizSubscriber" package-name="org.apache.ofbiz.ofbizsubscriber" title="OfbizSubscriber Entity">
         <field name="OfbizSubscriberId" type="id"><description>primary sequenced ID</description></field>
-        <field name="OfbizSubscriberName" type="name"/>
+        <field name="OfbizEntityName" type="name"/>
         <field name="topic" type="name"/>
         <field name="description" type="description"/>
         <field name="filter" type="name"/>

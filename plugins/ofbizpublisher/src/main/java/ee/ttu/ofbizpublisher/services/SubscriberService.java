@@ -44,7 +44,7 @@ public class SubscriberService {
         }
 
         subscriberDTO.setSubscriberId((String) subscriber.get("OfbizSubscriberId"));
-        subscriberDTO.setSubscriberName((String) subscriber.get("OfbizSubscriberName"));
+        subscriberDTO.setSubscriberName((String) subscriber.get("OfbizEntityName"));
         subscriberDTO.setTopic((String) subscriber.get("topic"));
         subscriberDTO.setDescription((String) subscriber.get("description"));
         subscriberDTO.setFilter((String) subscriber.get("filter"));
@@ -54,7 +54,7 @@ public class SubscriberService {
     public void createSubscriber(Map<String, Object> data) {
         Map<String, Object> subscriberContext = new HashMap<>();
         subscriberContext.put("OfbizSubscriberId", data.get("OfbizSubscriberId"));
-        subscriberContext.put("OfbizSubscriberName", data.get("OfbizSubscriberName"));
+        subscriberContext.put("OfbizEntityName", data.get("OfbizEntityName"));
         subscriberContext.put("topic", data.get("topic"));
         subscriberContext.put("description", data.get("description"));
         subscriberContext.put("filter", data.get("filter"));
