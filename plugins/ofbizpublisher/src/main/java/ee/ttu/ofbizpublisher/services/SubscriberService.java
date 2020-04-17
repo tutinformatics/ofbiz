@@ -1,16 +1,22 @@
 package ee.ttu.ofbizpublisher.services;
 
+import ee.ttu.ofbizpublisher.model.SubscriberDTO;
+import ee.ttu.ofbizpublisher.mqtt.ConnectionBinding;
+import ee.ttu.ofbizpublisher.mqtt.Subscriber;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.util.EntityQuery;
-import ee.ttu.ofbizpublisher.model.SubscriberDTO;
 import org.apache.ofbiz.service.DispatchContext;
+import org.eclipse.paho.client.mqttv3.IMqttClient;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttException;
 import services.OfbizSubscriberServices;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class SubscriberService {
@@ -51,14 +57,24 @@ public class SubscriberService {
         return subscriberDTO;
     }
 
-    public void createSubscriber(Map<String, Object> data) {
+    public void createSubscriber(Map<String, Object> data) throws MqttException, InterruptedException {
         Map<String, Object> subscriberContext = new HashMap<>();
         subscriberContext.put("OfbizSubscriberId", data.get("OfbizSubscriberId"));
         subscriberContext.put("OfbizEntityName", data.get("OfbizEntityName"));
         subscriberContext.put("topic", data.get("topic"));
         subscriberContext.put("description", data.get("description"));
         subscriberContext.put("filter", data.get("filter"));
+        setSubscriberData(data.get("topic").toString());
         OfbizSubscriberServices ofbizSubscriberServices = new OfbizSubscriberServices();
         ofbizSubscriberServices.createOfbizSubscriber(dispatchContext, subscriberContext);
+    }
+
+    private void setSubscriberData(String topic) throws MqttException, InterruptedException {
+        String receiverID = UUID.randomUUID().toString();
+        IMqttClient receiver = new MqttClient("tcp://mqtt.eclipse.org:1883", receiverID);
+        ConnectionBinding mqttClientService2 = new ConnectionBinding(receiver);
+        mqttClientService2.makeConnection();
+        Subscriber subscriber = new Subscriber(receiver, topic);
+        subscriber.receiveMessage(delegator);
     }
 }

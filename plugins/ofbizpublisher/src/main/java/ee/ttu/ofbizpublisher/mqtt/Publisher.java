@@ -1,17 +1,23 @@
 package ee.ttu.ofbizpublisher.mqtt;
 
+import org.apache.commons.lang.SerializationUtils;
+import org.apache.ofbiz.entity.GenericValue;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 public class Publisher implements Callable<Void> {
 
     private final String topic;
-    private final String message;
+    private final List<GenericValue> message;
     private final IMqttClient client;
 
-    public Publisher(IMqttClient client, String topic, String message) {
+    public Publisher(IMqttClient client, String topic, List<GenericValue> message) {
         this.client = client;
         this.topic = topic;
         this.message = message;
@@ -29,8 +35,11 @@ public class Publisher implements Callable<Void> {
         return null;
     }
 
-    private MqttMessage getDataInBytes() {
-        byte[] payload = message.getBytes();
+    private MqttMessage getDataInBytes() throws IOException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(bos);
+        oos.writeObject(message);
+        byte[] payload = bos.toByteArray();
         return new MqttMessage(payload);
     }
 }

@@ -1,16 +1,24 @@
 package ee.ttu.ofbizpublisher.services;
 
+import ee.taltech.accounting.connector.camel.service.InvoiceService;
 import ee.ttu.ofbizpublisher.OfbizPublisherServices;
 import ee.ttu.ofbizpublisher.model.PublisherDTO;
+import ee.ttu.ofbizpublisher.mqtt.ConnectionBinding;
+import ee.ttu.ofbizpublisher.mqtt.Publisher;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.service.DispatchContext;
+import org.apache.ofbiz.service.LocalDispatcher;
+import org.eclipse.paho.client.mqttv3.IMqttClient;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class PublisherService {
@@ -51,14 +59,25 @@ public class PublisherService {
         return ofbizPublisherDTO;
     }
 
-    public void createPublisher(Map<String, Object> data) {
+    public void createPublisher(Map<String, Object> data) throws Exception {
         Map<String, Object> publisherContext = new HashMap<>();
         publisherContext.put("OfbizPublisherId", data.get("OfbizPublisherId"));
         publisherContext.put("OfbizEntityName", data.get("OfbizEntityName"));
         publisherContext.put("topic", data.get("topic"));
         publisherContext.put("description", data.get("description"));
         publisherContext.put("filter", data.get("filter"));
+        setPublisherData(data.get("OfbizEntityName").toString(), data.get("topic").toString());
         OfbizPublisherServices ofbizPublisherServices = new OfbizPublisherServices();
         ofbizPublisherServices.createOfbizPublisher(dispatchContext, publisherContext);
+    }
+
+    private void setPublisherData(String entityName, String topic) throws Exception {
+        List<GenericValue> genericValues = EntityQuery.use(delegator).from(entityName).queryList();
+        String publisherId = UUID.randomUUID().toString();
+        IMqttClient publisher = new MqttClient("tcp://mqtt.eclipse.org:1883", publisherId);
+        ConnectionBinding mqttClientService = new ConnectionBinding(publisher);
+        mqttClientService.makeConnection();
+        Publisher mqttService = new Publisher(publisher, topic, genericValues);
+        mqttService.call();
     }
 }
