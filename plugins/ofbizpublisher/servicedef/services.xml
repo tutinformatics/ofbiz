@@ -31,7 +31,7 @@ under the License.
     </service>
 
     <service name="createOfbizPublisherJavaService" default-entity-name="OfbizPublisher" engine="java"
-             location="ee.ttu.ofbizpublisher.services.OfbizPublisherServices" invoke="createOfbizPublisher" auth="false">
+             location="ee.ttu.ofbizpublisher.OfbizPublisherServices" invoke="createOfbizPublisher" auth="false">
         <description>Create an Ofbiz Pubilsher record using a service in Java</description>
         <auto-attributes include="pk" mode="OUT" optional="true"/>
         <auto-attributes include="nonpk" mode="IN" optional="false"/>

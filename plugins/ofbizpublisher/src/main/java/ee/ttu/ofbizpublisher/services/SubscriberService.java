@@ -44,7 +44,7 @@ public class SubscriberService {
         }
 
         subscriberDTO.setSubscriberId((String) subscriber.get("OfbizSubscriberId"));
-        subscriberDTO.setSubscriberName((String) subscriber.get("OfbizEntityName"));
+        subscriberDTO.setEntityName((String) subscriber.get("OfbizEntityName"));
         subscriberDTO.setTopic((String) subscriber.get("topic"));
         subscriberDTO.setDescription((String) subscriber.get("description"));
         subscriberDTO.setFilter((String) subscriber.get("filter"));

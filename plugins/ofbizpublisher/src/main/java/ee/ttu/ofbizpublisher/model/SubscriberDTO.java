@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SubscriberDTO {
     String subscriberId;
-    String subscriberName;
+    String entityName;
     String topic;
     String description;
     String filter;
@@ -20,12 +20,12 @@ public class SubscriberDTO {
         this.subscriberId = subscriberId;
     }
 
-    public String getSubscriberName() {
-        return subscriberName;
+    public String getEntityName() {
+        return entityName;
     }
 
-    public void setSubscriberName(String subscriberName) {
-        this.subscriberName = subscriberName;
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
     }
 
     public String getTopic() {

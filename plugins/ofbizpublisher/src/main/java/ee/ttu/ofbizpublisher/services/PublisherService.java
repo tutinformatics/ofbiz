@@ -44,7 +44,7 @@ public class PublisherService {
         }
 
         ofbizPublisherDTO.setPublisherId((String) ofbizPublisher.get("OfbizPublisherId"));
-        ofbizPublisherDTO.setPublisherName((String) ofbizPublisher.get("OfbizEntityName"));
+        ofbizPublisherDTO.setEntityName((String) ofbizPublisher.get("OfbizEntityName"));
         ofbizPublisherDTO.setTopic((String) ofbizPublisher.get("topic"));
         ofbizPublisherDTO.setDescription((String) ofbizPublisher.get("description"));
         ofbizPublisherDTO.setFilter((String) ofbizPublisher.get("filter"));
