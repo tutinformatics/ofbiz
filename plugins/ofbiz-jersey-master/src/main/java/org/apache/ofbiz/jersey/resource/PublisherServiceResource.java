@@ -1,11 +1,11 @@
 package org.apache.ofbiz.jersey.resource;
 
+import ee.ttu.ofbizpublisher.model.PublisherDTO;
+import ee.ttu.ofbizpublisher.model.SubscriberDTO;
+import ee.ttu.ofbizpublisher.services.PublisherService;
+import ee.ttu.ofbizpublisher.services.SubscriberService;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.util.ExtendedConverters;
-import ee.ttu.ofbizpublisher.model.PublisherDTO;
-import ee.ttu.ofbizpublisher.services.PublisherService;
-import ee.ttu.ofbizpublisher.model.SubscriberDTO;
-import ee.ttu.ofbizpublisher.services.SubscriberService;
 import org.apache.ofbiz.jersey.util.JsonUtils;
 import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.LocalDispatcher;
@@ -21,7 +21,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -48,16 +47,6 @@ public class PublisherServiceResource {
         DispatchContext dpc = dispatcher.getDispatchContext();
         publisherService = new PublisherService(dpc);
         subscriberService = new SubscriberService(dpc);
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getServiceNames() throws IOException {
-        Response.ResponseBuilder builder = null;
-        LocalDispatcher dispatcher = (LocalDispatcher) servletContext.getAttribute("dispatcher");
-        DispatchContext dpc = dispatcher.getDispatchContext();
-        builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity("Hello world");
-        return builder.build();
     }
 
     @GET
