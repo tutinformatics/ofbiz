@@ -29,6 +29,36 @@ under the License.
             <widgets>
                 <decorator-screen name="ManufacturingWarehouseCommonDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
+                        <label>
+                        <workEffortId>DEFAULT_ROUTING</workEffortId>
+                        <workEffortTypeId>ROUTING</workEffortTypeId>
+                        <revisionNumber>1</revisionNumber>
+                        <createdStamp>Feb 25, 2020, 2:07:58 AM</createdStamp>
+                        <quantityToProduce>0</quantityToProduce>
+                        <createdTxStamp>Feb 25, 2020, 2:07:58 AM</createdTxStamp>
+                        <lastUpdatedTxStamp>Feb 25, 2020, 1:14:55 PM</lastUpdatedTxStamp>
+                        <currentStatusId>ROU_ACTIVE</currentStatusId>
+                        <description>Default Routing</description>
+                        <workEffortName>Default Routing</workEffortName>
+                        <lastUpdatedStamp>Feb 25, 2020, 1:14:55 PM</lastUpdatedStamp>
+                    </label>
+                    <label>
+                        <workEffortId>DEFAULT_TASK</workEffortId>
+                        <workEffortTypeId>ROU_TASK</workEffortTypeId>
+                        <revisionNumber>1</revisionNumber>
+                        <createdStamp>Feb 25, 2020, 2:07:59 AM</createdStamp>
+                        <workEffortPurposeTypeId>ROU_ASSEMBLING</workEffortPurposeTypeId>
+                        <createdTxStamp>Feb 25, 2020, 2:07:58 AM</createdTxStamp>
+                        <lastUpdatedTxStamp>Feb 25, 2020, 2:07:58 AM</lastUpdatedTxStamp>
+                        <currentStatusId>ROU_ACTIVE</currentStatusId>
+                        <estimatedMilliSeconds>0</estimatedMilliSeconds>
+                        <description>Default Routing Task</description>
+                        <workEffortName>Default Routing Task</workEffortName>
+                        <lastUpdatedStamp>Feb 25, 2020, 2:07:59 AM</lastUpdatedStamp>
+                        <estimatedSetupMillis>0</estimatedSetupMillis>
+                </label>
+        </decorator-section>
+
 
                         <label></label>
 
@@ -37,7 +67,14 @@ under the License.
             </widgets>
         </section>
     </screen>
-
+ <screen name="">
+        <section>
+            <actions>
+                <set field="" value ="main"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="" location="">
+                    <decorator-section name=""></decorator-section>
     <screen name="WorkEfforts">
         <section>
             <actions>
@@ -56,6 +93,7 @@ under the License.
             </widgets>
         </section>
     </screen>
+</screens>
 
 
 </screens>
