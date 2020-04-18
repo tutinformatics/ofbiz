@@ -8,7 +8,7 @@ WORKDIR /ofbiz
 
 # Install OpenJDK-11
 RUN apt-get update && \
-    apt-get install -y openjdk-8-jdk && \
+    apt-get install -y openjdk-11-jdk && \
     apt-get install -y ant && \
     apt-get clean;
 
@@ -19,12 +19,12 @@ RUN apt-get update && \
     update-ca-certificates -f;
 
 # Setup JAVA_HOME -- useful for docker commandline
-ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/
+ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64/
 RUN export JAVA_HOME
 ENV JAVA_OPTS="-Dfile.encoding=UTF-8"
 
 # Setup backend connection
-RUN sed -i 's/citus_master/10.166.0.2/g' framework/entity/config/entityengine.xml
+RUN cat deploy/entity/entityengine.xml > framework/entity/config/entityengine.xml
 
 # Fix line endings
 RUN apt-get install dos2unix

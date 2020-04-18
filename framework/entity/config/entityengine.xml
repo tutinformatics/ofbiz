@@ -596,7 +596,8 @@ access. For a detailed description see the core/docs/entityconfig.html file.
         <read-data reader-name="ext-demo"/>
         <inline-jdbc
                 jdbc-driver="org.postgresql.Driver"
-                jdbc-uri="jdbc:postgresql://citus_master:5432/ofbiz"
+
+                jdbc-uri="jdbc:postgresql://localhost:5432/ofbiz"
                 jdbc-username="ofbiz"
                 jdbc-password="ofbiz"
                 isolation-level="ReadCommitted"
@@ -771,7 +772,7 @@ access. For a detailed description see the core/docs/entityconfig.html file.
         <read-data reader-name="ext-demo"/>
         <inline-jdbc
                 jdbc-driver="com.sap.dbtech.jdbc.DriverSapDB"
-                jdbc-uri="jdbc:sapdb://localhost/OFBIZ"
+                jdbc-uri="jdbc:sapdb://citus_master/OFBIZ"
                 jdbc-username="ofbiz"
                 jdbc-password="ofbiz"
                 isolation-level="ReadCommitted"
