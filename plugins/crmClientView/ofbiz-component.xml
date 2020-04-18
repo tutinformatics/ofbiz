@@ -24,6 +24,9 @@ under the License.
     <!-- define resource loaders; most common is to use the component resource loader -->
     <resource-loader name="main" type="component"/>
 
+    <!-- place the config directory on the classpath to access configuration files -->
+    <classpath type="dir" location="config"/>
+
     <container name="camel-container" loaders="main,rmi" class="ee.taltech.services.loader.CamelContainer">
         <!--<property name="dispatcher-factory" value="org.apache.ofbiz.service.GenericDispatcherFactory"/>-->
 
@@ -57,5 +60,5 @@ under the License.
         server="default-server"
         location="webapp/crmClientView"
         base-permission="OFBTOOLS,CRMCLIENTVIEW"
-        mount-point="/crmClientView"/>
+        mount-point="/api"/>
 </ofbiz-component>

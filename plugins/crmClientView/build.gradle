@@ -16,12 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+project.rootProject.configurations.all {
+    exclude module: 'jsr311-api'
+}
 
 dependencies {
     //Examples of compile-time and runtime dependencies
 
     //pluginLibsCompile 'junit:junit-dep:4.10'
     //pluginLibsRuntime 'junit:junit-dep:4.10'
+    pluginLibsCompile 'org.glassfish.jersey.containers:jersey-container-servlet:2.30'
+    pluginLibsCompile 'org.glassfish.jersey.media:jersey-media-multipart:2.30'
+    pluginLibsCompile 'org.glassfish.jersey.media:jersey-media-json-jackson:2.30'
+    pluginLibsCompile 'org.glassfish.jersey.inject:jersey-hk2:2.30'
+
     pluginLibsCompile 'org.osgi:org.osgi.core:5.0.0'
     pluginLibsCompile 'biz.aQute.bnd:biz.aQute.bndlib:3.0.0'
 
