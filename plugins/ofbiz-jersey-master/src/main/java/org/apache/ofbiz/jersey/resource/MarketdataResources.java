@@ -68,11 +68,14 @@ public class MarketdataResources {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addMarketdataEntity(@PathParam(value = "companyName") String entityName, String jsonBody)
             throws GenericEntityException, ConversionException {
+
+        System.out.println(jsonBody);
+
         Response.ResponseBuilder builder = null;
         Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
-        GenericValue object = jsonToGenericConverter.convert(delegator.getDelegatorName(), entityName,
+        GenericValue object = jsonToGenericConverter.convert(delegator.getDelegatorName(), "MarketdataModel",
                 JSON.from(jsonBody));
-        ModelEntity model = delegator.getModelEntity(entityName);
+        ModelEntity model = delegator.getModelEntity("MarketdataModel");
         if (model.getPksSize() == 1) {
             if (object.get(model.getFirstPkFieldName()) == null) {
                 object.setNextSeqId();
@@ -82,29 +85,4 @@ public class MarketdataResources {
         builder = Response.status(Response.Status.OK);
         return builder.build();
     }
-
-
-//    @POST
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public Response addMarketdataEntity(String jsonBody)
-//            throws GenericEntityException, ConversionException {
-//        String entityName = "MarketdataModel";
-//        Response.ResponseBuilder builder;
-//        Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
-//        GenericValue object = jsonToGenericConverter.convert(delegator.getDelegatorName(), entityName,
-//                JSON.from(jsonBody));
-//        ModelEntity model = delegator.getModelEntity(entityName);
-//        if (model.getPksSize() == 1) {
-//            // because can only sequence if one PK field
-//            if (object.get(model.getFirstPkFieldName()) == null) {
-//                object.setNextSeqId();
-//            }
-//        }
-//
-//
-//        delegator.create(object); // TODO: catch exception
-//        builder = Response.status(Response.Status.OK);
-//        return builder.build();
-//    }
-
 }
