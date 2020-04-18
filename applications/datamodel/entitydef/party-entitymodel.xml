@@ -1565,6 +1565,7 @@ under the License.
             title="Affiliate Party">
         <field name="affiliateCodeId" type="id"></field>
         <field name="partyId" type="id"></field>
+        <field name="isDefault" type="indicator"/>
         <prim-key field="affiliateCodeId"/>
         <relation type="one" fk-name="AFFILIATE_CODE_PARTY" rel-entity-name="Person">
             <key-map field-name="partyId"/>
@@ -1583,6 +1584,7 @@ under the License.
         <field name="dateTimeCreated" type="date-time"></field>
         <field name="dateTimeApproved" type="date-time"></field>
         <field name="RootPartyId" type="id"></field>
+        <field name="status" type="description"></field>
         <prim-key field="partyId"/>
         <relation type="one" fk-name="ROOT_AFFILIATE_PARTY" rel-entity-name="Affiliate">
             <key-map field-name="RootPartyId" rel-field-name="partyId"/>

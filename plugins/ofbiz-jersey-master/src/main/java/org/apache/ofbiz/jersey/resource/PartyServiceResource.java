@@ -52,96 +52,117 @@ import java.util.stream.Collectors;
 //@Secured
 public class PartyServiceResource {
 
-	public static final String MODULE = PartyServiceResource.class.getName();
-	public static final ExtendedConverters.ExtendedJSONToGenericValue jsonToGenericConverter = new ExtendedConverters.ExtendedJSONToGenericValue();
-	public static final ExtendedConverters.ExtendedGenericValueToJSON genericToJsonConverter = new ExtendedConverters.ExtendedGenericValueToJSON();
+    public static final String MODULE = PartyServiceResource.class.getName();
+    public static final ExtendedConverters.ExtendedJSONToGenericValue jsonToGenericConverter = new ExtendedConverters.ExtendedJSONToGenericValue();
+    public static final ExtendedConverters.ExtendedGenericValueToJSON genericToJsonConverter = new ExtendedConverters.ExtendedGenericValueToJSON();
 
 
-	@Context
-	private HttpServletRequest httpRequest;
+    @Context
+    private HttpServletRequest httpRequest;
 
-	@Context
-	private ServletContext servletContext;
-
-
-	private PartyService partyService;
-
-	@PostConstruct
-	public void init() {
-		LocalDispatcher dispatcher = (LocalDispatcher) servletContext.getAttribute("dispatcher");
-		DispatchContext dpc = dispatcher.getDispatchContext();
-		partyService = new PartyService(dpc);
-	}
+    @Context
+    private ServletContext servletContext;
 
 
+    private PartyService partyService;
+
+    @PostConstruct
+    public void init() {
+        LocalDispatcher dispatcher = (LocalDispatcher) servletContext.getAttribute("dispatcher");
+        DispatchContext dpc = dispatcher.getDispatchContext();
+        partyService = new PartyService(dpc);
+    }
+
+    @GET
+    @Path("/affiliates")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAffiliates() throws GenericEntityException {
+        List<AffiliateDTO> entity = partyService.getAffiliates();
+        ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
+        return builder.build();
+    }
+
+    @GET
+    @Path("/unconfirmedAffiliates")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUnconfirmedAffiliates() throws GenericEntityException {
+        List<AffiliateDTO> entity = partyService.getUnconfirmedAffiliates();
+        ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
+        return builder.build();
+    }
 
 
-	@GET
-	@Path("/affiliates")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAffiliates() throws GenericEntityException {
-		List<AffiliateDTO> entity = partyService.getAffiliates();
-		ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
-		return builder.build();
-	}
-
-	@GET
-	@Path("/unconfirmedAffiliates")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getUnconfirmedAffiliates() throws GenericEntityException {
-		List<AffiliateDTO> entity = partyService.getUnconfirmedAffiliates();
-		ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
-		return builder.build();
-	}
-
-	@POST()
-	@Path("/affiliate/create")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response createAffiliates(String jsonBody) throws Exception {
-		Map<String, Object> data = JsonUtils.parseJson(jsonBody);
-		AffiliateDTO entity = partyService.createAffiliateForUserLogin(data);
-		ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
-		return builder.build();
-	}
 
 
-	@PUT()
-	@Path("/affiliate/approve")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response approveAffiliates(String jsonBody) throws Exception {
-		Map<String, Object> data = JsonUtils.parseJson(jsonBody);
-		AffiliateDTO entity = partyService.approve(data);
-		ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
-		return builder.build();
-	}
+    @POST()
+    @Path("/affiliate/create")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createAffiliates(String jsonBody) throws Exception {
+        Map<String, Object> data = JsonUtils.parseJson(jsonBody);
+        AffiliateDTO entity = partyService.createAffiliateForUserLogin(data);
+        ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
+        return builder.build();
+    }
 
-	@PUT()
-	@Path("/affiliate/disapprove")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response disapproveAffiliates(String jsonBody) throws Exception {
-		Map<String, Object> data = JsonUtils.parseJson(jsonBody);
-		AffiliateDTO entity = partyService.disapprove(data);
-		ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
-		return builder.build();
-	}
 
-	@POST()
-	@Path("/createCode")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response createCode(String jsonBody) throws Exception {
-		Map<String, Object> data = JsonUtils.parseJson(jsonBody);
-		GenericValue entity = partyService.createAffiliateCode(data);
-		ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
-		return builder.build();
-	}
+    @POST()
+    @Path("/affiliate")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAffiliate(String jsonBody) throws Exception {
+        Map<String, Object> data = JsonUtils.parseJson(jsonBody);
+        AffiliateDTO entity = partyService.getAffiliate(data);
+        ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
+        return builder.build();
+    }
 
-	@POST()
-	@Path("/getCodes")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getCodes(String jsonBody) throws Exception {
-		Map<String, Object> data = JsonUtils.parseJson(jsonBody);
-		List<GenericValue> entity = partyService.getAffiliateCodes(data);
-		ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
-		return builder.build();
-	}
+    @PUT()
+    @Path("/affiliate/approve")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response approveAffiliate(String jsonBody) throws Exception {
+        Map<String, Object> data = JsonUtils.parseJson(jsonBody);
+        AffiliateDTO genericValue = partyService.approve(data);
+        ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(genericValue);
+        return builder.build();
+    }
+
+    @PUT()
+    @Path("/affiliate/disapprove")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response disapproveAffiliates(String jsonBody) throws Exception {
+        Map<String, Object> data = JsonUtils.parseJson(jsonBody);
+        AffiliateDTO entity = partyService.disapprove(data);
+        ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
+        return builder.build();
+    }
+
+    @DELETE()
+    @Path("/affiliate/code")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response approveAffiliates(String jsonBody) throws Exception {
+        Map<String, Object> data = JsonUtils.parseJson(jsonBody);
+        GenericValue entity = partyService.deleteAffiliateCodes(data);
+        ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
+        return builder.build();
+    }
+
+    @POST()
+    @Path("/affiliate/code")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createCode(String jsonBody) throws Exception {
+        Map<String, Object> data = JsonUtils.parseJson(jsonBody);
+        GenericValue entity = partyService.createAffiliateCode(data);
+        ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
+        return builder.build();
+    }
+
+
+    @POST()
+    @Path("/affiliate/codes")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getCodes(String jsonBody) throws Exception {
+        Map<String, Object> data = JsonUtils.parseJson(jsonBody);
+        List<GenericValue> entity = partyService.getAffiliateCodes(data);
+        ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
+        return builder.build();
+    }
 }

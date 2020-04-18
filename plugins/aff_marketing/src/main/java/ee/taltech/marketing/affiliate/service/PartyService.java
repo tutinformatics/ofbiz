@@ -7,11 +7,11 @@ import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
+import org.apache.ofbiz.entity.GenericPK;
 import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.party.party.PartyServices;
 import org.apache.ofbiz.service.DispatchContext;
-import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ServiceUtil;
 
 import javax.ws.rs.ext.Provider;
@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static ee.taltech.marketing.affiliate.model.AffiliateDTO.Status.*;
 
 @Provider
 public class PartyService {
@@ -58,11 +60,33 @@ public class PartyService {
         return genericValues.stream().map(x -> getAffiliateDTO((String) x.get("partyId"))).collect(Collectors.toList());
     }
 
+    /**
+     * Get all affiliate
+     *
+     * @return
+     * @throws GenericEntityException
+     */
+    public AffiliateDTO getAffiliate(Map<String, Object> data) throws GenericEntityException {
+        return getAffiliateDTO((String) data.get("partyId"));
+    }
+
     public AffiliateDTO approve(Map<String, Object> data) throws GenericEntityException {
         String partyId = (String) data.get("partyId");
         GenericValue genericValue = EntityQuery.use(delegator).from("Affiliate").where("partyId", partyId).queryOne();
-        genericValue.set("dateTimeApproved", new Timestamp(System.currentTimeMillis()));
-        delegator.store(genericValue);
+        if (genericValue.get("status") == PENDING) {
+            genericValue.set("dateTimeApproved", new Timestamp(System.currentTimeMillis()));
+
+            List<GenericValue> affiliateCodes = getAffiliateCodes(data);
+            if (affiliateCodes.isEmpty()) {
+                GenericValue genericCode = delegator.makeValue("AffiliateCode", UtilMisc.toMap("partyId", partyId, "affiliateCodeId", delegator.getNextSeqId("AffiliateCode"), "isDefault", true));
+                delegator.create(genericCode);
+            }
+
+
+            genericValue.set("status", ACTIVE);
+            delegator.store(genericValue);
+        }
+
         return getAffiliateDTO((String) genericValue.get("partyId"));
     }
 
@@ -70,6 +94,7 @@ public class PartyService {
         String partyId = (String) data.get("partyId");
         GenericValue genericValue = EntityQuery.use(delegator).from("Affiliate").where("partyId", partyId).queryOne();
         genericValue.set("dateTimeApproved", null);
+        genericValue.set("status", DECLINED);
         delegator.store(genericValue);
         return getAffiliateDTO((String) genericValue.get("partyId"));
     }
@@ -77,7 +102,7 @@ public class PartyService {
     public GenericValue createAffiliateCode(Map<String, Object> data) throws GenericEntityException {
         String partyId = (String) data.get("partyId");
         checkApprovedAffiliate(partyId);
-        GenericValue genericValue = delegator.makeValue("AffiliateCode", UtilMisc.toMap("partyId", partyId, "affiliateCodeId", delegator.getNextSeqId("AffiliateCode")));
+        GenericValue genericValue = delegator.makeValue("AffiliateCode", UtilMisc.toMap("partyId", partyId, "affiliateCodeId", delegator.getNextSeqId("AffiliateCode"), "isDefault", false));
         delegator.create(genericValue);
         return genericValue;
     }
@@ -86,6 +111,19 @@ public class PartyService {
         String partyId = (String) data.get("partyId");
         checkApprovedAffiliate(partyId);
         List<GenericValue> genericValue = EntityQuery.use(delegator).from("AffiliateCode").where("partyId", partyId).queryList();
+        return genericValue;
+    }
+
+    public GenericValue deleteAffiliateCodes(Map<String, Object> data) throws GenericEntityException {
+        String partyId = (String) data.get("partyId");
+        String affCode = (String) data.get("affiliateCodeId");
+        checkApprovedAffiliate(partyId);
+        GenericValue genericValue = EntityQuery.use(delegator).from("AffiliateCode").where("partyId", partyId, "affiliateCodeId", affCode).queryOne();
+        if (genericValue.get("isDefault").equals("N")) {
+            genericValue.remove();
+        } else {
+            throw new IllegalArgumentException("Code is default and cannot be deleted");
+        }
         return genericValue;
     }
 
@@ -112,9 +150,13 @@ public class PartyService {
 
         if (userParty != null) {
             if (!"PERSON".equals(userParty.getString("partyTypeId"))) {
-                // TODO throw error
-//                return Map.of("status", "user already has party of another type");
+                throw new IllegalArgumentException("User must be of PERSON group");
             }
+        }
+
+        GenericValue checkExistence = EntityQuery.use(delegator).from("Affiliate").where("partyId", userPartyId).queryOne();
+        if (checkExistence != null) {
+            throw new IllegalArgumentException("User already has applied for Affliate");
         }
 
         Map<String, Object> personCreateContext = new HashMap<>();
@@ -128,16 +170,19 @@ public class PartyService {
         PartyServices.createAffiliate(dispatchCtx, affiliateCreateContext);
 
         try {
-            String rootPartyId = (String) data.get("rootPartyId");
             GenericValue genericValue = EntityQuery.use(delegator).from("Affiliate").where("partyId", userPartyId).queryOne();
-            genericValue.set("RootPartyId", rootPartyId);
+            genericValue.set("status", PENDING);
             delegator.store(genericValue);
+
+            String rootPartyId = (String) data.get("rootPartyId");
+            genericValue.set("RootPartyId", rootPartyId);
         } catch (GenericEntityException | NullPointerException e) {
             Debug.logWarning(e.getMessage(), module);
         }
 
         return getAffiliateDTO(userPartyId);
     }
+
 
     private void checkApprovedAffiliate(String partyId) throws GenericEntityException {
         GenericValue userParty = EntityQuery
@@ -190,24 +235,17 @@ public class PartyService {
         }
 
         affiliateDTO.setEmail(getEmail(partyId));
-
         affiliateDTO.setFirstName((String) person.get("firstName"));
         affiliateDTO.setLastName((String) person.get("lastName"));
-
-        if (affiliate.get("dateTimeApproved") != null) {
-            affiliateDTO.setDate((Timestamp) affiliate.get("dateTimeApproved"));
-            affiliateDTO.setStatus(AffiliateDTO.Status.ACTIVE);
-        } else {
-            affiliateDTO.setStatus(AffiliateDTO.Status.NOT_APPROVED);
-        }
-
+        affiliateDTO.setStatus(AffiliateDTO.Status.valueOf((String) affiliate.get("status")));
+        affiliateDTO.setDate((Timestamp) affiliate.get("dateTimeApproved"));
 
         return affiliateDTO;
     }
 
     private String getEmail(String partyId) {
         GenericValue partyContactMechPurpose = null;
-        GenericValue contactMech = null;
+        String email = "";
         try {
             partyContactMechPurpose = EntityQuery
                     .use(delegator)
@@ -215,15 +253,17 @@ public class PartyService {
                     .where("partyId", partyId, "contactMechPurposeTypeId", "PRIMARY_EMAIL")
                     .queryOne();
 
-            contactMech = EntityQuery
+            GenericValue contactMech = EntityQuery
                     .use(delegator)
                     .from("ContactMech")
                     .where("contactMechId", partyContactMechPurpose.get("contactMechId"), "contactMechTypeId", "EMAIL_ADDRESS")
                     .queryOne();
-        } catch (GenericEntityException e) {
+
+            email = (String) contactMech.get("infoString");
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return (String) contactMech.get("infoString");
+        return email;
     }
 }

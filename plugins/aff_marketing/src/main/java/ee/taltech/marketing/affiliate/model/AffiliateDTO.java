@@ -13,7 +13,8 @@ public class AffiliateDTO {
 
     public enum Status {
         ACTIVE,
-        NOT_APPROVED
+        PENDING,
+        DECLINED
     }
 
     Status status;
