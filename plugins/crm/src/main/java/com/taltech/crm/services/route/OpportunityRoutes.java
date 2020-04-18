@@ -37,6 +37,15 @@ public class OpportunityRoutes extends RouteBuilder {
                 .bean(opportunityService, "getOpportunities()")
                 .endRest();
 
+
+        rest("/api")
+                .get("/opportunity/{opportunityId}")
+                .produces("application/json")
+                .route()
+                .bean(opportunityService, "getOpportunityById")
+                .endRest();
+
+
         rest("/api").delete("/opportunity/{opportunityId}")
                 .route()
                 .bean(opportunityService, "deleteOpportunity")

@@ -1,6 +1,5 @@
 package com.taltech.crm.services;
 
-
 import com.taltech.crm.services.converter.Converter;
 import org.apache.camel.Exchange;
 import org.apache.camel.component.sparkrest.SparkMessage;
@@ -37,6 +36,16 @@ public class OpportunityService {
     public List<GenericValue> getOpportunities() {
         try {
             return delegator.findAll("opportunity", true);
+        } catch (GenericEntityException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<GenericValue> getOpportunityById(Exchange exchange) {
+        try {
+            String id = getParamValueFromExchange("id", exchange);
+            return delegator.findByAnd("opportunity",  UtilMisc.toMap("opportunityId", id),null , true);
         } catch (GenericEntityException e) {
             e.printStackTrace();
         }
@@ -97,3 +106,4 @@ public class OpportunityService {
     }
 
 }
+
