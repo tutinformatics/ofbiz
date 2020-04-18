@@ -50,9 +50,7 @@ under the License.
         <field name="companyId" type="id"><description>primary sequenced ID</description></field>
         <field name="companyName" type="name"></field>
         <field name="registryCode" type="name"></field>
-        <field name="vatNr" type="name"></field>
         <field name="companyStatus" type="name"></field>
-        <field name="firstEntryDate" type="name"></field>
         <field name="companyAddress" type="name"></field>
         <prim-key field="companyId"/>
     </entity>

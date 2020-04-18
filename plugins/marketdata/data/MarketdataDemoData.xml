@@ -28,17 +28,13 @@ under the License.
             companyId="SAMPLE_DEMO_5"
             companyName="001 group OÜ"
             registryCode="12754230"
-            vatNr=""
             companyStatus="Registrisse kantud"
-            firstEntryDate="17.11.2014"
             companyAddress="Harju maakond, Tallinn, Haabersti linnaosa, Õismäe tee 78-9"/>
 
     <MarketdataModel
             companyId="SAMPLE_DEMO_6"
             companyName="001 group OÜ"
             registryCode="12754230"
-            vatNr=""
             companyStatus="Registrisse kantud"
-            firstEntryDate="17.11.2014"
             companyAddress="Harju maakond, Tallinn, Haabersti linnaosa, Õismäe tee 79-9"/>
 </entity-engine-xml>

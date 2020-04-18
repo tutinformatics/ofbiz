@@ -40,7 +40,7 @@ public class MarketdataResources {
     public Response getAllMarketdataEntities() throws GenericEntityException {
         Response.ResponseBuilder builder = null;
         Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
-        List<GenericValue> allEntries = delegator.findAll("MarketdataModel", true);
+        List<GenericValue> allEntries = delegator.findAll("MarketdataModel", false);
         builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(allEntries);
         return builder.build();
     }
