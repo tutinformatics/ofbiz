@@ -47,7 +47,6 @@ public class GraphQLSchemaDefinition {
         Reader cdpSchemaReader = getSchemaReader(AppServletContextListener.SCHEMA_FILE);
         TypeDefinitionRegistry typeRegistry = new TypeDefinitionRegistry();
         typeRegistry.merge(schemaParser.parse(cdpSchemaReader));
-//        typeRegistry.scalars().put("Timestamp", ScalarTypeDefinition.newScalarTypeDefinition().name("Timestamp").build());
         RuntimeWiring runtimeWiring = buildRuntimeWiring();
         return schemaGenerator.makeExecutableSchema(typeRegistry, runtimeWiring);
     }
