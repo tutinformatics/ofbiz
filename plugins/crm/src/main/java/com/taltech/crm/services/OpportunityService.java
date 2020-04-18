@@ -43,6 +43,16 @@ public class OpportunityService {
         return null;
     }
 
+    public List<GenericValue> getOpportunityById(Exchange exchange) {
+        try {
+            String id = getParamValueFromExchange("id", exchange);
+            return delegator.findByAnd("opportunity",  UtilMisc.toMap("opportunityId", id),null , true);
+        } catch (GenericEntityException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public List<GenericValue> getOpportunitiesByStage(Exchange exchange) {
         try {
             //String id = getParamValueFromExchange("id", exchange);
