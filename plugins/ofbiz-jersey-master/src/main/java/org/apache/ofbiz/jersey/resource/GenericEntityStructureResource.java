@@ -85,10 +85,14 @@ public class GenericEntityStructureResource {
 			ModelField field = entity.getField(fieldName);
 			String fType = field.getType();
 			boolean isPk = field.getIsPk();
+			boolean isAutoCreatedInternal = field.getIsAutoCreatedInternal();
+			boolean isNotNull = field.getIsNotNull();
 			LinkedHashMap<String, Object> map = new LinkedHashMap<String, Object>();
 			map.put("name", fieldName);
 			map.put("type", fType);
 			map.put("is_pk", isPk);
+			map.put("is_auto", isAutoCreatedInternal);
+			map.put("is_required", isNotNull);
 			response.add(map);
 		});
 		builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(response);
