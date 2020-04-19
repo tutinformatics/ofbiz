@@ -18,6 +18,7 @@
  *******************************************************************************/
 package org.apache.ofbiz.jersey.resource;
 
+
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.base.util.UtilProperties;
@@ -31,6 +32,7 @@ import org.apache.ofbiz.jersey.annotation.Secured;
 import org.apache.ofbiz.jersey.core.HttpResponseStatus;
 import org.apache.ofbiz.jersey.response.Error;
 import org.apache.ofbiz.jersey.response.Success;
+import org.apache.ofbiz.jersey.util.Utils;
 import org.apache.ofbiz.service.GenericServiceException;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ModelService;
@@ -106,7 +108,7 @@ public class EntityResource {
 	}
 	
 	@GET
-	@Path("/{name}")
+	@Path("/fields/{name}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getEntity(@PathParam(value = "name") String entityName) throws IOException, GenericEntityException {
 		ResponseBuilder builder = null;
@@ -130,7 +132,7 @@ public class EntityResource {
 
 
 	@GET
-	@Path("/all/{name}")
+	@Path("/{name}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllEntities(@PathParam(value = "name") String entityName) throws IOException, GenericEntityException {
 		ResponseBuilder builder = null;
@@ -143,6 +145,26 @@ public class EntityResource {
 			response.add(map);
 		});
 		builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(response);
+		return builder.build();
+	}
+
+	@POST
+	@Path("/{name}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response createEntity(@PathParam(value = "name") String entityName, Map<String, Object> data) throws IOException, GenericEntityException, ClassNotFoundException {
+		Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
+		Optional<GenericValue> entity = Utils.mapToGenericValue(delegator, entityName, data);
+		if (entity.isPresent()) {
+			for (String key : data.keySet()) {
+				if (!key.equals("_DELEGATOR_NAME_") && !key.equals("_ENTITY_NAME_")) {
+					entity.get().set(key, data.get(key));
+				}
+			}
+			delegator.create(entity.get());
+		}
+		ResponseBuilder builder;
+		builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(data);
 		return builder.build();
 	}
 }
