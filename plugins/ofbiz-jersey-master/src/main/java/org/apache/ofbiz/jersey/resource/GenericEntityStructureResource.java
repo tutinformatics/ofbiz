@@ -23,6 +23,7 @@ import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.model.ModelEntity;
 import org.apache.ofbiz.entity.model.ModelField;
 import org.apache.ofbiz.entity.model.ModelReader;
+import org.apache.ofbiz.jersey.annotation.Secured;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -39,7 +40,7 @@ import java.util.*;
 
 @Path("/generic/v1/structure/entities")
 @Provider
-//@Secured
+@Secured
 public class GenericEntityStructureResource {
 
 	public static final String MODULE = GenericEntityStructureResource.class.getName();
