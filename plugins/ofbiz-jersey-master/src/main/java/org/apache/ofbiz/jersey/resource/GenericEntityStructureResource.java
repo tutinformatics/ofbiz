@@ -23,6 +23,8 @@ import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.model.ModelEntity;
 import org.apache.ofbiz.entity.model.ModelField;
 import org.apache.ofbiz.entity.model.ModelReader;
+import org.apache.ofbiz.jersey.annotation.Secured;
+import org.apache.ofbiz.jersey.response.Error;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -39,7 +41,7 @@ import java.util.*;
 
 @Path("/generic/v1/structure/entities")
 @Provider
-//@Secured
+@Secured
 public class GenericEntityStructureResource {
 
 	public static final String MODULE = GenericEntityStructureResource.class.getName();
@@ -60,7 +62,8 @@ public class GenericEntityStructureResource {
 		try {
 			entityNames = reader.getEntityNames();
 		} catch (GenericEntityException e) {
-			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity("{\"error\": \"Error getting entity names from delegator.\"}");
+			Error error = new Error(500, "Internal Server Error", "Error getting entity names from delegator.");
+			builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.APPLICATION_JSON_TYPE).entity(error);
 			e.printStackTrace();
 			return builder.build();
 		}
@@ -82,10 +85,14 @@ public class GenericEntityStructureResource {
 			ModelField field = entity.getField(fieldName);
 			String fType = field.getType();
 			boolean isPk = field.getIsPk();
+			boolean isAutoCreatedInternal = field.getIsAutoCreatedInternal();
+			boolean isNotNull = field.getIsNotNull();
 			LinkedHashMap<String, Object> map = new LinkedHashMap<String, Object>();
 			map.put("name", fieldName);
 			map.put("type", fType);
 			map.put("is_pk", isPk);
+			map.put("is_auto", isAutoCreatedInternal);
+			map.put("is_required", isNotNull);
 			response.add(map);
 		});
 		builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(response);
