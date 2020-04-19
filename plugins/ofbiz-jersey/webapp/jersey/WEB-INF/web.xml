@@ -40,6 +40,7 @@
 			<param-name>jersey.config.servlet.filter.staticContentRegex</param-name>
 			<param-value>/swagger/.*</param-value>
 		</init-param>
+
 	</filter>
 	<filter-mapping>
 		<filter-name>Jersey REST Filter</filter-name>

@@ -21,9 +21,11 @@ package org.apache.ofbiz.jersey.config;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.ofbiz.base.util.Debug;
+import org.apache.ofbiz.jersey.CORSFilter.CORSFilter;
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
+
 
 
 public class ApplicationConfig extends ResourceConfig {
@@ -33,6 +35,7 @@ public class ApplicationConfig extends ResourceConfig {
 		packages("com.fasterxml.jackson.jaxrs");
 		packages("io.swagger.v3.jaxrs2.integration.resources");
 		register(MultiPartFeature.class);
+		register(new CORSFilter());
 		if (Debug.verboseOn()) {
 			register(new LoggingFeature(Logger.getLogger(LoggingFeature.DEFAULT_LOGGER_NAME), Level.INFO,
 					LoggingFeature.Verbosity.PAYLOAD_ANY, 10000));

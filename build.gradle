@@ -153,6 +153,8 @@ configurations {
 }
 
 dependencies {
+
+
     implementation 'apache-xerces:xercesImpl:2.9.1'
     implementation 'com.google.zxing:core:3.4.0'
     implementation 'com.googlecode.concurrentlinkedhashmap:concurrentlinkedhashmap-lru:1.4.2'
