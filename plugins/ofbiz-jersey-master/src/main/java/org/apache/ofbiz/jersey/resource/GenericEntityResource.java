@@ -126,6 +126,7 @@ public class GenericEntityResource {
 		return builder.build();
 	}
 
+	// TODO: recursive addition
 	@POST
 	@Path("/{name}")
 	@Consumes(MediaType.APPLICATION_JSON)
