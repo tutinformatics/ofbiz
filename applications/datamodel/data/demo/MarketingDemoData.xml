@@ -161,9 +161,9 @@ under the License.
 
     <Party partyId="DemoUser3" partyTypeId="PERSON" statusId="PARTY_ENABLED"/>
     <Person partyId="DemoUser3" firstName="Demo" lastName="User3"/>
-    <Affiliate partyId="DemoUser2" RootPartyId="DemoUser2" status="ACTIVE" dateTimeApproved="2001-01-01 12:00:00.0" />
+    <Affiliate partyId="DemoUser3" RootPartyId="DemoUser2" status="ACTIVE" dateTimeApproved="2001-01-01 12:00:00.0" />
     <PartyStatus partyId="DemoUser3" statusId="PARTY_ENABLED" statusDate="2001-01-01 12:00:00.0"/>
-    <AffiliateCode affiliateCodeId="10030" partyId="DemoUser2" isDefault="Y"/>
+    <AffiliateCode affiliateCodeId="10030" partyId="DemoUser3" isDefault="Y"/>
 
     <Party partyId="DemoUser4" partyTypeId="PERSON" statusId="PARTY_ENABLED"/>
     <Person partyId="DemoUser4" firstName="Demo" lastName="User4"/>
