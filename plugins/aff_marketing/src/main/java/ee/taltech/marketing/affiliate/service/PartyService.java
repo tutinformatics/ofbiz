@@ -45,7 +45,7 @@ public class PartyService {
      * @throws GenericEntityException
      */
     public List<AffiliateDTO> getUnconfirmedAffiliates() throws GenericEntityException {
-        List<GenericValue> genericValues = EntityQuery.use(delegator).from("Affiliate").where("dateTimeApproved", null).queryList();
+        List<GenericValue> genericValues = EntityQuery.use(delegator).from("Affiliate").where("status", "PENDING").queryList();
         return genericValues.stream().map(x -> getAffiliateDTO((String) x.get("partyId"))).collect(Collectors.toList());
     }
 
@@ -261,7 +261,7 @@ public class PartyService {
 
             email = (String) contactMech.get("infoString");
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
 
         return email;

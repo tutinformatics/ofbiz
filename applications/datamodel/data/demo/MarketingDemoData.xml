@@ -146,6 +146,36 @@ under the License.
     <PartyRole partyId="DemoLead4" roleTypeId="LEAD"/>
     <PartyStatus partyId="DemoLead4" statusId="PARTY_ENABLED" statusDate="2001-01-01 12:00:00.0"/>
 
+
+
+    <Party partyId="DemoUser1" partyTypeId="PERSON" statusId="PARTY_ENABLED"/>
+    <Person partyId="DemoUser1" firstName="Demo" lastName="User1"/>
+    <PartyStatus partyId="DemoUser1" statusId="PARTY_ENABLED" statusDate="2001-01-01 12:00:00.0"/>
+
+    <Party partyId="DemoUser2" partyTypeId="PERSON" statusId="PARTY_ENABLED"/>
+    <Person partyId="DemoUser2" firstName="Demo" lastName="User2"/>
+    <Affiliate partyId="DemoUser2" status="ACTIVE" dateTimeApproved="2001-01-01 12:00:00.0" />
+    <PartyStatus partyId="DemoUser2" statusId="PARTY_ENABLED" statusDate="2001-01-01 12:00:00.0"/>
+    <AffiliateCode affiliateCodeId="10030" partyId="DemoUser2" isDefault="Y"/>
+    <AffiliateCode affiliateCodeId="10031" partyId="DemoUser2" isDefault="N"/>
+
+    <Party partyId="DemoUser3" partyTypeId="PERSON" statusId="PARTY_ENABLED"/>
+    <Person partyId="DemoUser3" firstName="Demo" lastName="User3"/>
+    <Affiliate partyId="DemoUser2" RootPartyId="DemoUser2" status="ACTIVE" dateTimeApproved="2001-01-01 12:00:00.0" />
+    <PartyStatus partyId="DemoUser3" statusId="PARTY_ENABLED" statusDate="2001-01-01 12:00:00.0"/>
+    <AffiliateCode affiliateCodeId="10030" partyId="DemoUser2" isDefault="Y"/>
+
+    <Party partyId="DemoUser4" partyTypeId="PERSON" statusId="PARTY_ENABLED"/>
+    <Person partyId="DemoUser4" firstName="Demo" lastName="User4"/>
+    <Affiliate partyId="DemoUser4" RootPartyId="DemoUser2" status="PENDING" />
+    <PartyStatus partyId="DemoUser4" statusId="PARTY_ENABLED" statusDate="2001-01-01 12:00:00.0"/>
+
+
+    <Party partyId="DemoUser5" partyTypeId="PERSON" statusId="PARTY_ENABLED"/>
+    <Person partyId="DemoUser5" firstName="Demo" lastName="User5"/>
+    <Affiliate partyId="DemoUser5" RootPartyId="DemoUser2" status="DECLINED" />
+    <PartyStatus partyId="DemoUser5" statusId="PARTY_ENABLED" statusDate="2001-01-01 12:00:00.0"/>
+
     <!-- Lead Owners Team -->
     <Party partyId="DemoLeadOwnersGroup" partyTypeId="TEAM" statusId="PARTY_ENABLED"/>
     <PartyGroup partyId="DemoLeadOwnersGroup" groupName="A Group of Lead Owners"/>
