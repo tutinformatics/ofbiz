@@ -46,7 +46,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.ext.Provider;
-import java.io.IOException;
 import java.util.*;
 
 @Path("/entities")
@@ -66,7 +65,7 @@ public class EntityResource {
 	@PUT
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response entityImport(String importXml) throws IOException {
+	public Response entityImport(String importXml) {
 		ResponseBuilder builder = null;
 		LocalDispatcher dispatcher = (LocalDispatcher) servletContext.getAttribute("dispatcher");
 		String fullText = null;
@@ -98,7 +97,7 @@ public class EntityResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response listEntities() throws IOException, GenericEntityException {
+	public Response listEntities() throws GenericEntityException {
 		ResponseBuilder builder = null;
 		Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
 		ModelReader reader = delegator.getModelReader();
@@ -110,7 +109,7 @@ public class EntityResource {
 	@GET
 	@Path("/fields/{name}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getEntity(@PathParam(value = "name") String entityName) throws IOException, GenericEntityException {
+	public Response getEntity(@PathParam(value = "name") String entityName) throws GenericEntityException {
 		ResponseBuilder builder = null;
 		List<Map<String, Object>> response = new ArrayList<Map<String, Object>>();
 		Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
@@ -134,7 +133,7 @@ public class EntityResource {
 	@GET
 	@Path("/{name}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAllEntities(@PathParam(value = "name") String entityName) throws IOException, GenericEntityException {
+	public Response getAllEntities(@PathParam(value = "name") String entityName) throws GenericEntityException {
 		ResponseBuilder builder = null;
 		List<Map<String, Object>> response = new ArrayList<Map<String, Object>>();
 		Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
@@ -152,7 +151,7 @@ public class EntityResource {
 	@Path("/{name}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response createEntity(@PathParam(value = "name") String entityName, Map<String, Object> data) throws IOException, GenericEntityException, ClassNotFoundException {
+	public Response createEntity(@PathParam(value = "name") String entityName, Map<String, Object> data) throws GenericEntityException {
 		Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
 		Optional<GenericValue> entity = Utils.mapToGenericValue(delegator, entityName, data);
 		if (entity.isPresent()) {
@@ -162,6 +161,26 @@ public class EntityResource {
 				}
 			}
 			delegator.create(entity.get());
+		}
+		ResponseBuilder builder;
+		builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(data);
+		return builder.build();
+	}
+
+	@PUT
+	@Path("/{name}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response updateEntity(@PathParam(value = "name") String entityName, Map<String, Object> data) throws GenericEntityException {
+		Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
+		Optional<GenericValue> entity = Utils.mapToGenericValue(delegator, entityName, data);
+		if (entity.isPresent()) {
+			for (String key : data.keySet()) {
+				if (!key.equals("_DELEGATOR_NAME_") && !key.equals("_ENTITY_NAME_")) {
+					entity.get().set(key, data.get(key));
+				}
+			}
+			delegator.store(entity.get());
 		}
 		ResponseBuilder builder;
 		builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(data);
