@@ -24,6 +24,7 @@ import org.apache.ofbiz.entity.model.ModelEntity;
 import org.apache.ofbiz.entity.model.ModelField;
 import org.apache.ofbiz.entity.model.ModelReader;
 import org.apache.ofbiz.jersey.annotation.Secured;
+import org.apache.ofbiz.jersey.response.Error;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -61,7 +62,8 @@ public class GenericEntityStructureResource {
 		try {
 			entityNames = reader.getEntityNames();
 		} catch (GenericEntityException e) {
-			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity("{\"error\": \"Error getting entity names from delegator.\"}");
+			Error error = new Error(500, "Internal Server Error", "Error getting entity names from delegator.");
+			builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.APPLICATION_JSON_TYPE).entity(error);
 			e.printStackTrace();
 			return builder.build();
 		}
