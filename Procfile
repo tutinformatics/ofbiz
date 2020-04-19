@@ -1,1 +1,1 @@
-web: gradle ofbiz
+web: chmod a+x gradlew && ./gradlew ofbiz
