@@ -959,7 +959,6 @@ task cleanAll(group: cleanupGroup, dependsOn: [cleanTasks, clean]) {
 task stage(group: ofbizServer, dependsOn: [cleanAll, loadAll]) {
     cleanAll
     loadAll
-    run
     description 'Heroku stage task.'
 }
 
