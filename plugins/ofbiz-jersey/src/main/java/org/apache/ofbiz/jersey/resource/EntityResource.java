@@ -18,25 +18,6 @@
  *******************************************************************************/
 package org.apache.ofbiz.jersey.resource;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeSet;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.ws.rs.ext.Provider;
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.base.util.UtilProperties;
@@ -54,6 +35,17 @@ import org.apache.ofbiz.service.GenericServiceException;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ModelService;
 import org.apache.ofbiz.service.ServiceUtil;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.ext.Provider;
+import java.io.IOException;
+import java.util.*;
 
 @Path("/entities")
 @Provider
@@ -136,4 +128,21 @@ public class EntityResource {
 		return builder.build();
 	}
 
+
+	@GET
+	@Path("/all/{name}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllEntities(@PathParam(value = "name") String entityName) throws IOException, GenericEntityException {
+		ResponseBuilder builder = null;
+		List<Map<String, Object>> response = new ArrayList<Map<String, Object>>();
+		Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
+		List<GenericValue> list = delegator.findAll(entityName, true);
+		list.forEach((entity) -> {
+			LinkedHashMap<String, Object> map = new LinkedHashMap<>(entity.getAllFields());
+			System.out.println(entity.getAllFields());
+			response.add(map);
+		});
+		builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(response);
+		return builder.build();
+	}
 }
