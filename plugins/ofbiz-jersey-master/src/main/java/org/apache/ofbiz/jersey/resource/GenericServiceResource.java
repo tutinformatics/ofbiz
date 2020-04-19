@@ -1,14 +1,19 @@
 package org.apache.ofbiz.jersey.resource;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.ofbiz.base.conversion.ConversionException;
 import org.apache.ofbiz.base.lang.JSON;
 import org.apache.ofbiz.base.util.UtilGenerics;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.util.ExtendedConverters;
 import org.apache.ofbiz.jersey.annotation.Secured;
+import org.apache.ofbiz.jersey.response.Error;
 import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.GenericServiceException;
 import org.apache.ofbiz.service.LocalDispatcher;
+import org.apache.ofbiz.service.ModelParam;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +23,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Path("/generic/v1/services")
@@ -28,6 +33,7 @@ public class GenericServiceResource {
 
 	public static final String MODULE = GenericServiceResource.class.getName();
 	public static final ExtendedConverters.ExtendedJSONToGenericValue jsonToGenericConverter = new ExtendedConverters.ExtendedJSONToGenericValue();
+	private static final ObjectMapper mapper = new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
 	@Context
 	private HttpServletRequest httpRequest;
@@ -37,8 +43,8 @@ public class GenericServiceResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getServiceNames() throws IOException {
-		Response.ResponseBuilder builder = null;
+	public Response getServiceNames() {
+		Response.ResponseBuilder builder;
 		LocalDispatcher dispatcher = (LocalDispatcher) servletContext.getAttribute("dispatcher");
 		DispatchContext dpc = dispatcher.getDispatchContext();
 		builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(dpc.getAllServiceNames());
@@ -52,15 +58,25 @@ public class GenericServiceResource {
 		Response.ResponseBuilder builder;
 		LocalDispatcher dispatcher = (LocalDispatcher) servletContext.getAttribute("dispatcher");
 		DispatchContext dpc = dispatcher.getDispatchContext();
-		Object obj;
+		List<ModelParam> obj;
 		try {
 			obj = dpc.getModelService(serviceName).getModelParamList();
 		} catch (GenericServiceException e) {
-			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity("{\"error\": \"Error getting service.\"}");
+			Error error = new Error(400, "Bad Request", "Error getting service of given name.");
+			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity(error);
 			e.printStackTrace();
 			return builder.build();
 		}
-		builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(obj);
+		JSON json;
+		try {
+			json = JSON.from(mapper.writeValueAsString(obj));
+		} catch (JsonProcessingException e) {
+			Error error = new Error(500, "Internal Server Error", "Error converting structure to JSON.");
+			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity(error);
+			e.printStackTrace();
+			return builder.build();
+		}
+		builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(json.toString());
 		return builder.build();
 	}
 
@@ -80,7 +96,8 @@ public class GenericServiceResource {
 		try {
 			fieldMap = UtilGenerics.<Map<String, Object>>cast(body.toObject(Map.class));
 		} catch (IOException e) {
-			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity("{\"error\": \"Error converting Json body to Map.\"}");
+			Error error = new Error(400, "Bad Request", "Error converting JSON to Map.");
+			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity(error);
 			e.printStackTrace();
 			return builder.build();
 		}
@@ -103,9 +120,8 @@ public class GenericServiceResource {
 			builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
 		} catch (GenericServiceException e) {
 			e.printStackTrace();
-			Map<String, Object> errors = new HashMap<>();
-			errors.put("Error", e.getMessage());
-			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON).entity(errors);
+			Error error = new Error(500, "Bad Request", e.getMessage());
+			builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.APPLICATION_JSON).entity(error);
 		}
 		return builder.build();
 	}

@@ -16,6 +16,7 @@ import org.apache.ofbiz.entity.util.EntityUtilProperties;
 import org.apache.ofbiz.entity.util.ExtendedConverters;
 import org.apache.ofbiz.jersey.annotation.Secured;
 import org.apache.ofbiz.jersey.pojo.EntityQueryInput;
+import org.apache.ofbiz.jersey.response.Error;
 import org.apache.ofbiz.service.GenericServiceException;
 import org.apache.ofbiz.service.LocalDispatcher;
 
@@ -55,16 +56,48 @@ public class GenericEntityQueryResource {
 	@POST
 	@Path("/{name}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response queryEntities(@PathParam(value = "name") String entityName, String jsonBody) throws JsonProcessingException, GenericEntityException, GenericServiceException {
+	public Response queryEntities(@PathParam(value = "name") String entityName, String jsonBody) {
 		Response.ResponseBuilder builder;
 		Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
 
-		EntityQueryInput query = mapper.readValue(jsonBody, EntityQueryInput.class);
+		EntityQueryInput query;
+		try {
+			query = mapper.readValue(jsonBody, EntityQueryInput.class);
+		} catch (JsonProcessingException e) {
+			Error error = new Error(400, "Bad Request", "Error converting body to required form.");
+			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity(error);
+			return builder.build();
+		}
 
-		EntityConditionList<EntityCondition> conditionList = getConditionList(entityName, query.toMap());
-		List<GenericValue> completeList = EntityQuery.use(delegator).from(entityName).where(conditionList).queryList();
+		EntityConditionList<EntityCondition> conditionList;
+		try {
+			conditionList = getConditionList(entityName, query.toMap());
+		} catch (GenericServiceException e) {
+			Error error = new Error(500, "Internal Server Error", "Error forming a condition list from given parameters.");
+			builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.APPLICATION_JSON_TYPE).entity(error);
+			return builder.build();
+		}
+		List<GenericValue> completeList;
+		try {
+			completeList = EntityQuery.use(delegator).from(entityName).where(conditionList).queryList();
+		} catch (GenericEntityException e) {
+			Error error = new Error(500, "Internal Server Error", "Error searching for top level entities.");
+			builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.APPLICATION_JSON_TYPE).entity(error);
+			return builder.build();
+		}
 
-		List<Map<String, ?>> filteredRel = recursiveFind(query, entityName, delegator, completeList);
+		List<Map<String, ?>> filteredRel;
+		try {
+			filteredRel = recursiveFind(query, entityName, delegator, completeList);
+		} catch (GenericServiceException e) {
+			Error error = new Error(500, "Internal Server Error", "Error getting condition list for a lower level entity.");
+			builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.APPLICATION_JSON_TYPE).entity(error);
+			return builder.build();
+		} catch (GenericEntityException e) {
+			Error error = new Error(500, "Internal Server Error", "Error getting related objects.");
+			builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.APPLICATION_JSON_TYPE).entity(error);
+			return builder.build();
+		}
 
 		builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON_TYPE).entity(filteredRel);
 		return builder.build();

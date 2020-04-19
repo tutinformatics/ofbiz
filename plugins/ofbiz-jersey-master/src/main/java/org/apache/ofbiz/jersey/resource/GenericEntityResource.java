@@ -28,6 +28,7 @@ import org.apache.ofbiz.entity.model.ModelReader;
 import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.entity.util.ExtendedConverters;
 import org.apache.ofbiz.jersey.annotation.Secured;
+import org.apache.ofbiz.jersey.response.Error;
 import org.apache.ofbiz.jersey.util.QueryParamStringConverter;
 
 import javax.servlet.ServletContext;
@@ -69,7 +70,8 @@ public class GenericEntityResource {
 		try {
 			entityNames = reader.getEntityNames();
 		} catch (GenericEntityException e) {
-			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity("{\"error\": \"Error fetching existing entity names.\"}");
+			Error error = new Error(500, "Internal Server Error", "Error fetching existing entity names.");
+			builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.APPLICATION_JSON_TYPE).entity(error);
 			e.printStackTrace();
 			return builder.build();
 		}
@@ -96,8 +98,8 @@ public class GenericEntityResource {
 		try {
 			model = delegator.getModelReader().getModelEntity(entityName);
 		} catch (GenericEntityException e) {
-			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity("{\"error\": \"Error fetching model for given entity name.\"}");
-			e.printStackTrace();
+			Error error = new Error(400, "Bad Request", "Error fetching model for given entity name.");
+			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity(error);
 			return builder.build();
 		}
 
@@ -109,7 +111,8 @@ public class GenericEntityResource {
 		try {
 			allEntities = EntityQuery.use(delegator).from(entityName).where(secondary).queryList();
 		} catch (GenericEntityException e) {
-			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity("{\"error\": \"Error searching for entities on given parameters.\"}");
+			Error error = new Error(400, "Bad Request", "Error searching for entities on given parameters.");
+			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity(error);
 			e.printStackTrace();
 			return builder.build();
 		}
@@ -118,7 +121,8 @@ public class GenericEntityResource {
 		try {
 			json = genericToJsonConverter.convertListWithChildren(allEntities, depth);
 		} catch (ConversionException e) {
-			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity("{\"error\": \"Error converting result to JSON.\"}");
+			Error error = new Error(500, "Internal Server Error", "Error converting result to JSON.");
+			builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.APPLICATION_JSON_TYPE).entity(error);
 			e.printStackTrace();
 			return builder.build();
 		}
@@ -127,6 +131,7 @@ public class GenericEntityResource {
 		return builder.build();
 	}
 
+	// TODO: recursive addition
 	@POST
 	@Path("/{name}")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -138,7 +143,8 @@ public class GenericEntityResource {
 		try {
 			object = jsonToGenericConverter.convert(delegator.getDelegatorName(), entityName, JSON.from(jsonBody));
 		} catch (ConversionException e) {
-			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity("{\"error\": \"Error converting to Java object.\"}");
+			Error error = new Error(400, "Bad Request", "Error converting request body to Java object.");
+			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity(error);
 			e.printStackTrace();
 			return builder.build();
 		}
@@ -150,16 +156,25 @@ public class GenericEntityResource {
 				object.setNextSeqId();
 			}
 		}
-
+		GenericValue gv;
 		try {
-			delegator.create(object);
+			gv = delegator.create(object);
 		} catch (GenericEntityException e) {
-			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity("{\"error\": \"Error saving entity.\"}");
+			Error error = new Error(500, "Internal Server Error", "Error saving entity.");
+			builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.APPLICATION_JSON_TYPE).entity(error);
 			e.printStackTrace();
 			return builder.build();
 		}
 
-		builder = Response.status(Response.Status.OK);
+		try {
+			builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON_TYPE).entity(genericToJsonConverter.convert(gv).toString());
+		} catch (ConversionException e) {
+			Error error = new Error(500, "Internal Server Error", "Error converting entity to JSON.");
+			builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.APPLICATION_JSON_TYPE).entity(error);
+			e.printStackTrace();
+			return builder.build();
+		}
+
 		return builder.build();
 	}
 
@@ -174,7 +189,8 @@ public class GenericEntityResource {
 		try {
 			object = jsonToGenericConverter.convert(delegator.getDelegatorName(), entityName, JSON.from(jsonBody));
 		} catch (ConversionException e) {
-			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity("{\"error\": \"Error converting to Java object.\"}");
+			Error error = new Error(400, "Bad Request", "Error converting request body to Java object.");
+			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity(error);
 			e.printStackTrace();
 			return builder.build();
 		}
@@ -183,7 +199,8 @@ public class GenericEntityResource {
 		try {
 			check = delegator.findOne(entityName, object.getPrimaryKey(), false);
 		} catch (GenericEntityException e) {
-			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity("{\"error\": \"Error performing search based on given primary keys.\"}");
+			Error error = new Error(400, "Bad Request", "Error performing search based on given primary keys.");
+			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity(error);
 			e.printStackTrace();
 			return builder.build();
 		}
@@ -193,13 +210,15 @@ public class GenericEntityResource {
 			try {
 				delegator.store(object);
 			} catch (GenericEntityException e) {
-				builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity("{\"error\": \"Error storing updated entity.\"}");
+				Error error = new Error(500, "Internal Server Error", "Error storing updated entity.");
+				builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.APPLICATION_JSON_TYPE).entity(error);
 				e.printStackTrace();
 				return builder.build();
 			}
 			builder = Response.status(Response.Status.OK);
 		} else {
-			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity("{\"error\": \"No matching entity for given primary keys.\"}");
+			Error error = new Error(400, "Bad Request", "No matching entity found for given primary keys.");
+			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity(error);
 		}
 
 		return builder.build();
@@ -217,7 +236,8 @@ public class GenericEntityResource {
 		try {
 			model = delegator.getModelReader().getModelEntity(entityName);
 		} catch (GenericEntityException e) {
-			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity("{\"error\": \"Error getting model for given entity name.\"}");
+			Error error = new Error(400, "Bad Request", "Error fetching model for given entity name.");
+			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity(error);
 			e.printStackTrace();
 			return builder.build();
 		}
@@ -229,7 +249,8 @@ public class GenericEntityResource {
 		try {
 			allEntities = EntityQuery.use(delegator).from(entityName).where(searchParams).queryList();
 		} catch (GenericEntityException e) {
-			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity("{\"error\": \"Error searching given entities based on given parameters.\"}");
+			Error error = new Error(400, "Bad Request", "Error searching entities based on given parameters.");
+			builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity(error);
 			e.printStackTrace();
 			return builder.build();
 		}
@@ -244,7 +265,8 @@ public class GenericEntityResource {
 			try {
 				delegator.removeValue(allEntities.get(0));
 			} catch (GenericEntityException e) {
-				builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity("{\"error\": \"Error deleting entity.\"}");
+				Error error = new Error(500, "Internal Server Error", "Error deleting entity.");
+				builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.APPLICATION_JSON_TYPE).entity(error);
 				e.printStackTrace();
 				return builder.build();
 			}
@@ -252,7 +274,8 @@ public class GenericEntityResource {
 			try {
 				json = genericToJsonConverter.convertWithChildren(allEntities.get(0));
 			} catch (ConversionException e) {
-				builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE).entity("{\"error\": \"Error converting GenericValue to Json.\"}");
+				Error error = new Error(500, "Internal Server Error", "Error converting GenericValue to Json.");
+				builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.APPLICATION_JSON_TYPE).entity(error);
 				e.printStackTrace();
 				return builder.build();
 			}
