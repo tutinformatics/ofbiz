@@ -70,19 +70,22 @@ public class PartyService {
     public AffiliateDTO approve(Map<String, Object> data) throws GenericEntityException {
         String partyId = (String) data.get("partyId");
         GenericValue genericValue = EntityQuery.use(delegator).from("Affiliate").where("partyId", partyId).queryOne();
-        if (genericValue.get("status") == PENDING) {
-            genericValue.set("dateTimeApproved", new Timestamp(System.currentTimeMillis()));
-
-            List<GenericValue> affiliateCodes = getAffiliateCodes(data);
-            if (affiliateCodes.isEmpty()) {
-                GenericValue genericCode = delegator.makeValue("AffiliateCode", UtilMisc.toMap("partyId", partyId, "affiliateCodeId", delegator.getNextSeqId("AffiliateCode"), "isDefault", true));
-                delegator.create(genericCode);
-            }
 
 
-            genericValue.set("status", ACTIVE);
-            delegator.store(genericValue);
+        genericValue.set("dateTimeApproved", new Timestamp(System.currentTimeMillis()));
+
+        List<GenericValue> affiliateCodes = getAffiliateCodes(data);
+        if (affiliateCodes.isEmpty()) {
+            GenericValue genericCode = delegator.makeValue("AffiliateCode", UtilMisc.toMap("partyId", partyId, "affiliateCodeId", delegator.getNextSeqId("AffiliateCode"), "isDefault", true));
+            delegator.create(genericCode);
         }
+
+
+        genericValue.set("status", ACTIVE);
+        delegator.store(genericValue);
+
+//        if (genericValue.get("status").equals(PENDING.toString())) {
+//        }
 
         return getAffiliateDTO((String) genericValue.get("partyId"), false);
     }
@@ -242,6 +245,7 @@ public class PartyService {
             throw new IllegalArgumentException("No such Affiliate found!");
         }
 
+        affiliateDTO.setPartyId(partyId);
         affiliateDTO.setEmail(getEmail(partyId));
         affiliateDTO.setFirstName((String) person.get("firstName"));
         affiliateDTO.setLastName((String) person.get("lastName"));

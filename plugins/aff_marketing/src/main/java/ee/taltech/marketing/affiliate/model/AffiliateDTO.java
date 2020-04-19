@@ -7,6 +7,7 @@ import java.util.List;
 
 @Data
 public class AffiliateDTO {
+    String partyId;
     String firstName;
     String lastName;
     Timestamp date = null;
