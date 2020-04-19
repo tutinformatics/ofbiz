@@ -141,8 +141,7 @@ public final class SecurityUtil {
     /**
      * Return a JWToken for authenticate a userLogin with salt the token by userLoginId and currentPassword
      */
-    public static String generateJwtToAuthenticateUserLogin(Delegator delegator, String userLoginId)
-    throws GenericEntityException {
+    public static String generateJwtToAuthenticateUserLogin(Delegator delegator, String userLoginId) throws GenericEntityException {
         GenericValue userLogin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", userLoginId).queryOne();
         Map<String, String> claims = UtilMisc.toMap("userLoginId", userLogin.getString("userLoginId"));
         return JWTManager.createJwt(delegator, claims,

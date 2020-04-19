@@ -52,7 +52,7 @@ import java.util.Map;
 public class AuthenticationFilter implements ContainerRequestFilter {
 
     private static final String MODULE = AuthenticationFilter.class.getName();
-    private static final Boolean IS_DEV = true;
+    private static final Boolean IS_DEV = false;
 
     @Context
     private ResourceInfo resourceInfo;
