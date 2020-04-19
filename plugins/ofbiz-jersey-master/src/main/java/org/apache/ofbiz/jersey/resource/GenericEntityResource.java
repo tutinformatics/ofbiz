@@ -156,9 +156,9 @@ public class GenericEntityResource {
 				object.setNextSeqId();
 			}
 		}
-
+		GenericValue gv;
 		try {
-			delegator.create(object);
+			gv = delegator.create(object);
 		} catch (GenericEntityException e) {
 			Error error = new Error(500, "Internal Server Error", "Error saving entity.");
 			builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.APPLICATION_JSON_TYPE).entity(error);
@@ -166,7 +166,15 @@ public class GenericEntityResource {
 			return builder.build();
 		}
 
-		builder = Response.status(Response.Status.OK);
+		try {
+			builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON_TYPE).entity(genericToJsonConverter.convert(gv).toString());
+		} catch (ConversionException e) {
+			Error error = new Error(500, "Internal Server Error", "Error converting entity to JSON.");
+			builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.APPLICATION_JSON_TYPE).entity(error);
+			e.printStackTrace();
+			return builder.build();
+		}
+
 		return builder.build();
 	}
 
