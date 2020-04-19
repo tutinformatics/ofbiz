@@ -14,6 +14,7 @@ import org.apache.ofbiz.entity.model.ModelEntity;
 import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.entity.util.EntityUtilProperties;
 import org.apache.ofbiz.entity.util.ExtendedConverters;
+import org.apache.ofbiz.jersey.annotation.Secured;
 import org.apache.ofbiz.jersey.pojo.EntityQueryInput;
 import org.apache.ofbiz.service.GenericServiceException;
 import org.apache.ofbiz.service.LocalDispatcher;
@@ -39,7 +40,7 @@ import static org.apache.ofbiz.base.util.UtilGenerics.checkMap;
 
 @Path("/generic/v1/entityquery/")
 @Provider
-//@Secured
+@Secured
 public class GenericEntityQueryResource {
 
 	public static final String MODULE = GenericEntityResource.class.getName();

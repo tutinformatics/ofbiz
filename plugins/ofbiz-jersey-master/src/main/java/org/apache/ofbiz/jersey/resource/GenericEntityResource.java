@@ -27,6 +27,7 @@ import org.apache.ofbiz.entity.model.ModelEntity;
 import org.apache.ofbiz.entity.model.ModelReader;
 import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.entity.util.ExtendedConverters;
+import org.apache.ofbiz.jersey.annotation.Secured;
 import org.apache.ofbiz.jersey.util.QueryParamStringConverter;
 
 import javax.servlet.ServletContext;
@@ -43,7 +44,7 @@ import java.util.stream.Collectors;
 
 @Path("/generic/v1/entities")
 @Provider
-//@Secured
+@Secured
 public class GenericEntityResource {
 
 	public static final String MODULE = GenericEntityResource.class.getName();
