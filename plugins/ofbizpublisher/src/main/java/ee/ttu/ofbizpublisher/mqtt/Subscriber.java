@@ -41,9 +41,9 @@ public class Subscriber {
         List<GenericValue> genericValues = (List<GenericValue>) objectInputStream.readObject();
         for (GenericValue genericValue : genericValues) {
             GenericValue check = delegator.findOne(entityName, genericValue.getPrimaryKey(), false);
-            if (check != null) {
+            if (check == null) {
                 try {
-                    delegator.store(genericValue);
+                    delegator.create(genericValue);
                 } catch (GenericEntityException e) {
                     e.printStackTrace();
                 }
