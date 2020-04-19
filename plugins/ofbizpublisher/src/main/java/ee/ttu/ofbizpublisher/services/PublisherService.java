@@ -71,12 +71,15 @@ public class PublisherService {
     }
 
     private void setPublisherData(String entityName, String topic, Object filter) throws Exception {
-        Map<String, List<String>> query = (Map<String, List<String>>) filter;
+        List<Map<String, List<String>>> queryList = (List<Map<String, List<String>>>) filter;
         ModelEntity model = delegator.getModelReader().getModelEntity(entityName);
-        Map<String, Object> queryParams = query.entrySet().stream()
-                .map(x -> new AbstractMap.SimpleEntry<>(x.getKey(), QueryParamStringConverter.convert(x.getValue().get(0), model.getField(x.getKey()).getType())))
-                .collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue));
-        List<GenericValue> genericValues = EntityQuery.use(delegator).from(entityName).where(queryParams).queryList();
+        List<GenericValue> genericValues = new ArrayList<>();
+        for(Map<String, List<String>> query: queryList) {
+            Map<String, Object> queryParams = query.entrySet().stream()
+                    .map(x -> new AbstractMap.SimpleEntry<>(x.getKey(), QueryParamStringConverter.convert(x.getValue().get(0), model.getField(x.getKey()).getType())))
+                    .collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue));
+            genericValues.addAll(EntityQuery.use(delegator).from(entityName).where(queryParams).queryList());
+        }
         String publisherId = UUID.randomUUID().toString();
         IMqttClient publisher = new MqttClient("tcp://mqtt.eclipse.org:1883", publisherId);
         ConnectionBinding mqttClientService = new ConnectionBinding(publisher);
