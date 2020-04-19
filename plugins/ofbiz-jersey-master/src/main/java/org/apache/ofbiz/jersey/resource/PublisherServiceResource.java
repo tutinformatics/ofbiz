@@ -63,7 +63,7 @@ public class PublisherServiceResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response createPublisher(String jsonBody) throws Exception {
         Map<String, Object> data = JsonUtils.parseJson(jsonBody);
-        publisherService.createPublisher(data);
+            publisherService.createPublisher(data);
         Response.ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON);
         return builder.build();
     }

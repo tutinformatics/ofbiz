@@ -1,6 +1,5 @@
 package ee.ttu.ofbizpublisher.services;
 
-import ee.taltech.accounting.connector.camel.service.InvoiceService;
 import ee.ttu.ofbizpublisher.OfbizPublisherServices;
 import ee.ttu.ofbizpublisher.model.PublisherDTO;
 import ee.ttu.ofbizpublisher.mqtt.ConnectionBinding;
@@ -12,10 +11,8 @@ import org.apache.ofbiz.entity.model.ModelEntity;
 import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.jersey.util.QueryParamStringConverter;
 import org.apache.ofbiz.service.DispatchContext;
-import org.apache.ofbiz.service.LocalDispatcher;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -74,11 +71,14 @@ public class PublisherService {
         List<Map<String, List<String>>> queryList = (List<Map<String, List<String>>>) filter;
         ModelEntity model = delegator.getModelReader().getModelEntity(entityName);
         List<GenericValue> genericValues = new ArrayList<>();
-        for(Map<String, List<String>> query: queryList) {
+        for (Map<String, List<String>> query : queryList) {
             Map<String, Object> queryParams = query.entrySet().stream()
                     .map(x -> new AbstractMap.SimpleEntry<>(x.getKey(), QueryParamStringConverter.convert(x.getValue().get(0), model.getField(x.getKey()).getType())))
                     .collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue));
             genericValues.addAll(EntityQuery.use(delegator).from(entityName).where(queryParams).queryList());
+        }
+        if (queryList.isEmpty()) {
+            genericValues = EntityQuery.use(delegator).from(entityName).queryList();
         }
         String publisherId = UUID.randomUUID().toString();
         IMqttClient publisher = new MqttClient("tcp://mqtt.eclipse.org:1883", publisherId);

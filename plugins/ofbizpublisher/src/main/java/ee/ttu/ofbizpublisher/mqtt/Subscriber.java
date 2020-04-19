@@ -49,5 +49,9 @@ public class Subscriber {
                 }
             }
         }
+
+    }
+
+    private void checkValues(List<GenericValue> genericValues, String entityName, Object filter) {
     }
 }
