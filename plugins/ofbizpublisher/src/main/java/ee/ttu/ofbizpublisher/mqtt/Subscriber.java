@@ -23,24 +23,31 @@ public class Subscriber {
         this.topic = topic;
     }
 
-    public void receiveMessage(Delegator delegator) throws InterruptedException, MqttException {
+    public void receiveMessage(Delegator delegator, String entityName, Object filter) throws InterruptedException, MqttException {
         CountDownLatch receivedSignal = new CountDownLatch(10);
         System.out.println("RECEIVE MESSAGE");
         client.subscribe(topic, (topic, message) -> {
             byte[] payload = message.getPayload();
-            deserialize(payload, delegator);
+            deserialize(payload, delegator, entityName, filter);
             System.out.println(message);
             receivedSignal.countDown();
         });
         receivedSignal.await(1, TimeUnit.MINUTES);
     }
 
-    private void deserialize(byte[] payload, Delegator delegator) throws IOException, ClassNotFoundException, GenericEntityException {
+    private void deserialize(byte[] payload, Delegator delegator, String entityName, Object filter) throws IOException, ClassNotFoundException, GenericEntityException {
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(payload);
         ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
         List<GenericValue> genericValues = (List<GenericValue>) objectInputStream.readObject();
         for (GenericValue genericValue : genericValues) {
-            delegator.create(genericValue);
+            GenericValue check = delegator.findOne(entityName, genericValue.getPrimaryKey(), false);
+            if (check != null) {
+                try {
+                    delegator.store(genericValue);
+                } catch (GenericEntityException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

@@ -31,7 +31,7 @@ under the License.
         <field name="OfbizEntityName" type="name"/>
         <field name="topic" type="name"/>
         <field name="description" type="description"/>
-        <field name="filter" type="name"/>
+        <field name="filter" type="long-varchar"/>
         <prim-key field="OfbizSubscriberId"/>
     </entity>
 

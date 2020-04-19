@@ -64,17 +64,17 @@ public class SubscriberService {
         subscriberContext.put("topic", data.get("topic"));
         subscriberContext.put("description", data.get("description"));
         subscriberContext.put("filter", data.get("filter"));
-        setSubscriberData(data.get("topic").toString());
+        setSubscriberData(data.get("topic").toString(), data.get("OfbizEntityName").toString(), data.get("filter"));
         OfbizSubscriberServices ofbizSubscriberServices = new OfbizSubscriberServices();
         ofbizSubscriberServices.createOfbizSubscriber(dispatchContext, subscriberContext);
     }
 
-    private void setSubscriberData(String topic) throws MqttException, InterruptedException {
+    private void setSubscriberData(String topic, String entityName, Object filter) throws MqttException, InterruptedException {
         String receiverID = UUID.randomUUID().toString();
         IMqttClient receiver = new MqttClient("tcp://mqtt.eclipse.org:1883", receiverID);
         ConnectionBinding mqttClientService2 = new ConnectionBinding(receiver);
         mqttClientService2.makeConnection();
         Subscriber subscriber = new Subscriber(receiver, topic);
-        subscriber.receiveMessage(delegator);
+        subscriber.receiveMessage(delegator, entityName, filter);
     }
 }
