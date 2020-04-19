@@ -1,1 +1,1 @@
-web: gradlew ofbiz
+web: gradle ofbiz
