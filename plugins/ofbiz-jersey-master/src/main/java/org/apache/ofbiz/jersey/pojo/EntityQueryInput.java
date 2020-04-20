@@ -1,17 +1,14 @@
 package org.apache.ofbiz.jersey.pojo;
 
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class EntityQueryInput {
 
-	private Map<String, Object> inputFields;
-	private List<String> fieldList;
+	private Map<String, Object> inputFields = new HashMap<>();
+	private List<String> fieldList = new ArrayList<>();
 	private Boolean areRelationResultsMandatory = false;
-	private Map<String, EntityQueryInput> entityRelationValues;
+	private Map<String, EntityQueryInput> entityRelationValues = new HashMap<>();
 
 	public EntityQueryInput() {
 	}

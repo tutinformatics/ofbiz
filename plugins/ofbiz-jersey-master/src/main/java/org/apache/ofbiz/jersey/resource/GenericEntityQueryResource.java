@@ -112,7 +112,7 @@ public class GenericEntityQueryResource {
 		List<String> multitudeRelationName = queryInput.getEntityRelationValues().keySet().stream().filter(x -> x.startsWith("_toMany_")).map(x -> x.replace("_toMany_", "")).collect(Collectors.toList());
 		for (GenericValue val : values) {
 			if (conditionList == null || conditionList.entityMatches(val)) {
-				Map<String, Object> relationBuilder = val.getFields(queryInput.getFieldList());
+				Map<String, Object> relationBuilder =queryInput.getFieldList().size() > 0 ? val.getFields(queryInput.getFieldList()) : val.getAllFields();
 
 				boolean skip = false;
 

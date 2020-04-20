@@ -21,13 +21,13 @@ Currently the following /v1 endpoints (meaning `/api/generic/v1/*`) are implemen
     
     ```json
     {
-        "areRelationResultsMandatory": boolean,
-        "inputFields": {
+        "areRelationResultsMandatory": boolean (optional, default false),
+        "inputFields": { (optional, default no constraints)
           "field1": "value1",
           "field2": 2
         },
-        "fieldList": ["List", "of", "returned", "fields"],
-        "entityRelationValues": {
+        "fieldList": ["List", "of", "returned", "fields"] (optional, default all fields),
+        "entityRelationValues": { (optional, default no relations, only given relations are returned)
           "_toOne_RelationName": {
             this same object recursively
           }
