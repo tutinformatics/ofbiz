@@ -1,1 +1,1 @@
-web: chmod a+x gradlew && ./gradlew ofbiz --stacktrace
+web: chmod a+x gradlew && ./gradlew ofbiz --debug
