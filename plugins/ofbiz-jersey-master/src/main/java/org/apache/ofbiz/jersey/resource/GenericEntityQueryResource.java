@@ -108,8 +108,8 @@ public class GenericEntityQueryResource {
 		EntityConditionList<EntityCondition> conditionList = getConditionList(entityName, queryInput.toMap());
 		ModelEntity modelEntity = delegator.getModelEntity(entityName);
 
-		List<String> singularRelationName = queryInput.getEntityRelationValues().keySet().stream().filter(x -> x.startsWith("_toOne_")).map(x -> x.replace("_toOne_", "")).collect(Collectors.toList());
-		List<String> multitudeRelationName = queryInput.getEntityRelationValues().keySet().stream().filter(x -> x.startsWith("_toMany_")).map(x -> x.replace("_toMany_", "")).collect(Collectors.toList());
+		List<String> singularRelationName = queryInput.getEntityRelations().keySet().stream().filter(x -> x.startsWith("_toOne_")).map(x -> x.replace("_toOne_", "")).collect(Collectors.toList());
+		List<String> multitudeRelationName = queryInput.getEntityRelations().keySet().stream().filter(x -> x.startsWith("_toMany_")).map(x -> x.replace("_toMany_", "")).collect(Collectors.toList());
 		for (GenericValue val : values) {
 			if (conditionList == null || conditionList.entityMatches(val)) {
 				Map<String, Object> relationBuilder =queryInput.getFieldList().size() > 0 ? val.getFields(queryInput.getFieldList()) : val.getAllFields();
@@ -119,7 +119,7 @@ public class GenericEntityQueryResource {
 				for (String singularRel : singularRelationName) {
 					String fullName = "_toOne_" + singularRel;
 					List<GenericValue> rels = val.getRelated(singularRel, null, null, false);
-					EntityQueryInput relQueryInput = queryInput.getEntityRelationValues().get(fullName);
+					EntityQueryInput relQueryInput = queryInput.getEntityRelations().get(fullName);
 					List<Map<String, ?>> filteredRel = recursiveFind(relQueryInput, modelEntity.getRelation(singularRel).getRelEntityName(), delegator, rels);
 					if (queryInput.getAreRelationResultsMandatory() && filteredRel.size() == 0) {
 						skip = true;
@@ -134,7 +134,7 @@ public class GenericEntityQueryResource {
 				for (String multitudeRel : multitudeRelationName) {
 					String fullName = "_toMany_" + multitudeRel;
 					List<GenericValue> rels = val.getRelated(multitudeRel, null, null, false);
-					EntityQueryInput relQueryInput = queryInput.getEntityRelationValues().get(fullName);
+					EntityQueryInput relQueryInput = queryInput.getEntityRelations().get(fullName);
 					List<Map<String, ?>> filteredRel = recursiveFind(relQueryInput, modelEntity.getRelation(multitudeRel).getRelEntityName(), delegator, rels);
 					if (queryInput.getAreRelationResultsMandatory() && filteredRel.size() == 0) {
 						skip = true;

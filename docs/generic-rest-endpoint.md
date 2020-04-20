@@ -27,7 +27,7 @@ Currently the following /v1 endpoints (meaning `/api/generic/v1/*`) are implemen
           "field2": 2
         },
         "fieldList": ["List", "of", "returned", "fields"] (optional, default all fields),
-        "entityRelationValues": { (optional, default no relations, only given relations are returned)
+        "entityRelations": { (optional, default no relations, only given relations are returned)
           "_toOne_RelationName": {
             this same object recursively
           }
