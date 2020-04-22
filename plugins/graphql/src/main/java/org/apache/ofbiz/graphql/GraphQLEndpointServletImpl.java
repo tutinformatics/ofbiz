@@ -24,10 +24,10 @@ import graphql.GraphqlErrorBuilder;
 import graphql.kickstart.execution.GraphQLObjectMapper;
 import graphql.servlet.GraphQLConfiguration;
 import graphql.servlet.SimpleGraphQLHttpServlet;
+import org.apache.ofbiz.graphql.annotation.Secured;
 import org.apache.ofbiz.graphql.config.OFBizGraphQLObjectMapperConfigurer;
 import org.apache.ofbiz.graphql.schema.GraphQLSchemaDefinition;
 
-import javax.servlet.ServletException;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,7 +35,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 
-
+@Secured
 @SuppressWarnings("serial")
 public class GraphQLEndpointServletImpl extends SimpleGraphQLHttpServlet {
 

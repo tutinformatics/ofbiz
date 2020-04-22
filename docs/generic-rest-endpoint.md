@@ -16,6 +16,45 @@ Currently the following /v1 endpoints (meaning `/api/generic/v1/*`) are implemen
     Fails if you try to add something with lacking PK fields or PKs that are in conflict with an existing entity.
 * **PUT** `/entities/{case sensitive entity name}`
     * Updates an existing entity. Fails if no entity with chosen PKs found.
+* **POST** `/entityquery/{case sensitive entity name}`
+    * Fetches entity with given parameters. Can set if all relations must return something for item to get returned or not. Inputfields supports everything performFind supports.
+    
+    ```json
+    {
+        "areRelationResultsMandatory": boolean (optional, default false),
+        "inputFields": { (optional, default no constraints)
+          "field1": "value1",
+          "field2": 2
+        },
+        "fieldList": ["List", "of", "returned", "fields"] (optional, default all fields),
+        "entityRelations": { (optional, default no relations, only given relations are returned)
+          "_toOne_RelationName": {
+            this same object recursively
+          }
+        }
+    }
+    ```
+    ```json
+    {
+        "areRelationResultsMandatory": true,
+        "inputFields": 
+            {
+                "partyIdFrom": "AcctBigSupplier"
+            },
+        "fieldList": ["partyIdFrom", "invoiceTypeId", "dueDate", "description"],
+        "entityRelationValues" : {
+            "_toOne_CurrencyUom" : {
+                "areRelationResultsMandatory": false,
+                "inputFields": 
+                    {
+                        "description": "United States Dollar"
+                    },
+                "fieldList": ["abbreviation", "description"],
+                "entityRelationValues" : {}
+            }
+        }
+    }
+    ```
 * **GET** `/services`
     * Gets list of all service names
 * **GET** `/services/{case sensitive service name}`
