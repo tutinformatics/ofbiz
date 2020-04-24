@@ -5,7 +5,7 @@ services:
     container_name: ofbiz-api
     build:
       context: .
-      dockerfile: Dockerfile-dev
+      dockerfile: Dockerfile
     restart: on-failure
     volumes:
       - ./:/ofbiz  # Volume mount to allow runtime changes to xml etc.
