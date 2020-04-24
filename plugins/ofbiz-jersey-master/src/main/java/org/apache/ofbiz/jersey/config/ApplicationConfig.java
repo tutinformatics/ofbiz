@@ -19,7 +19,6 @@
 package org.apache.ofbiz.jersey.config;
 
 import org.apache.ofbiz.base.util.Debug;
-import org.apache.ofbiz.jersey.сors.CORSFilter;
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
