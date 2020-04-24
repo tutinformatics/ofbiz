@@ -1,4 +1,4 @@
-package org.apache.ofbiz.jersey.cors;
+package org.apache.ofbiz.jersey.config;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
