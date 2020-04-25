@@ -1,17 +1,14 @@
 package org.apache.ofbiz.jersey.pojo;
 
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class EntityQueryInput {
 
-	private Map<String, Object> inputFields;
-	private List<String> fieldList;
+	private Map<String, Object> inputFields = new HashMap<>();
+	private List<String> fieldList = new ArrayList<>();
 	private Boolean areRelationResultsMandatory = false;
-	private Map<String, EntityQueryInput> entityRelationValues;
+	private Map<String, EntityQueryInput> entityRelations = new HashMap<>();
 
 	public EntityQueryInput() {
 	}
@@ -40,12 +37,12 @@ public class EntityQueryInput {
 		this.areRelationResultsMandatory = areRelationResultsMandatory;
 	}
 
-	public Map<String, EntityQueryInput> getEntityRelationValues() {
-		return entityRelationValues;
+	public Map<String, EntityQueryInput> getEntityRelations() {
+		return entityRelations;
 	}
 
-	public void setEntityRelationValues(Map<String, EntityQueryInput> entityRelationValues) {
-		this.entityRelationValues = entityRelationValues;
+	public void setEntityRelations(Map<String, EntityQueryInput> entityRelations) {
+		this.entityRelations = entityRelations;
 	}
 
 	public Map<String, Object> toMap() {
@@ -53,8 +50,8 @@ public class EntityQueryInput {
 		result.put("inputFields", inputFields);
 		result.put("fieldList", fieldList);
 		result.put("areRelationResultsMandatory", areRelationResultsMandatory);
-		Map<String, Map<String, Object>> converted = entityRelationValues.entrySet().stream().map(x -> new AbstractMap.SimpleEntry<>(x.getKey(), x.getValue().toMap())).collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue));
-		result.put("entityRelationValues", converted);
+		Map<String, Map<String, Object>> converted = entityRelations.entrySet().stream().map(x -> new AbstractMap.SimpleEntry<>(x.getKey(), x.getValue().toMap())).collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue));
+		result.put("entityRelations", converted);
 		return result;
 	}
 }
