@@ -5,8 +5,9 @@ import lombok.Data;
 @Data
 public class AuthenticationInput {
 
-    private String username;
-    private String password;
+    private String userLoginId;
+    private String currentPassword;
+    private String currentPasswordVerify;
 
     public AuthenticationInput() {
     }
