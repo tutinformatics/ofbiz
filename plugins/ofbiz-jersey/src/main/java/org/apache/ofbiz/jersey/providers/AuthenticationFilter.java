@@ -18,8 +18,15 @@
  *******************************************************************************/
 package org.apache.ofbiz.jersey.providers;
 
-import java.io.IOException;
-import java.util.Map;
+import org.apache.ofbiz.base.util.Debug;
+import org.apache.ofbiz.base.util.UtilValidate;
+import org.apache.ofbiz.entity.Delegator;
+import org.apache.ofbiz.entity.GenericEntityException;
+import org.apache.ofbiz.entity.GenericValue;
+import org.apache.ofbiz.entity.util.EntityQuery;
+import org.apache.ofbiz.jersey.annotation.Secured;
+import org.apache.ofbiz.jersey.util.ApiUtil;
+
 import javax.annotation.Priority;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -31,17 +38,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
-
-import org.apache.ofbiz.base.util.Debug;
-import org.apache.ofbiz.base.util.UtilValidate;
-import org.apache.ofbiz.entity.Delegator;
-import org.apache.ofbiz.entity.GenericEntityException;
-import org.apache.ofbiz.entity.GenericValue;
-import org.apache.ofbiz.entity.util.EntityQuery;
-import org.apache.ofbiz.jersey.annotation.Secured;
-import org.apache.ofbiz.jersey.util.ApiUtil;
-import org.apache.ofbiz.service.ModelService;
-import org.apache.ofbiz.webapp.control.JWTManager;
+import java.io.IOException;
+import java.util.Map;
 
 @Secured
 @Provider
@@ -64,24 +62,24 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
-		String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
-		Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
-		if (!isTokenBasedAuthentication(authorizationHeader)) {
-			abortWithUnauthorized(requestContext, false, "Unauthorized: Access is denied due to invalid or absent Authorization header");
-			return;
-		}
-		String jwtToken = JWTManager.getHeaderAuthBearerToken(httpRequest);
-		Map<String, Object> claims = JWTManager.validateToken(jwtToken, JWTManager.getJWTKey(delegator));
-		if (claims.containsKey(ModelService.ERROR_MESSAGE)) {
-			abortWithUnauthorized(requestContext, true, (String) claims.get(ModelService.ERROR_MESSAGE));
-		} else {
-			GenericValue userLogin = extractUserLoginFromJwtClaim(delegator, claims);
-			if (UtilValidate.isEmpty(userLogin)) {
-				abortWithUnauthorized(requestContext, true, "Access Denied: User does not exist in the system");
-				return;
-			}
-			httpRequest.setAttribute("userLogin", userLogin);
-		}
+//		String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
+//		Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
+//		if (!isTokenBasedAuthentication(authorizationHeader)) {
+//			abortWithUnauthorized(requestContext, false, "Unauthorized: Access is denied due to invalid or absent Authorization header");
+//			return;
+//		}
+//		String jwtToken = JWTManager.getHeaderAuthBearerToken(httpRequest);
+//		Map<String, Object> claims = JWTManager.validateToken(jwtToken, JWTManager.getJWTKey(delegator));
+//		if (claims.containsKey(ModelService.ERROR_MESSAGE)) {
+//			abortWithUnauthorized(requestContext, true, (String) claims.get(ModelService.ERROR_MESSAGE));
+//		} else {
+//			GenericValue userLogin = extractUserLoginFromJwtClaim(delegator, claims);
+//			if (UtilValidate.isEmpty(userLogin)) {
+//				abortWithUnauthorized(requestContext, true, "Access Denied: User does not exist in the system");
+//				return;
+//			}
+//			httpRequest.setAttribute("userLogin", userLogin);
+//		}
 		
 	}
 
