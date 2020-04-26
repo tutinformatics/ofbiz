@@ -46,7 +46,7 @@ public class WorkspaceResource {
 
         try {
             Map<String, Object> context = mapper.convertValue(workspaceCmd, Map.class);
-            result = dispatcher.runSync("createWorkspace", context);
+            result = dispatcher.runSync("createWorkspaceByJavaService", context);
         } catch (GenericServiceException e) {
             Debug.logError(e, "Exception thrown while running createWorkspace service: ",
                     module);
