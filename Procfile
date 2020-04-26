@@ -1,0 +1,1 @@
+web: ./gradlew cleanAll loadAll ofbiz

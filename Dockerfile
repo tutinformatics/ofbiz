@@ -33,7 +33,7 @@ RUN dos2unix ./gradlew
 EXPOSE 8443
 EXPOSE 8080
 EXPOSE 4567
-EXPOSE 1099
+EXPOSE 10999
 
 # Run ofbiz
 ENTRYPOINT ./gradlew cleanAll loadAll ofbiz

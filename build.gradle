@@ -35,7 +35,11 @@ plugins {
     id 'se.patrikerdes.use-latest-versions' version '0.2.12' apply false
     id 'com.github.ben-manes.versions' version '0.27.0' apply false
     id "com.github.ManifestClasspath" version "0.1.0-RELEASE"
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
+    id 'java'
 }
+
+shadowJar {zip64=true}
 
 /* OWASP plugin
  *
@@ -104,8 +108,8 @@ javadoc {
     }
 }
 
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
+sourceCompatibility = '11'
+targetCompatibility = '11'
 
 // Java compile options, syntax gradlew -PXlint:none build
 tasks.withType(JavaCompile) {

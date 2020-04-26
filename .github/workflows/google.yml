@@ -16,6 +16,7 @@ on:
       - manufacturing_warehouse_rest_plugin
       - release/*
       - trunk
+      - big_data
       - ci
   release:
     types: [created]

@@ -23,6 +23,7 @@ import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.model.ModelEntity;
 import org.apache.ofbiz.entity.model.ModelField;
 import org.apache.ofbiz.entity.model.ModelReader;
+import org.apache.ofbiz.entity.model.ModelRelation;
 import org.apache.ofbiz.jersey.annotation.Secured;
 import org.apache.ofbiz.jersey.response.Error;
 
@@ -76,12 +77,17 @@ public class GenericEntityStructureResource {
 	@Path("/{name}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getEntity(@PathParam(value = "name") String entityName) {
-		ResponseBuilder builder = null;
+		ResponseBuilder builder;
 		List<Map<String, Object>> response = new ArrayList<Map<String, Object>>();
 		Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
 		ModelEntity entity = delegator.getModelEntity(entityName);
+		if (entity == null) {
+			Error error = new Error(400, "Bad Request", "No such entity found.");
+			builder = Response.status(400).type(MediaType.APPLICATION_JSON).entity(error);
+			return builder.build();
+		}
 		List<String> fieldNames = entity.getAllFieldNames();
-		fieldNames.forEach((fieldName) -> {
+		fieldNames.forEach(fieldName -> {
 			ModelField field = entity.getField(fieldName);
 			String fType = field.getType();
 			boolean isPk = field.getIsPk();
@@ -93,6 +99,24 @@ public class GenericEntityStructureResource {
 			map.put("is_pk", isPk);
 			map.put("is_auto", isAutoCreatedInternal);
 			map.put("is_required", isNotNull);
+			response.add(map);
+		});
+		List<ModelRelation> oneRelations = entity.getRelationsList(true, true, false);
+		oneRelations.forEach(modelRelation -> {
+			LinkedHashMap<String, Object> map = new LinkedHashMap<String, Object>();
+			map.put("name", "_toOne_" + modelRelation.getCombinedName());
+			map.put("type", modelRelation.getType());
+			map.put("is_auto", modelRelation.isAutoRelation());
+			map.put("rel_entity", modelRelation.getRelEntityName());
+			response.add(map);
+		});
+		List<ModelRelation> manyRelations = entity.getRelationsList(false, false, true);
+		manyRelations.forEach(modelRelation -> {
+			LinkedHashMap<String, Object> map = new LinkedHashMap<String, Object>();
+			map.put("name", "_toMany_" + modelRelation.getCombinedName());
+			map.put("type", modelRelation.getType());
+			map.put("is_auto", modelRelation.isAutoRelation());
+			map.put("rel_entity", modelRelation.getRelEntityName());
 			response.add(map);
 		});
 		builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(response);
