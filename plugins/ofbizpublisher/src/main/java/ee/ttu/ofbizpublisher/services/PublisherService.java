@@ -11,6 +11,7 @@ import org.apache.ofbiz.entity.model.ModelEntity;
 import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.jersey.util.QueryParamStringConverter;
 import org.apache.ofbiz.service.DispatchContext;
+import org.apache.ofbiz.service.ServiceUtil;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 
@@ -86,5 +87,28 @@ public class PublisherService {
         mqttClientService.makeConnection();
         Publisher mqttService = new Publisher(publisher, topic, genericValues);
         mqttService.call();
+    }
+
+    public GenericValue deletePublisher(Map<String, Object> data) throws GenericEntityException {
+        String ofbizPublisherId = (String) data.get("OfbizPublisherId");
+        checkPublisher(ofbizPublisherId);
+        GenericValue genericValue = EntityQuery
+                .use(delegator)
+                .from("OfbizPublisher")
+                .where("OfbizPublisherId", ofbizPublisherId)
+                .queryOne();
+        genericValue.remove();
+        return genericValue;
+    }
+
+    private void checkPublisher(String ofbizPublisherId) throws GenericEntityException {
+        GenericValue ofbizPublisher = EntityQuery
+                .use(delegator)
+                .from("OfbizPublisher")
+                .where("OfbizPublisherId", ofbizPublisherId)
+                .queryOne();
+        if (ofbizPublisher == null) {
+            ServiceUtil.returnError("No ofbizPublisher found!");
+        }
     }
 }
