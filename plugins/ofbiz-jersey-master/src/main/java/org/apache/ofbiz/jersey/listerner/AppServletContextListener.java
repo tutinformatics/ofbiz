@@ -20,6 +20,7 @@ package org.apache.ofbiz.jersey.listerner;
 
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.entity.Delegator;
+import org.apache.ofbiz.security.SecurityUtil;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.webapp.WebAppUtil;
 
@@ -29,22 +30,32 @@ import javax.servlet.ServletContextListener;
 
 public class AppServletContextListener implements ServletContextListener {
 
-	public static final String MODULE = AppServletContextListener.class.getName();
+    public static final String MODULE = AppServletContextListener.class.getName();
 
-	public void contextInitialized(ServletContextEvent sce) {
-		ServletContext servletContext = sce.getServletContext();
-		Delegator delegator = WebAppUtil.getDelegator(servletContext);
-		LocalDispatcher dispatcher = WebAppUtil.getDispatcher(servletContext);
-		Debug.logInfo("Jersey Context initialized, delegator " + delegator + ", dispatcher", MODULE);
-		servletContext.setAttribute("delegator", delegator);
-		servletContext.setAttribute("dispatcher", dispatcher);
-	}
+    public void contextInitialized(ServletContextEvent sce) {
+        ServletContext servletContext = sce.getServletContext();
+        Delegator delegator = WebAppUtil.getDelegator(servletContext);
+        LocalDispatcher dispatcher = WebAppUtil.getDispatcher(servletContext);
+        Debug.logInfo("Jersey Context initialized, delegator " + delegator + ", dispatcher", MODULE);
+        servletContext.setAttribute("delegator", delegator);
+        servletContext.setAttribute("dispatcher", dispatcher);
 
-	public void contextDestroyed(ServletContextEvent sce) {
-		ServletContext context = sce.getServletContext();
-		Debug.logInfo("Jersey Context destroyed, removing delegator and dispatcher ", MODULE);
-		context.removeAttribute("delegator");
-		context.removeAttribute("dispatcher");
-	}
+        try {
+            String jwtToken = SecurityUtil.generateJwtToAuthenticateUserLogin(delegator, "admin");
+            System.out.println("--------------------------------------- TOKEN ---------------------------------------------");
+            System.out.println(jwtToken);
+            System.out.println();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void contextDestroyed(ServletContextEvent sce) {
+        ServletContext context = sce.getServletContext();
+        Debug.logInfo("Jersey Context destroyed, removing delegator and dispatcher ", MODULE);
+        context.removeAttribute("delegator");
+        context.removeAttribute("dispatcher");
+    }
 
 }
