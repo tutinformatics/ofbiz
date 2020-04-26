@@ -26,14 +26,14 @@ under the License.
     <jndi-server name="default"/>
 
     <jndi-server name="localjndi"
-            context-provider-url="rmi://127.0.0.1:1099"
+            context-provider-url="rmi://127.0.0.1:10999"
             initial-context-factory="com.sun.jndi.rmi.registry.RegistryContextFactory"
             url-pkg-prefixes="java.naming.rmi.security.manager"
             security-principal=""
             security-credentials=""/>
 
     <jndi-server name="OpenJMS"
-            context-provider-url="rmi://127.0.0.1:1099"
+            context-provider-url="rmi://127.0.0.1:10999"
             initial-context-factory="org.exolab.jms.jndi.InitialContextFactory"/>
 
     <!-- Note that in most cases this is not necessary or desired for Orion, the default above is easier/better -->
