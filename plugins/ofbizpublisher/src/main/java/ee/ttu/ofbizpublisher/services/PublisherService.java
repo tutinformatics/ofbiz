@@ -89,8 +89,7 @@ public class PublisherService {
         mqttService.call();
     }
 
-    public GenericValue deletePublisher(Map<String, Object> data) throws GenericEntityException {
-        String ofbizPublisherId = (String) data.get("OfbizPublisherId");
+    public GenericValue deletePublisher(String ofbizPublisherId) throws GenericEntityException {
         checkPublisher(ofbizPublisherId);
         GenericValue genericValue = EntityQuery
                 .use(delegator)

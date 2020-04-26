@@ -79,8 +79,7 @@ public class SubscriberService {
         subscriber.receiveMessage(delegator, entityName, filter);
     }
 
-    public GenericValue deleteSubscriber(Map<String, Object> data) throws GenericEntityException {
-        String ofbizSubscriberId = (String) data.get("OfbizSubscriberId");
+    public GenericValue deleteSubscriber(String ofbizSubscriberId) throws GenericEntityException {
         checkSubscriber(ofbizSubscriberId);
         GenericValue genericValue = EntityQuery
                 .use(delegator)
