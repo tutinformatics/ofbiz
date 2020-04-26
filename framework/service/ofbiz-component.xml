@@ -49,7 +49,7 @@ under the License.
     <container name="rmi-dispatcher" loaders="rmi" class="org.apache.ofbiz.service.rmi.RmiServiceContainer">
         <property name="bound-name" value="RMIDispatcher"/>
         <property name="bound-host" value="127.0.0.1"/>
-        <property name="bound-port" value="10999"/>
+        <property name="bound-port" value="1099"/>
         <property name="delegator-name" value="default"/>
         <property name="client-factory" value="org.apache.ofbiz.service.rmi.socket.ssl.SSLClientSocketFactory"/>
         <property name="server-factory" value="org.apache.ofbiz.service.rmi.socket.ssl.SSLServerSocketFactory"/>
