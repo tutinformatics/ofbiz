@@ -13,9 +13,9 @@ Definitions file must be referenced in ofbiz-component.xml file under
 
 ```
 
-&lt;!-- entity resources: model(s), eca(s), group, and data definitions -->
+<!-- entity resources: model(s), eca(s), group, and data definitions -->
 
-&lt;entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel.xml"/>
+<entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel.xml"/>
 ```
 By default, every plugin has an **entitydef **folder with entitymodel.xml, specifically to store entity definitions.
 
