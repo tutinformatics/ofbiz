@@ -45,4 +45,21 @@ under the License.
      <property key="api.success.import_entity">
         <value xml:lang="en">Entity(ies) imported successfully.</value>
     </property>
+    <property key="api.error.get_task_list">
+        <value xml:lang="en">Error retrieving task list.</value>
+    </property>
+    <property key="api.error.create_task">
+        <value xml:lang="en">Error creating task.</value>
+    </property>
+    <property key="api.error.create_project">
+        <value xml:lang="en">Error creating project.</value>
+    </property>
+    <property key="api.error.get_project_list">
+        <value xml:lang="en">Error retrieving project list.</value>
+    </property>
+    <property key="api.error.create_workspace">
+        <value xml:lang="en">Error creating workspace.</value>
+    </property>
 </resource>
+
+
