@@ -1,5 +1,6 @@
 package ee.ttu.ofbizpublisher.services;
 
+import com.google.gson.Gson;
 import ee.ttu.ofbizpublisher.OfbizPublisherServices;
 import ee.ttu.ofbizpublisher.model.PublisherDTO;
 import ee.ttu.ofbizpublisher.mqtt.ConnectionBinding;
@@ -63,12 +64,14 @@ public class PublisherService {
         publisherContext.put("topic", data.get("topic"));
         publisherContext.put("description", data.get("description"));
         publisherContext.put("filter", data.get("filter"));
-        setPublisherData(data.get("OfbizEntityName").toString(), data.get("topic").toString(), data.get("filter"));
+        setPublisherData(data.get("OfbizEntityName").toString(), data.get("topic").toString(), data.get("filter").toString());
         OfbizPublisherServices ofbizPublisherServices = new OfbizPublisherServices();
         ofbizPublisherServices.createOfbizPublisher(dispatchContext, publisherContext);
     }
 
-    private void setPublisherData(String entityName, String topic, Object filter) throws Exception {
+    private void setPublisherData(String entityName, String topic, String filterParams) throws Exception {
+        Gson gson = new Gson();
+        Object filter = gson.fromJson(filterParams, Object.class);
         List<Map<String, List<String>>> queryList = (List<Map<String, List<String>>>) filter;
         ModelEntity model = delegator.getModelReader().getModelEntity(entityName);
         List<GenericValue> genericValues = new ArrayList<>();
