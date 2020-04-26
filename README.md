@@ -11,10 +11,12 @@ Ofbiz entities can be defined in whatever .xml file.
 
 Definitions file must be referenced in ofbiz-component.xml file under
 
+```
+
 &lt;!-- entity resources: model(s), eca(s), group, and data definitions -->
 
 &lt;entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel.xml"/>
-
+```
 By default, every plugin has an **entitydef **folder with entitymodel.xml, specifically to store entity definitions.
 
 **[Ofbiz tutorial](https://cwiki.apache.org/confluence/display/OFBIZ/OFBiz%2BTutorial%2B-%2BA%2BBeginners%2BDevelopment%2BGuide#OFBizTutorial-ABeginnersDevelopmentGuide-CreatingFirstDatabaseEntity(Table))** explains entity creation and import pretty well.
@@ -29,7 +31,7 @@ Once you have created an endpoint with your service using Camel/Jersey, you will
 You will query entities using delegator. You get it from dispatch context. You can either extract it dynamically, or define it at service initialization.
 
 Here is how we get delegator at service initialization:
-
+```
 public MytService(DispatchContext context) {
 
    this.context = context;
@@ -37,6 +39,7 @@ public MytService(DispatchContext context) {
    delegator = dctx.getDelegator();
 
 }
+```
 
 There are two ways you can receive data for your logic: by using parameters or by sending data as a map.
 
@@ -48,7 +51,7 @@ There are two ways you can receive data for your logic: by using parameters or b
 If you use get request, your sent data needs to be defined in service route
 
 (ex. api/contact/name/{name}).
-
+```
 public String getByParam(Exchange exchange) {
 
 
@@ -58,7 +61,9 @@ public String getByParam(Exchange exchange) {
     //Etc...;
 
 }
+```
 
+```
 public static String getParamValueFromExchange(String paramName, Exchange exchange) {
 
 
@@ -73,13 +78,15 @@ public static String getParamValueFromExchange(String paramName, Exchange exchan
    return params.get(sparkParamName);
 
 }
-
+```
 The extracted parameter will be in string format. Convert if needed.
 
 
 #### Mapped data
 
 Mapped data can be sent by POST method etc.:
+
+```
 
 public void createContact(Map&lt;String, Object> data) {
 
@@ -119,6 +126,8 @@ public static Optional&lt;GenericValue> mapToGenericValue(Delegator delegator, S
    return Optional._empty_();
 
 }
+
+```
 
 When we receive mapped data from a request, we cannot simply feed it to the delegator.
 
