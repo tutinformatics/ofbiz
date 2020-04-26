@@ -1,1 +1,1 @@
-web: ./gradlew ofbiz
+web: ./gradlew cleanAll loadAll ofbiz
