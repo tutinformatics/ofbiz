@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+    <pipeline  pipelineId="SAMPLE_ID1" userId="SAMPLE_ID1"/>
+</entity-engine-xml>
