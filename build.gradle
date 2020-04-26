@@ -104,8 +104,8 @@ javadoc {
     }
 }
 
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
+sourceCompatibility = '11'
+targetCompatibility = '11'
 
 // Java compile options, syntax gradlew -PXlint:none build
 tasks.withType(JavaCompile) {
@@ -149,6 +149,12 @@ configurations {
     ofbizPlugins {
         description = 'ofbiz plugin dependencies configuration'
         transitive = true
+    }
+}
+
+repositories {
+    maven {
+        url "https://repo.eclipse.org/content/repositories/paho-snapshots/"
     }
 }
 
@@ -223,6 +229,9 @@ dependencies {
     runtimeOnly 'org.apache.logging.log4j:log4j-slf4j-impl:2.12.1'
     // for external jars using slf4j: routes logging to log4j 2
     runtimeOnly 'org.codeartisans.thirdparties.swing:batik-all:1.8pre-r1084380'
+
+    compile 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.2'
+    compile 'org.eclipse.paho:org.eclipse.paho.android.service:1.0.2'
 
     // Dependencies defined by the plugins
     subprojects.each { subProject ->
