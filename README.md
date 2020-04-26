@@ -12,9 +12,7 @@ Ofbiz entities can be defined in whatever .xml file.
 Definitions file must be referenced in ofbiz-component.xml file under
 
 ```
-
 <!-- entity resources: model(s), eca(s), group, and data definitions -->
-
 <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel.xml"/>
 ```
 By default, every plugin has an **entitydef **folder with entitymodel.xml, specifically to store entity definitions.
@@ -33,11 +31,8 @@ You will query entities using delegator. You get it from dispatch context. You c
 Here is how we get delegator at service initialization:
 ```
 public MytService(DispatchContext context) {
-
    this.context = context;
-
    delegator = dctx.getDelegator();
-
 }
 ```
 
@@ -53,30 +48,17 @@ If you use get request, your sent data needs to be defined in service route
 (ex. api/contact/name/{name}).
 ```
 public String getByParam(Exchange exchange) {
-
-
     String someData= Utils._getParamValueFromExchange_("name", exchange);
-
-
-    //Etc...;
-
+    //Etc...
 }
 ```
 
 ```
 public static String getParamValueFromExchange(String paramName, Exchange exchange) {
-
-
        SparkMessage msg = (SparkMessage) exchange.getIn();
-
-
        Map&lt;String, String> params = msg.getRequest().params();
-
-
        String sparkParamName = ":" + paramName;
-
    return params.get(sparkParamName);
-
 }
 ```
 The extracted parameter will be in string format. Convert if needed.
@@ -87,44 +69,23 @@ The extracted parameter will be in string format. Convert if needed.
 Mapped data can be sent by POST method etc.:
 
 ```
-
 public void createContact(Map&lt;String, Object> data) {
-
 Optional&lt;GenericValue> contactList = Utils._mapToGenericValue_(delegator, "PersonData", data);
-
-.//..
-
+//...
 delegator.createOrStore(contactList.get());
-
 }
 
 public static final Converters.JSONToGenericValue _convert _= new Converters.JSONToGenericValue();
 
 public static Optional&lt;GenericValue> mapToGenericValue(Delegator delegator, String entityName, Map&lt;String, Object> data) {
-
-
        data.put("_DELEGATOR_NAME_", delegator.getDelegatorName());
-
-
        data.put("_ENTITY_NAME_", entityName);
-
-
        try {
-
-
            return Optional._of_(_convert_.convert(JSON._from_(data)));
-
-
        } catch (ConversionException | IOException e) {
-
-
            e.printStackTrace();
-
-
        }
-
    return Optional._empty_();
-
 }
 
 ```
