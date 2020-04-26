@@ -1,23 +1,23 @@
 package org.apache.ofbiz.graphql.fetcher;
 
 import graphql.language.Field;
+import graphql.language.Node;
 import graphql.language.Selection;
 import graphql.language.SelectionSet;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
-import graphql.servlet.context.DefaultGraphQLServletContext;
-import org.apache.ofbiz.base.util.UtilValidate;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.model.ModelEntity;
 import org.apache.ofbiz.entity.model.ModelField;
 import org.apache.ofbiz.entity.util.EntityQuery;
+import org.apache.ofbiz.graphql.utils.GetDelegatorAndDispatcher;
 import org.apache.ofbiz.graphql.utils.QueryParamStringConverter;
+import org.apache.ofbiz.service.GenericServiceException;
+import org.apache.ofbiz.service.LocalDispatcher;
 import org.jetbrains.annotations.NotNull;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,20 +37,25 @@ public class EntityDataFetcher implements DataFetcher<Object> {
      * DELETE - Removes an existing row from database
      **/
     @Override
-    public Object get(DataFetchingEnvironment dataFetchingEnvironment) throws GenericEntityException {
+    public Object get(DataFetchingEnvironment dataFetchingEnvironment) throws GenericEntityException, GenericServiceException {
 
-        DefaultGraphQLServletContext context = dataFetchingEnvironment.getContext();
-        HttpServletRequest request = context.getHttpServletRequest();
-        Delegator delegator = (Delegator) request.getAttribute("delegator");
-
-        if (UtilValidate.isEmpty(delegator)) {
-            ServletContext servContext = request.getServletContext();
-            delegator = (Delegator) servContext.getAttribute("delegator");
-        }
+        GetDelegatorAndDispatcher getDelegatorAndDispatcher = new GetDelegatorAndDispatcher(dataFetchingEnvironment).invoke();
+        Delegator delegator = getDelegatorAndDispatcher.getDelegator();
+        LocalDispatcher dispatcher = getDelegatorAndDispatcher.getDispatcher();
 
         String operation = dataFetchingEnvironment.getField().getName();
 
-        if (operation.startsWith("delete")) { // DELETE
+        if (operation.equals("services_")) { // GET services
+            return dispatcher.getDispatchContext().getAllServiceNames();
+
+        } /* else if (operation.startsWith("service_")) {
+
+            String serviceName = operation.replace("service_", "");
+            for (ModelParam param : dispatcher.getDispatchContext().getModelService(operation.replace("service_", "")).getModelParamList()) {
+            }
+            return dispatcher.getDispatchContext().getModelService(operation.replace("service_", "")).getModelParamList();
+
+        } */ else if (operation.startsWith("delete")) { // DELETE
             String entity = dataFetchingEnvironment.getFieldType().getName();
             GenericValue genericValue = EntityQuery.use(delegator).from(entity)
                     .where(dataFetchingEnvironment.getArguments())
@@ -117,6 +122,7 @@ public class EntityDataFetcher implements DataFetcher<Object> {
                         fillSubfieldsRecursively(returnable.get(i), genericValue.get(i), (SelectionSet) va);
                     }
                 }
+
                 return returnable;
             }
         }
@@ -135,14 +141,13 @@ public class EntityDataFetcher implements DataFetcher<Object> {
 
             try {
                 goDeeper(returnable, genericValue, (Field) selection);
-                return;
             } catch (Exception e) {
             }
 
             try {
                 for (Object a : selection.getChildren()) {
                     SelectionSet se = (SelectionSet) a;
-                    for (Selection selection_ : se.getSelections()) {
+                    for (Object selection_ : se.getChildren()) {
                         goDeeper(returnable, genericValue, (Field) selection_);
                     }
                 }
@@ -160,15 +165,17 @@ public class EntityDataFetcher implements DataFetcher<Object> {
      * @param field:        graphQL field from where recursive calls are called from
      **/
     private void goDeeper(Map<String, Object> returnable, GenericValue genericValue, Field field) {
+
         if (field.getName().startsWith("_toOne_")) {
             try {
-                GenericValue child = genericValue.getRelated(field.getName().replace("_toOne_", "")).get(0);
+                GenericValue child = genericValue.getRelatedOne(field.getName().replace("_toOne_", ""), true);
                 Map<String, Object> returnable_ = new HashMap<>();
-                fillSubfieldsRecursively(returnable_, child, (SelectionSet) field.getChildren().get(0));
+                for (Node child_ : field.getChildren()) {
+                    fillSubfieldsRecursively(returnable_, child, (SelectionSet) child_);
+                }
                 returnable.put(field.getName(), returnable_);
 
             } catch (Exception e) {
-                e.printStackTrace();
                 returnable.put(field.getName(), null);
             }
         }
@@ -182,13 +189,14 @@ public class EntityDataFetcher implements DataFetcher<Object> {
 
                 for (int i = 0; i < children.size(); i++) {
                     returnable_.add(new HashMap<>());
-                    fillSubfieldsRecursively(returnable_.get(i), children.get(i), (SelectionSet) field.getChildren().get(0));
+                    for (Node child_ : field.getChildren()) {
+                        fillSubfieldsRecursively(returnable_.get(i), children.get(i), (SelectionSet) child_);
+                    }
                 }
 
                 returnable.put(field.getName(), returnable_);
 
             } catch (Exception e) {
-                e.printStackTrace();
                 returnable.put(field.getName(), new ArrayList<>());
             }
         }
