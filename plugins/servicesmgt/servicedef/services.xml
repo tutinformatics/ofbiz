@@ -24,100 +24,10 @@ under the License.
     <vendor></vendor>
     <version>1.0</version>
 
-    <service name="getAllContactInfo" engine="java"
-             location="ee.taltech.servicesmgt.CustomerServices" invoke="getAllContactInfo">
-        <description>Gets all the contact info of the current party.</description>
-        <attribute name="partyId" type="String" mode="IN" optional="false"/>
-        <attribute name="person" type="Map" mode="OUT" optional="true"/>
-        <attribute name="emails" type="List" mode="OUT" optional="true"/>
-        <attribute name="addresses" type="List" mode="OUT" optional="true"/>
-        <attribute name="telephones" type="List" mode="OUT" optional="true"/>
+    <service name="noSyntaxError" engine="interface">
+        <description>
+            Dummy service to prevent empty files and syntax error - Remove when the 1st real service will be added here
+        </description>
     </service>
 
-    <service name="updatePersonTemp" engine="java" default-entity-name="Person"
-             location="ee.taltech.servicesmgt.CustomerServices" invoke="updatePersonTemp">
-        <description>Update a Person, temporary auth bypass.</description>
-        <!--        <required-permissions join-type="AND">
-                    <check-permission permission="update:party:${partyId}"/>
-                </required-permissions> -->
-        <auto-attributes mode="IN" include="pk" optional="true"><!-- if no partyId specified will use userLogin.partyId --></auto-attributes>
-        <auto-attributes mode="IN" include="nonpk" optional="true"/>
-        <attribute name="preferredCurrencyUomId" type="String" mode="IN" optional="true"/>
-        <attribute name="description" type="String" mode="IN" optional="true"/>
-        <attribute name="externalId" type="String" mode="IN" optional="true"/>
-        <attribute name="statusId" type="String" mode="IN" optional="true"/>
-        <override name="firstName" optional="false"/>
-        <override name="lastName" optional="false"/>
-    </service>
-
-    <service name="createPartyEmailTemp" engine="java"
-             location="ee.taltech.servicesmgt.CustomerServices" invoke="createPartyEmailTemp">
-        <description>Create an Email Address, temporary auth bypass.</description>
-        <auto-attributes entity-name="ContactMech" include="nonpk" mode="IN" optional="true"/>
-        <auto-attributes entity-name="PartyContactMech" include="all" mode="IN" optional="true"/>
-        <attribute name="contactMechPurposeTypeId" type="String" mode="IN" optional="true"/>
-        <attribute name="contactMechId" type="String" mode="INOUT" optional="true"/>
-        <attribute name="emailAddress" type="String" mode="IN" optional="false"/>
-    </service>
-
-    <service name="updatePartyEmailTemp" engine="java"
-             location="ee.taltech.servicesmgt.CustomerServices" invoke="updatePartyEmailTemp">
-        <description>Update an Email Address, temporary auth bypass.</description>
-        <auto-attributes entity-name="PartyContactMech" include="all" mode="IN" optional="true"/>
-        <attribute name="contactMechId" type="String" mode="INOUT" optional="false"/> <!-- the out paramater is the id of the new address -->
-        <attribute name="emailAddress" type="String" mode="IN" optional="false"/>
-        <attribute name="oldContactMechId" type="String" mode="OUT" optional="false"/> <!-- this is the id of the old address -->
-    </service>
-
-    <service name="createPartyTelecomNumberTemp" engine="java"
-             location="ee.taltech.servicesmgt.CustomerServices" invoke="createPartyTelecomNumberTemp">
-        <description>Create a Telecommunications Number, temporary auth bypass.</description>
-        <auto-attributes entity-name="PartyContactMech" include="all" mode="IN" optional="true"/>
-        <auto-attributes entity-name="TelecomNumber" include="nonpk" mode="IN" optional="true"/>
-        <attribute name="contactMechPurposeTypeId" type="String" mode="IN" optional="true"/>
-        <attribute name="contactMechId" type="String" mode="OUT" optional="false"/>
-    </service>
-
-    <service name="updatePartyTelecomNumberTemp" engine="java"
-             location="ee.taltech.servicesmgt.CustomerServices" invoke="updatePartyTelecomNumberTemp">
-        <description>Update a Telecommunications Number, temporary auth bypass.</description>
-        <auto-attributes entity-name="PartyContactMech" include="all" mode="IN" optional="true"/>
-        <auto-attributes entity-name="TelecomNumber" include="nonpk" mode="IN" optional="true"/>
-        <attribute name="contactMechId" type="String" mode="INOUT" optional="false"/>
-    </service>
-
-    <service name="createPartyPostalAddressTemp" engine="java"
-             location="ee.taltech.servicesmgt.CustomerServices" invoke="createPartyPostalAddressTemp">
-        <description>Create a Postal Address, temporary auth bypass.</description>
-        <auto-attributes entity-name="PartyContactMech" include="all" mode="IN" optional="true"/>
-        <auto-attributes entity-name="PostalAddress" include="nonpk" mode="IN" optional="true"/>
-        <attribute name="paymentMethodId" type="String" mode="IN" optional="true"/>
-        <attribute name="contactMechPurposeTypeId" type="String" mode="IN" optional="true"/>
-        <attribute name="contactMechId" type="String" mode="OUT" optional="false"/>
-        <attribute name="latitude" type="String" mode="IN" optional="true"/>
-        <attribute name="longitude" type="String" mode="IN" optional="true"/>
-        <override name="address1" optional="false"/>
-        <override name="city" optional="false"/>
-        <override name="postalCode" optional="false"/>
-    </service>
-
-    <service name="updatePartyPostalAddressTemp" engine="java"
-             location="ee.taltech.servicesmgt.CustomerServices" invoke="updatePartyPostalAddressTemp">
-        <description>Update a Postal Address, temporary auth bypass.</description>
-        <auto-attributes entity-name="PartyContactMech" include="all" mode="IN" optional="true"/>
-        <auto-attributes entity-name="PostalAddress" include="nonpk" mode="IN" optional="true"/>
-        <attribute name="contactMechId" type="String" mode="INOUT" optional="false"/>
-        <attribute name="directions" type="String" mode="IN" optional="true"/> <!-- ?? -->
-        <override name="address1" optional="false"/>
-        <override name="city" optional="false"/>
-        <override name="postalCode" optional="false"/>
-    </service>
-
-    <service name="deletePartyContactMechTemp" engine="java"
-             location="ee.taltech.servicesmgt.CustomerServices" invoke="deletePartyContactMechTemp">
-        <description>Delete a PartyContactMech, temporary auth bypass.</description>
-        <attribute name="partyId" type="String" mode="IN" optional="true"/>
-        <attribute name="contactMechId" type="String" mode="IN" optional="false"/>
-    </service>
-    
 </services>

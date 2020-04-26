@@ -1,5 +1,7 @@
 package ee.taltech.servicesmgt;
 
+import ee.taltech.accounting.connector.camel.service.PartyService;
+import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
@@ -52,6 +54,7 @@ public class CustomerServices {
 
     public static Map<String, Object> getAllContactInfo(DispatchContext dctx, Map<String, Object> context) {
         GenericValue party = getParty(dctx, context);
+        Debug.logError(party.toString(), CustomerServices.class.getName());
 
         Object person = PartyServices.getPerson(dctx, context)
                 .getOrDefault("lookupPerson", GenericValue.NULL_VALUE);
@@ -75,37 +78,5 @@ public class CustomerServices {
                 "addresses", addresses,
                 "telephones", telephones
         );
-    }
-
-    public static Map<String, Object> updatePersonTemp(DispatchContext dctx, Map<String, Object> context) {
-        return runServiceLoggedIn("updatePerson", dctx, context);
-    }
-
-    public static Map<String, Object> createPartyEmailTemp(DispatchContext dctx, Map<String, Object> context) {
-        return runServiceLoggedIn("createPartyEmailAddress", dctx, context);
-    }
-
-    public static Map<String, Object> updatePartyEmailTemp(DispatchContext dctx, Map<String, Object> context) {
-        return runServiceLoggedIn("updatePartyEmailAddress", dctx, context);
-    }
-
-    public static Map<String, Object> createPartyTelecomNumberTemp(DispatchContext dctx, Map<String, Object> context) {
-        return runServiceLoggedIn("createPartyTelecomNumber", dctx, context);
-    }
-
-    public static Map<String, Object> updatePartyTelecomNumberTemp(DispatchContext dctx, Map<String, Object> context) {
-        return runServiceLoggedIn("createPartyTelecomNumber", dctx, context);
-    }
-
-    public static Map<String, Object> createPartyPostalAddressTemp(DispatchContext dctx, Map<String, Object> context) {
-        return runServiceLoggedIn("createPartyPostalAddress", dctx, context);
-    }
-
-    public static Map<String, Object> updatePartyPostalAddressTemp(DispatchContext dctx, Map<String, Object> context) {
-        return runServiceLoggedIn("updatePartyPostalAddress", dctx, context);
-    }
-
-    public static Map<String, Object> deletePartyContactMechTemp(DispatchContext dctx, Map<String, Object> context) {
-        return runServiceLoggedIn("deletePartyContactMech", dctx, context);
     }
 }
