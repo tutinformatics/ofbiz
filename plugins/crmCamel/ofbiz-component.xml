@@ -32,6 +32,7 @@ under the License.
     <entity-resource type="data" reader-name="demo" loader="main" location="data/OpportunityData.xml"/>
 
     <!-- service resources: model(s), eca(s) and group definitions -->
+    <service-resource type="model" loader="main" location="servicedef/services.xml"/>
     <!--
     <service-resource type="eca" loader="main" location="servicedef/secas.xml"/>
     <service-resource type="group" loader="main" location="servicedef/groups.xml"/>
@@ -39,4 +40,11 @@ under the License.
 
     <test-suite loader="main" location="testdef/CrmTests.xml"/>
 
+    <!-- web applications; will be mounted when using the embedded container -->
+    <webapp name="crm"
+            title="crm"
+            server="default-server"
+            location="webapp/crm"
+            base-permission="OFBTOOLS,CRMCLIENTVIEW"
+            mount-point="/crm"/>
 </ofbiz-component>
