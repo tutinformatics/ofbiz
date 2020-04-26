@@ -67,11 +67,10 @@ public class PublisherServiceResource {
     }
 
     @DELETE()
-    @Path("/publishers/delete")
+    @Path("/publishers/delete/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response approveAffiliates(String jsonBody) throws Exception {
-        Map<String, Object> data = JsonUtils.parseJson(jsonBody);
-        GenericValue entity = publisherService.deletePublisher(data);
+    public Response deletePublisher(@PathParam(value = "id") String id) throws Exception {
+        GenericValue entity = publisherService.deletePublisher(id);
         Response.ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
         return builder.build();
     }
@@ -92,6 +91,15 @@ public class PublisherServiceResource {
         Map<String, Object> data = JsonUtils.parseJson(jsonBody);
         subscriberService.createSubscriber(data);
         Response.ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON);
+        return builder.build();
+    }
+
+    @DELETE()
+    @Path("/subscribers/delete/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteSubscriber(@PathParam(value = "id") String id) throws Exception {
+        GenericValue entity = subscriberService.deleteSubscriber(id);
+        Response.ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
         return builder.build();
     }
 }

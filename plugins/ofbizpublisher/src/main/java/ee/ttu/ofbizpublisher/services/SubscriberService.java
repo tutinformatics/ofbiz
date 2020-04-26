@@ -8,6 +8,7 @@ import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.service.DispatchContext;
+import org.apache.ofbiz.service.ServiceUtil;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -76,5 +77,27 @@ public class SubscriberService {
         mqttClientService2.makeConnection();
         Subscriber subscriber = new Subscriber(receiver, topic);
         subscriber.receiveMessage(delegator, entityName, filter);
+    }
+
+    public GenericValue deleteSubscriber(String ofbizSubscriberId) throws GenericEntityException {
+        checkSubscriber(ofbizSubscriberId);
+        GenericValue genericValue = EntityQuery
+                .use(delegator)
+                .from("OfbizSubscriber")
+                .where("OfbizSubscriberId", ofbizSubscriberId)
+                .queryOne();
+        genericValue.remove();
+        return genericValue;
+    }
+
+    private void checkSubscriber(String ofbizSubscriberId) throws GenericEntityException {
+        GenericValue ofbizSubscriber = EntityQuery
+                .use(delegator)
+                .from("OfbizSubscriber")
+                .where("OfbizSubscriberId", ofbizSubscriberId)
+                .queryOne();
+        if (ofbizSubscriber == null) {
+            ServiceUtil.returnError("No ofbizSubscriber found!");
+        }
     }
 }
