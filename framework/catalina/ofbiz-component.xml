@@ -133,8 +133,8 @@ under the License.
             <property name="protocol" value="HTTP/1.1"/>
             <property name="upgradeProtocol" value="true"/>
             <property name="scheme" value="https"/>
-            <property name="secure" value="false"/>
-            <property name="SSLEnabled" value="false"/>
+            <property name="secure" value="true"/>
+            <property name="SSLEnabled" value="true"/>
             <property name="URIEncoding" value="UTF-8"/>
             <property name="xpoweredBy" value="false"/>
             <property name="compression" value="on"/>
@@ -202,8 +202,8 @@ under the License.
             <property name="protocol" value="HTTP/1.1"/>
             <property name="upgradeProtocol" value="true"/>
             <property name="scheme" value="https"/>
-            <property name="secure" value="false"/>
-            <property name="SSLEnabled" value="false"/>
+            <property name="secure" value="true"/>
+            <property name="SSLEnabled" value="true"/>
             <property name="URIEncoding" value="UTF-8"/>
             <property name="xpoweredBy" value="false"/>
             <property name="compression" value="on"/>

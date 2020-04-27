@@ -1,0 +1,50 @@
+version: '3.7'
+services:
+  nginx:
+    image: xandurx/ofbiz-proxy:1.0.1-SNAPSHOT
+    deploy:
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "80:80"
+    depends_on:
+      - ofbiz-ui
+    networks:
+      webnet:
+        aliases:
+          - ng
+
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: ofbiz
+      POSTGRES_USER: ofbiz
+      POSTGRES_PASSWORD: ofbiz
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "5432:5432"
+    networks:
+      webnet:
+        aliases:
+          - pg
+
+  ofbiz:
+    depends_on:
+      - pg
+    build:
+      context: .
+    deploy:
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "8443:8443"
+    networks:
+      webnet:
+        aliases:
+          - ofbiz
+
+networks:
+  webnet:
