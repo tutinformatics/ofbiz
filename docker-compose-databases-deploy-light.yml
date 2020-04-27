@@ -28,13 +28,10 @@ services:
       webnet:
         aliases:
           - pg
-
   ofbiz:
     depends_on:
-      - postgres
-      - nginx
-    build:
-      context: .
+      - pg
+    image: xandurx/ofbiz-backend:1.0.1-SNAPSHOT
     deploy:
       restart_policy:
         condition: on-failure
