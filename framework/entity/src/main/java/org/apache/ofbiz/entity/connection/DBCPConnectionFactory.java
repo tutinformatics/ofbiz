@@ -115,16 +115,22 @@ public class DBCPConnectionFactory implements ConnectionFactory {
         factory.setAutoCommitOnReturn(false);
         String transIso = jdbcElement.getIsolationLevel();
         if (!transIso.isEmpty()) {
-            if ("Serializable".equals(transIso)) {
-                factory.setDefaultTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
-            } else if ("RepeatableRead".equals(transIso)) {
-                factory.setDefaultTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
-            } else if ("ReadUncommitted".equals(transIso)) {
-                factory.setDefaultTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
-            } else if ("ReadCommitted".equals(transIso)) {
-                factory.setDefaultTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
-            } else if ("None".equals(transIso)) {
-                factory.setDefaultTransactionIsolation(Connection.TRANSACTION_NONE);
+            switch (transIso) {
+                case "Serializable":
+                    factory.setDefaultTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+                    break;
+                case "RepeatableRead":
+                    factory.setDefaultTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+                    break;
+                case "ReadUncommitted":
+                    factory.setDefaultTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
+                    break;
+                case "ReadCommitted":
+                    factory.setDefaultTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+                    break;
+                case "None":
+                    factory.setDefaultTransactionIsolation(Connection.TRANSACTION_NONE);
+                    break;
             }
         }
 

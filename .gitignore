@@ -18,6 +18,8 @@ runtime/tempfiles/*
 runtime/indexes/products/
 !runtime/tempfiles/README
 applications/content/index/
+
+!plugins/accountingConnector
 changelog
 .classpath
 .project
@@ -36,3 +38,6 @@ desktop.ini
 .*.swp
 .*.swo
 *.patch
+schema.graphqls
+
+plugins/*/.svn/
