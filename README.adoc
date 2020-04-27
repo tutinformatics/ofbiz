@@ -1,5 +1,4 @@
-Project frontend: https://github.com/tutinformatics/ofbiz-ui     
-&& https://github.com/MartenJurg/accounting_frontend
+Project frontend: https://github.com/tutinformatics/ofbiz-ui     && https://github.com/MartenJurg/accounting_frontend
 
 == Lokaalne jooksutamine
 
