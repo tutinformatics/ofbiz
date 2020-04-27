@@ -27,7 +27,8 @@ services:
   ofbiz:
     depends_on:
       - postgres
-    image: xandurx/ofbiz-backend:1.0.1-SNAPSHOT
+    build:
+      context: .
     ports:
       - "8443:8443"
     networks:
