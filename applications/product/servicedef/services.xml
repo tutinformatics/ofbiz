@@ -674,12 +674,27 @@ under the License.
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
         <override name="productCategoryTypeId" optional="false"/>
     </service>
+
+
+    <!-- Create BigBuy product category, add products, add products to category-->
+    <!--______________________________________________________________________________________________________________________________-->
+
+    <service name="createCategoryAndAddProducts" engine="java"
+             location="org.apache.ofbiz.product.category.BigBuyCategoryAdd" invoke="addCategoryAndProducts" auth="true">
+        <description>Service for BigBuy API, takes category ID and creates Category, Products with this Category</description>
+        <attribute name="productCategoryTypeId" type="String" mode="IN" optional="false"/>
+
+    </service>
+
+    <!--______________________________________________________________________________________________________________________________-->
+
+
     <service name="updateProductCategory" default-entity-name="ProductCategory" engine="groovy"
                 location="component://product/groovyScripts/product/category/CategoryServices.groovy" invoke="updateProductCategory" auth="true">
         <description>Update an ProductCategory</description>
         <auto-attributes include="pk" mode="IN" optional="false"/>
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
-        <override name="productCategoryTypeId" optional="false"/>
+        <override name="productCategoryTypeId" type="id" optional="false"/>
     </service>
 
     <service name="duplicateProductCategory" engine="groovy"
