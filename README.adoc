@@ -18,19 +18,6 @@ link:docs/small-rest-example.md[REST example]
 
 == Lokaalne jooksutamine
 
-*For developing frontend:*
-
-[source,bash]
-----
-./deploy.sh
-----
-
-*For developing backend:*
-
-Jooksutamiseks on 2 võimalust. Kas dockeris või otse masinas.
-
-=== Docker
-
 [source,bash]
 ----
 ./deploy.sh
