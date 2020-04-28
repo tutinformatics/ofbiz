@@ -33,9 +33,10 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
-        envs: GITHUBUSERNAME, GITHUB_TOKEN
+        envs: GITHUB_USERNAME, GITHUB_TOKEN
         script: |
           docker stop $(docker ps -a -q)
+          docker system prune -af
           docker login docker.pkg.github.com -u $GITHUB_USERNAME -p $GITHUB_TOKEN
-          docker run -dit -p 80:80 docker.pkg.github.com/kilpkonn/ofbiz/ofbiz:latest
+          docker run -dit -p 8443:8443 docker.pkg.github.com/kilpkonn/ofbiz/ofbiz:latest
 
