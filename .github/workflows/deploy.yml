@@ -18,7 +18,24 @@ jobs:
       with:
         name: kilpkonn/ofbiz/ofbiz
         registry: docker.pkg.github.com
-        username: ${{ secrets.username }}
+        username: ${{ secrets.GITHUBUSERNAME }}
         password: ${{ secrets.GITHUB_TOKEN }}
         dockerfile: Dockerfile
         tags: latest
+  
+    - name: Deploy package to digitalocean
+      uses: appleboy/ssh-action@master
+      env:
+          GITHUB_USERNAME: ${{ secrets.GITHUBUSERNAME }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        envs: GITHUBUSERNAME, GITHUB_TOKEN
+        script: |
+          docker stop $(docker ps -a -q)
+          docker login docker.pkg.github.com -u $GITHUB_USERNAME -p $GITHUB_TOKEN
+          docker run -dit -p 80:80 docker.pkg.github.com/kilpkonn/ofbiz/ofbiz:latest
+
