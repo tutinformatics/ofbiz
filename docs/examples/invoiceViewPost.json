@@ -1,0 +1,81 @@
+{
+  "inputFields" : {
+    "invoiceId": "8004"
+  },
+  "fieldList": ["description", "roleTypeId", "invoiceDate", "referenceNumber", "invoiceMessage", "billingAccountId", "dueDate", "paidDate"],
+  "entityRelations" : {
+    "_toMany_InvoiceStatus" : {
+      "fieldList": ["statusDate", "changeByUserLoginId"],
+      "entityRelations" : {
+        "_toOne_StatusItem": {
+          "fieldList": ["description"]
+        }
+      }
+    },
+    "_toOne_StatusItem" : {
+      "fieldList": ["description"]
+    },
+    "_toOne_InvoiceType" : {
+      "fieldList": ["description"]
+    },
+    "_toOne_FromParty" : {
+      "entityRelations" : {
+        "_toOne_PartyGroup" : {
+          "fieldList" : ["groupName"]
+        }
+      }
+    },
+    "_toOne_Party" : {
+      "entityRelations" : {
+        "_toOne_PartyGroup" : {
+          "fieldList": ["groupName"]
+        }
+      }
+    },
+    "_toMany_PaymentApplication" : {
+      "fieldList": ["paymentId", "amountApplied"]
+    },
+    "_toMany_InvoiceItem" : {
+      "fieldList": ["invoiceItemSeqId", "overrideGlAccountId", "overrideOrgPartyId", "inventoryItemId", "productId", "productFeatureId", "parentInvoiceId", "parentInvoiceItemSeqId", "taxableFlag", "quantity", "amount", "description", "taxAuthPartyId", "taxAuthGeoId", "taxAuthorityRateSeqId", "salesOpportunityId"],
+      "entityRelations" : {
+        "_toOne_InvoiceItemType": {
+          "fieldList": ["description"]
+        },
+        "_toOne_Uom" : {
+          "fieldList": ["abbreviation"]
+        }
+      }
+    },
+    "_toMany_AcctgTrans" : {
+      "fieldList": ["isPosted", "glFiscalTypeId", "transactionDate", "postedDate", "glJournalId", "paymentId", "fixedAssetId"],
+      "entityRelations" : {
+        "_toMany_AcctgTransEntry": {
+          "fieldList": ["acctgTransId", "acctgTransEntrySeqId", "description", "glAccountId", "productId", "debitCreditFlag", "amount", "origAmount", "organizationPartyId", "acctgTransEntryTypeId"],
+          "entityRelations" : {
+            "_toOne_GlAccount" : {
+              "fieldList": ["accountCode", "accountName"],
+              "entityRelations" : {
+                "_toOne_GlAccountType" : {
+                  "fieldList" : ["description"]
+                },
+                "_toOne_GlAccountClass" : {
+                  "fieldList" : ["description"]
+                }
+              }
+            },
+            "_toOne_Party" : {
+              "entityRelations" : {
+                "_toOne_PartyGroup" : {
+                  "fieldList": ["groupName"]
+                }
+              }
+            },
+            "_toOne_StatusItem" : {
+              "fieldList" : ["description"]
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -100,10 +100,11 @@ public class AuthenticationFilter implements Filter {
             assert SecurityUtil.authenticateUserLoginByJWT(delegator, String.valueOf(claims.get("userLoginId")), jwtToken);
 
         } catch (Exception e) {
+            e.printStackTrace();
             abortWithUnauthorized(httpResponse, true, "Access Denied: User does not exist in the system");
         }
 
-        chain.doFilter(request, response);
+//        chain.doFilter(request, response);
     }
 
     @Override
