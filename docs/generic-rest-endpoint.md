@@ -26,6 +26,7 @@ Currently the following /v1 endpoints (meaning `/api/generic/v1/*`) are implemen
     {
         "areRelationResultsMandatory": boolean (optional, default false),
         "inputFields": { (optional, default no constraints)
+          "field": ["any", "value", "match", "from", "list"],
           "field1": "value1",
           "field2": 2,
           "field3_fld0_op": "like",
@@ -33,7 +34,7 @@ Currently the following /v1 endpoints (meaning `/api/generic/v1/*`) are implemen
           "numericfield4_fld0_op": "greaterThan",
           "numericfield4_fld0_value": 12,
           "numericfield4_fld1_op": "lessThanEqualTo",
-          "numericfield4_fld1_value": "2019-12-01 20:09:01"
+          "numericfield4_fld1_value": "2019-12-01 20:09:01" 
         },
         "fieldList": ["List", "of", "returned", "fields"] (optional, default all fields),
         "entityRelations": { (optional, default no relations, only given relations are returned)
@@ -43,6 +44,7 @@ Currently the following /v1 endpoints (meaning `/api/generic/v1/*`) are implemen
         }
     }
     ```
+  
     ```json
     {
         "areRelationResultsMandatory": true,
