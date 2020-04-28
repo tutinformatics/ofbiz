@@ -3,8 +3,10 @@ FROM openjdk:11
 MAINTAINER tutinformatics
 
 # copy files to workdir
+VOLUME /ofbiz
 ADD . /ofbiz
 WORKDIR /ofbiz
+
 
 RUN ./gradlew cleanAll loadAll
 
