@@ -6,6 +6,8 @@ MAINTAINER tutinformatics
 ADD . /ofbiz
 WORKDIR /ofbiz
 
+RUN ./gradlew cleanAll loadAll
+
 # Setup backend connection
 # RUN cat deploy/entity/entityengine.xml > framework/entity/config/entityengine.xml
 
@@ -15,5 +17,5 @@ EXPOSE 4567
 EXPOSE 1099
 
 # Run ofbiz
-ENTRYPOINT ./gradlew cleanAll loadAll ofbiz --no-daemon
+ENTRYPOINT ./gradlew ofbiz
 
