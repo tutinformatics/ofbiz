@@ -1,0 +1,22 @@
+name: build
+
+on:
+  push:
+    branches: 
+      - trunk
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Publish to Github Packages Registry
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: kilpkonn/ofbiz/ofbiz
+        registry: docker.pkg.github.com
+        username: ${{ secrets.GITHUB_USERNAME }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        dockerfile: Dockerfile
+        tags: latest
