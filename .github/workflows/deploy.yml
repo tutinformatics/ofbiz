@@ -18,7 +18,7 @@ jobs:
       with:
         name: kilpkonn/ofbiz/ofbiz
         registry: docker.pkg.github.com
-        username: ${{ secrets.GITHUB_USERNAME }}
+        username: ${{ secrets.username }}
         password: ${{ secrets.GITHUB_TOKEN }}
         dockerfile: Dockerfile
         tags: latest
