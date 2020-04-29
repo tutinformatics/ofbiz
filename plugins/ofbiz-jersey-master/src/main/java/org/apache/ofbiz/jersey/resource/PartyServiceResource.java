@@ -20,17 +20,10 @@ package org.apache.ofbiz.jersey.resource;
 
 import ee.taltech.marketing.affiliate.model.AffiliateDTO;
 import ee.taltech.marketing.affiliate.service.PartyService;
-import org.apache.ofbiz.base.conversion.ConversionException;
-import org.apache.ofbiz.base.lang.JSON;
-import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
-import org.apache.ofbiz.entity.model.ModelEntity;
-import org.apache.ofbiz.entity.model.ModelReader;
-import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.entity.util.ExtendedConverters;
 import org.apache.ofbiz.jersey.util.JsonUtils;
-import org.apache.ofbiz.jersey.util.QueryParamStringConverter;
 import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.LocalDispatcher;
 
@@ -42,10 +35,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Provider;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Map;
 
 @Path("/parties")
 @Provider
@@ -91,15 +83,22 @@ public class PartyServiceResource {
         return builder.build();
     }
 
-
-
-
     @POST()
     @Path("/affiliate/create")
     @Produces(MediaType.APPLICATION_JSON)
     public Response createAffiliates(String jsonBody) throws Exception {
         Map<String, Object> data = JsonUtils.parseJson(jsonBody);
         AffiliateDTO entity = partyService.createAffiliateForUserLogin(data);
+        ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
+        return builder.build();
+    }
+
+    @POST()
+    @Path("/get-party-id")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPartyId(String jsonBody) throws Exception {
+        Map<String, Object> data = JsonUtils.parseJson(jsonBody);
+        AffiliateDTO entity = partyService.getPartyIdForUserId(data);
         ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
         return builder.build();
     }

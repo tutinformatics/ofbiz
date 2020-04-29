@@ -7,7 +7,6 @@ import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
-import org.apache.ofbiz.entity.GenericPK;
 import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.party.party.PartyServices;
@@ -127,10 +126,20 @@ public class PartyService {
         return genericValue;
     }
 
+    public AffiliateDTO getPartyIdForUserId(Map<String, Object> data) throws GenericEntityException {
+        Map<String, Object> affiliateCreateContext = new HashMap<>();
 
-    /**
-     * @return - status of operation
-     */
+        String userLoginId = (String) data.get("userLoginId");
+        GenericValue currentUserLogin = ServiceUtil.getUserLogin(dispatchCtx, affiliateCreateContext, userLoginId);
+        AffiliateDTO affiliateDTO = new AffiliateDTO();
+        affiliateDTO.setPartyId(currentUserLogin.getString("partyId"));
+        return affiliateDTO;
+    }
+
+
+        /**
+         * @return - status of operation
+         */
     public AffiliateDTO createAffiliateForUserLogin(Map<String, Object> data) throws GenericEntityException {
         Map<String, Object> affiliateCreateContext = new HashMap<>();
 
