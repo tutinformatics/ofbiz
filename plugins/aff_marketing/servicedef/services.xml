@@ -22,11 +22,62 @@ under the License.
           xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
     <description>Affiliate Marketing Service Definition</description>
 
-    <service name="createAffiliate2" engine="java"
+    <service name="createMultiLvlAffiliate"
+             engine="java"
              location="ee.taltech.marketing.affiliate.service.PartyService"
-             invoke="createAffiliateForUserLogin" auth="false">
+             invoke="createAffiliateForUserLogin">
         <description>Create affiliate partner</description>
         <attribute name="partyId" type="String" mode="INOUT"/>
+    </service>
+
+    <service name="approveAffiliatePartner"
+             engine="java"
+             location="ee.taltech.marketing.affiliate.service.PartyService"
+             invoke="approve">
+        <description>Create affiliate partner</description>
+        <attribute name="partyId" type="String" mode="INOUT"/>
+    </service>
+
+    <service name="disapproveAffiliatePartner"
+             engine="java"
+             location="ee.taltech.marketing.affiliate.service.PartyService"
+             invoke="disapprove">
+        <description>Create affiliate partner</description>
+        <attribute name="partyId" type="String" mode="INOUT"/>
+    </service>
+
+    <service name="createAffiliateCode"
+             engine="java"
+             location="ee.taltech.marketing.affiliate.service.PartyService"
+             invoke="createAffiliateCode">
+        <description>Create affiliate partner</description>
+        <attribute name="partyId" type="String" mode="INOUT"/>
+    </service>
+
+    <service name="getAffiliateCodes"
+             engine="java"
+             location="ee.taltech.marketing.affiliate.service.PartyService"
+             invoke="getAffiliateCodes">
+        <description>Create affiliate partner</description>
+        <attribute name="partyId" type="String" mode="INOUT"/>
+    </service>
+
+    <service name="deleteAffiliateCode"
+             engine="java"
+             location="ee.taltech.marketing.affiliate.service.PartyService"
+             invoke="deleteAffiliateCode">
+        <description>Create affiliate partner</description>
+        <attribute name="partyId" type="String" mode="INOUT"/>
+        <attribute name="affiliateCodeId" type="String" mode="INOUT"/>
+    </service>
+
+    <service name="getPartyIdForUserId"
+             engine="java"
+             location="ee.taltech.marketing.affiliate.service.PartyService"
+             invoke="getPartyIdForUserId">
+        <description>Create affiliate partner</description>
+        <attribute name="userLoginId" type="String" mode="IN"/>
+        <attribute name="partyId" type="String" mode="OUT"/>
     </service>
 
 </services>
