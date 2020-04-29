@@ -3054,6 +3054,20 @@ under the License.
             <key-map field-name="lastModifiedByUserLogin" rel-field-name="userLoginId"/>
         </relation>
     </entity>
+
+    <entity entity-name="TestEntity"
+            package-name="org.ofbiz.product.product"
+            never-cache="true"
+            title="For testing">
+      <field name="field1" col-name="fld1" type="id-ne"/>
+      <field name="field2" col-name="fld2" type="id"/>
+      <prim-key field="field1"/>
+      <prim-key field="field2"/>
+      <relation type="one" fk-name="TEST_FK_NAME" rel-entity-name="ProductTest">
+        <key-map field-name="field1" rel-field-name="orderId"/>
+      </relation>
+    </entity>
+
     <view-entity entity-name="AllocationPlanAndItem"
                  package-name="org.apache.ofbiz.order.allocationplan"
                  title="Allocation Plan And Allocation Plan Item View">

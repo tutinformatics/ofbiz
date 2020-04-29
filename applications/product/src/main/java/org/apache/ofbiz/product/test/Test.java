@@ -1,4 +1,4 @@
-package org.apache.ofbiz.accounting;
+package org.apache.ofbiz.product.test;
 
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
