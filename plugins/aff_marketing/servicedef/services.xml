@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -18,13 +18,15 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-<ofbiz-component name="servicesRest"
-                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                 xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-component.xsd">
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+    <description>Affiliate Marketing Service Definition</description>
 
-    <resource-loader name="main" type="component"/>
-    <classpath type="dir" location="config"/>
+    <service name="createAffiliate2" engine="java"
+             location="ee.taltech.marketing.affiliate.service.PartyService"
+             invoke="createAffiliateForUserLogin" auth="false">
+        <description>Create affiliate partner</description>
+        <attribute name="partyId" type="String" mode="INOUT"/>
+    </service>
 
-    <service-resource type="model" loader="main" location="servicedef/services.xml"/>
-
-</ofbiz-component>
+</services>
