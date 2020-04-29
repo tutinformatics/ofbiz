@@ -680,7 +680,7 @@ under the License.
     <!--______________________________________________________________________________________________________________________________-->
 
     <service name="createCategoryAndAddProducts" engine="java"
-             location="org.apache.ofbiz.product.category.BigBuyCategoryAdd" invoke="addCategoryAndProducts" auth="true">
+             location="org.apache.ofbiz.product.category.BigBuyInventory" invoke="addBigBuyCategory" auth="true">
         <description>Service for BigBuy API, takes category ID and creates Category, Products with this Category</description>
         <attribute name="productCategoryTypeId" type="String" mode="IN" optional="false"/>
 
