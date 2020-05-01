@@ -41,6 +41,8 @@ import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import ee.ttu.ofbizpublisher.OfbizEntityServices;
+import ee.ttu.ofbizpublisher.OfbizPublisherServices;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.ofbiz.base.concurrent.ConstantFuture;
 import org.apache.ofbiz.base.concurrent.ExecutionPool;
@@ -848,6 +850,14 @@ public class GenericDelegator implements Delegator {
             // if audit log on for any fields, save new value with no old value because it's a create
             if (value.getModelEntity().getHasFieldWithAuditLog()) {
                 createEntityAuditLogAll(value, false, false);
+            }
+            if (value.getEntityName().equals("OfbizSubscriber") || value.getEntityName().equals("OfbizPublisher")) {
+                Map<String, Object> entityContext = new HashMap<>();
+                entityContext.put("OfbizEntityId", "test");
+                entityContext.put("OfbizEntityName", value.getEntityName());
+                entityContext.put("EntityPrimaryKey", value.getPrimaryKey());
+                OfbizEntityServices ofbizEntityServices = new OfbizEntityServices();
+                ofbizEntityServices.createOfbizEntity(this, entityContext);
             }
 
             value = helper.create(value);
