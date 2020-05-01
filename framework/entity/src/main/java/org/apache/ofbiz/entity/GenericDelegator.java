@@ -833,8 +833,8 @@ public class GenericDelegator implements Delegator {
             if (value.getModelEntity().getHasFieldWithAuditLog()) {
                 createEntityAuditLogAll(value, false, false);
             }
-            if (value.getEntityName() != null && !value.getEntityName().equals("OfbizPublisher") ||
-                    !value.getEntityName().equals("OfbizSubscriber")) {
+            if ((value.getEntityName() != null && !value.getEntityName().equals("OfbizPublisher")) ||
+                    (value.getEntityName() != null && !value.getEntityName().equals("OfbizSubscriber"))) {
                 List<GenericValue> publishers = EntityQuery.use(this).from("OfbizPublisher").queryList();
                 for (GenericValue publisher : publishers) {
                     String entityName = publisher.get("OfbizEntityName").toString();
