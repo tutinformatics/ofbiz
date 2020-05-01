@@ -11,7 +11,6 @@ import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.model.ModelEntity;
 import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.jersey.util.QueryParamStringConverter;
-import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.ServiceUtil;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -22,11 +21,9 @@ import java.util.stream.Collectors;
 public class PublisherService {
 
     Delegator delegator;
-    DispatchContext dispatchContext;
 
-    public PublisherService(DispatchContext dpc) {
-        dispatchContext = dpc;
-        delegator = dpc.getDelegator();
+    public PublisherService(Delegator delegator) {
+        this.delegator = delegator;
     }
 
 
@@ -66,10 +63,10 @@ public class PublisherService {
         publisherContext.put("filter", data.get("filter"));
         setPublisherData(data.get("OfbizEntityName").toString(), data.get("topic").toString(), data.get("filter").toString());
         OfbizPublisherServices ofbizPublisherServices = new OfbizPublisherServices();
-        ofbizPublisherServices.createOfbizPublisher(dispatchContext, publisherContext);
+        ofbizPublisherServices.createOfbizPublisher(delegator, publisherContext);
     }
 
-    private void setPublisherData(String entityName, String topic, String filterParams) throws Exception {
+    public void setPublisherData(String entityName, String topic, String filterParams) throws Exception {
         Gson gson = new Gson();
         Object filter = gson.fromJson(filterParams, Object.class);
         List<Map<String, List<String>>> queryList = (List<Map<String, List<String>>>) filter;
@@ -88,8 +85,8 @@ public class PublisherService {
         IMqttClient publisher = new MqttClient("tcp://mqtt.eclipse.org:1883", publisherId);
         ConnectionBinding mqttClientService = new ConnectionBinding(publisher);
         mqttClientService.makeConnection();
-        Publisher mqttService = new Publisher(publisher, topic, genericValues);
-        mqttService.call();
+        Publisher mqttService = new Publisher(publisher, topic);
+        mqttService.call(genericValues);
     }
 
     public GenericValue deletePublisher(String ofbizPublisherId) throws GenericEntityException {

@@ -152,7 +152,7 @@ public interface Delegator {
      *            The GenericPK to create a value in the datasource from
      * @return GenericValue instance containing the new instance
      */
-    GenericValue create(GenericPK primaryKey) throws GenericEntityException;
+    GenericValue create(GenericPK primaryKey) throws Exception;
 
     /**
      * Creates a Entity in the form of a GenericValue and write it to the
@@ -162,7 +162,7 @@ public interface Delegator {
      *            The GenericValue to create a value in the datasource from
      * @return GenericValue instance containing the new instance
      */
-    GenericValue create(GenericValue value) throws GenericEntityException;
+    GenericValue create(GenericValue value) throws Exception;
 
     /**
      * Creates a Entity in the form of a GenericValue and write it to the
@@ -170,7 +170,7 @@ public interface Delegator {
      *
      * @return GenericValue instance containing the new instance
      */
-    GenericValue create(String entityName, Map<String, ? extends Object> fields) throws GenericEntityException;
+    GenericValue create(String entityName, Map<String, ? extends Object> fields) throws Exception;
 
     /**
      * Creates a Entity in the form of a GenericValue and write it to the
@@ -178,7 +178,7 @@ public interface Delegator {
      *
      * @return GenericValue instance containing the new instance
      */
-    GenericValue create(String entityName, Object... fields) throws GenericEntityException;
+    GenericValue create(String entityName, Object... fields) throws Exception;
 
     /**
      * Creates or stores an Entity
@@ -208,7 +208,7 @@ public interface Delegator {
      *
      * @return GenericValue instance containing the new instance
      */
-    GenericValue createSingle(String entityName, Object singlePkValue) throws GenericEntityException;
+    GenericValue createSingle(String entityName, Object singlePkValue) throws Exception;
 
     Object decryptFieldValue(String entityName, ModelField.EncryptMethod encryptMethod, String encValue) throws EntityCryptoException;
 
@@ -813,7 +813,7 @@ public interface Delegator {
      */
     int removeValue(GenericValue value) throws GenericEntityException;
 
-    void rollback();
+    void rollback() throws Exception;
 
     void setDistributedCacheClear(DistributedCacheClear distributedCacheClear);
 
@@ -860,7 +860,7 @@ public interface Delegator {
      *            store
      * @return int representing number of rows effected by this operation
      */
-    int storeAll(List<GenericValue> values) throws GenericEntityException;
+    int storeAll(List<GenericValue> values) throws Exception;
 
     /**
      * <p>Store the Entities from the List GenericValue instances to the persistent
@@ -883,7 +883,7 @@ public interface Delegator {
      *            store
      * @return int representing number of rows effected by this operation
      */
-    int storeAll(List<GenericValue> values, EntityStoreOptions storeOptions) throws GenericEntityException;
+    int storeAll(List<GenericValue> values, EntityStoreOptions storeOptions) throws Exception;
 
     /**
      * Store a group of values.
