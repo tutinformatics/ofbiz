@@ -28,6 +28,7 @@ under the License.
              invoke="createAffiliateForUserLogin">
         <description>Create affiliate partner</description>
         <attribute name="partyId" type="String" mode="IN"/>
+        <attribute name="affCode" type="String" mode="IN"/>
         <attribute name="createdAffiliate" type="ee.taltech.marketing.affiliate.model.AffiliateDTO" mode="OUT"/>
     </service>
 

@@ -107,7 +107,10 @@ public class PartyService {
             genericValue.set("status", PENDING);
             delegator.store(genericValue);
 
-            String rootPartyId = (String) context.get("rootPartyId");
+            String affCode = (String) context.get("affCode");
+            List<GenericValue> affiliateCodes = EntityQuery.use(delegator).from("AffiliateCode").queryList();
+            String rootPartyId = (String) affiliateCodes.stream().filter(affDto -> affDto.get("affiliateCodeId").equals(affCode)).findFirst().orElse(null).get("partyId");
+
             genericValue.set("RootPartyId", rootPartyId);
         } catch (GenericEntityException | NullPointerException e) {
             Debug.logWarning(e.getMessage(), module);
