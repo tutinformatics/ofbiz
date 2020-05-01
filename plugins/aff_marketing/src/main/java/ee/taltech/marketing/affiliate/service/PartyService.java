@@ -136,6 +136,20 @@ public class PartyService {
         return Map.of("affiliateDTOs", EntityQuery.use(delegator).from("AffiliateCode").where("partyId", partyId).queryList());
     }
 
+    public Map<String, String> getAffiliateStatus(DispatchContext dctx, Map<String, ?> context) throws GenericEntityException {
+        String partyId = (String) context.get("partyId");
+        GenericValue affiliate = EntityQuery
+                .use(dctx.getDelegator())
+                .from("Affiliate")
+                .where("partyId", partyId)
+                .queryOne();
+        if (affiliate != null) {
+            return Map.of("status", affiliate.getString("status"));
+        } else {
+            return Map.of("status", "NOT-PARTNER");
+        }
+    }
+
     private void checkApprovedAffiliate(String partyId, Delegator delegator) throws GenericEntityException {
         GenericValue userParty = EntityQuery
                 .use(delegator)

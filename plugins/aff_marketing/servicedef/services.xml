@@ -59,6 +59,15 @@ under the License.
         <attribute name="createdCode" type="org.apache.ofbiz.entity.GenericValue" mode="OUT"/>
     </service>
 
+    <service name="getAffiliateStatus"
+             engine="java"
+             location="ee.taltech.marketing.affiliate.service.PartyService"
+             invoke="getAffiliateStatus">
+        <description>Create affiliate partner</description>
+        <attribute name="partyId" type="String" mode="IN"/>
+        <attribute name="status" type="String" mode="OUT"/>
+    </service>
+
     <service name="getAffiliateCodes"
              engine="java"
              location="ee.taltech.marketing.affiliate.service.PartyService"
