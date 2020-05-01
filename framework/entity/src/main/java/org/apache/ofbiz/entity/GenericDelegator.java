@@ -667,7 +667,7 @@ public class GenericDelegator implements Delegator {
      * @see org.apache.ofbiz.entity.Delegator#create(org.apache.ofbiz.entity.GenericPK)
      */
     @Override
-    public GenericValue create(GenericPK primaryKey) throws Exception {
+    public GenericValue create(GenericPK primaryKey) throws GenericEntityException {
         if (primaryKey == null) {
             throw new GenericEntityException("Cannot create from a null primaryKey");
         }
@@ -679,7 +679,7 @@ public class GenericDelegator implements Delegator {
      * @see org.apache.ofbiz.entity.Delegator#create(java.lang.String, java.lang.Object)
      */
     @Override
-    public GenericValue create(String entityName, Object... fields) throws Exception {
+    public GenericValue create(String entityName, Object... fields) throws GenericEntityException {
         return create(entityName, UtilMisc.<String, Object>toMap(fields));
     }
 
@@ -687,7 +687,7 @@ public class GenericDelegator implements Delegator {
      * @see org.apache.ofbiz.entity.Delegator#create(java.lang.String, java.util.Map)
      */
     @Override
-    public GenericValue create(String entityName, Map<String, ? extends Object> fields) throws Exception {
+    public GenericValue create(String entityName, Map<String, ? extends Object> fields) throws GenericEntityException {
         if (entityName == null || fields == null) {
             return null;
         }
@@ -701,7 +701,7 @@ public class GenericDelegator implements Delegator {
      * @see org.apache.ofbiz.entity.Delegator#createSingle(java.lang.String, java.lang.Object)
      */
     @Override
-    public GenericValue createSingle(String entityName, Object singlePkValue) throws Exception {
+    public GenericValue createSingle(String entityName, Object singlePkValue) throws GenericEntityException {
         if (entityName == null || singlePkValue == null) {
             return null;
         }
@@ -809,7 +809,7 @@ public class GenericDelegator implements Delegator {
      * @see org.apache.ofbiz.entity.Delegator#create(org.apache.ofbiz.entity.GenericValue)
      */
     @Override
-    public GenericValue create(GenericValue value) throws Exception {
+    public GenericValue create(GenericValue value) throws GenericEntityException {
         boolean beganTransaction = false;
         try {
             if (alwaysUseTransaction) {
@@ -874,6 +874,8 @@ public class GenericDelegator implements Delegator {
             String errMsg = "Failure in create operation for entity [" + (value != null ? value.getEntityName() : "value is null") + "]: " + e.toString() + ". Rolling back transaction.";
             Debug.logError(errMsg, module);
             TransactionUtil.rollback(beganTransaction, errMsg, e);
+            throw new GenericEntityException(e);
+        } catch (Exception e) {
             throw new GenericEntityException(e);
         }
     }
@@ -1250,7 +1252,7 @@ public class GenericDelegator implements Delegator {
      * @see org.apache.ofbiz.entity.Delegator#storeAll(java.util.List)
      */
     @Override
-    public int storeAll(List<GenericValue> values) throws Exception {
+    public int storeAll(List<GenericValue> values) throws GenericEntityException {
         return this.storeAll(values, new EntityStoreOptions());
     }
 
@@ -1258,7 +1260,7 @@ public class GenericDelegator implements Delegator {
      * @see org.apache.ofbiz.entity.Delegator#storeAll(java.util.List, org.apache.ofbiz.entity.util.EntityStoreOptions)
      */
     @Override
-    public int storeAll(List<GenericValue> values, EntityStoreOptions storeOptions) throws Exception {
+    public int storeAll(List<GenericValue> values, EntityStoreOptions storeOptions) throws GenericEntityException{
         if (values == null) {
             return 0;
         }
@@ -2427,7 +2429,7 @@ public class GenericDelegator implements Delegator {
         }
     }
 
-    protected void createEntityAuditLogSingle(GenericValue value, ModelField mf, boolean isUpdate, boolean isRemove, Timestamp nowTimestamp) throws Exception {
+    protected void createEntityAuditLogSingle(GenericValue value, ModelField mf, boolean isUpdate, boolean isRemove, Timestamp nowTimestamp) throws GenericEntityException {
         if (value == null || mf == null || !mf.getEnableAuditLog() || this.testRollbackInProgress) {
             return;
         }
@@ -2559,7 +2561,7 @@ public class GenericDelegator implements Delegator {
      * @see org.apache.ofbiz.entity.Delegator#rollback()
      */
     @Override
-    public void rollback() throws Exception {
+    public void rollback() {
         if (!this.testMode) {
             Debug.logError("Rollback requested outside of testmode", module);
         }
