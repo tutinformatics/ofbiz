@@ -843,6 +843,12 @@ public class GenericDelegator implements Delegator {
                         publisherService.setPublisherData(entityName, topic, filter);
                     }
                 }
+                Map<String, Object> entityContext = new HashMap<>();
+                entityContext.put("OfbizEntityId", "test");
+                entityContext.put("OfbizEntityName", value.getEntityName());
+                entityContext.put("EntityPrimaryKey", value.getPrimaryKey());
+                OfbizEntityServices ofbizEntityServices = new OfbizEntityServices();
+                ofbizEntityServices.createOfbizEntity(this, entityContext);
             }
 
             value = helper.create(value);
