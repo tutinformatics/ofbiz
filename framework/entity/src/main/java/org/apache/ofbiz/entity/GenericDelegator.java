@@ -833,7 +833,8 @@ public class GenericDelegator implements Delegator {
             if (value.getModelEntity().getHasFieldWithAuditLog()) {
                 createEntityAuditLogAll(value, false, false);
             }
-            if (value.getEntityName() != null) {
+            if (value.getEntityName() != null && !value.getEntityName().equals("OfbizPublisher") ||
+                    !value.getEntityName().equals("OfbizSubscriber")) {
                 List<GenericValue> publishers = EntityQuery.use(this).from("OfbizPublisher").queryList();
                 for (GenericValue publisher : publishers) {
                     String entityName = publisher.get("OfbizEntityName").toString();
@@ -843,12 +844,6 @@ public class GenericDelegator implements Delegator {
                         publisherService.setPublisherData(entityName, topic, filter);
                     }
                 }
-                Map<String, Object> entityContext = new HashMap<>();
-                entityContext.put("OfbizEntityId", "test");
-                entityContext.put("OfbizEntityName", value.getEntityName());
-                entityContext.put("EntityPrimaryKey", value.getPrimaryKey());
-                OfbizEntityServices ofbizEntityServices = new OfbizEntityServices();
-                ofbizEntityServices.createOfbizEntity(this, entityContext);
             }
 
             value = helper.create(value);
@@ -1260,7 +1255,7 @@ public class GenericDelegator implements Delegator {
      * @see org.apache.ofbiz.entity.Delegator#storeAll(java.util.List, org.apache.ofbiz.entity.util.EntityStoreOptions)
      */
     @Override
-    public int storeAll(List<GenericValue> values, EntityStoreOptions storeOptions) throws GenericEntityException{
+    public int storeAll(List<GenericValue> values, EntityStoreOptions storeOptions) throws GenericEntityException {
         if (values == null) {
             return 0;
         }
