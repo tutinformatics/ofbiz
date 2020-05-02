@@ -35,7 +35,11 @@ plugins {
     id 'se.patrikerdes.use-latest-versions' version '0.2.12' apply false
     id 'com.github.ben-manes.versions' version '0.27.0' apply false
     id "com.github.ManifestClasspath" version "0.1.0-RELEASE"
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
+    id 'java'
 }
+
+shadowJar {zip64=true}
 
 /* OWASP plugin
  *
@@ -152,6 +156,12 @@ configurations {
     }
 }
 
+repositories {
+    maven {
+        url "https://repo.eclipse.org/content/repositories/paho-snapshots/"
+    }
+}
+
 dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
@@ -223,6 +233,9 @@ dependencies {
     runtimeOnly 'org.apache.logging.log4j:log4j-slf4j-impl:2.12.1'
     // for external jars using slf4j: routes logging to log4j 2
     runtimeOnly 'org.codeartisans.thirdparties.swing:batik-all:1.8pre-r1084380'
+
+    compile 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.2'
+    compile 'org.eclipse.paho:org.eclipse.paho.android.service:1.0.2'
 
     // Dependencies defined by the plugins
     subprojects.each { subProject ->

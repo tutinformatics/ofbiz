@@ -35,7 +35,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 
-@Secured
+//@Secured
 @SuppressWarnings("serial")
 public class GraphQLEndpointServletImpl extends SimpleGraphQLHttpServlet {
 

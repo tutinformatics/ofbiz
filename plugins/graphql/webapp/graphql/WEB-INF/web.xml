@@ -31,14 +31,14 @@ under the License.
 		<param-name>entityDelegatorName</param-name>
 		<param-value>default</param-value>
 	</context-param>
-	<filter>
-	    <filter-name>AuthenticationFilter</filter-name>
-	    <filter-class>org.apache.ofbiz.graphql.filter.AuthenticationFilter</filter-class>
-    </filter>
-	<filter-mapping>
-		<filter-name>AuthenticationFilter</filter-name>
-		<url-pattern>/graphql/*</url-pattern>
-	</filter-mapping>
+<!--	<filter>-->
+<!--	    <filter-name>AuthenticationFilter</filter-name>-->
+<!--	    <filter-class>org.apache.ofbiz.graphql.filter.AuthenticationFilter</filter-class>-->
+<!--    </filter>-->
+<!--	<filter-mapping>-->
+<!--		<filter-name>AuthenticationFilter</filter-name>-->
+<!--		<url-pattern>/graphql/*</url-pattern>-->
+<!--	</filter-mapping>-->
 	<servlet>
 		<description>Main Control Servlet</description>
 		<display-name>GraphQLEndpointServlet</display-name>
