@@ -55,8 +55,10 @@ under the License.
              invoke="createAffiliateCode">
         <description>Create affiliate partner</description>
         <attribute name="partyId" type="String" mode="IN"/>
+        <attribute name="productCategoryId" type="String" mode="IN"/>
         <attribute name="createdCode" type="org.apache.ofbiz.entity.GenericValue" mode="OUT"/>
     </service>
+
 
     <service name="getAffiliateCodes"
              engine="java"
