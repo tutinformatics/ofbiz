@@ -73,6 +73,20 @@ public class PartyService {
         return Map.of("deletedCode", genericValue);
     }
 
+
+    public Map<String, AffiliateDTO> disableAffiliate(DispatchContext dctx, Map<String, ?> context) throws GenericEntityException {
+        String partyId = (String) context.get("partyId");
+        List<GenericValue> affCodes = getAffiliateCodes(dctx, context).get("affiliateDTOs");
+        Delegator delegator = dctx.getDelegator();
+        checkApprovedAffiliate(partyId, dctx.getDelegator());
+        for (GenericValue affCode : affCodes) {
+            String currentCode = (String) affCode.get("affiliateCodeId");
+            GenericValue genericCode = EntityQuery.use(delegator).from("AffiliateCode").where("partyId", partyId, "affiliateCodeId", currentCode).queryOne();
+            genericCode.remove();
+        }
+        return disapprove(dctx, context);
+    }
+
     public Map<String, AffiliateDTO> createAffiliateForUserLogin(DispatchContext dctx, Map<String, ?> context) throws GenericEntityException {
         Map<String, Object> affiliateCreateContext = new HashMap<>();
 
