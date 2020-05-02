@@ -1,6 +1,7 @@
 package org.apache.ofbiz.jersey.resource.vsbridge;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ee.taltech.servicesmgt.VsBridgeServices;
 import org.apache.ofbiz.base.lang.JSON;
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilMisc;
@@ -10,7 +11,6 @@ import org.apache.ofbiz.entity.transaction.TransactionUtil;
 import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.jersey.pojo.AuthenticationOutput;
 import org.apache.ofbiz.jersey.resource.AuthServiceResource;
-import org.apache.ofbiz.jersey.resource.ProjectResource;
 import org.apache.ofbiz.jersey.response.Error;
 
 import javax.servlet.ServletContext;
@@ -27,7 +27,7 @@ import java.util.Map;
 @Path("/vsbridge/")
 public class StaticResource {
 
-    public static final String module = ProjectResource.class.getName();
+    public static final String module = StaticResource.class.getName();
 
     private static final ObjectMapper mapper = new ObjectMapper();
 
@@ -76,6 +76,7 @@ public class StaticResource {
 
     @GET
     @Path("attributes/index")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getAttributes(@QueryParam(value = "apiKey") String apiKey,
             @DefaultValue("5") @QueryParam(value = "pageSize") Integer pageSize,
             @DefaultValue("1") @QueryParam(value = "page") Integer page)
@@ -83,23 +84,14 @@ public class StaticResource {
         // TODO: Care about apiKey.
         Response.ResponseBuilder builder = null;
         Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
-        boolean beganTransaction = false;
 
-        try {
-            beganTransaction = TransactionUtil.begin();
-            PagedList<GenericValue> resultPage = EntityQuery.use(delegator)
-                    .from("ProductAttribute")
-                    .cursorScrollInsensitive()
-                    .queryPagedList(page, pageSize);
-            TransactionUtil.commit(beganTransaction);
-
+        PagedList<GenericValue> resultPage = VsBridgeServices.getPagedList(delegator, "Product", page, pageSize);
+        if (resultPage != null) {
             Map<Object, Object> result = UtilMisc.toMap("code", 200, "result", resultPage.getData());
             builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON_TYPE).entity(result);
-
-        } catch (GenericEntityException e) {
-            Debug.logError(e.getMessage(), module);
+        } else {
             builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE)
-                    .entity(new Error(400, "Bad request!", "Incorrect parameters!"));
+                    .entity(new Error(400, "Bad request!", "Failed to get pagedList!"));
         }
         return builder.build();
     }
