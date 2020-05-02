@@ -61,6 +61,7 @@ public class PartyServices {
      */
     public static Map<String, Object> createPerson(DispatchContext ctx, Map<String, ? extends Object> context) {
         Map<String, Object> result = new HashMap<>();
+
         Delegator delegator = ctx.getDelegator();
         Timestamp now = UtilDateTime.nowTimestamp();
         List<GenericValue> toBeStored = new LinkedList<>();
@@ -908,6 +909,7 @@ public class PartyServices {
             if (Debug.infoOn()) {
                 Debug.logInfo("PartyFromGroup number found: " + pc.size(), module);
             }
+
             if (pc != null) {
                 for (GenericValue group: pc) {
                     GenericValue party = delegator.makeValue("Party", UtilMisc.toMap("partyId", group.get("partyId"), "partyTypeId", "PARTY_GROUP"));

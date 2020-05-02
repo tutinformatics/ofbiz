@@ -49,6 +49,15 @@ under the License.
         <attribute name="disapprovedPartner" type="ee.taltech.marketing.affiliate.model.AffiliateDTO" mode="OUT"/>
     </service>
 
+    <service name="disableAffiliate"
+             engine="java"
+             location="ee.taltech.marketing.affiliate.service.PartyService"
+             invoke="disableAffiliate">
+        <description>Create affiliate partner</description>
+        <attribute name="partyId" type="String" mode="IN"/>
+        <attribute name="disapprovedPartner" type="ee.taltech.marketing.affiliate.model.AffiliateDTO" mode="OUT"/>
+    </service>
+
     <service name="createAffiliateCode"
              engine="java"
              location="ee.taltech.marketing.affiliate.service.PartyService"
@@ -59,6 +68,14 @@ under the License.
         <attribute name="createdCode" type="org.apache.ofbiz.entity.GenericValue" mode="OUT"/>
     </service>
 
+    <service name="getAffiliateStatus"
+             engine="java"
+             location="ee.taltech.marketing.affiliate.service.PartyService"
+             invoke="getAffiliateStatus">
+        <description>Create affiliate partner</description>
+        <attribute name="partyId" type="String" mode="IN"/>
+        <attribute name="status" type="String" mode="OUT"/>
+    </service>
 
     <service name="getAffiliateCodes"
              engine="java"

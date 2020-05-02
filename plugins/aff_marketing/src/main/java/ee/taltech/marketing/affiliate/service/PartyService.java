@@ -143,6 +143,20 @@ public class PartyService {
         return Map.of("deletedCode", genericValue);
     }
 
+
+    public Map<String, AffiliateDTO> disableAffiliate(DispatchContext dctx, Map<String, ?> context) throws GenericEntityException {
+        String partyId = (String) context.get("partyId");
+        List<GenericValue> affCodes = getAffiliateCodes(dctx, context).get("affiliateDTOs");
+        Delegator delegator = dctx.getDelegator();
+        checkApprovedAffiliate(partyId, dctx.getDelegator());
+        for (GenericValue affCode : affCodes) {
+            String currentCode = (String) affCode.get("affiliateCodeId");
+            GenericValue genericCode = EntityQuery.use(delegator).from("AffiliateCode").where("partyId", partyId, "affiliateCodeId", currentCode).queryOne();
+            genericCode.remove();
+        }
+        return disapprove(dctx, context);
+    }
+
     public Map<String, AffiliateDTO> createAffiliateForUserLogin(DispatchContext dctx, Map<String, ?> context) throws GenericEntityException {
         Map<String, Object> affiliateCreateContext = new HashMap<>();
 
@@ -177,7 +191,10 @@ public class PartyService {
             genericValue.set("status", PENDING);
             delegator.store(genericValue);
 
-            String rootPartyId = (String) context.get("rootPartyId");
+            String affCode = (String) context.get("affCode");
+            List<GenericValue> affiliateCodes = EntityQuery.use(delegator).from("AffiliateCode").queryList();
+            String rootPartyId = (String) affiliateCodes.stream().filter(affDto -> affDto.get("affiliateCodeId").equals(affCode)).findFirst().orElse(null).get("partyId");
+
             genericValue.set("RootPartyId", rootPartyId);
         } catch (GenericEntityException | NullPointerException e) {
             Debug.logWarning(e.getMessage(), module);
@@ -201,6 +218,20 @@ public class PartyService {
         Delegator delegator = dctx.getDelegator();
         checkApprovedAffiliate(partyId, dctx.getDelegator());
         return Map.of("affiliateDTOs", EntityQuery.use(delegator).from("AffiliateCode").where("partyId", partyId).queryList());
+    }
+
+    public Map<String, String> getAffiliateStatus(DispatchContext dctx, Map<String, ?> context) throws GenericEntityException {
+        String partyId = (String) context.get("partyId");
+        GenericValue affiliate = EntityQuery
+                .use(dctx.getDelegator())
+                .from("Affiliate")
+                .where("partyId", partyId)
+                .queryOne();
+        if (affiliate != null) {
+            return Map.of("status", affiliate.getString("status"));
+        } else {
+            return Map.of("status", "NOT-PARTNER");
+        }
     }
 
     private void checkApprovedAffiliate(String partyId, Delegator delegator) throws GenericEntityException {
