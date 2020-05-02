@@ -2,7 +2,12 @@ package org.apache.ofbiz.jersey.resource.vsbridge;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.ofbiz.base.lang.JSON;
+import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilMisc;
+import org.apache.ofbiz.base.util.collections.PagedList;
+import org.apache.ofbiz.entity.*;
+import org.apache.ofbiz.entity.transaction.TransactionUtil;
+import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.jersey.pojo.AuthenticationOutput;
 import org.apache.ofbiz.jersey.resource.AuthServiceResource;
 import org.apache.ofbiz.jersey.resource.ProjectResource;
@@ -10,10 +15,7 @@ import org.apache.ofbiz.jersey.response.Error;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -44,7 +46,7 @@ public class StaticResource {
      * @return json with response "code" and "token"
      */
     @POST
-    @Path("{a:user\\/login|auth\\/admin}")
+    @Path("{a:user/login|auth/admin}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response getToken(String jsonBody) {
@@ -65,9 +67,39 @@ public class StaticResource {
                             "token", ((AuthenticationOutput) r.getEntity()).getToken()
                     ));
         } catch (IOException e) {
-            e.printStackTrace();
+            Debug.logError(e.getMessage(), module);
             builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE)
                     .entity(new Error(400, "Bad request!", "Can't read json!"));
+        }
+        return builder.build();
+    }
+
+    @GET
+    @Path("attributes/index")
+    public Response getAttributes(@QueryParam(value = "apiKey") String apiKey,
+            @DefaultValue("5") @QueryParam(value = "pageSize") Integer pageSize,
+            @DefaultValue("1") @QueryParam(value = "page") Integer page)
+    {
+        // TODO: Care about apiKey.
+        Response.ResponseBuilder builder = null;
+        Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
+        boolean beganTransaction = false;
+
+        try {
+            beganTransaction = TransactionUtil.begin();
+            PagedList<GenericValue> resultPage = EntityQuery.use(delegator)
+                    .from("ProductAttribute")
+                    .cursorScrollInsensitive()
+                    .queryPagedList(page, pageSize);
+            TransactionUtil.commit(beganTransaction);
+
+            Map<Object, Object> result = UtilMisc.toMap("code", 200, "result", resultPage.getData());
+            builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON_TYPE).entity(result);
+
+        } catch (GenericEntityException e) {
+            Debug.logError(e.getMessage(), module);
+            builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE)
+                    .entity(new Error(400, "Bad request!", "Incorrect parameters!"));
         }
         return builder.build();
     }
