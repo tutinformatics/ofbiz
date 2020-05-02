@@ -62,7 +62,7 @@ public class CamelContainer implements Container {
         context.addComponent("restlet", new SparkComponent());
         ContainerConfig.Configuration cfg = ContainerConfig.getConfiguration(name, configFile);
         String packageName = ContainerConfig.getPropertyValue(cfg, "package", "ee.taltech.accounting.connector.camel.routes");
-        /*
+
         PackageScanClassResolver packageResolver = new DefaultPackageScanClassResolver();
         Set<Class<?>> routesClassesSet = packageResolver.findImplementations(BaseRoute.class, packageName);
 
@@ -77,7 +77,6 @@ public class CamelContainer implements Container {
                 e.printStackTrace();
             }
         });
-        */
         producerTemplate = context.createProducerTemplate();
     }
 
