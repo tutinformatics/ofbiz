@@ -1,17 +1,23 @@
 package ee.taltech.marketing.affiliate.service;
 
 import ee.taltech.marketing.affiliate.model.AffiliateDTO;
+import org.apache.camel.language.Bean;
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilDateTime;
 import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.entity.Delegator;
+import org.apache.ofbiz.entity.DelegatorFactory;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.party.party.PartyServices;
 import org.apache.ofbiz.service.DispatchContext;
+import org.apache.ofbiz.service.LocalDispatcher;
+import org.apache.ofbiz.service.ServiceContainer;
 import org.apache.ofbiz.service.ServiceUtil;
+import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,7 +26,22 @@ import static ee.taltech.marketing.affiliate.model.AffiliateDTO.Status.*;
 
 public class PartyService {
 
+    private static boolean init = false;
+
     public static final String module = PartyServices.class.getName();
+
+    public PartyService() {
+        if (!init) {
+            Delegator delegator = DelegatorFactory.getDelegator("default");
+            LocalDispatcher dispatcher = ServiceContainer.getLocalDispatcher("aff-dispatcher", delegator);
+            try {
+                generateAffPromoPerCategory(dispatcher.getDispatchContext(), new HashMap<>());
+            } catch (GenericEntityException e) {
+                e.printStackTrace();
+            }
+            init = true;
+        }
+    }
 
     public Map<String, AffiliateDTO> approve(DispatchContext dctx, Map<String, ?> context) throws GenericEntityException {
         String partyId = (String) context.get("partyId");
@@ -52,7 +73,41 @@ public class PartyService {
         return Map.of("disapprovedPartner", getAffiliateDTO((String) genericValue.get("partyId"), false, dctx.getDelegator()));
     }
 
-    public Map<String, GenericValue> createAffiliateCode(DispatchContext dctx, Map<String, ?> context) throws GenericEntityException {
+    public Map<String, Object> generateAffPromoPerCategory(DispatchContext dctx, Map<String, ?> context) throws GenericEntityException {
+        Delegator delegator = dctx.getDelegator();
+        List<String> tags = new ArrayList<>();
+        List<GenericValue> categories = EntityQuery.use(delegator).from("ProductCategory").queryList();
+        for (GenericValue category : categories) {
+            String promoId = delegator.getNextSeqId("ProductPromo");
+            GenericValue genericValue = delegator.makeValue("ProductPromo", UtilMisc.toMap("productPromoId", promoId, "userEntered", "Y", "showToCustomer", "N", "requireCode", "Y", "promoName", "AffiliateDiscount", "promoText", category.get("productCategoryId"), "useLimitPerOrder", 1));
+            delegator.create(genericValue);
+
+            String promoRuleId = delegator.getNextSeqId("ProductPromoRule");
+            genericValue = delegator.makeValue("ProductPromoRule", UtilMisc.toMap("productPromoId", promoId, "productPromoRuleId", promoRuleId, "ruleName", "AffiliateDiscount"));
+            delegator.create(genericValue);
+
+            String promoActionId = delegator.getNextSeqId("ProductPromoAction");
+            genericValue = delegator.makeValue("ProductPromoAction", UtilMisc.toMap("productPromoId", promoId, "productPromoRuleId", promoRuleId, "productPromoActionSeqId", promoActionId, "productPromoActionEnumId", "PROMO_ORDER_PERCENT", "amount", "20", "orderAdjustmentTypeId", "PROMOTION_ADJUSTMENT"));
+            delegator.create(genericValue);
+
+            String promoCondId = delegator.getNextSeqId("ProductPromoCond");
+            genericValue = delegator.makeValue("ProductPromoCond", UtilMisc.toMap("productPromoId", promoId, "productPromoRuleId", promoRuleId, "productPromoCondSeqId", promoCondId));
+            delegator.create(genericValue);
+
+            genericValue = delegator.makeValue("ProductPromoCategory", UtilMisc.toMap("productPromoId", promoId, "productPromoRuleId", promoRuleId, "productPromoCondSeqId", promoCondId, "productPromoActionSeqId", promoActionId, "productCategoryId", category.get("productCategoryId"), "andGroupId", "_NA_", "includeSubCategories",
+                    "Y"));
+            delegator.create(genericValue);
+
+            // todo get store id
+            genericValue = delegator.makeValue("ProductStorePromoAppl", UtilMisc.toMap("productStoreId", "9000", "productPromoId", promoId, "fromDate", UtilDateTime.nowTimestamp()));
+            delegator.create(genericValue);
+
+        }
+
+        return Map.of("values", tags);
+    }
+
+    public Map<String, Object> createAffiliateCode(DispatchContext dctx, Map<String, ?> context) throws GenericEntityException {
         GenericValue discountCode = createDiscountCode(dctx, context);
 
         String partyId = (String) context.get("partyId");
@@ -60,6 +115,8 @@ public class PartyService {
         checkApprovedAffiliate(partyId, dctx.getDelegator());
         GenericValue genericValue = delegator.makeValue("AffiliateCode", UtilMisc.toMap("partyId", partyId, "affiliateCodeId", discountCode.get("productPromoCodeId"), "isDefault", false));
         delegator.create(genericValue);
+
+
         return Map.of("createdCode", genericValue);
     }
 
@@ -88,11 +145,20 @@ public class PartyService {
         return promoForCategory;
     }
 
+    public String generateTag(String tag, Map<String, String> params) {
+        StringBuilder stringParams = new StringBuilder();
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            stringParams.append(String.format("%s=\"%s\" ", entry.getKey(), entry.getValue()));
+        }
+        return String.format("<%s %s/>", tag, stringParams);
+    }
+
     public GenericValue createPromoForCategory(DispatchContext dctx, Map<String, ?> context) throws GenericEntityException {
         Delegator delegator = dctx.getDelegator();
         String productCategoryId = (String) context.get("productCategoryId");
         GenericValue promoValue = null;
         try {
+
             GenericValue productCategory = EntityQuery.use(delegator).from("ProductCategory").where("productCategoryId", productCategoryId).queryOne();
 
             if (productCategory == null) {
