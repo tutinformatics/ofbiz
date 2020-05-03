@@ -28,10 +28,9 @@ import java.util.stream.Collectors;
 public class TemplateService {
 
     public static final String module = TemplateService.class.getName();
-    // there probably is a slightly better way to do them
+    // There probably is a slightly better way to do them
     public static final ExtendedConverters.ExtendedJSONToGenericValue jsonToGenericConverter = new ExtendedConverters.ExtendedJSONToGenericValue();
     public static final ExtendedConverters.ExtendedGenericValueToJSON genericToJsonConverter = new ExtendedConverters.ExtendedGenericValueToJSON();
-    private static final ObjectMapper mapper = new ObjectMapper();
     public static Map<String, String> entityMap;
     public static Map<String, String> serviceMap;
     protected static ModelReader modelReader;
@@ -143,8 +142,6 @@ public class TemplateService {
         }
 
         List<GenericValue> orderItems = new ArrayList<>();
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
         try {
             orderItems = EntityQuery.use(delegator)
                     .from(entity)    // "Invoice" is name of the entity defined in datamodel component under applications/

@@ -46,11 +46,9 @@ import java.util.Set;
  */
 public class CamelContainer implements Container {
 	private static final String module = CamelContainer.class.getName();
-	//    private static LocalDispatcherFactory dispatcherFactory;
 	private static ProducerTemplate producerTemplate;
 	private LocalDispatcher dispatcher;
 	private CamelContext context;
-	private ServiceRegistration<CamelContext> serviceRegistration;
 	private String name;
 
 	public static ProducerTemplate getProducerTemplate() {
@@ -76,7 +74,7 @@ public class CamelContainer implements Container {
 				Debug.logInfo("Creating route: " + key.getName(), module);
 				routeBuilder = createRoutes(key.getName());
 				addRoutesToContext(routeBuilder);
-			} catch (ContainerException e) {
+			} catch (ContainerException ignored) {
 
 			}
 		});
@@ -143,6 +141,6 @@ public class CamelContainer implements Container {
 	private LocalDispatcher createDispatcher() throws ContainerException {
 		Delegator delegator = DelegatorFactory.getDelegator("default");
 		return ServiceContainer.getLocalDispatcher("camel-dispatcher", delegator);
-//        return dispatcherFactory.createLocalDispatcher("camel-dispatcher", delegator);
+		// return dispatcherFactory.createLocalDispatcher("camel-dispatcher", delegator);
 	}
 }
