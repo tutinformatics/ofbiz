@@ -55,6 +55,7 @@ public class SubscriberService {
         subscriberDTO.setTopic((String) subscriber.get("topic"));
         subscriberDTO.setDescription((String) subscriber.get("description"));
         subscriberDTO.setFilter((String) subscriber.get("filter"));
+        subscriberDTO.setProperties((String) subscriber.get("properties"));
         return subscriberDTO;
     }
 
@@ -65,6 +66,7 @@ public class SubscriberService {
         subscriberContext.put("topic", data.get("topic"));
         subscriberContext.put("description", data.get("description"));
         subscriberContext.put("filter", data.get("filter"));
+        subscriberContext.put("properties", data.get("properties"));
         setSubscriberData(data.get("topic").toString(), data.get("OfbizEntityName").toString(), data.get("filter"));
         OfbizSubscriberServices ofbizSubscriberServices = new OfbizSubscriberServices();
         ofbizSubscriberServices.createOfbizSubscriber(dispatchContext, subscriberContext);

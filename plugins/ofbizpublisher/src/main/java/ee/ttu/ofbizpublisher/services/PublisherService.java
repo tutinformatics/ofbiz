@@ -24,7 +24,6 @@ public class PublisherService {
         this.delegator = delegator;
     }
 
-
     public List<PublisherDTO> getPublishers() throws GenericEntityException {
         List<GenericValue> genericValues = EntityQuery.use(delegator).from("OfbizPublisher").queryList();
         return genericValues.stream().map(x -> getOfbizPublisherDTO((String) x.get("OfbizPublisherId"))).collect(Collectors.toList());
@@ -32,7 +31,6 @@ public class PublisherService {
 
     public PublisherDTO getOfbizPublisherDTO(String ofbizPublisherId) {
         PublisherDTO ofbizPublisherDTO = new PublisherDTO();
-
         GenericValue ofbizPublisher = null;
         try {
             ofbizPublisher = EntityQuery
@@ -43,7 +41,6 @@ public class PublisherService {
         } catch (GenericEntityException e) {
             e.printStackTrace();
         }
-
         ofbizPublisherDTO.setPublisherId((String) ofbizPublisher.get("OfbizPublisherId"));
         ofbizPublisherDTO.setEntityName((String) ofbizPublisher.get("OfbizEntityName"));
         ofbizPublisherDTO.setTopic((String) ofbizPublisher.get("topic"));
