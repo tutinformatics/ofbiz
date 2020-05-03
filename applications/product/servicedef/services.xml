@@ -679,21 +679,21 @@ under the License.
     <!-- Create BigBuy product category, add products, add products to category-->
     <!--______________________________________________________________________________________________________________________________-->
 
-    <service name="createCategory" engine="java"
+    <service name="createCategoryInBigBuyCatalog" engine="java"
              location="org.apache.ofbiz.product.category.BigBuyInventory" invoke="addBigBuyCategory" auth="true">
-        <description>Service for BigBuy API, takes category ID and creates Category, Products with this Category</description>
+        <description>Creates chosen category and adds it into BigBuy catalog.</description>
         <attribute name="productCategoryTypeId" type="String" mode="IN" optional="false"/>
     </service>
 
-    <service name="addProductsToCategory" engine="java"
-             location="org.apache.ofbiz.product.category.BigBuyInventory" invoke="addProductsToCategory" auth="true">
-        <description>Service for BigBuy API, takes category ID and creates Category, Products with this Category</description>
-        <attribute name="productCategoryTypeId" type="String" mode="IN" optional="false"/>
+    <service name="addProductsIntoCategory" engine="java"
+             location="org.apache.ofbiz.product.category.BigBuyInventory" invoke="addProducts" auth="true">
+        <description>Adds BigBuy products from chosen category.</description>
+        <attribute name="categoryId" type="String" mode="IN" optional="false"/>
     </service>
 
-    <service name="createCatalogAndSupplier" engine="java"
-             location="org.apache.ofbiz.product.category.BigBuyInventory" invoke="creatingCatalogAndSupplier" auth="true">
-        <description>Service for BigBuy API, takes category ID and creates Category, Products with this Category</description>
+    <service name="createBigBuyCatalogAndSupplier" engine="java"
+             location="org.apache.ofbiz.product.category.BigBuyInventory" invoke="addBigBuyCatalogAndSupplier" auth="true">
+        <description>Creates BigBuy party, gives to it Supplier role, creates BigBuy catalog.</description>
     </service>
 
     <!--______________________________________________________________________________________________________________________________-->
