@@ -9,4 +9,5 @@ public abstract class BaseRoute extends RouteBuilder {
 	public BaseRoute(LocalDispatcher localDispatcher) {
 		this.localDispatcher = localDispatcher;
 	}
+
 }
