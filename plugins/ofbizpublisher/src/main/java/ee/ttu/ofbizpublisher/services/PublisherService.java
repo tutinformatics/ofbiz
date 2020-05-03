@@ -8,9 +8,7 @@ import ee.ttu.ofbizpublisher.mqtt.Publisher;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
-import org.apache.ofbiz.entity.model.ModelEntity;
 import org.apache.ofbiz.entity.util.EntityQuery;
-import org.apache.ofbiz.jersey.util.QueryParamStringConverter;
 import org.apache.ofbiz.service.ServiceUtil;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -69,16 +67,12 @@ public class PublisherService {
     public void setPublisherData(String entityName, String topic, String filterParams) throws Exception {
         Gson gson = new Gson();
         Object filter = gson.fromJson(filterParams, Object.class);
-        List<Map<String, List<String>>> queryList = (List<Map<String, List<String>>>) filter;
-        ModelEntity model = delegator.getModelReader().getModelEntity(entityName);
+        List<List<Filter>> filterList = (List<List<Filter>>) filter;
         List<GenericValue> genericValues = new ArrayList<>();
-        for (Map<String, List<String>> query : queryList) {
-            Map<String, Object> queryParams = query.entrySet().stream()
-                    .map(x -> new AbstractMap.SimpleEntry<>(x.getKey(), QueryParamStringConverter.convert(x.getValue().get(0), model.getField(x.getKey()).getType())))
-                    .collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue));
-            genericValues.addAll(EntityQuery.use(delegator).from(entityName).where(queryParams).queryList());
+        for (List<Filter> query : filterList) {
+            genericValues.addAll(EntityQuery.use(delegator).from(entityName).where(query).queryList());
         }
-        if (queryList.isEmpty()) {
+        if (filterList.isEmpty()) {
             genericValues = EntityQuery.use(delegator).from(entityName).queryList();
         }
         String publisherId = UUID.randomUUID().toString();
@@ -92,24 +86,21 @@ public class PublisherService {
     public void setPublisherDataWithPublisher(String entityName, String topic, String filterParams) throws Exception {
         Gson gson = new Gson();
         Object filter = gson.fromJson(filterParams, Object.class);
-        List<Map<String, List<String>>> queryList = (List<Map<String, List<String>>>) filter;
-        ModelEntity model = delegator.getModelReader().getModelEntity(entityName);
+        List<List<Filter>> filterList = (List<List<Filter>>) filter;
         List<GenericValue> genericValues = new ArrayList<>();
-        for (Map<String, List<String>> query : queryList) {
-            Map<String, Object> queryParams = query.entrySet().stream()
-                    .map(x -> new AbstractMap.SimpleEntry<>(x.getKey(), QueryParamStringConverter.convert(x.getValue().get(0), model.getField(x.getKey()).getType())))
-                    .collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue));
-            genericValues.addAll(EntityQuery.use(delegator).from(entityName).where(queryParams).queryList());
+        for (List<Filter> query : filterList) {
+            genericValues.addAll(EntityQuery.use(delegator).from(entityName).where(query).queryList());
         }
-        if (queryList.isEmpty()) {
+        if (filterList.isEmpty()) {
             genericValues = EntityQuery.use(delegator).from(entityName).queryList();
         }
-        Publisher ofbizPublisher = (Publisher) EntityQuery
+        GenericValue ofbizPublisher = EntityQuery
                 .use(delegator)
                 .from("OfbizPublisher")
                 .where("topic", topic)
-                .queryOne();
-        ofbizPublisher.callWithTopic(genericValues, topic, ofbizPublisher);
+                .queryFirst();
+        Publisher publisher = (Publisher) ofbizPublisher;
+        publisher.callWithTopic(genericValues, topic);
     }
 
     public GenericValue deletePublisher(String ofbizPublisherId) throws GenericEntityException {
