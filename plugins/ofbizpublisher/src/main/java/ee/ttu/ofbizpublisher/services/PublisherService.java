@@ -89,6 +89,29 @@ public class PublisherService {
         mqttService.call(genericValues);
     }
 
+    public void setPublisherDataWithPublisher(String entityName, String topic, String filterParams) throws Exception {
+        Gson gson = new Gson();
+        Object filter = gson.fromJson(filterParams, Object.class);
+        List<Map<String, List<String>>> queryList = (List<Map<String, List<String>>>) filter;
+        ModelEntity model = delegator.getModelReader().getModelEntity(entityName);
+        List<GenericValue> genericValues = new ArrayList<>();
+        for (Map<String, List<String>> query : queryList) {
+            Map<String, Object> queryParams = query.entrySet().stream()
+                    .map(x -> new AbstractMap.SimpleEntry<>(x.getKey(), QueryParamStringConverter.convert(x.getValue().get(0), model.getField(x.getKey()).getType())))
+                    .collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue));
+            genericValues.addAll(EntityQuery.use(delegator).from(entityName).where(queryParams).queryList());
+        }
+        if (queryList.isEmpty()) {
+            genericValues = EntityQuery.use(delegator).from(entityName).queryList();
+        }
+        Publisher ofbizPublisher = (Publisher) EntityQuery
+                .use(delegator)
+                .from("OfbizPublisher")
+                .where("topic", topic)
+                .queryOne();
+        ofbizPublisher.callWithTopic(genericValues, topic, ofbizPublisher);
+    }
+
     public GenericValue deletePublisher(String ofbizPublisherId) throws GenericEntityException {
         checkPublisher(ofbizPublisherId);
         GenericValue genericValue = EntityQuery

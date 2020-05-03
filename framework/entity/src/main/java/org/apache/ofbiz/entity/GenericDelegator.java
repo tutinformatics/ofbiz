@@ -841,7 +841,7 @@ public class GenericDelegator implements Delegator {
                     String topic = publisher.get("topic").toString();
                     String filter = publisher.get("filter").toString();
                     if (entityName.equals(value.getEntityName())) {
-                        publisherService.setPublisherData(entityName, topic, filter);
+                        publisherService.setPublisherDataWithPublisher(entityName, topic, filter);
                     }
                 }
             }

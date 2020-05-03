@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.List;
 
-public class Publisher {
+public class Publisher extends GenericValue {
 
     private final String topic;
     private final IMqttClient client;
@@ -27,6 +27,17 @@ public class Publisher {
         msg.setQos(0);
         msg.setRetained(true);
         client.publish(this.topic, msg);
+        return null;
+    }
+
+    public Void callWithTopic(List<GenericValue> message, String topic, Publisher publisher) throws Exception {
+        if (!publisher.client.isConnected()) {
+            return null;
+        }
+        MqttMessage msg = getDataInBytes(message);
+        msg.setQos(0);
+        msg.setRetained(true);
+        publisher.client.publish(topic, msg);
         return null;
     }
 
