@@ -10,6 +10,8 @@ performFind service is a service for executing searches with additional paramete
 }
 ```
 
+Times can be entered in milliseconds or in strings edible for java.sql.Timestamp in format "yyyy-[m]m-[d]d hh:mm:ss[.f...]"
+
 It supports plainly giving parameters which gives results with perfect match, such as:
 `"partyId": "Company"`
 
