@@ -20,6 +20,7 @@ public class FilteredSearchService {
 //			"fieldName": "name"
 //			"operation": "like"
 //			"value": "val"
+//		  "ignoreCase": boolean
 //		}
 		LocalDispatcher dispatcher = dctx.getDispatcher();
 		Map<String, Object> performFindInput = new HashMap<>();
@@ -38,6 +39,9 @@ public class FilteredSearchService {
 				String prefix = field + "_fld" + i++ + "_";
 				performFindInputFieldsInput.put(prefix + "op", specific.get("operation"));
 				performFindInputFieldsInput.put(prefix + "value", specific.get("value"));
+				if (specific.containsKey("ignoreCase") && specific.get("ignoreCase").equals(true)) {
+					performFindInputFieldsInput.put(prefix + "ic", "Y");
+				}
 			}
 		}
 

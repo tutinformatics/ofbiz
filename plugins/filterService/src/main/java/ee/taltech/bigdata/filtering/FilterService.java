@@ -1,4 +1,3 @@
-// licence: only usable until 18 May 2020, after that this file must not be ran
 package ee.taltech.bigdata.filtering;
 
 import org.apache.ofbiz.base.util.UtilGenerics;
