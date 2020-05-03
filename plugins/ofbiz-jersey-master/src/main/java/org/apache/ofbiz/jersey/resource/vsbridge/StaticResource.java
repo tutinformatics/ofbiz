@@ -91,15 +91,15 @@ public class StaticResource {
         switch (entityName) {
             case "attributes":
                 resultPage = VsBridgeServices.getPagedList(delegator, "ProductFeatureCategory", page, pageSize);
-                result = VsBridgeServices.attributeToVsfAttribute(resultPage.getData());
+                result = VsBridgeServices.convertFeaturesToVsAttributes(resultPage.getData());
                 break;
             case "categories":
                 resultPage = VsBridgeServices.getPagedList(delegator, "ProductCategory", page, pageSize);
-                result = VsBridgeServices.categoryToVsfCategory(resultPage.getData());
+                result = VsBridgeServices.convertCategoriesToVsCategories(resultPage.getData());
                 break;
             case "products":
                 resultPage = VsBridgeServices.getPagedList(delegator, "Product", page, pageSize);
-                result = VsBridgeServices.productToVsfProduct(resultPage.getData());
+                result = VsBridgeServices.convertProductsToVsProducts(resultPage.getData());
                 break;
         }
 
