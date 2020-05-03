@@ -7,8 +7,6 @@ import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.base.util.collections.PagedList;
 import org.apache.ofbiz.entity.*;
-import org.apache.ofbiz.entity.transaction.TransactionUtil;
-import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.jersey.pojo.AuthenticationOutput;
 import org.apache.ofbiz.jersey.resource.AuthServiceResource;
 import org.apache.ofbiz.jersey.response.Error;
@@ -21,6 +19,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @Provider
@@ -75,23 +74,42 @@ public class StaticResource {
     }
 
     @GET
-    @Path("attributes/index")
+    @Path("{name}/index")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAttributes(@QueryParam(value = "apiKey") String apiKey,
+    public Response getPagedEntity(@PathParam(value = "name") String entityName,
+            @QueryParam(value = "apiKey") String apiKey,
             @DefaultValue("5") @QueryParam(value = "pageSize") Integer pageSize,
-            @DefaultValue("1") @QueryParam(value = "page") Integer page)
+            @DefaultValue("0") @QueryParam(value = "page") Integer page)
     {
         // TODO: Care about apiKey.
-        Response.ResponseBuilder builder = null;
+
         Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
 
-        PagedList<GenericValue> resultPage = VsBridgeServices.getPagedList(delegator, "Product", page, pageSize);
-        if (resultPage != null) {
-            Map<Object, Object> result = UtilMisc.toMap("code", 200, "result", resultPage.getData());
-            builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON_TYPE).entity(result);
+        PagedList<GenericValue> resultPage = null;
+        List<Map<String, Object>> result = null;
+
+        switch (entityName) {
+            case "attributes":
+                resultPage = VsBridgeServices.getPagedList(delegator, "ProductFeatureCategory", page, pageSize);
+                result = VsBridgeServices.attributeToVsfAttribute(resultPage.getData());
+                break;
+            case "categories":
+                resultPage = VsBridgeServices.getPagedList(delegator, "ProductCategory", page, pageSize);
+                result = VsBridgeServices.categoryToVsfCategory(resultPage.getData());
+                break;
+            case "products":
+                resultPage = VsBridgeServices.getPagedList(delegator, "Product", page, pageSize);
+                result = VsBridgeServices.productToVsfProduct(resultPage.getData());
+                break;
+        }
+
+        Response.ResponseBuilder builder = null;
+        if (result != null) {
+            builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON_TYPE)
+                    .entity(UtilMisc.toMap("code", 200, "result", result));
         } else {
             builder = Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON_TYPE)
-                    .entity(new Error(400, "Bad request!", "Failed to get pagedList!"));
+                    .entity(new Error(400, "Bad request!", "Incorrect entity requested!"));
         }
         return builder.build();
     }
