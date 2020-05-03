@@ -18,39 +18,13 @@
  *******************************************************************************/
 package org.apache.ofbiz.common;
 
-import static org.apache.ofbiz.base.util.UtilGenerics.checkCollection;
-import static org.apache.ofbiz.base.util.UtilGenerics.checkMap;
-
-import java.sql.Timestamp;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TimeZone;
-
-import org.apache.ofbiz.base.util.Debug;
-import org.apache.ofbiz.base.util.ObjectType;
-import org.apache.ofbiz.base.util.StringUtil;
-import org.apache.ofbiz.base.util.UtilDateTime;
-import org.apache.ofbiz.base.util.UtilGenerics;
-import org.apache.ofbiz.base.util.UtilHttp;
-import org.apache.ofbiz.base.util.UtilMisc;
-import org.apache.ofbiz.base.util.UtilProperties;
-import org.apache.ofbiz.base.util.UtilValidate;
+import org.apache.commons.lang.math.NumberUtils;
+import org.apache.ofbiz.base.util.*;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntity;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
-import org.apache.ofbiz.entity.condition.EntityComparisonOperator;
-import org.apache.ofbiz.entity.condition.EntityCondition;
-import org.apache.ofbiz.entity.condition.EntityConditionList;
-import org.apache.ofbiz.entity.condition.EntityFunction;
-import org.apache.ofbiz.entity.condition.EntityOperator;
+import org.apache.ofbiz.entity.condition.*;
 import org.apache.ofbiz.entity.model.ModelEntity;
 import org.apache.ofbiz.entity.model.ModelField;
 import org.apache.ofbiz.entity.util.EntityListIterator;
@@ -61,6 +35,13 @@ import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.GenericServiceException;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ServiceUtil;
+
+import java.sql.Timestamp;
+import java.util.*;
+import java.util.Map.Entry;
+
+import static org.apache.ofbiz.base.util.UtilGenerics.checkCollection;
+import static org.apache.ofbiz.base.util.UtilGenerics.checkMap;
 
 /**
  * FindServices Class
@@ -268,7 +249,7 @@ public class FindServices {
                 keys.add(key);
                 fieldValue = parameters.get(key);
             }
-            if (fieldName.endsWith("_fld0") || fieldName.endsWith("_fld1")) {
+            if (fieldName.indexOf("_fld", fieldName.length() - 6) == (fieldName.length() - 5) && NumberUtils.isNumber(fieldName.substring(fieldName.length() - 1))) {
                 if (parameters.containsKey(fieldName)) {
                     keys.add(fieldName);
                 }
