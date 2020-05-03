@@ -47,7 +47,7 @@ import static org.apache.ofbiz.jersey.util.ApiUtil.*;
 
 public class AuthenticationFilter implements Filter {
 
-	private static final Boolean IS_DEV = false;
+	private static final Boolean IS_DEV = true;
 
 	private static final String MODULE = AuthenticationFilter.class.getName();
 	private final GraphQLObjectMapper mapper;
