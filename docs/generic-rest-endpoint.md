@@ -34,7 +34,9 @@ Currently the following /v1 endpoints (meaning `/api/generic/v1/*`) are implemen
           "numericfield4_fld0_op": "greaterThan",
           "numericfield4_fld0_value": 12,
           "numericfield4_fld1_op": "lessThanEqualTo",
-          "numericfield4_fld1_value": "2019-12-01 20:09:01" 
+          "numericfield4_fld1_value": "2019-12-01 20:09:01",
+          "stringfield_fld0_op": "in",
+          "stringfield_fld0_value": ["str1", "str2"]
         },
         "fieldList": ["List", "of", "returned", "fields"] (optional, default all fields),
         "entityRelations": { (optional, default no relations, only given relations are returned)
