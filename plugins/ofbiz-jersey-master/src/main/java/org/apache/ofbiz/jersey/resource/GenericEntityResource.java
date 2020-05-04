@@ -168,13 +168,13 @@ public class GenericEntityResource {
 
 		try {
 			builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON_TYPE).entity(genericToJsonConverter.convert(gv).toString());
+			System.out.println(genericToJsonConverter.convert(gv).toString());
 		} catch (ConversionException e) {
 			Error error = new Error(500, "Internal Server Error", "Error converting entity to JSON.");
 			builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.APPLICATION_JSON_TYPE).entity(error);
 			e.printStackTrace();
 			return builder.build();
 		}
-
 		return builder.build();
 	}
 

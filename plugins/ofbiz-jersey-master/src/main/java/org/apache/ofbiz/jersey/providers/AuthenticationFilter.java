@@ -45,7 +45,7 @@ import static org.apache.ofbiz.jersey.util.ApiUtil.*;
 public class AuthenticationFilter implements ContainerRequestFilter {
 
 	private static final String MODULE = AuthenticationFilter.class.getName();
-	private static final Boolean IS_DEV = false;
+	private static final Boolean IS_DEV = true;
 
 	@Context
 	private ResourceInfo resourceInfo;
