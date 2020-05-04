@@ -676,7 +676,7 @@ under the License.
     </service>
 
 
-    <!-- Create BigBuy product category, add products, add products to category-->
+    <!-- Create BigBuy product  category, add products, add products to category-->
     <!--______________________________________________________________________________________________________________________________-->
 
     <service name="createCategoryInBigBuyCatalog" engine="java"
