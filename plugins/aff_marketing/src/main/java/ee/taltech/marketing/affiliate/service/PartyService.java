@@ -75,31 +75,30 @@ public class PartyService {
         List<String> tags = new ArrayList<>();
         List<GenericValue> categories = EntityQuery.use(delegator).from("ProductCategory").queryList();
         for (GenericValue category : categories) {
-           if (EntityQuery.use(delegator).from("ProductPromo").where("promoName", "AffiliateDiscount", "promoText", category.getString("productCategoryId")).queryList().get(0) == null) {
-               String promoId = delegator.getNextSeqId("ProductPromo");
-               GenericValue genericValue = delegator.makeValue("ProductPromo", UtilMisc.toMap("productPromoId", promoId, "userEntered", "Y", "showToCustomer", "N", "requireCode", "Y", "promoName", "AffiliateDiscount", "promoText", category.get("productCategoryId"), "useLimitPerOrder", 1));
-               delegator.create(genericValue);
+            String promoId = delegator.getNextSeqId("ProductPromo");
+            GenericValue genericValue = delegator.makeValue("ProductPromo", UtilMisc.toMap("productPromoId", promoId, "userEntered", "Y", "showToCustomer", "N", "requireCode", "Y", "promoName", "AffiliateDiscount", "promoText", category.get("productCategoryId"), "useLimitPerOrder", 1));
+            delegator.create(genericValue);
 
-               String promoRuleId = delegator.getNextSeqId("ProductPromoRule");
-               genericValue = delegator.makeValue("ProductPromoRule", UtilMisc.toMap("productPromoId", promoId, "productPromoRuleId", promoRuleId, "ruleName", "AffiliateDiscount"));
-               delegator.create(genericValue);
+            String promoRuleId = delegator.getNextSeqId("ProductPromoRule");
+            genericValue = delegator.makeValue("ProductPromoRule", UtilMisc.toMap("productPromoId", promoId, "productPromoRuleId", promoRuleId, "ruleName", "AffiliateDiscount"));
+            delegator.create(genericValue);
 
-               String promoActionId = delegator.getNextSeqId("ProductPromoAction");
-               genericValue = delegator.makeValue("ProductPromoAction", UtilMisc.toMap("productPromoId", promoId, "productPromoRuleId", promoRuleId, "productPromoActionSeqId", promoActionId, "productPromoActionEnumId", "PROMO_ORDER_PERCENT", "amount", "20", "orderAdjustmentTypeId", "PROMOTION_ADJUSTMENT"));
-               delegator.create(genericValue);
+            String promoActionId = delegator.getNextSeqId("ProductPromoAction");
+            genericValue = delegator.makeValue("ProductPromoAction", UtilMisc.toMap("productPromoId", promoId, "productPromoRuleId", promoRuleId, "productPromoActionSeqId", promoActionId, "productPromoActionEnumId", "PROMO_ORDER_PERCENT", "amount", "20", "orderAdjustmentTypeId", "PROMOTION_ADJUSTMENT"));
+            delegator.create(genericValue);
 
-               String promoCondId = delegator.getNextSeqId("ProductPromoCond");
-               genericValue = delegator.makeValue("ProductPromoCond", UtilMisc.toMap("productPromoId", promoId, "productPromoRuleId", promoRuleId, "productPromoCondSeqId", promoCondId));
-               delegator.create(genericValue);
+            String promoCondId = delegator.getNextSeqId("ProductPromoCond");
+            genericValue = delegator.makeValue("ProductPromoCond", UtilMisc.toMap("productPromoId", promoId, "productPromoRuleId", promoRuleId, "productPromoCondSeqId", promoCondId));
+            delegator.create(genericValue);
 
-               genericValue = delegator.makeValue("ProductPromoCategory", UtilMisc.toMap("productPromoId", promoId, "productPromoRuleId", promoRuleId, "productPromoCondSeqId", promoCondId, "productPromoActionSeqId", promoActionId, "productCategoryId", category.get("productCategoryId"), "andGroupId", "_NA_", "includeSubCategories",
-                       "Y"));
-               delegator.create(genericValue);
+            genericValue = delegator.makeValue("ProductPromoCategory", UtilMisc.toMap("productPromoId", promoId, "productPromoRuleId", promoRuleId, "productPromoCondSeqId", promoCondId, "productPromoActionSeqId", promoActionId, "productCategoryId", category.get("productCategoryId"), "andGroupId", "_NA_", "includeSubCategories",
+                    "Y"));
+            delegator.create(genericValue);
 
-               // todo get store id
-               genericValue = delegator.makeValue("ProductStorePromoAppl", UtilMisc.toMap("productStoreId", "9000", "productPromoId", promoId, "fromDate", UtilDateTime.nowTimestamp()));
-               delegator.create(genericValue);
-           }
+            // todo get store id
+            genericValue = delegator.makeValue("ProductStorePromoAppl", UtilMisc.toMap("productStoreId", "9000", "productPromoId", promoId, "fromDate", UtilDateTime.nowTimestamp()));
+            delegator.create(genericValue);
+
         }
 
         return Map.of("values", tags);
@@ -109,17 +108,9 @@ public class PartyService {
         GenericValue discountCode = createDiscountCode(dctx, context);
 
         String partyId = (String) context.get("partyId");
-        String categoryId = (String) context.get("productCategoryId");
         Delegator delegator = dctx.getDelegator();
         checkApprovedAffiliate(partyId, dctx.getDelegator());
-        GenericValue genericValue = delegator.makeValue(
-                "AffiliateCode",
-                UtilMisc.toMap(
-                        "partyId", partyId,
-                        "affiliateCodeId", discountCode.get("productPromoCodeId"),
-                        "isDefault", false,
-                        "categoryId", categoryId),
-                categoryId);
+        GenericValue genericValue = delegator.makeValue("AffiliateCode", UtilMisc.toMap("partyId", partyId, "affiliateCodeId", discountCode.get("productPromoCodeId"), "isDefault", false));
         delegator.create(genericValue);
 
 
