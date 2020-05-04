@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
 distributed with this work for additional information
@@ -19,20 +18,13 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-<ofbiz-component name="base"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-component.xsd">
-    <resource-loader name="main" type="component"/>
-    <classpath type="dir" location="config"/>
+<entity-engine-xml>
+    <SecurityPermission description="View operations in the Ofbizsubscriber Component." permissionId="OFBIZSUBSCRIBER_VIEW"/>
+    <SecurityPermission description="Create operations in the Ofbizsubscriber Component." permissionId="OFBIZSUBSCRIBER_CREATE"/>
+    <SecurityPermission description="Update operations in the Ofbizsubscriber Component." permissionId="OFBIZSUBSCRIBER_UPDATE"/>
+    <SecurityPermission description="Delete operations in the Ofbizsubscriber Component." permissionId="OFBIZSUBSCRIBER_DELETE"/>
+    <SecurityPermission description="ALL operations in the Ofbizsubscriber Component." permissionId="OFBIZSUBSCRIBER_ADMIN"/>
 
-    <test-suite loader="main" location="testdef/basetests.xml"/>
+    <SecurityGroupPermission fromDate="2001-05-13 12:00:00.0" groupId="SUPER" permissionId="OFBIZSUBSCRIBER_ADMIN"/>
 
-    <!-- load the naming (JNDI) server -->
-    <container name="naming-container" loaders="rmi" class="org.apache.ofbiz.base.container.NamingServiceContainer">
-        <property name="host" value="0.0.0.0"/>
-        <property name="port" value="1099"/>
-    </container>
-    <!-- load the administration server -->
-    <container name="admin-container" loaders="main" class="org.apache.ofbiz.base.container.AdminServerContainer"/>
-
-</ofbiz-component>
+</entity-engine-xml>

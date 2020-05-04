@@ -16,15 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package ee.taltech.accounting.connector.camel;
+package com.taltech.crm.services.loader;
 
-import ee.taltech.accounting.connector.camel.routes.BaseRoute;
 import org.apache.camel.CamelContext;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.sparkrest.SparkComponent;
 import org.apache.camel.impl.DefaultCamelContext;
-import org.apache.camel.impl.DefaultCamelContextNameStrategy;
 import org.apache.camel.impl.DefaultPackageScanClassResolver;
 import org.apache.camel.impl.SimpleRegistry;
 import org.apache.camel.spi.PackageScanClassResolver;
@@ -37,9 +34,7 @@ import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.DelegatorFactory;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ServiceContainer;
-import org.osgi.framework.ServiceRegistration;
 
-import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Set;
 
@@ -48,7 +43,6 @@ import java.util.Set;
  */
 public class CamelContainer implements Container {
     private static final String module = CamelContainer.class.getName();
-    //    private static LocalDispatcherFactory dispatcherFactory;
     private static ProducerTemplate producerTemplate;
     private LocalDispatcher dispatcher;
     private CamelContext context;
@@ -56,30 +50,26 @@ public class CamelContainer implements Container {
 
     @Override
     public void init(List<StartupCommand> ofbizCommands, String name, String configFile) throws ContainerException {
+  /*
         this.name = name;
         context = createCamelContext();
-        context.setNameStrategy(new DefaultCamelContextNameStrategy("rest-api"));
-        context.addComponent("restlet", new SparkComponent());
         ContainerConfig.Configuration cfg = ContainerConfig.getConfiguration(name, configFile);
-        String packageName = ContainerConfig.getPropertyValue(cfg, "package", "ee.taltech.accounting.connector.camel.routes");
-
+        String packageName = ContainerConfig.getPropertyValue(cfg, "package", "com.taltech.crm.services.route");
         PackageScanClassResolver packageResolver = new DefaultPackageScanClassResolver();
-        Set<Class<?>> routesClassesSet = packageResolver.findImplementations(BaseRoute.class, packageName);
-
-        routesClassesSet.stream()
-                .filter(route -> !Modifier.isAbstract(route.getModifiers()))
-                .forEach(key -> {
+        Set<Class<?>> routesClassesSet = packageResolver.findImplementations(RouteBuilder.class, packageName);
+        routesClassesSet.forEach(key -> {
+            RouteBuilder routeBuilder;
             try {
-                Debug.logInfo("Creating route: " + key.getName(), module);
-                RouteBuilder routeBuilder = createRoutes(key.getName());
+                routeBuilder = createRoutes(key.getName());
                 addRoutesToContext(routeBuilder);
             } catch (ContainerException e) {
-                e.printStackTrace();
+
             }
         });
-        producerTemplate = context.createProducerTemplate();
-    }
 
+        producerTemplate = context.createProducerTemplate();
+*/
+    }
 
     @Override
     public boolean start() throws ContainerException {
@@ -127,6 +117,7 @@ public class CamelContainer implements Container {
 
     private DefaultCamelContext createCamelContext() throws ContainerException {
         dispatcher = createDispatcher();
+        LocalDispatcher dispatcher = createDispatcher();
         SimpleRegistry registry = new SimpleRegistry();
         registry.put("dispatcher", dispatcher);
         return new DefaultCamelContext(registry);
@@ -146,6 +137,6 @@ public class CamelContainer implements Container {
     private LocalDispatcher createDispatcher() throws ContainerException {
         Delegator delegator = DelegatorFactory.getDelegator("default");
         return ServiceContainer.getLocalDispatcher("camel-dispatcher", delegator);
-        // return dispatcherFactory.createLocalDispatcher("camel-dispatcher", delegator);
+//        return dispatcherFactory.createLocalDispatcher("camel-dispatcher", delegator);
     }
 }

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+    <opportunity
+            opportunityId="SAMPLE_ID1"
+            pipelineId="SAMPLE_ID1"
+            customerId="SAMPLE_ID1"
+            contactId="SAMPLE_ID1"
+            name="Selver"
+            description="Duis dictum, erat in tristique placerat."
+            stage="new"
+            price="200"/>
+    <opportunity
+            opportunityId="SAMPLE_ID2"
+            pipelineId="SAMPLE_ID1"
+            customerId="SAMPLE_ID1"
+            contactId="SAMPLE_ID1"
+            name="Rimi"
+            description="Nullam tellus justo, aliquam a consectetur."
+            stage="new"
+            price="3000"/>
+    <opportunity
+            opportunityId="SAMPLE_ID3"
+            pipelineId="SAMPLE_ID1"
+            customerId="SAMPLE_ID1"
+            contactId="SAMPLE_ID1"
+            name="Prisma"
+            description="Aenean eget commodo felis."
+            stage="new"
+            price="4000"/>
+    <opportunity
+            opportunityId="SAMPLE_ID4"
+            pipelineId="SAMPLE_ID1"
+            customerId="SAMPLE_ID1"
+            contactId="SAMPLE_ID1"
+            name="Coop"
+            description="Sed et eros nec ligula dignissim faucibus et in sapien."
+            stage="proposition"
+            price="1000"/>
+    <opportunity
+            opportunityId="SAMPLE_ID5"
+            pipelineId="SAMPLE_ID1"
+            customerId="SAMPLE_ID1"
+            contactId="SAMPLE_ID1"
+            name="Maxima"
+            description="Quisque varius lacus vitae cursus consequat.   "
+            stage="won"
+            price="500"/>
+</entity-engine-xml>
