@@ -20,13 +20,14 @@ package org.apache.ofbiz.jersey.listerner;
 
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.entity.Delegator;
-import org.apache.ofbiz.security.SecurityUtil;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.webapp.WebAppUtil;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+
+import static org.apache.ofbiz.jersey.util.ApiUtil.generateAdminToken;
 
 public class AppServletContextListener implements ServletContextListener {
 
@@ -41,9 +42,8 @@ public class AppServletContextListener implements ServletContextListener {
         servletContext.setAttribute("dispatcher", dispatcher);
 
         try {
-            String jwtToken = SecurityUtil.generateJwtToAuthenticateUserLogin(delegator, "admin");
             System.out.println("--------------------------------------- TOKEN ---------------------------------------------");
-            System.out.println(jwtToken);
+            System.out.println(generateAdminToken(delegator));
             System.out.println();
         } catch (Exception e) {
             e.printStackTrace();
