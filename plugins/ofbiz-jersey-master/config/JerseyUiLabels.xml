@@ -60,6 +60,12 @@ under the License.
     <property key="api.error.create_workspace">
         <value xml:lang="en">Error creating workspace.</value>
     </property>
+    <property key="api.error.create_timesheet">
+        <value xml:lang="en">Error creating timesheet.</value>
+    </property>
+    <property key="api.error.get_timesheet_list">
+        <value xml:lang="en">Error retrieving timesheet list.</value>
+    </property>
 </resource>
 
 
