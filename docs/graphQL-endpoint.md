@@ -62,3 +62,44 @@ Näide komplekspäringust
   }
 }
 ```
+Mille väljund on järgmine
+```
+{
+    "data": {
+        "party": {
+            "partyId": "DemoEmployee",
+            "_toOne_PartyGroup": null,
+            "description": null,
+            "_toOne_Uom": null,
+            "externalId": null,
+            "statusId": "PARTY_ENABLED",
+            "lastUpdatedStamp": 1588598327365,
+            "lastModifiedDate": null,
+            "createdStamp": 1586114421843,
+            "createdDate": null,
+            "_toOne_PartyType": {
+                "partyTypeId": "PERSON",
+                "parentTypeId": null,
+                "description": "Person"
+            },
+            "_toMany_PartyRole": [
+                {
+                    "roleTypeId": "EMAIL_ADMIN"
+                },
+                {
+                    "roleTypeId": "EMPLOYEE"
+                },
+                {
+                    "roleTypeId": "REQ_TAKER"
+                },
+                {
+                    "roleTypeId": "PROVIDER_ANALYST"
+                },
+                {
+                    "roleTypeId": "PROJECT_TEAM"
+                }
+            ]
+        }
+    }
+}
+```
