@@ -17,3 +17,48 @@ Kus:
 6.   put"entity"(PK, fields) uuendab eksisteerivat entity't, mis otsitakse primary key'de järgi.
 
 TL;DR - _ lõpus tähendab, et primary key'd pole vaja kaasa anda ning kõiki fielde pole post/put tehes kaasa anda - defaultib null'iks
+
+
+Näide komplekspäringust
+
+```
+{
+  party(partyId: "DemoEmployee") {
+    partyId
+
+    _toOne_PartyGroup {
+      groupName
+      groupNameLocal
+      officeSiteName
+      annualRevenue
+      numEmployees
+      tickerSymbol
+    }
+    
+    description
+    
+    _toOne_Uom {
+      abbreviation
+    }
+    
+    externalId
+    
+    statusId
+    
+    lastUpdatedStamp
+    lastModifiedDate
+    createdStamp
+    createdDate # party creation
+    
+    _toOne_PartyType {
+      partyTypeId
+      parentTypeId
+      description
+    } 
+    
+    _toMany_PartyRole {
+      roleTypeId
+    }
+  }
+}
+```
