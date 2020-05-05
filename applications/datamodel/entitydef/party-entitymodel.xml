@@ -1565,10 +1565,14 @@ under the License.
             title="Affiliate Party">
         <field name="affiliateCodeId" type="id"></field>
         <field name="partyId" type="id"></field>
+        <field name="productCategoryId" type="id"></field>
         <field name="isDefault" type="indicator"/>
         <prim-key field="affiliateCodeId"/>
         <relation type="one" fk-name="AFFILIATE_CODE_PARTY" rel-entity-name="Person">
             <key-map field-name="partyId"/>
+        </relation>
+        <relation type="one" fk-name="AFFILIATE_CODE_CATEGORY" rel-entity-name="ProductCategory">
+            <key-map field-name="productCategoryId"/>
         </relation>
     </entity>
     <entity entity-name="Affiliate"

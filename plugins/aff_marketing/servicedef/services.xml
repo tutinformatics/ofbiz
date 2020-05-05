@@ -35,7 +35,6 @@ under the License.
              engine="java"
              location="ee.taltech.marketing.affiliate.service.PartyService"
              invoke="approve">
-        <description>Create affiliate partner</description>
         <attribute name="partyId" type="String" mode="IN"/>
         <attribute name="approvedPartner" type="ee.taltech.marketing.affiliate.model.AffiliateDTO" mode="OUT"/>
     </service>
@@ -44,7 +43,6 @@ under the License.
              engine="java"
              location="ee.taltech.marketing.affiliate.service.PartyService"
              invoke="disapprove">
-        <description>Create affiliate partner</description>
         <attribute name="partyId" type="String" mode="IN"/>
         <attribute name="disapprovedPartner" type="ee.taltech.marketing.affiliate.model.AffiliateDTO" mode="OUT"/>
     </service>
@@ -53,9 +51,32 @@ under the License.
              engine="java"
              location="ee.taltech.marketing.affiliate.service.PartyService"
              invoke="disableAffiliate">
-        <description>Create affiliate partner</description>
         <attribute name="partyId" type="String" mode="IN"/>
         <attribute name="disapprovedPartner" type="ee.taltech.marketing.affiliate.model.AffiliateDTO" mode="OUT"/>
+    </service>
+
+    <service name="getAffiliateDiscounts"
+             engine="java"
+             location="ee.taltech.marketing.affiliate.service.PartyService"
+             invoke="getAffiliateDiscounts">
+        <attribute name="discounts" type="java.util.List" mode="OUT"/>
+    </service>
+
+    <service name="getAffiliateDiscount"
+             engine="java"
+             location="ee.taltech.marketing.affiliate.service.PartyService"
+             invoke="getAffiliateDiscount">
+        <attribute name="productCategoryId" type="String" mode="IN"/>
+        <attribute name="discount" type="ee.taltech.marketing.affiliate.model.SimpleDiscountDTO" mode="OUT"/>
+    </service>
+
+    <service name="setAffiliateDiscount"
+             engine="java"
+             location="ee.taltech.marketing.affiliate.service.PartyService"
+             invoke="setAffiliateDiscount">
+        <attribute name="productCategoryId" type="String" mode="IN"/>
+        <attribute name="amount" type="Double" mode="IN"/>
+        <attribute name="discount" type="ee.taltech.marketing.affiliate.model.SimpleDiscountDTO" mode="OUT"/>
     </service>
 
     <service name="createAffiliateCode"

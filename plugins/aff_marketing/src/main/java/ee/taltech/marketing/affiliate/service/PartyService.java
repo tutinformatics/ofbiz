@@ -1,7 +1,7 @@
 package ee.taltech.marketing.affiliate.service;
 
 import ee.taltech.marketing.affiliate.model.AffiliateDTO;
-import org.apache.camel.language.Bean;
+import ee.taltech.marketing.affiliate.model.SimpleDiscountDTO;
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilDateTime;
 import org.apache.ofbiz.base.util.UtilMisc;
@@ -15,9 +15,7 @@ import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ServiceContainer;
 import org.apache.ofbiz.service.ServiceUtil;
-import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -26,21 +24,31 @@ import static ee.taltech.marketing.affiliate.model.AffiliateDTO.Status.*;
 
 public class PartyService {
 
-    private static boolean init = false;
+    private static boolean initialized = false;
 
     public static final String module = PartyServices.class.getName();
 
     public PartyService() {
-        if (!init) {
-            Delegator delegator = DelegatorFactory.getDelegator("default");
-            LocalDispatcher dispatcher = ServiceContainer.getLocalDispatcher("aff-dispatcher", delegator);
+
+        if (!initialized) {
             try {
-                generateAffPromoPerCategory(dispatcher.getDispatchContext(), new HashMap<>());
+                Delegator delegator = DelegatorFactory.getDelegator("default");
+                LocalDispatcher dispatcher = ServiceContainer.getLocalDispatcher("aff-dispatcher", delegator);
+
+                List<GenericValue> categories = EntityQuery.use(delegator).from("ProductCategory").queryList();
+                List<GenericValue> productPromos = EntityQuery.use(delegator).from("ProductPromo").where("promoName", "AffiliateDiscount").queryList();
+
+                if (categories.size() > productPromos.size()) {
+                    generateAffPromoPerCategory(dispatcher.getDispatchContext(), new HashMap<>());
+                }
+
+                initialized = true;
             } catch (GenericEntityException e) {
                 e.printStackTrace();
             }
-            init = true;
         }
+
+
     }
 
     public Map<String, AffiliateDTO> approve(DispatchContext dctx, Map<String, ?> context) throws GenericEntityException {
@@ -78,30 +86,9 @@ public class PartyService {
         List<String> tags = new ArrayList<>();
         List<GenericValue> categories = EntityQuery.use(delegator).from("ProductCategory").queryList();
         for (GenericValue category : categories) {
-            String promoId = delegator.getNextSeqId("ProductPromo");
-            GenericValue genericValue = delegator.makeValue("ProductPromo", UtilMisc.toMap("productPromoId", promoId, "userEntered", "Y", "showToCustomer", "N", "requireCode", "Y", "promoName", "AffiliateDiscount", "promoText", category.get("productCategoryId"), "useLimitPerOrder", 1));
-            delegator.create(genericValue);
-
-            String promoRuleId = delegator.getNextSeqId("ProductPromoRule");
-            genericValue = delegator.makeValue("ProductPromoRule", UtilMisc.toMap("productPromoId", promoId, "productPromoRuleId", promoRuleId, "ruleName", "AffiliateDiscount"));
-            delegator.create(genericValue);
-
-            String promoActionId = delegator.getNextSeqId("ProductPromoAction");
-            genericValue = delegator.makeValue("ProductPromoAction", UtilMisc.toMap("productPromoId", promoId, "productPromoRuleId", promoRuleId, "productPromoActionSeqId", promoActionId, "productPromoActionEnumId", "PROMO_ORDER_PERCENT", "amount", "20", "orderAdjustmentTypeId", "PROMOTION_ADJUSTMENT"));
-            delegator.create(genericValue);
-
-            String promoCondId = delegator.getNextSeqId("ProductPromoCond");
-            genericValue = delegator.makeValue("ProductPromoCond", UtilMisc.toMap("productPromoId", promoId, "productPromoRuleId", promoRuleId, "productPromoCondSeqId", promoCondId));
-            delegator.create(genericValue);
-
-            genericValue = delegator.makeValue("ProductPromoCategory", UtilMisc.toMap("productPromoId", promoId, "productPromoRuleId", promoRuleId, "productPromoCondSeqId", promoCondId, "productPromoActionSeqId", promoActionId, "productCategoryId", category.get("productCategoryId"), "andGroupId", "_NA_", "includeSubCategories",
-                    "Y"));
-            delegator.create(genericValue);
-
-            // todo get store id
-            genericValue = delegator.makeValue("ProductStorePromoAppl", UtilMisc.toMap("productStoreId", "9000", "productPromoId", promoId, "fromDate", UtilDateTime.nowTimestamp()));
-            delegator.create(genericValue);
-
+            Map<String, Object> categoryContext = new HashMap<>();
+            categoryContext.put("productCategoryId", category.get("productCategoryId"));
+            getAndCreateIfNeededPromoForCategory(dctx, categoryContext);
         }
 
         return Map.of("values", tags);
@@ -113,9 +100,8 @@ public class PartyService {
         String partyId = (String) context.get("partyId");
         Delegator delegator = dctx.getDelegator();
         checkApprovedAffiliate(partyId, dctx.getDelegator());
-        GenericValue genericValue = delegator.makeValue("AffiliateCode", UtilMisc.toMap("partyId", partyId, "affiliateCodeId", discountCode.get("productPromoCodeId"), "isDefault", false));
+        GenericValue genericValue = delegator.makeValue("AffiliateCode", UtilMisc.toMap("partyId", partyId, "affiliateCodeId", discountCode.get("productPromoCodeId"), "isDefault", false, "productCategoryId", discountCode.get("productCategoryId")));
         delegator.create(genericValue);
-
 
         return Map.of("createdCode", genericValue);
     }
@@ -123,7 +109,7 @@ public class PartyService {
     public GenericValue createDiscountCode(DispatchContext dctx, Map<String, ?> context) throws GenericEntityException {
         Delegator delegator = dctx.getDelegator();
 
-        GenericValue promoForCategory = getPromoForCategory(dctx, context);
+        GenericValue promoForCategory = getAndCreateIfNeededPromoForCategory(dctx, context);
 
         String productPromoCodeId = delegator.getNextSeqId("ProductPromoCode");
         GenericValue promoCode = delegator.makeValue("ProductPromoCode", UtilMisc.toMap("productPromoCodeId", productPromoCodeId, "productPromoId", promoForCategory.get("productPromoId"), "userEntered", "Y", "requireEmailOrParty", "N"));
@@ -132,7 +118,7 @@ public class PartyService {
         return promoCode;
     }
 
-    public GenericValue getPromoForCategory(DispatchContext dctx, Map<String, ?> context) throws GenericEntityException {
+    public GenericValue getAndCreateIfNeededPromoForCategory(DispatchContext dctx, Map<String, ?> context) throws GenericEntityException {
         Delegator delegator = dctx.getDelegator();
         String productCategoryId = (String) context.get("productCategoryId");
 
@@ -145,20 +131,45 @@ public class PartyService {
         return promoForCategory;
     }
 
-    public String generateTag(String tag, Map<String, String> params) {
-        StringBuilder stringParams = new StringBuilder();
-        for (Map.Entry<String, String> entry : params.entrySet()) {
-            stringParams.append(String.format("%s=\"%s\" ", entry.getKey(), entry.getValue()));
+    public Map<String, List<SimpleDiscountDTO>> getAffiliateDiscounts(DispatchContext dctx, Map<String, ?> context) throws GenericEntityException {
+        Delegator delegator = dctx.getDelegator();
+        List<GenericValue> productPromos = EntityQuery.use(delegator).from("ProductPromo").where("promoName", "AffiliateDiscount").queryList();
+
+        List<SimpleDiscountDTO> discounts = new ArrayList<>();
+
+        for (GenericValue productPromo : productPromos) {
+            discounts.add(getAffiliateDiscount(dctx, new HashMap<>(Map.of("productCategoryId", productPromo.get("promoText")))).get("discount"));
         }
-        return String.format("<%s %s/>", tag, stringParams);
+
+        return new HashMap<>(Map.of("discounts", discounts));
     }
+
+    public Map<String, SimpleDiscountDTO> getAffiliateDiscount(DispatchContext dctx, Map<String, ?> context) throws GenericEntityException {
+        Delegator delegator = dctx.getDelegator();
+
+        GenericValue productPromo = EntityQuery.use(delegator).from("ProductPromo").where("promoName", "AffiliateDiscount", "promoText", context.get("productCategoryId")).queryOne();
+        GenericValue productPromoAction = EntityQuery.use(delegator).from("ProductPromoAction").where("productPromoId", productPromo.get("productPromoId")).queryOne();
+
+        return new HashMap<>(Map.of("discount", new SimpleDiscountDTO((String) productPromo.get("productPromoId"), (String) productPromo.get("promoText"), productPromoAction.getDouble("amount"))));
+    }
+
+    public Map<String, SimpleDiscountDTO> setAffiliateDiscount(DispatchContext dctx, Map<String, ?> context) throws GenericEntityException {
+        Delegator delegator = dctx.getDelegator();
+        GenericValue productPromo = EntityQuery.use(delegator).from("ProductPromo").where("promoName", "AffiliateDiscount", "promoText", context.get("productCategoryId")).queryOne();
+        GenericValue productPromoAction = EntityQuery.use(delegator).from("ProductPromoAction").where("productPromoId", productPromo.get("productPromoId")).queryOne();
+
+        productPromoAction.set("amount", context.get("amount"));
+        delegator.store(productPromoAction);
+
+        return new HashMap<>(Map.of("discount", new SimpleDiscountDTO((String) productPromo.get("productPromoId"), (String) productPromo.get("promoText"), productPromoAction.getDouble("amount"))));
+    }
+
 
     public GenericValue createPromoForCategory(DispatchContext dctx, Map<String, ?> context) throws GenericEntityException {
         Delegator delegator = dctx.getDelegator();
         String productCategoryId = (String) context.get("productCategoryId");
         GenericValue promoValue = null;
         try {
-
             GenericValue productCategory = EntityQuery.use(delegator).from("ProductCategory").where("productCategoryId", productCategoryId).queryOne();
 
             if (productCategory == null) {
