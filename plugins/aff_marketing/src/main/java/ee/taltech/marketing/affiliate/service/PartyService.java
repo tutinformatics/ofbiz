@@ -100,7 +100,7 @@ public class PartyService {
         String partyId = (String) context.get("partyId");
         Delegator delegator = dctx.getDelegator();
         checkApprovedAffiliate(partyId, dctx.getDelegator());
-        GenericValue genericValue = delegator.makeValue("AffiliateCode", UtilMisc.toMap("partyId", partyId, "affiliateCodeId", discountCode.get("productPromoCodeId"), "isDefault", false, "productCategoryId", discountCode.get("productCategoryId")));
+        GenericValue genericValue = delegator.makeValue("AffiliateCode", UtilMisc.toMap("partyId", partyId, "affiliateCodeId", discountCode.get("productPromoCodeId"), "isDefault", false, "productCategoryId", context.get("productCategoryId")));
         delegator.create(genericValue);
 
         return Map.of("createdCode", genericValue);
