@@ -13,7 +13,6 @@ import org.apache.ofbiz.entity.condition.EntityConditionList;
 import org.apache.ofbiz.entity.model.ModelEntity;
 import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.entity.util.EntityUtilProperties;
-import org.apache.ofbiz.entity.util.ExtendedConverters;
 import org.apache.ofbiz.jersey.annotation.Secured;
 import org.apache.ofbiz.jersey.pojo.EntityQueryInput;
 import org.apache.ofbiz.jersey.response.Error;
@@ -33,7 +32,6 @@ import javax.ws.rs.ext.Provider;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -45,8 +43,6 @@ import static org.apache.ofbiz.base.util.UtilGenerics.checkMap;
 public class GenericEntityQueryResource {
 
 	public static final String MODULE = GenericEntityResource.class.getName();
-	public static final ExtendedConverters.ExtendedJSONToGenericValue jsonToGenericConverter = new ExtendedConverters.ExtendedJSONToGenericValue();
-	public static final ExtendedConverters.ExtendedGenericValueToJSON genericToJsonConverter = new ExtendedConverters.ExtendedGenericValueToJSON();
 	private static ObjectMapper mapper = new ObjectMapper();
 	@Context
 	private HttpServletRequest httpRequest;
@@ -162,10 +158,7 @@ public class GenericEntityQueryResource {
 		String orderBy = (String) query.get("orderBy");
 		Map<String, ?> inputFields = checkMap(query.get("inputFields"), String.class, Object.class); // Input
 		String noConditionFind = (String) query.get("noConditionFind");
-		String distinct = (String) query.get("distinct");
-		List<String> fieldList = UtilGenerics.cast(query.get("fieldList"));
 		GenericValue userLogin = (GenericValue) query.get("userLogin");
-		Locale locale = (Locale) query.get("locale");
 
 		if (UtilValidate.isEmpty(noConditionFind)) {
 			// try finding in inputFields Map
@@ -192,17 +185,10 @@ public class GenericEntityQueryResource {
 			thruDateName = (String) inputFields.get("thruDateName");
 		}
 
-		Integer viewSize = (Integer) query.get("viewSize");
-		Integer viewIndex = (Integer) query.get("viewIndex");
-		Integer maxRows = null;
-		if (viewSize != null && viewIndex != null) {
-			maxRows = viewSize * (viewIndex + 1);
-		}
+		Map<String, Object> prepareResult;
 
-		Map<String, Object> prepareResult = null;
-
-		prepareResult = dispatcher.runSync("prepareFind", UtilMisc.toMap("entityName", entityName, "orderBy", orderBy,
-				"inputFields", inputFields, "filterByDate", filterByDate, "noConditionFind", noConditionFind,
+		prepareResult = dispatcher.runSync("prepareFind", UtilMisc.toMap("entityName", entityName,
+				"orderBy", orderBy, "inputFields", inputFields, "filterByDate", filterByDate, "noConditionFind", noConditionFind,
 				"filterByDateValue", filterByDateValue, "userLogin", userLogin, "fromDateName", fromDateName, "thruDateName", thruDateName,
 				"locale", query.get("locale"), "timeZone", query.get("timeZone")));
 

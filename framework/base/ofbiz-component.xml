@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
+
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
 distributed with this work for additional information
@@ -29,7 +30,7 @@ under the License.
     <!-- load the naming (JNDI) server -->
     <container name="naming-container" loaders="rmi" class="org.apache.ofbiz.base.container.NamingServiceContainer">
         <property name="host" value="0.0.0.0"/>
-        <property name="port" value="10999"/>
+        <property name="port" value="1099"/>
     </container>
     <!-- load the administration server -->
     <container name="admin-container" loaders="main" class="org.apache.ofbiz.base.container.AdminServerContainer"/>

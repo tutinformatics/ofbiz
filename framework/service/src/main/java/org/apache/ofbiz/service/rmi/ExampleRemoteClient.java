@@ -49,7 +49,7 @@ import org.apache.ofbiz.service.GenericServiceException;
 public class ExampleRemoteClient {
 
     public static final String module = ExampleRemoteClient.class.getName();
-    protected final static String RMI_URL = "rmi://localhost:10999/RMIDispatcher"; // change to match the remote server
+    protected final static String RMI_URL = "rmi://localhost:1099/RMIDispatcher"; // change to match the remote server
     protected RemoteDispatcher rd = null;
 
     public ExampleRemoteClient() {
