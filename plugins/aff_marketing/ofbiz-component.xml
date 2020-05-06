@@ -22,14 +22,9 @@ under the License.
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-component.xsd">
 
-    <container name="camel-container" loaders="main,rmi" class="ee.taltech.marketing.affiliate.loader.CamelContainer">
-        <!--<property name="dispatcher-factory" value="org.apache.ofbiz.service.GenericDispatcherFactory"/>-->
+    <resource-loader name="main" type="component"/>
+    <classpath type="dir" location="config"/>
 
-        <property name="routes.package" value="org.apache.ofbiz.camel.route"/>
-        <!-- Possible future implementation might read from an XML DSL -->
-        <property name="routeConfigFile" value="config/camel-routes.xml"/>
-        <property name="dispatcher-name" value="camel-dispatcher"/>
-        <property name="delegator-name" value="default"/>
-    </container>
+    <service-resource type="model" loader="main" location="servicedef/services.xml"/>
 
 </ofbiz-component>
