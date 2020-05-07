@@ -1,6 +1,6 @@
-Tutorial on how to deploy to heroku
+Tutorial on how to create a jar with dependencies locally and how to push it to heroku
 
-First deploy:
+First: (Recommended to use some othet deploy environment. Heroku servers are not beefy enough)
 1) Minge `framework/entity/config/entityengine.xml` ning vahetage (Ctrl + F) `datasource-name="localcitus` ära (Ctrl + R) `datasource-name="localderby` vastu ära
 2) gradlew.bat runShadow
 3) heroku plugins:install java
@@ -18,13 +18,13 @@ Kui teil aga on admin õigused seate CI/CD püsti panna järgnevalt
 2) Under Deploy tab - Deployment method GitHub -> Connect to `tutinformatics/ofbiz` repository, choose your branch and `Enable Automatic Deploys`
 3) Minge `framework/entity/config/entityengine.xml` ning vahetage (Ctrl + F) `datasource-name="localcitus` ära (Ctrl + R) `datasource-name="localderby` vastu ära
 
-Ärge seda muudatust trunk'i pushige!!!
+Seejärel tehke failist koopia ning pange deploy kausta. Ning deploy olukorras kirjutage faili sisu ümber. Xml fail revertida!
 
-4) Under Settings tab - `Config Vars` - `GRADLE_TASK`=`test`
+4) Under Settings tab - `Config Vars` - `GRADLE_TASK`=`test` - see jooksutab teste staging etapis
 
 5) Press `Deploy Branch` just to make sure it finds everything it's supposed to find. If not, go back to step two
 
-Mingi selline pilt võiks tekkida
+Mingi selline pilt võiks tekkida kui oled asju vastavalt konfinud
 ```
 -----> Gradle app detected
 -----> Installing JDK 11... done

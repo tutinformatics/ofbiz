@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<entity-engine-xml>
-    <Workspace ofbizDemoIdworkspaceId="1" workspaceGroupId="1" name="Test Name 1" url="some-url/1" userId="1"/>
-    <Workspace ofbizDemoIdworkspaceId="2" workspaceGroupId="1" name="Test Name 2" url="some-url/2" userId="1"/>
-    <Workspace ofbizDemoIdworkspaceId="3" workspaceGroupId="2" name="Test Name 3" url="some-url/3" userId="1"/>
-    <Workspace ofbizDemoIdworkspaceId="4" workspaceGroupId="2" name="Test Name 4" url="some-url/4" userId="1"/>
-</entity-engine-xml>
