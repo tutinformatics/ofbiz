@@ -1,0 +1,42 @@
+name: build
+
+on:
+  push:
+    branches: 
+      - trunk
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+  
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Publish to Github Packages Registry
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: kilpkonn/ofbiz/ofbiz
+        registry: docker.pkg.github.com
+        username: ${{ secrets.GITHUBUSERNAME }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        dockerfile: Dockerfile
+        tags: latest
+  
+    - name: Deploy package to digitalocean
+      uses: appleboy/ssh-action@master
+      env:
+          GITHUB_USERNAME: ${{ secrets.GITHUBUSERNAME }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        envs: GITHUB_USERNAME, GITHUB_TOKEN
+        script: |
+          docker stop $(docker ps -a -q)
+          docker system prune -af
+          docker login docker.pkg.github.com -u $GITHUB_USERNAME -p $GITHUB_TOKEN
+          docker run -dit -p 8443:8443 docker.pkg.github.com/kilpkonn/ofbiz/ofbiz:latest
+
