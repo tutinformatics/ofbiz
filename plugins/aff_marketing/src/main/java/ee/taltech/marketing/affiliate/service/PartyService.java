@@ -404,4 +404,24 @@ public class PartyService {
         return email;
     }
 
+    public Map<String, GenericValue> setAffiliateSettings(DispatchContext dctx, Map<String, ?> context) throws GenericEntityException {
+        Delegator delegator = dctx.getDelegator();
+        String settingsType = (String) context.get("settingsType");
+        GenericValue settings = EntityQuery.use(delegator).from("AffiliateSettings").where("settingsType", settingsType).queryOne();
+
+        if (settings == null) {
+            settings = delegator.makeValue("AffiliateSettings", UtilMisc.toMap("settingsType", settingsType,
+                    "commissionFrequency", context.get("commissionFrequency"), "multiLevelAffiliation", context.get("multiLevelAffiliation"),
+                    "codeCookieDuration", context.get("codeCookieDuration")));
+            delegator.create(settings);
+        } else {
+            settings.set("commissionFrequency", context.get("commissionFrequency"));
+            settings.set("multiLevelAffiliation", context.get("multiLevelAffiliation"));
+            settings.set("codeCookieDuration", context.get("codeCookieDuration"));
+            delegator.store(settings);
+        }
+        return Map.of("settings", settings);
+    }
+
+
 }

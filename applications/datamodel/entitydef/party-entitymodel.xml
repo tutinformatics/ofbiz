@@ -1597,6 +1597,15 @@ under the License.
             <key-map field-name="partyId"/>
         </relation>
     </entity>
+    <entity entity-name="AffiliateSettings"
+            package-name="org.apache.ofbiz.party.party"
+            title="Affiliate Party">
+        <field name="settingsType" type="id"></field>
+        <field name="commissionFrequency" type="very-short"></field>
+        <field name="multiLevelAffiliation" type="indicator"></field>
+        <field name="codeCookieDuration" type="very-short"></field>
+        <prim-key field="settingsType"/>
+    </entity>
     <entity entity-name="Party"
             package-name="org.apache.ofbiz.party.party"
             title="Party">

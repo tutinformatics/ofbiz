@@ -98,6 +98,18 @@ under the License.
         <attribute name="status" type="String" mode="OUT"/>
     </service>
 
+    <service name="setAffiliateSettings"
+             engine="java"
+             location="ee.taltech.marketing.affiliate.service.PartyService"
+             invoke="setAffiliateSettings">
+        <description>Set Affiliate Settings</description>
+        <attribute name="settingsType" type="String" mode="IN"/>
+        <attribute name="commissionFrequency" type="String" mode="IN"/>
+        <attribute name="multiLevelAffiliation" type="String" mode="IN"/>
+        <attribute name="codeCookieDuration" type="String" mode="IN"/>
+        <attribute name="settings" type="String" mode="OUT"/>
+    </service>
+
     <service name="getAffiliateCodes"
              engine="java"
              location="ee.taltech.marketing.affiliate.service.PartyService"
