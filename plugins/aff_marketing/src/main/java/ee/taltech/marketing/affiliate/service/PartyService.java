@@ -404,6 +404,7 @@ public class PartyService {
         return email;
     }
 
+
     public Map<String, GenericValue> setAffiliateSettings(DispatchContext dctx, Map<String, ?> context) throws GenericEntityException {
         Delegator delegator = dctx.getDelegator();
         String settingsType = (String) context.get("settingsType");
