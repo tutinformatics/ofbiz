@@ -63,10 +63,11 @@ public class PartyService {
 
         List<GenericValue> affiliateCodes = getAffiliateCodes(dctx, context).get("affiliateDTOs");
         if (affiliateCodes.isEmpty()) {
-            GenericValue genericCode = delegator.makeValue("AffiliateCode", UtilMisc.toMap("partyId", partyId, "affiliateCodeId", delegator.getNextSeqId("AffiliateCode"), "isDefault", true));
-            delegator.create(genericCode);
+            Map<String, Object> codeContext = new HashMap<>(context);
+            codeContext.put("isDefault", true);
+            codeContext.put("productPromoId", "CATALOG1");
+            createAffiliateCode(dctx, codeContext);
         }
-
 
         return Map.of("approvedPartner", getAffiliateDTO((String) genericValue.get("partyId"), false, delegator));
     }
@@ -100,7 +101,8 @@ public class PartyService {
         String partyId = (String) context.get("partyId");
         Delegator delegator = dctx.getDelegator();
         checkApprovedAffiliate(partyId, dctx.getDelegator());
-        GenericValue genericValue = delegator.makeValue("AffiliateCode", UtilMisc.toMap("partyId", partyId, "affiliateCodeId", discountCode.get("productPromoCodeId"), "isDefault", false, "productCategoryId", context.get("productCategoryId")));
+        boolean isDefault = context.get("isDefault") != null ? Boolean.parseBoolean((String) context.get("isDefault")) : false;
+        GenericValue genericValue = delegator.makeValue("AffiliateCode", UtilMisc.toMap("partyId", partyId, "affiliateCodeId", discountCode.get("productPromoCodeId"), "isDefault", isDefault, "productCategoryId", context.get("productCategoryId")));
         delegator.create(genericValue);
 
         return Map.of("createdCode", genericValue);
@@ -255,6 +257,11 @@ public class PartyService {
 
         GenericValue checkExistence = EntityQuery.use(delegator).from("Affiliate").where("partyId", userPartyId).queryOne();
         if (checkExistence != null) {
+            if (AffiliateDTO.Status.DECLINED.equals(checkExistence.get("status"))) {
+                checkExistence.set("status", PENDING);
+                delegator.store(checkExistence);
+                return Map.of("createdAffiliate", getAffiliateDTO(userPartyId, false, dctx.getDelegator()));
+            }
             throw new IllegalArgumentException("User already has applied for Affliate");
         }
 
