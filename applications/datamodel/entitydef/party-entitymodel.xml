@@ -75,12 +75,20 @@ under the License.
         <field name="thruDate" type="date-time"></field>
         <field name="description" type="description"></field>
         <field name="textData" type="very-long"></field>
+        <field name="affiliateCodeId" type="id"></field>
+        <field name="productCategoryId" type="id"></field>
         <prim-key field="agreementId"/>
         <relation type="one" fk-name="AGRMNT_PRODUCT" rel-entity-name="Product">
             <key-map field-name="productId"/>
         </relation>
         <relation type="one-nofk" title="From" rel-entity-name="Party">
             <key-map field-name="partyIdFrom" rel-field-name="partyId"/>
+        </relation>
+        <relation type="one" fk-name="AFFILIATE_CODE" rel-entity-name="AffiliateCode">
+            <key-map field-name="affiliateCodeId"/>
+        </relation>
+        <relation type="one" fk-name="PRODUCT_CATEGORY" rel-entity-name="ProductCategory">
+            <key-map field-name="productCategoryId"/>
         </relation>
         <relation type="one-nofk" title="From" rel-entity-name="RoleType">
             <key-map field-name="roleTypeIdFrom" rel-field-name="roleTypeId"/>

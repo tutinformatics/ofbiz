@@ -25,6 +25,7 @@ import static ee.taltech.marketing.affiliate.model.AffiliateDTO.Status.*;
 public class PartyService {
 
     private static boolean initialized = false;
+    public static final int DEFAULT_AFFILIATE_COMMISSION = 5;
 
     public static final String module = PartyServices.class.getName();
 
@@ -105,7 +106,27 @@ public class PartyService {
         GenericValue genericValue = delegator.makeValue("AffiliateCode", UtilMisc.toMap("partyId", partyId, "affiliateCodeId", discountCode.get("productPromoCodeId"), "isDefault", isDefault, "productCategoryId", context.get("productCategoryId")));
         delegator.create(genericValue);
 
+        Timestamp tm = new Timestamp(2208981600000L);
+
+        GenericValue commission = EntityQuery.use(delegator).from("ProductCategory").where("productCategoryId", context.get("productCategoryId")).queryOne();
+
+        if (commission.getString("affiliateCommission") == null) {
+            commission.set("affiliateCommission", DEFAULT_AFFILIATE_COMMISSION);
+            delegator.store(commission);
+        }
+
+        GenericValue agreement = delegator.makeValue("Agreement", UtilMisc.toMap("agreementId", discountCode.get("productPromoCodeId"), "partyIdFrom", "admin", "agreementDate", tm, "agreementTypeId", "COMMISSION_AGREEMENT", "partyIdTo", partyId, "affiliateCodeId", discountCode.get("productPromoCodeId"), "productCategoryId", context.get("productCategoryId")));
+        delegator.create(agreement);
         return Map.of("createdCode", genericValue);
+    }
+
+    public Map<String, GenericValue> setCommission(DispatchContext dctx, Map<String, ?> context) throws GenericEntityException {
+        String productCategory = (String) context.get("productCategoryId");
+        Delegator delegator = dctx.getDelegator();
+        GenericValue genericValue = EntityQuery.use(delegator).from("ProductCategory").where("productCategoryId", productCategory).queryOne();
+        genericValue.set("affiliateCommission", context.get("affiliateCommission"));
+        delegator.store(genericValue);
+        return Map.of("productCategory", genericValue);
     }
 
     public GenericValue createDiscountCode(DispatchContext dctx, Map<String, ?> context) throws GenericEntityException {
@@ -215,6 +236,8 @@ public class PartyService {
         checkApprovedAffiliate(partyId, dctx.getDelegator());
         GenericValue genericValue = EntityQuery.use(delegator).from("AffiliateCode").where("partyId", partyId, "affiliateCodeId", affCode).queryOne();
         if (genericValue.get("isDefault").equals("N")) {
+            GenericValue agreement = EntityQuery.use(delegator).from("Agreement").where("affiliateCodeId", affCode).queryOne();
+            agreement.remove();
             genericValue.remove();
         } else {
             throw new IllegalArgumentException("Code is default and cannot be deleted");
