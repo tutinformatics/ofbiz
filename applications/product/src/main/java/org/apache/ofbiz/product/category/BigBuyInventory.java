@@ -12,9 +12,15 @@ import org.apache.ofbiz.service.GenericServiceException;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ServiceUtil;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
 
+import static org.apache.camel.model.dataformat.JsonLibrary.Jackson;
+
+@SuppressWarnings("Duplicates")
 public class BigBuyInventory {
     public static Map<String, Object> addBigBuyCategory(DispatchContext ctx, Map<String, Object> context) throws UnirestException, JsonProcessingException {
         Map<String, Object> success = ServiceUtil.returnSuccess();
@@ -144,7 +150,7 @@ public class BigBuyInventory {
         return success;
     }
 
-    public static Map<String, Object> addProducts(DispatchContext ctx, Map<String, Object> context) throws UnirestException, JsonProcessingException {
+    public static Map<String, Object> addProducts(DispatchContext ctx, Map<String, Object> context) throws UnirestException, IOException {
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Map<String,Object> success = ServiceUtil.returnSuccess();
 
@@ -152,100 +158,178 @@ public class BigBuyInventory {
         Locale locale = (Locale)context.get("locale");
         String categoryId = (String) context.get("categoryId");
 
+        //link gerq: YTUwOGI5ZGY5ZDMzNGM4Mjk3ZTY4N2ExODJjYmJiN2VjZDU0ZThiM2Y2NTZkMTlhMjE4NzQ0ZTE4YjgwYjBjNA
+        //my link: MGJlMGFlYWJiZjNlOTNkZTk1ZmQyMTA1MjI3NzljMWQwNjFkZTAyNjdhNDA5Y2ExNmJkN2MzOWQ5NzE3YjMyNw
+
+        String token = "YTUwOGI5ZGY5ZDMzNGM4Mjk3ZTY4N2ExODJjYmJiN2VjZDU0ZThiM2Y2NTZkMTlhMjE4NzQ0ZTE4YjgwYjBjNA";
+
         ObjectMapper objectMapper = new ObjectMapper();
 
-        Unirest.setTimeouts(0, 0);
-        com.mashape.unirest.http.JsonNode response = Unirest.get("https://api.sandbox.bigbuy.eu/rest/catalog/products.json?isoCode=en")
-                .header("Authorization", "Bearer YTUwOGI5ZGY5ZDMzNGM4Mjk3ZTY4N2ExODJjYmJiN2VjZDU0ZThiM2Y2NTZkMTlhMjE4NzQ0ZTE4YjgwYjBjNA")
-                .asJson().getBody();
+        String productsJson = "applications/product/BigBuyData/products.json";
+        com.fasterxml.jackson.databind.JsonNode productsList = objectMapper.readTree(new FileReader(productsJson));
 
         //add product context
-        Map<String, String> idPrice = new HashMap<>();
 
-        com.fasterxml.jackson.databind.JsonNode jsonNode = objectMapper.readTree(String.valueOf(response));
-        for (JsonNode node : jsonNode) {
+        Map<String, Map<String, String>> productAttributes = new HashMap<>();
+
+        for (JsonNode node : productsList) {
             String category  = String.valueOf(node.get("category"));
             String id  = String.valueOf(node.get("id"));
-            String price  = String.valueOf(node.get("inShopsPrice"));
             if (category.equals(categoryId)) {
-                idPrice.put(id, price);
+                Map<String, String> values = new HashMap<>();
+
+                String price  = String.valueOf(node.get("inShopsPrice"));
+                String sku = String.valueOf(node.get("sku"));
+                String ean = String.valueOf(node.get("ean13"));
+                String weight = String.valueOf(node.get("weight"));
+                String height = String.valueOf(node.get("height"));
+                String width = String.valueOf(node.get("width"));
+                String depth = String.valueOf(node.get("depth"));
+                String brandId  = String.valueOf(node.get("manufacturer"));
+
+                values.put("price", price);
+                values.put("sku", sku);
+                values.put("ean", ean);
+                values.put("weight", weight);
+                values.put("height", height);
+                values.put("width", width);
+                values.put("depth", depth);
+                values.put("brandId", brandId);
+
+                productAttributes.put(id, values);
             }
         }
 
-        Unirest.setTimeouts(0, 0);
-        com.mashape.unirest.http.JsonNode nameList = Unirest.get("https://api.sandbox.bigbuy.eu/rest/catalog/productsinformation.json?isoCode=en")
-                .header("Authorization", "Bearer YTUwOGI5ZGY5ZDMzNGM4Mjk3ZTY4N2ExODJjYmJiN2VjZDU0ZThiM2Y2NTZkMTlhMjE4NzQ0ZTE4YjgwYjBjNA")
-                .asJson().getBody();
+        String productsInformationJson = "applications/product/BigBuyData/productsinformation.json";
+        com.fasterxml.jackson.databind.JsonNode productsInformationList = objectMapper.readTree(new FileReader(productsInformationJson));
 
-        Set<String> idList = idPrice.keySet();
-        com.fasterxml.jackson.databind.JsonNode jsonNode2 = objectMapper.readTree(String.valueOf(nameList));
-        for (JsonNode node : jsonNode2) {
-            String id  = String.valueOf(node.get("id"));
-            if (idList.contains(id)) {
-                //createProduct
-                Map<String, Object> productContext = new HashMap<>(context);
-                productContext.put("userLogin", userLogin);
-                productContext.put("locale", locale);
-                String name = String.valueOf(node.get("name")).replace("\"", "");
-                productContext.put("productName", name);
-                productContext.put("internalName", name);
-                productContext.put("productId", id);
-                productContext.put("productTypeId", "GOOD");
 
-                try {
-                    dispatcher.runSync("createProduct", productContext);
-                } catch (GenericServiceException e){
-                    System.err.println(e.getMessage());
-                }
+        String filename = "applications/product/BigBuyData/manufacturers.json";
+        com.fasterxml.jackson.databind.JsonNode brands = objectMapper.readTree(new FileReader(filename));
 
-                //add a price
-                double priceDB = Double.parseDouble(idPrice.get(id));
-                BigDecimal priceBD = BigDecimal.valueOf(priceDB);
-                Map<String, Object> priceContext = new HashMap<>(context);
-                priceContext.put("userLogin", userLogin);
-                priceContext.put("locale", locale);
-                priceContext.put("cost", priceBD);
-                priceContext.put("productId", id);
-                priceContext.put("costUomId", "EUR");
+        Set<String> idList = productAttributes.keySet();
 
-                try {
-                    dispatcher.runSync("createCostComponent", priceContext);
-                } catch (GenericServiceException e){
-                    System.err.println(e.getMessage());
-                }
+        if (idList.size() != 0) {
+            for (JsonNode node : productsInformationList) {
+                String id = String.valueOf(node.get("id"));
+                if (idList.contains(id)) {
+                    //createProduct
+                    Map<String, Object> productContext = new HashMap<>(context);
+                    double height = Double.parseDouble(productAttributes.get(id).get("height"));
+                    double weight = Double.parseDouble(productAttributes.get(id).get("weight"));
+                    double width = Double.parseDouble(productAttributes.get(id).get("width"));
+                    double depth = Double.parseDouble(productAttributes.get(id).get("depth"));
 
-                //add supplier to product context
-                Map<String, Object> partyToProductContext = new HashMap<>(context);
-                partyToProductContext.put("userLogin", userLogin);
-                partyToProductContext.put("locale", locale);
+                    BigDecimal heightBD = BigDecimal.valueOf(height);
+                    BigDecimal weightBD = BigDecimal.valueOf(weight);
+                    BigDecimal widthBD = BigDecimal.valueOf(width);
+                    BigDecimal depthBD = BigDecimal.valueOf(depth);
 
-                partyToProductContext.put("partyId", "BigBuy");
-                partyToProductContext.put("productId", id);
-                partyToProductContext.put("roleTypeId", "SUPPLIER");
+                    productContext.put("userLogin", userLogin);
+                    productContext.put("locale", locale);
+                    String name = String.valueOf(node.get("name")).replace("\"", "");
+                    productContext.put("productName", name);
+                    productContext.put("internalName", name);
+                    productContext.put("productId", id);
+                    productContext.put("productTypeId", "GOOD");
+                    productContext.put("requirementMethodEnumId", "PRODRQM_DS");
+                    productContext.put("productHeight", heightBD);
+                    productContext.put("productWeight", weightBD);
+                    productContext.put("productWidth", widthBD);
+                    productContext.put("productDepth", depthBD);
+                    productContext.put("primaryProductCategoryId", categoryId);
 
-                try {
-                    dispatcher.runSync("addPartyToProduct", partyToProductContext);
-                } catch (GenericServiceException e){
-                    System.err.println(e.getMessage());
-                }
+                    for (JsonNode brand : brands) {
+                        String brandIdLoop = String.valueOf(brand.get("id"));
+                        if (productAttributes.get(id).get("brandId").equals(brandIdLoop)) {
+                            String brandName = String.valueOf(brand.get("name")).replace("\"", "");
+                            productContext.put("brandName", brandName);
+                        }
+                    }
 
-                //add product to category context
+                    try {
+                        dispatcher.runSync("createProduct", productContext);
+                    } catch (GenericServiceException e) {
+                        System.err.println(e.getMessage());
+                    }
 
-                Map<String, Object> productToCategoryContext = new HashMap<>(context);
-                productToCategoryContext.put("userLogin", userLogin);
-                productToCategoryContext.put("locale", locale);
+                    //add sku
+                    String sku = String.valueOf(productAttributes.get(id).get("sku")).replace("\"", "");
+                    Map<String, Object> skuContext = new HashMap<>(context);
+                    skuContext.put("userLogin", userLogin);
+                    skuContext.put("locale", locale);
+                    skuContext.put("goodIdentificationTypeId", "SKU");
+                    skuContext.put("idValue", sku);
+                    skuContext.put("productId", id);
 
-                productToCategoryContext.put("productCategoryId", categoryId);
-                productToCategoryContext.put("productId", id);
+                    try {
+                        dispatcher.runSync("createGoodIdentification", skuContext);
+                    } catch (GenericServiceException e) {
+                        System.err.println(e.getMessage());
+                    }
 
-                try {
-                    dispatcher.runSync("addProductToCategory", productToCategoryContext);
-                } catch (GenericServiceException e){
-                    System.err.println(e.getMessage());
+                    //add ean
+                    String ean = String.valueOf(productAttributes.get(id).get("ean")).replace("\"", "");
+                    Map<String, Object> eanContext = new HashMap<>(context);
+                    eanContext.put("userLogin", userLogin);
+                    eanContext.put("locale", locale);
+                    eanContext.put("goodIdentificationTypeId", "EAN");
+                    eanContext.put("idValue", ean);
+                    eanContext.put("productId", id);
+
+                    try {
+                        dispatcher.runSync("createGoodIdentification", eanContext);
+                    } catch (GenericServiceException e) {
+                        System.err.println(e.getMessage());
+                    }
+
+                    //add a price
+                    double priceDB = Double.parseDouble(productAttributes.get(id).get("price"));
+                    BigDecimal priceBD = BigDecimal.valueOf(priceDB);
+                    Map<String, Object> priceContext = new HashMap<>(context);
+                    priceContext.put("userLogin", userLogin);
+                    priceContext.put("locale", locale);
+                    priceContext.put("cost", priceBD);
+                    priceContext.put("productId", id);
+                    priceContext.put("costUomId", "EUR");
+
+                    try {
+                        dispatcher.runSync("createCostComponent", priceContext);
+                    } catch (GenericServiceException e) {
+                        System.err.println(e.getMessage());
+                    }
+
+                    //add supplier to product context
+                    Map<String, Object> partyToProductContext = new HashMap<>(context);
+                    partyToProductContext.put("userLogin", userLogin);
+                    partyToProductContext.put("locale", locale);
+
+                    partyToProductContext.put("partyId", "BigBuy");
+                    partyToProductContext.put("productId", id);
+                    partyToProductContext.put("roleTypeId", "SUPPLIER");
+
+                    try {
+                        dispatcher.runSync("addPartyToProduct", partyToProductContext);
+                    } catch (GenericServiceException e) {
+                        System.err.println(e.getMessage());
+                    }
+
+                    //add product to category context
+
+                    Map<String, Object> productToCategoryContext = new HashMap<>(context);
+                    productToCategoryContext.put("userLogin", userLogin);
+                    productToCategoryContext.put("locale", locale);
+                    productToCategoryContext.put("productCategoryId", categoryId);
+                    productToCategoryContext.put("productId", id);
+
+                    try {
+                        dispatcher.runSync("addProductToCategory", productToCategoryContext);
+                    } catch (GenericServiceException e) {
+                        System.err.println(e.getMessage());
+                    }
                 }
             }
         }
-
 
         return success;
     }
