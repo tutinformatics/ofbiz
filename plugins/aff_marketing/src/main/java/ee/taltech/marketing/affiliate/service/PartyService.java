@@ -264,7 +264,6 @@ public class PartyService {
 
         String userPartyId = (String) context.get("partyId");
         Delegator delegator = dctx.getDelegator();
-        Locale locale = Locale.ENGLISH;
         GenericValue userParty = EntityQuery
                 .use(delegator)
                 .from("Party")
@@ -280,7 +279,7 @@ public class PartyService {
 
         GenericValue checkExistence = EntityQuery.use(delegator).from("Affiliate").where("partyId", userPartyId).queryOne();
         if (checkExistence != null) {
-            if (AffiliateDTO.Status.DECLINED.equals(checkExistence.get("status"))) {
+            if (AffiliateDTO.Status.DECLINED.toString().equals(checkExistence.get("status"))) {
                 checkExistence.set("status", PENDING);
                 delegator.store(checkExistence);
                 return Map.of("createdAffiliate", getAffiliateDTO(userPartyId, false, dctx.getDelegator()));
