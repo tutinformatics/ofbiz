@@ -32,6 +32,8 @@ under the License.
         <field name="partyId" type="name"/>
         <field name="clientPartyId" type="name"/>
         <field name="statusId" type="name"/>
+        <field name="fromDate" type="date"/>
+        <field name="thruDate" type="date"/>
         <field name="approvedByUserLoginId" type="name"/>
         <prim-key field="partyId"/>
     </entity>
