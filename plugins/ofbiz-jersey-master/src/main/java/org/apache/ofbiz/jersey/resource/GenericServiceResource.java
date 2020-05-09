@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.ofbiz.base.conversion.ConversionException;
 import org.apache.ofbiz.base.lang.JSON;
 import org.apache.ofbiz.base.util.UtilGenerics;
+import org.apache.ofbiz.common.authentication.api.AuthenticatorException;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.util.ExtendedConverters;
 import org.apache.ofbiz.jersey.annotation.Secured;
@@ -27,8 +28,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import static org.apache.ofbiz.jersey.util.ApiUtil.getBodyFromJWE;
-import static org.apache.ofbiz.jersey.util.ApiUtil.getClaimsFromToken;
+import static org.apache.ofbiz.jersey.util.ApiUtil.*;
 
 @Path("/generic/v1/services")
 @Provider
@@ -124,8 +124,8 @@ public class GenericServiceResource {
 		}
 
 		try {
-			String jweToken = JWTManager.getHeaderAuthBearerToken(httpRequest); // GET FROM HEADER
-			Map<String, Object> claims = getClaimsFromToken(getBodyFromJWE(jweToken));
+			String jwtToken = JWTManager.getHeaderAuthBearerToken(httpRequest); // GET FROM HEADER
+			Map<String, Object> claims = getInnerClaimsFromJwt(jwtToken);
 
 			if (fieldMap.get("login.username") == null) {
 				fieldMap.put("login.username", claims.get("userLoginId"));
