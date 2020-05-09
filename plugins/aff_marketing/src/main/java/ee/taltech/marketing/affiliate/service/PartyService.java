@@ -100,9 +100,14 @@ public class PartyService {
         String partyId = (String) context.get("partyId");
         Delegator delegator = dctx.getDelegator();
         checkApprovedAffiliate(partyId, dctx.getDelegator());
+        Object s = discountCode.get("productPromoCodeId");
         GenericValue genericValue = delegator.makeValue("AffiliateCode", UtilMisc.toMap("partyId", partyId, "affiliateCodeId", discountCode.get("productPromoCodeId"), "isDefault", false, "productCategoryId", context.get("productCategoryId")));
         delegator.create(genericValue);
 
+        Timestamp tm = new Timestamp(2208981600000L);
+
+        GenericValue agreement = delegator.makeValue("Agreement", UtilMisc.toMap("agreementId", discountCode.get("productPromoCodeId"), "partyIdFrom", "admin", "agreementDate", tm, "agreementTypeId", "COMMISSION_AGREEMENT", "partyIdTo", partyId, "affiliateCodeId", discountCode.get("productPromoCodeId")));
+        delegator.create(agreement);
         return Map.of("createdCode", genericValue);
     }
 
@@ -213,6 +218,8 @@ public class PartyService {
         checkApprovedAffiliate(partyId, dctx.getDelegator());
         GenericValue genericValue = EntityQuery.use(delegator).from("AffiliateCode").where("partyId", partyId, "affiliateCodeId", affCode).queryOne();
         if (genericValue.get("isDefault").equals("N")) {
+            GenericValue agreement = EntityQuery.use(delegator).from("Agreement").where("affiliateCodeId", affCode).queryOne();
+            agreement.remove();
             genericValue.remove();
         } else {
             throw new IllegalArgumentException("Code is default and cannot be deleted");
