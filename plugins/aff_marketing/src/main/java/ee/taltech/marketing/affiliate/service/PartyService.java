@@ -65,7 +65,7 @@ public class PartyService {
         if (affiliateCodes.isEmpty()) {
             Map<String, Object> codeContext = new HashMap<>(context);
             codeContext.put("isDefault", true);
-            codeContext.put("productPromoId", "CATALOG1");
+            codeContext.put("productCategoryId", "CATALOG1");
             createAffiliateCode(dctx, codeContext);
         }
 
