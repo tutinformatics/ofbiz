@@ -78,7 +78,15 @@ under the License.
         <attribute name="amount" type="Double" mode="IN"/>
         <attribute name="discount" type="ee.taltech.marketing.affiliate.model.SimpleDiscountDTO" mode="OUT"/>
     </service>
-
+    <service name="setCommission"
+             engine="java"
+             location="ee.taltech.marketing.affiliate.service.PartyService"
+             invoke="setCommission">
+        <description>Set commission for product category</description>
+        <attribute name="productCategoryId" type="String" mode="IN"/>
+        <attribute name="affiliateCommission" type="String" mode="IN"/>
+        <attribute name="productCategory" type="org.apache.ofbiz.entity.GenericValue" mode="OUT"/>
+    </service>
     <service name="createAffiliateCode"
              engine="java"
              location="ee.taltech.marketing.affiliate.service.PartyService"
@@ -88,7 +96,6 @@ under the License.
         <attribute name="productCategoryId" type="String" mode="IN"/>
         <attribute name="createdCode" type="org.apache.ofbiz.entity.GenericValue" mode="OUT"/>
     </service>
-
     <service name="getAffiliateStatus"
              engine="java"
              location="ee.taltech.marketing.affiliate.service.PartyService"
