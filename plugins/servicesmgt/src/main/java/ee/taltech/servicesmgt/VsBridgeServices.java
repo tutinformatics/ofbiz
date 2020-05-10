@@ -74,7 +74,6 @@ public class VsBridgeServices {
 
     public static List<Map<String, Object>> convertCategoriesToVsCategories(List<GenericValue> categories) {
         List<Map<String, Object>> result = new ArrayList<>();
-        System.out.println(categories.size());
         for (GenericValue category : categories) {
             result.add(UtilMisc.toMap(
                     "id", category.get("productCategoryId"),
@@ -94,6 +93,22 @@ public class VsBridgeServices {
     }
 
     public static List<Map<String, Object>> convertProductsToVsProducts(List<GenericValue> products) {
-        return UtilMisc.toList(UtilMisc.toMap("name", "product"));
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (GenericValue product : products) {
+            result.add(UtilMisc.toMap(
+                    "id", product.get("productId"),
+                    "name", product.get("productName"),
+                    "image", product.get("mediumImageUrl"),
+                    "sku", product.get("productId"),
+                    "url_path", "product/" + product.get("productId"),
+                    "type_id", "simple",
+                    "price", 10,
+                    "status", 1,
+                    "visbility", 4,
+                    "category_ids", new ArrayList<>(),
+                    "stock", UtilMisc.toMap("is_in_stock", true, "qty", 1)
+            ));
+        }
+        return result;
     }
 }
