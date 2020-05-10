@@ -82,6 +82,7 @@ public class PublisherService {
 
     public void setPublisherDataWithPublisher(String entityName, String topic, String filterParams) throws Exception {
         Gson gson = new Gson();
+        
         Object filter = gson.fromJson(filterParams, Object.class);
         List<List<Filter>> filterList = (List<List<Filter>>) filter;
         List<GenericValue> genericValues = new ArrayList<>();
