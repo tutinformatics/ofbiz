@@ -1,6 +1,7 @@
 package ee.ttu.ofbizpublisher.services;
 
 import com.google.gson.Gson;
+import ee.taltech.bigdata.filtering.FilteredSearchService;
 import ee.ttu.ofbizpublisher.OfbizPublisherServices;
 import ee.ttu.ofbizpublisher.model.PublisherDTO;
 import ee.ttu.ofbizpublisher.mqtt.ConnectionBinding;
@@ -8,7 +9,9 @@ import ee.ttu.ofbizpublisher.mqtt.Publisher;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
+import org.apache.ofbiz.entity.model.ModelEntity;
 import org.apache.ofbiz.entity.util.EntityQuery;
+import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.ServiceUtil;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -19,9 +22,15 @@ import java.util.stream.Collectors;
 public class PublisherService {
 
     Delegator delegator;
+    DispatchContext dispatchContext;
 
     public PublisherService(Delegator delegator) {
         this.delegator = delegator;
+    }
+
+    public PublisherService(Delegator delegator, DispatchContext dispatchContext) {
+        this.delegator = delegator;
+        this.dispatchContext = dispatchContext;
     }
 
     public List<PublisherDTO> getPublishers() throws GenericEntityException {
@@ -66,8 +75,10 @@ public class PublisherService {
         Object filter = gson.fromJson(filterParams, Object.class);
         List<List<Filter>> filterList = (List<List<Filter>>) filter;
         List<GenericValue> genericValues = new ArrayList<>();
+        String model = delegator.getModelReader().getModelEntity(entityName).getEntityName();
         for (List<Filter> query : filterList) {
-            genericValues.addAll(EntityQuery.use(delegator).from(entityName).where(query).queryList());
+            SearchFilter searchFilter = new SearchFilter(query, model);
+            genericValues.addAll((Collection<? extends GenericValue>) FilteredSearchService.performFilteredSearch(dispatchContext, (Map<String, ?>) searchFilter));
         }
         if (filterList.isEmpty()) {
             genericValues = EntityQuery.use(delegator).from(entityName).queryList();
