@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 @Provider
-@Path("/vsbridge/")
+@Path("/vsbridge/V1/")
 public class StaticResource {
 
     public static final String module = StaticResource.class.getName();
