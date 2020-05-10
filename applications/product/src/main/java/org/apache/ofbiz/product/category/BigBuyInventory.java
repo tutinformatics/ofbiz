@@ -14,6 +14,7 @@ import org.apache.ofbiz.service.ServiceUtil;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
@@ -158,8 +159,8 @@ public class BigBuyInventory {
         Locale locale = (Locale)context.get("locale");
         String categoryId = (String) context.get("categoryId");
 
-        //link gerq: YTUwOGI5ZGY5ZDMzNGM4Mjk3ZTY4N2ExODJjYmJiN2VjZDU0ZThiM2Y2NTZkMTlhMjE4NzQ0ZTE4YjgwYjBjNA
-        //my link: MGJlMGFlYWJiZjNlOTNkZTk1ZmQyMTA1MjI3NzljMWQwNjFkZTAyNjdhNDA5Y2ExNmJkN2MzOWQ5NzE3YjMyNw
+        //1 token: YTUwOGI5ZGY5ZDMzNGM4Mjk3ZTY4N2ExODJjYmJiN2VjZDU0ZThiM2Y2NTZkMTlhMjE4NzQ0ZTE4YjgwYjBjNA
+        //2 token: MGJlMGFlYWJiZjNlOTNkZTk1ZmQyMTA1MjI3NzljMWQwNjFkZTAyNjdhNDA5Y2ExNmJkN2MzOWQ5NzE3YjMyNw
 
         String token = "YTUwOGI5ZGY5ZDMzNGM4Mjk3ZTY4N2ExODJjYmJiN2VjZDU0ZThiM2Y2NTZkMTlhMjE4NzQ0ZTE4YjgwYjBjNA";
 
@@ -329,6 +330,60 @@ public class BigBuyInventory {
                     }
                 }
             }
+        }
+        return success;
+    }
+
+    public static Map<String, Object> updateBigBuyData(DispatchContext ctx, Map<String, Object> context) throws UnirestException, IOException {
+        Map<String, Object> success = ServiceUtil.returnSuccess();
+
+        //1 token: YTUwOGI5ZGY5ZDMzNGM4Mjk3ZTY4N2ExODJjYmJiN2VjZDU0ZThiM2Y2NTZkMTlhMjE4NzQ0ZTE4YjgwYjBjNA
+        //2 token: MGJlMGFlYWJiZjNlOTNkZTk1ZmQyMTA1MjI3NzljMWQwNjFkZTAyNjdhNDA5Y2ExNmJkN2MzOWQ5NzE3YjMyNw
+        String token = "YTUwOGI5ZGY5ZDMzNGM4Mjk3ZTY4N2ExODJjYmJiN2VjZDU0ZThiM2Y2NTZkMTlhMjE4NzQ0ZTE4YjgwYjBjNA";
+
+        Unirest.setTimeouts(0, 0);
+
+        com.mashape.unirest.http.JsonNode products = Unirest.get("https://api.sandbox.bigbuy.eu/rest/catalog/products.json?isoCode=en")
+                .header("Authorization", "Bearer " + token)
+                .asJson().getBody();
+
+        com.mashape.unirest.http.JsonNode productsinformation = Unirest.get("https://api.sandbox.bigbuy.eu/rest/catalog/productsinformation.json?isoCode=en")
+                .header("Authorization", "Bearer " + token)
+                .asJson().getBody();
+
+        Unirest.setTimeouts(0, 0);
+        com.mashape.unirest.http.JsonNode manufacturers = Unirest.get("https://api.sandbox.bigbuy.eu/rest/catalog/manufacturers.json?isoCode=en")
+                .header("Authorization", "Bearer " + token)
+                .asJson().getBody();
+
+        try {
+            FileWriter myWriter = new FileWriter("applications/product/BigBuyData/products.json");
+            myWriter.write(products.toString());
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
+        try {
+            FileWriter myWriter = new FileWriter("applications/product/BigBuyData/productsinformation.json");
+            myWriter.write(productsinformation.toString());
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
+        try {
+            FileWriter myWriter = new FileWriter("applications/product/BigBuyData/manufacturers.json");
+            myWriter.write(manufacturers.toString());
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
         }
 
         return success;

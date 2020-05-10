@@ -696,6 +696,11 @@ under the License.
         <description>Creates BigBuy party, gives to it Supplier role, creates BigBuy catalog.</description>
     </service>
 
+    <service name="updateBigBuyDataFiles" engine="java"
+             location="org.apache.ofbiz.product.category.BigBuyInventory" invoke="updateBigBuyData" auth="true">
+        <description>Creates a json files for BigBuy inventory.</description>
+    </service>
+
     <!--______________________________________________________________________________________________________________________________-->
 
 
