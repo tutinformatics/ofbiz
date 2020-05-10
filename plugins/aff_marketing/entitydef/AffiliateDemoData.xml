@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<entity-engine-xml>
+    <!--    Affiliate Promos-->
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="20111" showToCustomer="Y" requireCode="Y" productPromoId="10000" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10000" ruleName="AffiliateDiscount" productPromoId="10000" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10000" productPromoRuleId="10000" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10000" />
+    <ProductPromoCond productPromoRuleId="10000" productPromoId="10000" productPromoCondSeqId="10000" />
+    <ProductPromoCategory productCategoryId="20111" andGroupId="_NA_" productPromoActionSeqId="10000" productPromoRuleId="10000" includeSubCategories="Y" productPromoId="10000" productPromoCondSeqId="10000" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.383" productStoreId="9000" productPromoId="10000" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="CATALOG1" showToCustomer="Y" requireCode="Y" productPromoId="10001" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10001" ruleName="AffiliateDiscount" productPromoId="10001" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10001" productPromoRuleId="10001" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10001" />
+    <ProductPromoCond productPromoRuleId="10001" productPromoId="10001" productPromoCondSeqId="10001" />
+    <ProductPromoCategory productCategoryId="CATALOG1" andGroupId="_NA_" productPromoActionSeqId="10001" productPromoRuleId="10001" includeSubCategories="Y" productPromoId="10001" productPromoCondSeqId="10001" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.384" productStoreId="9000" productPromoId="10001" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="100" showToCustomer="Y" requireCode="Y" productPromoId="10002" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10002" ruleName="AffiliateDiscount" productPromoId="10002" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10002" productPromoRuleId="10002" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10002" />
+    <ProductPromoCond productPromoRuleId="10002" productPromoId="10002" productPromoCondSeqId="10002" />
+    <ProductPromoCategory productCategoryId="100" andGroupId="_NA_" productPromoActionSeqId="10002" productPromoRuleId="10002" includeSubCategories="Y" productPromoId="10002" productPromoCondSeqId="10002" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.385" productStoreId="9000" productPromoId="10002" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="200" showToCustomer="Y" requireCode="Y" productPromoId="10003" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10003" ruleName="AffiliateDiscount" productPromoId="10003" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10003" productPromoRuleId="10003" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10003" />
+    <ProductPromoCond productPromoRuleId="10003" productPromoId="10003" productPromoCondSeqId="10003" />
+    <ProductPromoCategory productCategoryId="200" andGroupId="_NA_" productPromoActionSeqId="10003" productPromoRuleId="10003" includeSubCategories="Y" productPromoId="10003" productPromoCondSeqId="10003" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.386" productStoreId="9000" productPromoId="10003" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="101" showToCustomer="Y" requireCode="Y" productPromoId="10004" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10004" ruleName="AffiliateDiscount" productPromoId="10004" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10004" productPromoRuleId="10004" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10004" />
+    <ProductPromoCond productPromoRuleId="10004" productPromoId="10004" productPromoCondSeqId="10004" />
+    <ProductPromoCategory productCategoryId="101" andGroupId="_NA_" productPromoActionSeqId="10004" productPromoRuleId="10004" includeSubCategories="Y" productPromoId="10004" productPromoCondSeqId="10004" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.386" productStoreId="9000" productPromoId="10004" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="102" showToCustomer="Y" requireCode="Y" productPromoId="10005" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10005" ruleName="AffiliateDiscount" productPromoId="10005" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10005" productPromoRuleId="10005" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10005" />
+    <ProductPromoCond productPromoRuleId="10005" productPromoId="10005" productPromoCondSeqId="10005" />
+    <ProductPromoCategory productCategoryId="102" andGroupId="_NA_" productPromoActionSeqId="10005" productPromoRuleId="10005" includeSubCategories="Y" productPromoId="10005" productPromoCondSeqId="10005" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.387" productStoreId="9000" productPromoId="10005" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="201" showToCustomer="Y" requireCode="Y" productPromoId="10006" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10006" ruleName="AffiliateDiscount" productPromoId="10006" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10006" productPromoRuleId="10006" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10006" />
+    <ProductPromoCond productPromoRuleId="10006" productPromoId="10006" productPromoCondSeqId="10006" />
+    <ProductPromoCategory productCategoryId="201" andGroupId="_NA_" productPromoActionSeqId="10006" productPromoRuleId="10006" includeSubCategories="Y" productPromoId="10006" productPromoCondSeqId="10006" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.387" productStoreId="9000" productPromoId="10006" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="202" showToCustomer="Y" requireCode="Y" productPromoId="10007" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10007" ruleName="AffiliateDiscount" productPromoId="10007" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10007" productPromoRuleId="10007" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10007" />
+    <ProductPromoCond productPromoRuleId="10007" productPromoId="10007" productPromoCondSeqId="10007" />
+    <ProductPromoCategory productCategoryId="202" andGroupId="_NA_" productPromoActionSeqId="10007" productPromoRuleId="10007" includeSubCategories="Y" productPromoId="10007" productPromoCondSeqId="10007" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.388" productStoreId="9000" productPromoId="10007" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="2011" showToCustomer="Y" requireCode="Y" productPromoId="10008" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10008" ruleName="AffiliateDiscount" productPromoId="10008" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10008" productPromoRuleId="10008" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10008" />
+    <ProductPromoCond productPromoRuleId="10008" productPromoId="10008" productPromoCondSeqId="10008" />
+    <ProductPromoCategory productCategoryId="2011" andGroupId="_NA_" productPromoActionSeqId="10008" productPromoRuleId="10008" includeSubCategories="Y" productPromoId="10008" productPromoCondSeqId="10008" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.389" productStoreId="9000" productPromoId="10008" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="2012" showToCustomer="Y" requireCode="Y" productPromoId="10009" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10009" ruleName="AffiliateDiscount" productPromoId="10009" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10009" productPromoRuleId="10009" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10009" />
+    <ProductPromoCond productPromoRuleId="10009" productPromoId="10009" productPromoCondSeqId="10009" />
+    <ProductPromoCategory productCategoryId="2012" andGroupId="_NA_" productPromoActionSeqId="10009" productPromoRuleId="10009" includeSubCategories="Y" productPromoId="10009" productPromoCondSeqId="10009" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.389" productStoreId="9000" productPromoId="10009" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="PROMOTIONS" showToCustomer="Y" requireCode="Y" productPromoId="10010" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10010" ruleName="AffiliateDiscount" productPromoId="10010" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10010" productPromoRuleId="10010" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10010" />
+    <ProductPromoCond productPromoRuleId="10010" productPromoId="10010" productPromoCondSeqId="10010" />
+    <ProductPromoCategory productCategoryId="PROMOTIONS" andGroupId="_NA_" productPromoActionSeqId="10010" productPromoRuleId="10010" includeSubCategories="Y" productPromoId="10010" productPromoCondSeqId="10010" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.399" productStoreId="9000" productPromoId="10010" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="CATALOG1_SEARCH" showToCustomer="Y" requireCode="Y" productPromoId="10011" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10011" ruleName="AffiliateDiscount" productPromoId="10011" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10011" productPromoRuleId="10011" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10011" />
+    <ProductPromoCond productPromoRuleId="10011" productPromoId="10011" productPromoCondSeqId="10011" />
+    <ProductPromoCategory productCategoryId="CATALOG1_SEARCH" andGroupId="_NA_" productPromoActionSeqId="10011" productPromoRuleId="10011" includeSubCategories="Y" productPromoId="10011" productPromoCondSeqId="10011" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.399" productStoreId="9000" productPromoId="10011" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="CATALOG1_QUICKADD1" showToCustomer="Y" requireCode="Y" productPromoId="10012" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10012" ruleName="AffiliateDiscount" productPromoId="10012" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10012" productPromoRuleId="10012" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10012" />
+    <ProductPromoCond productPromoRuleId="10012" productPromoId="10012" productPromoCondSeqId="10012" />
+    <ProductPromoCategory productCategoryId="CATALOG1_QUICKADD1" andGroupId="_NA_" productPromoActionSeqId="10012" productPromoRuleId="10012" includeSubCategories="Y" productPromoId="10012" productPromoCondSeqId="10012" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.4" productStoreId="9000" productPromoId="10012" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="CATALOG1_QUICKADD2" showToCustomer="Y" requireCode="Y" productPromoId="10013" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10013" ruleName="AffiliateDiscount" productPromoId="10013" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10013" productPromoRuleId="10013" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10013" />
+    <ProductPromoCond productPromoRuleId="10013" productPromoId="10013" productPromoCondSeqId="10013" />
+    <ProductPromoCategory productCategoryId="CATALOG1_QUICKADD2" andGroupId="_NA_" productPromoActionSeqId="10013" productPromoRuleId="10013" includeSubCategories="Y" productPromoId="10013" productPromoCondSeqId="10013" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.4" productStoreId="9000" productPromoId="10013" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="TSTLTDADMIN" showToCustomer="Y" requireCode="Y" productPromoId="10014" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10014" ruleName="AffiliateDiscount" productPromoId="10014" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10014" productPromoRuleId="10014" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10014" />
+    <ProductPromoCond productPromoRuleId="10014" productPromoId="10014" productPromoCondSeqId="10014" />
+    <ProductPromoCategory productCategoryId="TSTLTDADMIN" andGroupId="_NA_" productPromoActionSeqId="10014" productPromoRuleId="10014" includeSubCategories="Y" productPromoId="10014" productPromoCondSeqId="10014" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.401" productStoreId="9000" productPromoId="10014" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="TSTCSL" showToCustomer="Y" requireCode="Y" productPromoId="10015" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10015" ruleName="AffiliateDiscount" productPromoId="10015" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10015" productPromoRuleId="10015" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10015" />
+    <ProductPromoCond productPromoRuleId="10015" productPromoId="10015" productPromoCondSeqId="10015" />
+    <ProductPromoCategory productCategoryId="TSTCSL" andGroupId="_NA_" productPromoActionSeqId="10015" productPromoRuleId="10015" includeSubCategories="Y" productPromoId="10015" productPromoCondSeqId="10015" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.401" productStoreId="9000" productPromoId="10015" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="GOOGLE_BASE" showToCustomer="Y" requireCode="Y" productPromoId="10016" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10016" ruleName="AffiliateDiscount" productPromoId="10016" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10016" productPromoRuleId="10016" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10016" />
+    <ProductPromoCond productPromoRuleId="10016" productPromoId="10016" productPromoCondSeqId="10016" />
+    <ProductPromoCategory productCategoryId="GOOGLE_BASE" andGroupId="_NA_" productPromoActionSeqId="10016" productPromoRuleId="10016" includeSubCategories="Y" productPromoId="10016" productPromoCondSeqId="10016" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.402" productStoreId="9000" productPromoId="10016" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="GB_ANIMALS" showToCustomer="Y" requireCode="Y" productPromoId="10017" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10017" ruleName="AffiliateDiscount" productPromoId="10017" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10017" productPromoRuleId="10017" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10017" />
+    <ProductPromoCond productPromoRuleId="10017" productPromoId="10017" productPromoCondSeqId="10017" />
+    <ProductPromoCategory productCategoryId="GB_ANIMALS" andGroupId="_NA_" productPromoActionSeqId="10017" productPromoRuleId="10017" includeSubCategories="Y" productPromoId="10017" productPromoCondSeqId="10017" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.402" productStoreId="9000" productPromoId="10017" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="GB_ART_N_ENTMNT" showToCustomer="Y" requireCode="Y" productPromoId="10018" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10018" ruleName="AffiliateDiscount" productPromoId="10018" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10018" productPromoRuleId="10018" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10018" />
+    <ProductPromoCond productPromoRuleId="10018" productPromoId="10018" productPromoCondSeqId="10018" />
+    <ProductPromoCategory productCategoryId="GB_ART_N_ENTMNT" andGroupId="_NA_" productPromoActionSeqId="10018" productPromoRuleId="10018" includeSubCategories="Y" productPromoId="10018" productPromoCondSeqId="10018" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.403" productStoreId="9000" productPromoId="10018" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="GB_BUZ_N_INDSTRL" showToCustomer="Y" requireCode="Y" productPromoId="10019" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10019" ruleName="AffiliateDiscount" productPromoId="10019" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10019" productPromoRuleId="10019" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10019" />
+    <ProductPromoCond productPromoRuleId="10019" productPromoId="10019" productPromoCondSeqId="10019" />
+    <ProductPromoCategory productCategoryId="GB_BUZ_N_INDSTRL" andGroupId="_NA_" productPromoActionSeqId="10019" productPromoRuleId="10019" includeSubCategories="Y" productPromoId="10019" productPromoCondSeqId="10019" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.404" productStoreId="9000" productPromoId="10019" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="GB_CMRA_N_OPTCS" showToCustomer="Y" requireCode="Y" productPromoId="10020" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10020" ruleName="AffiliateDiscount" productPromoId="10020" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10020" productPromoRuleId="10020" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10020" />
+    <ProductPromoCond productPromoRuleId="10020" productPromoId="10020" productPromoCondSeqId="10020" />
+    <ProductPromoCategory productCategoryId="GB_CMRA_N_OPTCS" andGroupId="_NA_" productPromoActionSeqId="10020" productPromoRuleId="10020" includeSubCategories="Y" productPromoId="10020" productPromoCondSeqId="10020" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.413" productStoreId="9000" productPromoId="10020" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="GB_CLTNG_N_ACECRS" showToCustomer="Y" requireCode="Y" productPromoId="10021" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10021" ruleName="AffiliateDiscount" productPromoId="10021" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10021" productPromoRuleId="10021" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10021" />
+    <ProductPromoCond productPromoRuleId="10021" productPromoId="10021" productPromoCondSeqId="10021" />
+    <ProductPromoCategory productCategoryId="GB_CLTNG_N_ACECRS" andGroupId="_NA_" productPromoActionSeqId="10021" productPromoRuleId="10021" includeSubCategories="Y" productPromoId="10021" productPromoCondSeqId="10021" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.413" productStoreId="9000" productPromoId="10021" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="GB_FD_BVRG_N_TBCO" showToCustomer="Y" requireCode="Y" productPromoId="10022" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10022" ruleName="AffiliateDiscount" productPromoId="10022" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10022" productPromoRuleId="10022" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10022" />
+    <ProductPromoCond productPromoRuleId="10022" productPromoId="10022" productPromoCondSeqId="10022" />
+    <ProductPromoCategory productCategoryId="GB_FD_BVRG_N_TBCO" andGroupId="_NA_" productPromoActionSeqId="10022" productPromoRuleId="10022" includeSubCategories="Y" productPromoId="10022" productPromoCondSeqId="10022" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.413" productStoreId="9000" productPromoId="10022" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="GB_FURNITURE" showToCustomer="Y" requireCode="Y" productPromoId="10023" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10023" ruleName="AffiliateDiscount" productPromoId="10023" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10023" productPromoRuleId="10023" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10023" />
+    <ProductPromoCond productPromoRuleId="10023" productPromoId="10023" productPromoCondSeqId="10023" />
+    <ProductPromoCategory productCategoryId="GB_FURNITURE" andGroupId="_NA_" productPromoActionSeqId="10023" productPromoRuleId="10023" includeSubCategories="Y" productPromoId="10023" productPromoCondSeqId="10023" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.414" productStoreId="9000" productPromoId="10023" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="GB_HARDWARE" showToCustomer="Y" requireCode="Y" productPromoId="10024" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10024" ruleName="AffiliateDiscount" productPromoId="10024" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10024" productPromoRuleId="10024" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10024" />
+    <ProductPromoCond productPromoRuleId="10024" productPromoId="10024" productPromoCondSeqId="10024" />
+    <ProductPromoCategory productCategoryId="GB_HARDWARE" andGroupId="_NA_" productPromoActionSeqId="10024" productPromoRuleId="10024" includeSubCategories="Y" productPromoId="10024" productPromoCondSeqId="10024" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.414" productStoreId="9000" productPromoId="10024" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="GB_HLTH_N_BEAUTY" showToCustomer="Y" requireCode="Y" productPromoId="10025" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10025" ruleName="AffiliateDiscount" productPromoId="10025" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10025" productPromoRuleId="10025" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10025" />
+    <ProductPromoCond productPromoRuleId="10025" productPromoId="10025" productPromoCondSeqId="10025" />
+    <ProductPromoCategory productCategoryId="GB_HLTH_N_BEAUTY" andGroupId="_NA_" productPromoActionSeqId="10025" productPromoRuleId="10025" includeSubCategories="Y" productPromoId="10025" productPromoCondSeqId="10025" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.415" productStoreId="9000" productPromoId="10025" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="GB_HME_N_GRDN" showToCustomer="Y" requireCode="Y" productPromoId="10026" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10026" ruleName="AffiliateDiscount" productPromoId="10026" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10026" productPromoRuleId="10026" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10026" />
+    <ProductPromoCond productPromoRuleId="10026" productPromoId="10026" productPromoCondSeqId="10026" />
+    <ProductPromoCategory productCategoryId="GB_HME_N_GRDN" andGroupId="_NA_" productPromoActionSeqId="10026" productPromoRuleId="10026" includeSubCategories="Y" productPromoId="10026" productPromoCondSeqId="10026" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.415" productStoreId="9000" productPromoId="10026" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="GB_LUGGAGE" showToCustomer="Y" requireCode="Y" productPromoId="10027" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10027" ruleName="AffiliateDiscount" productPromoId="10027" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10027" productPromoRuleId="10027" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10027" />
+    <ProductPromoCond productPromoRuleId="10027" productPromoId="10027" productPromoCondSeqId="10027" />
+    <ProductPromoCategory productCategoryId="GB_LUGGAGE" andGroupId="_NA_" productPromoActionSeqId="10027" productPromoRuleId="10027" includeSubCategories="Y" productPromoId="10027" productPromoCondSeqId="10027" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.416" productStoreId="9000" productPromoId="10027" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="GB_MATURE" showToCustomer="Y" requireCode="Y" productPromoId="10028" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10028" ruleName="AffiliateDiscount" productPromoId="10028" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10028" productPromoRuleId="10028" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10028" />
+    <ProductPromoCond productPromoRuleId="10028" productPromoId="10028" productPromoCondSeqId="10028" />
+    <ProductPromoCategory productCategoryId="GB_MATURE" andGroupId="_NA_" productPromoActionSeqId="10028" productPromoRuleId="10028" includeSubCategories="Y" productPromoId="10028" productPromoCondSeqId="10028" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.416" productStoreId="9000" productPromoId="10028" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="GB_MEDIA" showToCustomer="Y" requireCode="Y" productPromoId="10029" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10029" ruleName="AffiliateDiscount" productPromoId="10029" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10029" productPromoRuleId="10029" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10029" />
+    <ProductPromoCond productPromoRuleId="10029" productPromoId="10029" productPromoCondSeqId="10029" />
+    <ProductPromoCategory productCategoryId="GB_MEDIA" andGroupId="_NA_" productPromoActionSeqId="10029" productPromoRuleId="10029" includeSubCategories="Y" productPromoId="10029" productPromoCondSeqId="10029" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.417" productStoreId="9000" productPromoId="10029" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="GB_MTR_VEHICL" showToCustomer="Y" requireCode="Y" productPromoId="10030" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10030" ruleName="AffiliateDiscount" productPromoId="10030" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10030" productPromoRuleId="10030" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10030" />
+    <ProductPromoCond productPromoRuleId="10030" productPromoId="10030" productPromoCondSeqId="10030" />
+    <ProductPromoCategory productCategoryId="GB_MTR_VEHICL" andGroupId="_NA_" productPromoActionSeqId="10030" productPromoRuleId="10030" includeSubCategories="Y" productPromoId="10030" productPromoCondSeqId="10030" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.424" productStoreId="9000" productPromoId="10030" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="GB_OFFC_SPPLS" showToCustomer="Y" requireCode="Y" productPromoId="10031" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10031" ruleName="AffiliateDiscount" productPromoId="10031" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10031" productPromoRuleId="10031" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10031" />
+    <ProductPromoCond productPromoRuleId="10031" productPromoId="10031" productPromoCondSeqId="10031" />
+    <ProductPromoCategory productCategoryId="GB_OFFC_SPPLS" andGroupId="_NA_" productPromoActionSeqId="10031" productPromoRuleId="10031" includeSubCategories="Y" productPromoId="10031" productPromoCondSeqId="10031" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.424" productStoreId="9000" productPromoId="10031" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="GB_SOFTWARE" showToCustomer="Y" requireCode="Y" productPromoId="10032" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10032" ruleName="AffiliateDiscount" productPromoId="10032" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10032" productPromoRuleId="10032" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10032" />
+    <ProductPromoCond productPromoRuleId="10032" productPromoId="10032" productPromoCondSeqId="10032" />
+    <ProductPromoCategory productCategoryId="GB_SOFTWARE" andGroupId="_NA_" productPromoActionSeqId="10032" productPromoRuleId="10032" includeSubCategories="Y" productPromoId="10032" productPromoCondSeqId="10032" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.425" productStoreId="9000" productPromoId="10032" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="GB_SPRTNG_GDS" showToCustomer="Y" requireCode="Y" productPromoId="10033" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10033" ruleName="AffiliateDiscount" productPromoId="10033" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10033" productPromoRuleId="10033" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10033" />
+    <ProductPromoCond productPromoRuleId="10033" productPromoId="10033" productPromoCondSeqId="10033" />
+    <ProductPromoCategory productCategoryId="GB_SPRTNG_GDS" andGroupId="_NA_" productPromoActionSeqId="10033" productPromoRuleId="10033" includeSubCategories="Y" productPromoId="10033" productPromoCondSeqId="10033" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.425" productStoreId="9000" productPromoId="10033" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="GB_TYS_GMS" showToCustomer="Y" requireCode="Y" productPromoId="10034" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10034" ruleName="AffiliateDiscount" productPromoId="10034" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10034" productPromoRuleId="10034" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10034" />
+    <ProductPromoCond productPromoRuleId="10034" productPromoId="10034" productPromoCondSeqId="10034" />
+    <ProductPromoCategory productCategoryId="GB_TYS_GMS" andGroupId="_NA_" productPromoActionSeqId="10034" productPromoRuleId="10034" includeSubCategories="Y" productPromoId="10034" productPromoCondSeqId="10034" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.425" productStoreId="9000" productPromoId="10034" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="SERV-001" showToCustomer="Y" requireCode="Y" productPromoId="10035" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10035" ruleName="AffiliateDiscount" productPromoId="10035" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10035" productPromoRuleId="10035" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10035" />
+    <ProductPromoCond productPromoRuleId="10035" productPromoId="10035" productPromoCondSeqId="10035" />
+    <ProductPromoCategory productCategoryId="SERV-001" andGroupId="_NA_" productPromoActionSeqId="10035" productPromoRuleId="10035" includeSubCategories="Y" productPromoId="10035" productPromoCondSeqId="10035" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.426" productStoreId="9000" productPromoId="10035" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="GC-100" showToCustomer="Y" requireCode="Y" productPromoId="10036" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10036" ruleName="AffiliateDiscount" productPromoId="10036" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10036" productPromoRuleId="10036" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10036" />
+    <ProductPromoCond productPromoRuleId="10036" productPromoId="10036" productPromoCondSeqId="10036" />
+    <ProductPromoCategory productCategoryId="GC-100" andGroupId="_NA_" productPromoActionSeqId="10036" productPromoRuleId="10036" includeSubCategories="Y" productPromoId="10036" productPromoCondSeqId="10036" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.426" productStoreId="9000" productPromoId="10036" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="GC-101" showToCustomer="Y" requireCode="Y" productPromoId="10037" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10037" ruleName="AffiliateDiscount" productPromoId="10037" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10037" productPromoRuleId="10037" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10037" />
+    <ProductPromoCond productPromoRuleId="10037" productPromoId="10037" productPromoCondSeqId="10037" />
+    <ProductPromoCategory productCategoryId="GC-101" andGroupId="_NA_" productPromoActionSeqId="10037" productPromoRuleId="10037" includeSubCategories="Y" productPromoId="10037" productPromoCondSeqId="10037" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.427" productStoreId="9000" productPromoId="10037" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="GC-102" showToCustomer="Y" requireCode="Y" productPromoId="10038" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10038" ruleName="AffiliateDiscount" productPromoId="10038" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10038" productPromoRuleId="10038" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10038" />
+    <ProductPromoCond productPromoRuleId="10038" productPromoId="10038" productPromoCondSeqId="10038" />
+    <ProductPromoCategory productCategoryId="GC-102" andGroupId="_NA_" productPromoActionSeqId="10038" productPromoRuleId="10038" includeSubCategories="Y" productPromoId="10038" productPromoCondSeqId="10038" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.427" productStoreId="9000" productPromoId="10038" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="GC-103" showToCustomer="Y" requireCode="Y" productPromoId="10039" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10039" ruleName="AffiliateDiscount" productPromoId="10039" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10039" productPromoRuleId="10039" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10039" />
+    <ProductPromoCond productPromoRuleId="10039" productPromoId="10039" productPromoCondSeqId="10039" />
+    <ProductPromoCategory productCategoryId="GC-103" andGroupId="_NA_" productPromoActionSeqId="10039" productPromoRuleId="10039" includeSubCategories="Y" productPromoId="10039" productPromoCondSeqId="10039" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.427" productStoreId="9000" productPromoId="10039" />
+
+<!--    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="eBay_Category" showToCustomer="Y" requireCode="Y" productPromoId="10040" useLimitPerOrder="1" />-->
+<!--    <ProductPromoRule productPromoRuleId="10040" ruleName="AffiliateDiscount" productPromoId="10040" />-->
+<!--    <ProductPromoAction amount="20" productPromoActionSeqId="10040" productPromoRuleId="10040" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10040" />-->
+<!--    <ProductPromoCond productPromoRuleId="10040" productPromoId="10040" productPromoCondSeqId="10040" />-->
+<!--    <ProductPromoCategory productCategoryId="eBay_Category" andGroupId="_NA_" productPromoActionSeqId="10040" productPromoRuleId="10040" includeSubCategories="Y" productPromoId="10040" productPromoCondSeqId="10040" />-->
+<!--    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.436" productStoreId="9000" productPromoId="10040" />-->
+
+<!--    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="eBay_ECom_Category" showToCustomer="Y" requireCode="Y" productPromoId="10041" useLimitPerOrder="1" />-->
+<!--    <ProductPromoRule productPromoRuleId="10041" ruleName="AffiliateDiscount" productPromoId="10041" />-->
+<!--    <ProductPromoAction amount="20" productPromoActionSeqId="10041" productPromoRuleId="10041" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10041" />-->
+<!--    <ProductPromoCond productPromoRuleId="10041" productPromoId="10041" productPromoCondSeqId="10041" />-->
+<!--    <ProductPromoCategory productCategoryId="eBay_ECom_Category" andGroupId="_NA_" productPromoActionSeqId="10041" productPromoRuleId="10041" includeSubCategories="Y" productPromoId="10041" productPromoCondSeqId="10041" />-->
+<!--    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.436" productStoreId="9000" productPromoId="10041" />-->
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="PC-100" showToCustomer="Y" requireCode="Y" productPromoId="10042" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10042" ruleName="AffiliateDiscount" productPromoId="10042" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10042" productPromoRuleId="10042" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10042" />
+    <ProductPromoCond productPromoRuleId="10042" productPromoId="10042" productPromoCondSeqId="10042" />
+    <ProductPromoCategory productCategoryId="PC-100" andGroupId="_NA_" productPromoActionSeqId="10042" productPromoRuleId="10042" includeSubCategories="Y" productPromoId="10042" productPromoCondSeqId="10042" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.437" productStoreId="9000" productPromoId="10042" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="FOOD-001" showToCustomer="Y" requireCode="Y" productPromoId="10043" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10043" ruleName="AffiliateDiscount" productPromoId="10043" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10043" productPromoRuleId="10043" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10043" />
+    <ProductPromoCond productPromoRuleId="10043" productPromoId="10043" productPromoCondSeqId="10043" />
+    <ProductPromoCategory productCategoryId="FOOD-001" andGroupId="_NA_" productPromoActionSeqId="10043" productPromoRuleId="10043" includeSubCategories="Y" productPromoId="10043" productPromoCondSeqId="10043" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.437" productStoreId="9000" productPromoId="10043" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="RentBrowseRoot" showToCustomer="Y" requireCode="Y" productPromoId="10044" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10044" ruleName="AffiliateDiscount" productPromoId="10044" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10044" productPromoRuleId="10044" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10044" />
+    <ProductPromoCond productPromoRuleId="10044" productPromoId="10044" productPromoCondSeqId="10044" />
+    <ProductPromoCategory productCategoryId="RentBrowseRoot" andGroupId="_NA_" productPromoActionSeqId="10044" productPromoRuleId="10044" includeSubCategories="Y" productPromoId="10044" productPromoCondSeqId="10044" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.437" productStoreId="9000" productPromoId="10044" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="RentBrowseRoot_SRCH" showToCustomer="Y" requireCode="Y" productPromoId="10045" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10045" ruleName="AffiliateDiscount" productPromoId="10045" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10045" productPromoRuleId="10045" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10045" />
+    <ProductPromoCond productPromoRuleId="10045" productPromoId="10045" productPromoCondSeqId="10045" />
+    <ProductPromoCategory productCategoryId="RentBrowseRoot_SRCH" andGroupId="_NA_" productPromoActionSeqId="10045" productPromoRuleId="10045" includeSubCategories="Y" productPromoId="10045" productPromoCondSeqId="10045" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.438" productStoreId="9000" productPromoId="10045" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="RentalPromo" showToCustomer="Y" requireCode="Y" productPromoId="10046" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10046" ruleName="AffiliateDiscount" productPromoId="10046" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10046" productPromoRuleId="10046" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10046" />
+    <ProductPromoCond productPromoRuleId="10046" productPromoId="10046" productPromoCondSeqId="10046" />
+    <ProductPromoCategory productCategoryId="RentalPromo" andGroupId="_NA_" productPromoActionSeqId="10046" productPromoRuleId="10046" includeSubCategories="Y" productPromoId="10046" productPromoCondSeqId="10046" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.438" productStoreId="9000" productPromoId="10046" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="HotelFac" showToCustomer="Y" requireCode="Y" productPromoId="10047" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10047" ruleName="AffiliateDiscount" productPromoId="10047" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10047" productPromoRuleId="10047" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10047" />
+    <ProductPromoCond productPromoRuleId="10047" productPromoId="10047" productPromoCondSeqId="10047" />
+    <ProductPromoCategory productCategoryId="HotelFac" andGroupId="_NA_" productPromoActionSeqId="10047" productPromoRuleId="10047" includeSubCategories="Y" productPromoId="10047" productPromoCondSeqId="10047" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.439" productStoreId="9000" productPromoId="10047" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="Rooms" showToCustomer="Y" requireCode="Y" productPromoId="10048" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10048" ruleName="AffiliateDiscount" productPromoId="10048" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10048" productPromoRuleId="10048" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10048" />
+    <ProductPromoCond productPromoRuleId="10048" productPromoId="10048" productPromoCondSeqId="10048" />
+    <ProductPromoCategory productCategoryId="Rooms" andGroupId="_NA_" productPromoActionSeqId="10048" productPromoRuleId="10048" includeSubCategories="Y" productPromoId="10048" productPromoCondSeqId="10048" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.439" productStoreId="9000" productPromoId="10048" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="Suites" showToCustomer="Y" requireCode="Y" productPromoId="10049" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10049" ruleName="AffiliateDiscount" productPromoId="10049" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10049" productPromoRuleId="10049" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10049" />
+    <ProductPromoCond productPromoRuleId="10049" productPromoId="10049" productPromoCondSeqId="10049" />
+    <ProductPromoCategory productCategoryId="Suites" andGroupId="_NA_" productPromoActionSeqId="10049" productPromoRuleId="10049" includeSubCategories="Y" productPromoId="10049" productPromoCondSeqId="10049" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.439" productStoreId="9000" productPromoId="10049" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="ConfRooms" showToCustomer="Y" requireCode="Y" productPromoId="10050" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10050" ruleName="AffiliateDiscount" productPromoId="10050" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10050" productPromoRuleId="10050" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10050" />
+    <ProductPromoCond productPromoRuleId="10050" productPromoId="10050" productPromoCondSeqId="10050" />
+    <ProductPromoCategory productCategoryId="ConfRooms" andGroupId="_NA_" productPromoActionSeqId="10050" productPromoRuleId="10050" includeSubCategories="Y" productPromoId="10050" productPromoCondSeqId="10050" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.447" productStoreId="9000" productPromoId="10050" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="BoatRental" showToCustomer="Y" requireCode="Y" productPromoId="10051" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10051" ruleName="AffiliateDiscount" productPromoId="10051" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10051" productPromoRuleId="10051" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10051" />
+    <ProductPromoCond productPromoRuleId="10051" productPromoId="10051" productPromoCondSeqId="10051" />
+    <ProductPromoCategory productCategoryId="BoatRental" andGroupId="_NA_" productPromoActionSeqId="10051" productPromoRuleId="10051" includeSubCategories="Y" productPromoId="10051" productPromoCondSeqId="10051" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.447" productStoreId="9000" productPromoId="10051" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="RowBoats" showToCustomer="Y" requireCode="Y" productPromoId="10052" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10052" ruleName="AffiliateDiscount" productPromoId="10052" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10052" productPromoRuleId="10052" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10052" />
+    <ProductPromoCond productPromoRuleId="10052" productPromoId="10052" productPromoCondSeqId="10052" />
+    <ProductPromoCategory productCategoryId="RowBoats" andGroupId="_NA_" productPromoActionSeqId="10052" productPromoRuleId="10052" includeSubCategories="Y" productPromoId="10052" productPromoCondSeqId="10052" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.448" productStoreId="9000" productPromoId="10052" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="SailBoats" showToCustomer="Y" requireCode="Y" productPromoId="10053" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10053" ruleName="AffiliateDiscount" productPromoId="10053" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10053" productPromoRuleId="10053" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10053" />
+    <ProductPromoCond productPromoRuleId="10053" productPromoId="10053" productPromoCondSeqId="10053" />
+    <ProductPromoCategory productCategoryId="SailBoats" andGroupId="_NA_" productPromoActionSeqId="10053" productPromoRuleId="10053" includeSubCategories="Y" productPromoId="10053" productPromoCondSeqId="10053" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.448" productStoreId="9000" productPromoId="10053" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="MotorBoats" showToCustomer="Y" requireCode="Y" productPromoId="10054" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10054" ruleName="AffiliateDiscount" productPromoId="10054" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10054" productPromoRuleId="10054" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10054" />
+    <ProductPromoCond productPromoRuleId="10054" productPromoId="10054" productPromoCondSeqId="10054" />
+    <ProductPromoCategory productCategoryId="MotorBoats" andGroupId="_NA_" productPromoActionSeqId="10054" productPromoRuleId="10054" includeSubCategories="Y" productPromoId="10054" productPromoCondSeqId="10054" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.449" productStoreId="9000" productPromoId="10054" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="SpeedBoats" showToCustomer="Y" requireCode="Y" productPromoId="10055" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10055" ruleName="AffiliateDiscount" productPromoId="10055" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10055" productPromoRuleId="10055" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10055" />
+    <ProductPromoCond productPromoRuleId="10055" productPromoId="10055" productPromoCondSeqId="10055" />
+    <ProductPromoCategory productCategoryId="SpeedBoats" andGroupId="_NA_" productPromoActionSeqId="10055" productPromoRuleId="10055" includeSubCategories="Y" productPromoId="10055" productPromoCondSeqId="10055" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.449" productStoreId="9000" productPromoId="10055" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="dropShip" showToCustomer="Y" requireCode="Y" productPromoId="10056" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10056" ruleName="AffiliateDiscount" productPromoId="10056" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10056" productPromoRuleId="10056" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10056" />
+    <ProductPromoCond productPromoRuleId="10056" productPromoId="10056" productPromoCondSeqId="10056" />
+    <ProductPromoCategory productCategoryId="dropShip" andGroupId="_NA_" productPromoActionSeqId="10056" productPromoRuleId="10056" includeSubCategories="Y" productPromoId="10056" productPromoCondSeqId="10056" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.449" productStoreId="9000" productPromoId="10056" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="FA-100" showToCustomer="Y" requireCode="Y" productPromoId="10057" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10057" ruleName="AffiliateDiscount" productPromoId="10057" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10057" productPromoRuleId="10057" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10057" />
+    <ProductPromoCond productPromoRuleId="10057" productPromoId="10057" productPromoCondSeqId="10057" />
+    <ProductPromoCategory productCategoryId="FA-100" andGroupId="_NA_" productPromoActionSeqId="10057" productPromoRuleId="10057" includeSubCategories="Y" productPromoId="10057" productPromoCondSeqId="10057" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.45" productStoreId="9000" productPromoId="10057" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="CATALOG1_BEST_SELL" showToCustomer="Y" requireCode="Y" productPromoId="10058" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10058" ruleName="AffiliateDiscount" productPromoId="10058" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10058" productPromoRuleId="10058" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10058" />
+    <ProductPromoCond productPromoRuleId="10058" productPromoId="10058" productPromoCondSeqId="10058" />
+    <ProductPromoCategory productCategoryId="CATALOG1_BEST_SELL" andGroupId="_NA_" productPromoActionSeqId="10058" productPromoRuleId="10058" includeSubCategories="Y" productPromoId="10058" productPromoCondSeqId="10058" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.45" productStoreId="9000" productPromoId="10058" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="BEST-SELL-1" showToCustomer="Y" requireCode="Y" productPromoId="10059" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10059" ruleName="AffiliateDiscount" productPromoId="10059" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10059" productPromoRuleId="10059" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10059" />
+    <ProductPromoCond productPromoRuleId="10059" productPromoId="10059" productPromoCondSeqId="10059" />
+    <ProductPromoCategory productCategoryId="BEST-SELL-1" andGroupId="_NA_" productPromoActionSeqId="10059" productPromoRuleId="10059" includeSubCategories="Y" productPromoId="10059" productPromoCondSeqId="10059" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.45" productStoreId="9000" productPromoId="10059" />
+
+    <ProductPromo promoName="AffiliateDiscount" userEntered="Y" promoText="BEST-SELL-2" showToCustomer="Y" requireCode="Y" productPromoId="10060" useLimitPerOrder="1" />
+    <ProductPromoRule productPromoRuleId="10060" ruleName="AffiliateDiscount" productPromoId="10060" />
+    <ProductPromoAction amount="20" productPromoActionSeqId="10060" productPromoRuleId="10060" orderAdjustmentTypeId="PROMOTION_ADJUSTMENT" productPromoActionEnumId="PROMO_ORDER_PERCENT" productPromoId="10060" />
+    <ProductPromoCond productPromoRuleId="10060" productPromoId="10060" productPromoCondSeqId="10060" />
+    <ProductPromoCategory productCategoryId="BEST-SELL-2" andGroupId="_NA_" productPromoActionSeqId="10060" productPromoRuleId="10060" includeSubCategories="Y" productPromoId="10060" productPromoCondSeqId="10060" />
+    <ProductStorePromoAppl fromDate="2020-05-03 14:35:17.457" productStoreId="9000" productPromoId="10060" />"
+
+    <!--    Affiliate Promos-->
+
+</entity-engine-xml>

@@ -18,27 +18,7 @@
  *******************************************************************************/
 package org.apache.ofbiz.widget.model;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import org.apache.ofbiz.base.util.Debug;
-import org.apache.ofbiz.base.util.GroovyUtil;
-import org.apache.ofbiz.base.util.StringUtil;
-import org.apache.ofbiz.base.util.UtilCodec;
-import org.apache.ofbiz.base.util.UtilGenerics;
-import org.apache.ofbiz.base.util.UtilProperties;
-import org.apache.ofbiz.base.util.UtilValidate;
-import org.apache.ofbiz.base.util.UtilXml;
+import org.apache.ofbiz.base.util.*;
 import org.apache.ofbiz.base.util.collections.FlexibleMapAccessor;
 import org.apache.ofbiz.base.util.string.FlexibleStringExpander;
 import org.apache.ofbiz.entity.GenericEntityException;
@@ -54,6 +34,10 @@ import org.apache.ofbiz.widget.renderer.FormStringRenderer;
 import org.apache.ofbiz.widget.renderer.VisualTheme;
 import org.codehaus.groovy.control.CompilationFailedException;
 import org.w3c.dom.Element;
+
+import java.io.IOException;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Abstract base class for the &lt;form&gt; and &lt;grid&gt; elements.
@@ -434,7 +418,13 @@ public abstract class ModelForm extends ModelWidget {
                 } else {
                     onPaginateUpdateAreas.add(updateArea);
                 }
-            } else if ("submit".equals(updateArea.getEventType())) {
+            } else if ("submit".equals(updateArea.getEventType())
+                     ||"post".equals(updateArea.getEventType())
+                     ||"setArea".equals(updateArea.getEventType())
+                     ||"setWatcher".equals(updateArea.getEventType())
+                     ||"collapse".equals(updateArea.getEventType())
+                     ||"closeModal".equals(updateArea.getEventType())
+                      ) {
                 int index = onSubmitUpdateAreas.indexOf(updateArea);
                 if (index != -1) {
                     onSubmitUpdateAreas.set(index, updateArea);
@@ -1716,12 +1706,20 @@ public abstract class ModelForm extends ModelWidget {
             this.defaultServiceName = defaultServiceName;
             this.defaultEntityName = defaultEntityName;
             List<? extends Element> parameterElementList = UtilXml.childElementList(updateAreaElement, "parameter");
-            if (parameterElementList.isEmpty()) {
+            boolean autoPortletParamsElement = UtilXml.firstChildElement(updateAreaElement, "auto-parameters-portlet") == null ? false : true;
+            if (parameterElementList.isEmpty() && ! autoPortletParamsElement) {
                 this.parameterList = Collections.emptyList();
             } else {
-                List<CommonWidgetModels.Parameter> parameterList = new ArrayList<>(parameterElementList.size());
+                int paramListSize = parameterElementList.size() + (autoPortletParamsElement ? 4 : 0);
+                List<CommonWidgetModels.Parameter> parameterList = new ArrayList<>(paramListSize);
                 for (Element parameterElement : parameterElementList) {
                     parameterList.add(new CommonWidgetModels.Parameter(parameterElement));
+                }
+                if (autoPortletParamsElement) {
+                    parameterList.add(new CommonWidgetModels.Parameter("portalPageId",    "parameters.portalPageId",    true));
+                    parameterList.add(new CommonWidgetModels.Parameter("portalPortletId", "parameters.portalPortletId", true));
+                    parameterList.add(new CommonWidgetModels.Parameter("portletSeqId",    "parameters.portletSeqId",    true));
+                    parameterList.add(new CommonWidgetModels.Parameter("currentAreaId",   "parameters.currentAreaId",   true));
                 }
                 this.parameterList = Collections.unmodifiableList(parameterList);
             }
@@ -1761,6 +1759,10 @@ public abstract class ModelForm extends ModelWidget {
 
         public String getAreaId() {
             return areaId;
+        }
+
+        public String getAreaId(Map<String, ? extends Object> context) {
+            return FlexibleStringExpander.expandString(areaId, context);
         }
 
         public String getAreaTarget(Map<String, ? extends Object> context) {
@@ -1813,6 +1815,15 @@ public abstract class ModelForm extends ModelWidget {
 
         public List<CommonWidgetModels.Parameter> getParameterList() {
             return parameterList;
+        }
+
+        public Map<String, Object> toMap(Map<String, Object> context) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("eventType",    this.getEventType());
+            map.put("areaId",       FlexibleStringExpander.expandString(this.getAreaId(), context));
+            map.put("areaTarget",   FlexibleStringExpander.expandString(this.getAreaTarget(), context));
+            map.put("parameterMap", this.getParameterMap(context));
+            return map;
         }
     }
 }

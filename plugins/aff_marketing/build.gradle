@@ -18,10 +18,6 @@
  */
 
 dependencies {
-    //Examples of compile-time and runtime dependencies
-
-    //pluginLibsCompile 'junit:junit-dep:4.10'
-    //pluginLibsRuntime 'junit:junit-dep:4.10'
     pluginLibsCompile 'org.osgi:org.osgi.core:5.0.0'
     pluginLibsCompile 'biz.aQute.bnd:biz.aQute.bndlib:3.0.0'
 
@@ -32,16 +28,4 @@ dependencies {
     pluginLibsCompile 'org.apache.camel:camel-spark-rest:2.16.1'
 
     pluginLibsCompile 'org.apache.camel:camel-jackson:2.18.1'
-}
-
-task install {
-    doLast {
-        // Install logic for this plugin
-    }
-}
-
-task uninstall {
-    doLast {
-        // uninstall logic for this plugin
-    }
 }
