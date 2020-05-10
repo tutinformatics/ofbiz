@@ -15,10 +15,10 @@ Currently the following /v1 endpoints (meaning `/api/generic/v1/*`) are implemen
     * Make a new entity, doesn't support subobjects or adding relations. For those use existing or own services or assist with implementing them on a generic level.
     Fails if you try to add something with lacking PK fields or PKs that are in conflict with an existing entity.
 * **PUT** `/entities/{case sensitive entity name}`
-    * Updates an existing entity. Fails if no entity with chosen PKs found. PKs are taken from entity structure
+    * Updates an existing entity. Updates the given fields to given values, doesn't change other fields. Fails if no entity with chosen PKs found. PKs are taken from entity structure.
 * **POST** `/entityquery/{case sensitive entity name}`
     * Fetches entity with given parameters. Can set if all relations must return something for item to get returned or not. Inputfields supports everything performFind supports.
-    * in "field3_fld0_op" the "like" is one example. All possible values are [and, between, equals, greaterThan, greaterThanEqualTo, in, lessThan, lessThanEqualTo, like, not, notEqual, or]
+    * in "field3_fld0_op" the "like" is one example. Check [performFind docs for supported operations](./performfind-service.md)
     * For ranges you have to use two inputFields, first with fld0 and second with fld1 like in example
     * Times can be entered in milliseconds or in strings edible for java.sql.Timestamp in format "yyyy-[m]m-[d]d hh:mm:ss[.f...]"
     

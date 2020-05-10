@@ -43,7 +43,7 @@ public class AppServletContextListener implements ServletContextListener {
 
         try {
             System.out.println("--------------------------------------- TOKEN ---------------------------------------------");
-            System.out.println(generateAdminToken(delegator));
+            System.out.println(generateAdminToken());
             System.out.println();
         } catch (Exception e) {
             e.printStackTrace();

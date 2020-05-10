@@ -9,10 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationInput {
+public class TokenAuthenticationInput {
 
-	private String userLoginId;
-	private String currentPassword;
-	private String currentPasswordVerify;
+	private String token;
 
 }

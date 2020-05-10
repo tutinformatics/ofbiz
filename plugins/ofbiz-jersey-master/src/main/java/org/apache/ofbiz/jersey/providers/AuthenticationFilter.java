@@ -72,15 +72,17 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 		}
 
 		try {
-			String jweToken;
+			String jwtToken;
 
 			if (IS_DEV) {
-				jweToken = generateAdminToken(delegator);
+				jwtToken = generateAdminToken();
 			} else {
-				jweToken = JWTManager.getHeaderAuthBearerToken(httpRequest); // GET FROM HEADER
+				jwtToken = JWTManager.getHeaderAuthBearerToken(httpRequest); // GET FROM HEADER
 			}
 
-			Map<String, Object> claims = getClaimsFromToken(getBodyFromJWE(jweToken));
+			Map<String, Object> claims = getInnerClaimsFromJwt(jwtToken);
+
+			System.out.println(claims);
 
 			AuthenticationInput user = AuthenticationInput.builder()
 					.userLoginId(String.valueOf(claims.get("userLoginId")))
@@ -90,6 +92,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 			authenticateUserLogin(delegator, user);
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			abortWithUnauthorized(requestContext, true, "Access Denied: User does not exist in the system");
 		}
 	}
