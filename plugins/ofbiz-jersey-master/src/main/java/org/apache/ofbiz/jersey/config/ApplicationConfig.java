@@ -37,8 +37,7 @@ public class ApplicationConfig extends ResourceConfig {
 		register(MultiPartFeature.class);
 		register(new CORSFilter());
 		if (Debug.verboseOn()) {
-			register(new LoggingFeature(Logger.getLogger(LoggingFeature.DEFAULT_LOGGER_NAME), Level.INFO,
-					LoggingFeature.Verbosity.PAYLOAD_ANY, 10000));
+			register(new LoggingFeature(Logger.getLogger(LoggingFeature.DEFAULT_LOGGER_NAME), Level.INFO, LoggingFeature.Verbosity.PAYLOAD_ANY, 10000));
 		}
 
 	}

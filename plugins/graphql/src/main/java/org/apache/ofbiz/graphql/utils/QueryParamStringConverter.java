@@ -23,7 +23,7 @@ public class QueryParamStringConverter {
                     return string;
             }
         } catch (Exception e) {
-            System.out.println(string);
+            e.printStackTrace();
             return string;
         }
     }

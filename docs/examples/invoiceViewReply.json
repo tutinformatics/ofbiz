@@ -1,0 +1,323 @@
+[
+  {
+    "roleTypeId": null,
+    "dueDate": 1249896389758,
+    "description": null,
+    "billingAccountId": null,
+    "invoiceDate": 1247304389758,
+    "_toMany_InvoiceStatus": [
+      {
+        "statusDate": 1247304389761,
+        "_toOne_StatusItem": {
+          "description": "In-Process"
+        },
+        "changeByUserLoginId": null
+      },
+      {
+        "statusDate": 1247304424758,
+        "_toOne_StatusItem": {
+          "description": "Ready for Posting"
+        },
+        "changeByUserLoginId": null
+      },
+      {
+        "statusDate": 1247304525144,
+        "_toOne_StatusItem": {
+          "description": "Paid"
+        },
+        "changeByUserLoginId": null
+      }
+    ],
+    "_toMany_InvoiceItem": [
+      {
+        "amount": 33.990,
+        "_toOne_Uom": {
+          "abbreviation": "USD"
+        },
+        "quantity": null,
+        "productId": null,
+        "overrideOrgPartyId": null,
+        "productFeatureId": null,
+        "taxableFlag": "Y",
+        "taxAuthorityRateSeqId": null,
+        "overrideGlAccountId": null,
+        "description": null,
+        "invoiceItemSeqId": "00001",
+        "_toOne_InvoiceItemType": {
+          "description": "Invoice Work-Effort Item(Purchase)"
+        },
+        "inventoryItemId": null,
+        "taxAuthPartyId": null,
+        "parentInvoiceId": null,
+        "parentInvoiceItemSeqId": null,
+        "taxAuthGeoId": null,
+        "salesOpportunityId": null
+      }
+    ],
+    "paidDate": 1247304524950,
+    "_toOne_StatusItem": {
+      "description": "Paid"
+    },
+    "referenceNumber": null,
+    "_toOne_FromParty": {
+      "lastUpdatedStamp": 1586367016925,
+      "lastModifiedDate": null,
+      "createdTxStamp": 1586367016855,
+      "_toOne_PartyGroup": {
+        "groupName": "Demo Supplier"
+      },
+      "createdStamp": 1586367016925,
+      "externalId": null,
+      "description": null,
+      "lastUpdatedTxStamp": 1586367016855,
+      "isUnread": null,
+      "partyTypeId": "PARTY_GROUP",
+      "lastModifiedByUserLogin": null,
+      "dataSourceId": null,
+      "createdDate": null,
+      "statusId": "PARTY_ENABLED",
+      "preferredCurrencyUomId": null,
+      "partyId": "DemoSupplier",
+      "createdByUserLogin": null
+    },
+    "_toOne_InvoiceType": {
+      "description": "Purchase Invoice"
+    },
+    "_toOne_Party": {
+      "lastUpdatedStamp": 1586367019665,
+      "lastModifiedDate": null,
+      "createdTxStamp": 1586367016855,
+      "_toOne_PartyGroup": {
+        "groupName": "Your Company Name Here"
+      },
+      "createdStamp": 1586367016902,
+      "externalId": null,
+      "description": null,
+      "lastUpdatedTxStamp": 1586367018871,
+      "isUnread": null,
+      "partyTypeId": "PARTY_GROUP",
+      "lastModifiedByUserLogin": null,
+      "dataSourceId": null,
+      "createdDate": null,
+      "statusId": "PARTY_ENABLED",
+      "preferredCurrencyUomId": null,
+      "partyId": "Company",
+      "createdByUserLogin": null
+    },
+    "invoiceMessage": null,
+    "_toMany_PaymentApplication": [
+      {
+        "paymentId": "8002",
+        "amountApplied": 33.99
+      }
+    ],
+    "_toMany_AcctgTrans": [
+      {
+        "isPosted": "Y",
+        "paymentId": null,
+        "glFiscalTypeId": "ACTUAL",
+        "fixedAssetId": null,
+        "glJournalId": null,
+        "_toMany_AcctgTransEntry": [
+          {
+            "amount": 33.99,
+            "productId": null,
+            "glAccountId": "140000",
+            "_toOne_GlAccount": {
+              "_toOne_GlAccountType": {
+                "description": "Inventory"
+              },
+              "accountCode": "140000",
+              "accountName": "INVENTORY",
+              "_toOne_GlAccountClass": {
+                "description": "Inventory Asset"
+              }
+            },
+            "description": null,
+            "acctgTransEntryTypeId": "_NA_",
+            "acctgTransId": "8005",
+            "debitCreditFlag": "D",
+            "origAmount": 33.99,
+            "_toOne_StatusItem": {
+              "description": "Not Reconciled"
+            },
+            "_toOne_Party": {
+              "lastUpdatedStamp": 1586367016925,
+              "lastModifiedDate": null,
+              "createdTxStamp": 1586367016855,
+              "_toOne_PartyGroup": {
+                "groupName": "Demo Supplier"
+              },
+              "createdStamp": 1586367016925,
+              "externalId": null,
+              "description": null,
+              "lastUpdatedTxStamp": 1586367016855,
+              "isUnread": null,
+              "partyTypeId": "PARTY_GROUP",
+              "lastModifiedByUserLogin": null,
+              "dataSourceId": null,
+              "createdDate": null,
+              "statusId": "PARTY_ENABLED",
+              "preferredCurrencyUomId": null,
+              "partyId": "DemoSupplier",
+              "createdByUserLogin": null
+            },
+            "organizationPartyId": "Company",
+            "acctgTransEntrySeqId": "00001"
+          },
+          {
+            "amount": 33.99,
+            "productId": null,
+            "glAccountId": "210000",
+            "_toOne_GlAccount": {
+              "_toOne_GlAccountType": {
+                "description": "Accounts Payable"
+              },
+              "accountCode": "210000",
+              "accountName": "ACCOUNTS PAYABLE",
+              "_toOne_GlAccountClass": {
+                "description": "Current Liability"
+              }
+            },
+            "description": null,
+            "acctgTransEntryTypeId": "_NA_",
+            "acctgTransId": "8005",
+            "debitCreditFlag": "C",
+            "origAmount": 33.99,
+            "_toOne_StatusItem": {
+              "description": "Not Reconciled"
+            },
+            "_toOne_Party": {
+              "lastUpdatedStamp": 1586367016925,
+              "lastModifiedDate": null,
+              "createdTxStamp": 1586367016855,
+              "_toOne_PartyGroup": {
+                "groupName": "Demo Supplier"
+              },
+              "createdStamp": 1586367016925,
+              "externalId": null,
+              "description": null,
+              "lastUpdatedTxStamp": 1586367016855,
+              "isUnread": null,
+              "partyTypeId": "PARTY_GROUP",
+              "lastModifiedByUserLogin": null,
+              "dataSourceId": null,
+              "createdDate": null,
+              "statusId": "PARTY_ENABLED",
+              "preferredCurrencyUomId": null,
+              "partyId": "DemoSupplier",
+              "createdByUserLogin": null
+            },
+            "organizationPartyId": "Company",
+            "acctgTransEntrySeqId": "00002"
+          }
+        ],
+        "transactionDate": 1247304424916,
+        "postedDate": 1247304425127
+      },
+      {
+        "isPosted": "Y",
+        "paymentId": "8002",
+        "glFiscalTypeId": "ACTUAL",
+        "fixedAssetId": null,
+        "glJournalId": null,
+        "_toMany_AcctgTransEntry": [
+          {
+            "amount": 33.99,
+            "productId": null,
+            "glAccountId": "210000",
+            "_toOne_GlAccount": {
+              "_toOne_GlAccountType": {
+                "description": "Accounts Payable"
+              },
+              "accountCode": "210000",
+              "accountName": "ACCOUNTS PAYABLE",
+              "_toOne_GlAccountClass": {
+                "description": "Current Liability"
+              }
+            },
+            "description": null,
+            "acctgTransEntryTypeId": "_NA_",
+            "acctgTransId": "8010",
+            "debitCreditFlag": "D",
+            "origAmount": 33.99,
+            "_toOne_StatusItem": {
+              "description": "Not Reconciled"
+            },
+            "_toOne_Party": {
+              "lastUpdatedStamp": 1586367016925,
+              "lastModifiedDate": null,
+              "createdTxStamp": 1586367016855,
+              "_toOne_PartyGroup": {
+                "groupName": "Demo Supplier"
+              },
+              "createdStamp": 1586367016925,
+              "externalId": null,
+              "description": null,
+              "lastUpdatedTxStamp": 1586367016855,
+              "isUnread": null,
+              "partyTypeId": "PARTY_GROUP",
+              "lastModifiedByUserLogin": null,
+              "dataSourceId": null,
+              "createdDate": null,
+              "statusId": "PARTY_ENABLED",
+              "preferredCurrencyUomId": null,
+              "partyId": "DemoSupplier",
+              "createdByUserLogin": null
+            },
+            "organizationPartyId": "Company",
+            "acctgTransEntrySeqId": "00001"
+          },
+          {
+            "amount": 33.99,
+            "productId": null,
+            "glAccountId": "210000",
+            "_toOne_GlAccount": {
+              "_toOne_GlAccountType": {
+                "description": "Accounts Payable"
+              },
+              "accountCode": "210000",
+              "accountName": "ACCOUNTS PAYABLE",
+              "_toOne_GlAccountClass": {
+                "description": "Current Liability"
+              }
+            },
+            "description": null,
+            "acctgTransEntryTypeId": "_NA_",
+            "acctgTransId": "8010",
+            "debitCreditFlag": "C",
+            "origAmount": 33.99,
+            "_toOne_StatusItem": {
+              "description": "Not Reconciled"
+            },
+            "_toOne_Party": {
+              "lastUpdatedStamp": 1586367016925,
+              "lastModifiedDate": null,
+              "createdTxStamp": 1586367016855,
+              "_toOne_PartyGroup": {
+                "groupName": "Demo Supplier"
+              },
+              "createdStamp": 1586367016925,
+              "externalId": null,
+              "description": null,
+              "lastUpdatedTxStamp": 1586367016855,
+              "isUnread": null,
+              "partyTypeId": "PARTY_GROUP",
+              "lastModifiedByUserLogin": null,
+              "dataSourceId": null,
+              "createdDate": null,
+              "statusId": "PARTY_ENABLED",
+              "preferredCurrencyUomId": null,
+              "partyId": "DemoSupplier",
+              "createdByUserLogin": null
+            },
+            "organizationPartyId": "Company",
+            "acctgTransEntrySeqId": "00002"
+          }
+        ],
+        "transactionDate": 1247304525183,
+        "postedDate": 1247304525305
+      }
+    ]
+  }
+]
