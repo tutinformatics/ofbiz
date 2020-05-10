@@ -1,6 +1,5 @@
 package ee.ttu.ofbizpublisher.services;
 
-import com.google.gson.Gson;
 import ee.ttu.ofbizpublisher.OfbizPublisherServices;
 import ee.ttu.ofbizpublisher.model.PublisherDTO;
 import ee.ttu.ofbizpublisher.mqtt.ConnectionBinding;
@@ -8,7 +7,10 @@ import ee.ttu.ofbizpublisher.mqtt.Publisher;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
+import org.apache.ofbiz.entity.model.ModelEntity;
 import org.apache.ofbiz.entity.util.EntityQuery;
+import org.apache.ofbiz.jersey.util.QueryParamStringConverter;
+import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.ServiceUtil;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -19,10 +21,13 @@ import java.util.stream.Collectors;
 public class PublisherService {
 
     Delegator delegator;
+    DispatchContext dispatchContext;
 
-    public PublisherService(Delegator delegator) {
-        this.delegator = delegator;
+    public PublisherService(DispatchContext dpc) {
+        dispatchContext = dpc;
+        delegator = dpc.getDelegator();
     }
+
 
     public List<PublisherDTO> getPublishers() throws GenericEntityException {
         List<GenericValue> genericValues = EntityQuery.use(delegator).from("OfbizPublisher").queryList();
@@ -31,6 +36,7 @@ public class PublisherService {
 
     public PublisherDTO getOfbizPublisherDTO(String ofbizPublisherId) {
         PublisherDTO ofbizPublisherDTO = new PublisherDTO();
+
         GenericValue ofbizPublisher = null;
         try {
             ofbizPublisher = EntityQuery
@@ -41,6 +47,7 @@ public class PublisherService {
         } catch (GenericEntityException e) {
             e.printStackTrace();
         }
+
         ofbizPublisherDTO.setPublisherId((String) ofbizPublisher.get("OfbizPublisherId"));
         ofbizPublisherDTO.setEntityName((String) ofbizPublisher.get("OfbizEntityName"));
         ofbizPublisherDTO.setTopic((String) ofbizPublisher.get("topic"));
@@ -56,51 +63,34 @@ public class PublisherService {
         publisherContext.put("topic", data.get("topic"));
         publisherContext.put("description", data.get("description"));
         publisherContext.put("filter", data.get("filter"));
-        setPublisherData(data.get("OfbizEntityName").toString(), data.get("topic").toString(), data.get("filter").toString());
+        setPublisherData(data.get("OfbizEntityName").toString(), data.get("topic").toString(), data.get("filter"));
         OfbizPublisherServices ofbizPublisherServices = new OfbizPublisherServices();
-        ofbizPublisherServices.createOfbizPublisher(delegator, publisherContext);
+        ofbizPublisherServices.createOfbizPublisher(dispatchContext, publisherContext);
     }
 
-    public void setPublisherData(String entityName, String topic, String filterParams) throws Exception {
-        Gson gson = new Gson();
-        Object filter = gson.fromJson(filterParams, Object.class);
-        List<List<Filter>> filterList = (List<List<Filter>>) filter;
+    private void setPublisherData(String entityName, String topic, Object filter) throws Exception {
+        List<Map<String, List<String>>> queryList = (List<Map<String, List<String>>>) filter;
+        ModelEntity model = delegator.getModelReader().getModelEntity(entityName);
         List<GenericValue> genericValues = new ArrayList<>();
-        for (List<Filter> query : filterList) {
-            genericValues.addAll(EntityQuery.use(delegator).from(entityName).where(query).queryList());
+        for (Map<String, List<String>> query : queryList) {
+            Map<String, Object> queryParams = query.entrySet().stream()
+                    .map(x -> new AbstractMap.SimpleEntry<>(x.getKey(), QueryParamStringConverter.convert(x.getValue().get(0), model.getField(x.getKey()).getType())))
+                    .collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue));
+            genericValues.addAll(EntityQuery.use(delegator).from(entityName).where(queryParams).queryList());
         }
-        if (filterList.isEmpty()) {
+        if (queryList.isEmpty()) {
             genericValues = EntityQuery.use(delegator).from(entityName).queryList();
         }
         String publisherId = UUID.randomUUID().toString();
         IMqttClient publisher = new MqttClient("tcp://mqtt.eclipse.org:1883", publisherId);
         ConnectionBinding mqttClientService = new ConnectionBinding(publisher);
         mqttClientService.makeConnection();
-        Publisher mqttService = new Publisher(publisher, topic);
-        mqttService.call(genericValues);
+        Publisher mqttService = new Publisher(publisher, topic, genericValues);
+        mqttService.call();
     }
 
-    public void setPublisherDataWithPublisher(String entityName, String topic, String filterParams) throws Exception {
-        Gson gson = new Gson();
-        Object filter = gson.fromJson(filterParams, Object.class);
-        List<List<Filter>> filterList = (List<List<Filter>>) filter;
-        List<GenericValue> genericValues = new ArrayList<>();
-        for (List<Filter> query : filterList) {
-            genericValues.addAll(EntityQuery.use(delegator).from(entityName).where(query).queryList());
-        }
-        if (filterList.isEmpty()) {
-            genericValues = EntityQuery.use(delegator).from(entityName).queryList();
-        }
-        GenericValue ofbizPublisher = EntityQuery
-                .use(delegator)
-                .from("OfbizPublisher")
-                .where("topic", topic)
-                .queryFirst();
-        Publisher publisher = (Publisher) ofbizPublisher;
-        publisher.callWithTopic(genericValues, topic);
-    }
-
-    public GenericValue deletePublisher(String ofbizPublisherId) throws GenericEntityException {
+    public GenericValue deletePublisher(Map<String, Object> data) throws GenericEntityException {
+        String ofbizPublisherId = (String) data.get("OfbizPublisherId");
         checkPublisher(ofbizPublisherId);
         GenericValue genericValue = EntityQuery
                 .use(delegator)

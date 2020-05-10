@@ -1,5 +1,6 @@
 package ee.ttu.ofbizpublisher.mqtt;
 
+import org.apache.commons.lang.SerializationUtils;
 import org.apache.ofbiz.entity.GenericValue;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -8,40 +9,33 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.List;
+import java.util.concurrent.Callable;
 
-public class Publisher extends GenericValue {
+public class Publisher implements Callable<Void> {
 
     private final String topic;
+    private final List<GenericValue> message;
     private final IMqttClient client;
 
-    public Publisher(IMqttClient client, String topic) {
+    public Publisher(IMqttClient client, String topic, List<GenericValue> message) {
         this.client = client;
         this.topic = topic;
+        this.message = message;
     }
 
-    public Void call(List<GenericValue> message) throws Exception {
+    @Override
+    public Void call() throws Exception {
         if (!client.isConnected()) {
             return null;
         }
-        MqttMessage msg = getDataInBytes(message);
+        MqttMessage msg = getDataInBytes();
         msg.setQos(0);
         msg.setRetained(true);
         client.publish(this.topic, msg);
         return null;
     }
 
-    public Void callWithTopic(List<GenericValue> message, String topic) throws Exception {
-        if (!this.client.isConnected()) {
-            return null;
-        }
-        MqttMessage msg = getDataInBytes(message);
-        msg.setQos(0);
-        msg.setRetained(true);
-        this.client.publish(topic, msg);
-        return null;
-    }
-
-    private MqttMessage getDataInBytes(List<GenericValue> message) throws IOException {
+    private MqttMessage getDataInBytes() throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(bos);
         oos.writeObject(message);

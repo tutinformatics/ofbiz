@@ -11,7 +11,6 @@ public class SubscriberDTO {
     String topic;
     String description;
     String filter;
-    String properties;
 
     public String getSubscriberId() {
         return subscriberId;
@@ -51,12 +50,5 @@ public class SubscriberDTO {
 
     public void setFilter(String filter) {
         this.filter = filter;
-    }
-    public String getProperties() {
-        return properties;
-    }
-
-    public void setProperties(String properties) {
-        this.properties = properties;
     }
 }

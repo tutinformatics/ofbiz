@@ -37,11 +37,4 @@ under the License.
         <prim-key field="OfbizPublisherId"/>
     </entity>
 
-    <entity entity-name="OfbizEntity" package-name="org.apache.ofbiz.ofbizpublisher" title="OfbizEntity">
-        <field name="OfbizEntityId" type="long-varchar"><description>primary sequenced ID</description></field>
-        <field name="OfbizEntityName" type="long-varchar"/>
-        <field name="EntityPrimaryKey" type="long-varchar"/>
-        <prim-key field="OfbizEntityId"/>
-    </entity>
-
 </entitymodel>

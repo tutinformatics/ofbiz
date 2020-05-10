@@ -43,7 +43,7 @@ public class PublisherServiceResource {
     public void init() {
         LocalDispatcher dispatcher = (LocalDispatcher) servletContext.getAttribute("dispatcher");
         DispatchContext dpc = dispatcher.getDispatchContext();
-        publisherService = new PublisherService(dpc.getDelegator());
+        publisherService = new PublisherService(dpc);
         subscriberService = new SubscriberService(dpc);
     }
 
@@ -67,10 +67,11 @@ public class PublisherServiceResource {
     }
 
     @DELETE()
-    @Path("/publishers/delete/{id}")
+    @Path("/publishers/delete")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deletePublisher(@PathParam(value = "id") String id) throws Exception {
-        GenericValue entity = publisherService.deletePublisher(id);
+    public Response deletePublisher(String jsonBody) throws Exception {
+        Map<String, Object> data = JsonUtils.parseJson(jsonBody);
+        GenericValue entity = publisherService.deletePublisher(data);
         Response.ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
         return builder.build();
     }
@@ -95,10 +96,11 @@ public class PublisherServiceResource {
     }
 
     @DELETE()
-    @Path("/subscribers/delete/{id}")
+    @Path("/subscribers/delete")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteSubscriber(@PathParam(value = "id") String id) throws Exception {
-        GenericValue entity = subscriberService.deleteSubscriber(id);
+    public Response deleteSubscriber(String jsonBody) throws Exception {
+        Map<String, Object> data = JsonUtils.parseJson(jsonBody);
+        GenericValue entity = subscriberService.deleteSubscriber(data);
         Response.ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.APPLICATION_JSON).entity(entity);
         return builder.build();
     }

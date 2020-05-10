@@ -37,11 +37,4 @@ under the License.
         <auto-attributes include="nonpk" mode="IN" optional="false"/>
     </service>
 
-    <service name="createOfbizEntityJavaService" default-entity-name="OfbizEntity" engine="java"
-             location="ee.ttu.ofbizpublisher.OfbizEntityServices" invoke="createOfbizEntity" auth="false">
-        <description>Create an Ofbiz Entity record using a service in Java</description>
-        <auto-attributes include="pk" mode="OUT" optional="true"/>
-        <auto-attributes include="nonpk" mode="IN" optional="false"/>
-    </service>
-
 </services>
