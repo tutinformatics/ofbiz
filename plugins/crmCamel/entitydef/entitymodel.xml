@@ -61,10 +61,11 @@ under the License.
 
     <entity entity-name="customer" package-name="org.apache.ofbiz.crm" title="customer Type entity">
         <field name="customerId" type="id"/>
+        <field name="name" type="name"/>
         <field name="partyGroup" type="id"/>
         <field name="postalAddress" type="id"/>
         <field name="telecomNumber" type="id"/>
-        <field name="emailAadress" type="id"/>
+        <field name="emailAadress" type="name"/>
         <field name="extension" type="name"/>
         <field name="partyId" type="name"/>
         <prim-key field="customerId"/>
