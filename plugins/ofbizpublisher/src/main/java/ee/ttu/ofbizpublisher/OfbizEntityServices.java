@@ -10,28 +10,28 @@ import org.apache.ofbiz.service.ServiceUtil;
 import java.util.Arrays;
 import java.util.Map;
 
-public class OfbizPublisherServices {
+public class OfbizEntityServices {
 
     public static final String module = OfbizPublisherServices.class.getName();
 
-    public Map<String, Object> createOfbizPublisher(Delegator delegator, Map<String, ? extends Object> context) {
+    public Map<String, Object> createOfbizEntity(Delegator delegator, Map<String, ? extends Object> context) {
         Map<String, Object> result = ServiceUtil.returnSuccess();
         try {
             Debug.log("[DEBUG]: " + context.toString() + context.keySet() + Arrays.toString(context.values().toArray()));
-            GenericValue ofbizPublisher = delegator.makeValue("OfbizPublisher");
+            GenericValue ofbizEntity = delegator.makeValue("OfbizEntity");
             // Auto generating next sequence of OfbizPublisherId primary key
-            ofbizPublisher.setNextSeqId();
+            ofbizEntity.setNextSeqId();
             // Setting up all non primary key field values from context map
-            ofbizPublisher.setNonPKFields(context);
+            ofbizEntity.setNonPKFields(context);
             // Creating record in database for OfbizPublisher entity for prepared value
-            ofbizPublisher = delegator.create(ofbizPublisher);
-            result.put("OfbizPublisherId", ofbizPublisher.getString("OfbizPublisherId"));
+            ofbizEntity = delegator.create(ofbizEntity);
+            result.put("OfbizEntityId", ofbizEntity.getString("OfbizEntityId"));
 
-            Debug.log("Started OfbizPublisherService...");
+            Debug.log("Started OfbizEntityService...");
         } catch (GenericEntityException e) {
             Debug.logError(e, module);
-            Debug.log("Starting OfbizPublisherService Failed...");
-            return ServiceUtil.returnError("Error in creating record in OfbizPublisher entity ........" + module);
+            Debug.log("Starting OfbizEntityService Failed...");
+            return ServiceUtil.returnError("Error in creating record in OfbizEntity entity ........" + module);
         } catch (Exception e) {
             e.printStackTrace();
         }
