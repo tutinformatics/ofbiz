@@ -36,11 +36,9 @@ public class AuthServiceResource {
 		Response.ResponseBuilder builder;
 
 		try {
-			Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
-
 			AuthenticationInput user = mapper.readValue(jsonBody, AuthenticationInput.class);
 
-			authenticateUserLogin(delegator, user);
+			authenticateUserLogin(user);
 
 			builder = Response
 					.status(Response.Status.OK)
@@ -65,7 +63,6 @@ public class AuthServiceResource {
 		Response.ResponseBuilder builder;
 
 		try {
-
 			TokenAuthenticationInput token = mapper.readValue(jsonBody, TokenAuthenticationInput.class);
 
 			AuthenticationInput user = mapper.convertValue(getInnerClaimsFromJwt(token.getToken()), AuthenticationInput.class);
@@ -94,7 +91,6 @@ public class AuthServiceResource {
 		Response.ResponseBuilder builder;
 
 		try {
-			Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
 			LocalDispatcher dispatcher = (LocalDispatcher) servletContext.getAttribute("dispatcher");
 
 			AuthenticationInput user = mapper.readValue(jsonBody, AuthenticationInput.class);

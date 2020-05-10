@@ -99,7 +99,7 @@ public class AuthenticationFilter implements Filter {
 					.currentPassword(String.valueOf(claims.get("currentPassword")))
 					.build();
 
-			authenticateUserLogin(delegator, user);
+			authenticateUserLogin(user);
 
 		} catch (Exception e) {
 			abortWithUnauthorized(httpResponse, true, "Access Denied: User does not exist in the system");

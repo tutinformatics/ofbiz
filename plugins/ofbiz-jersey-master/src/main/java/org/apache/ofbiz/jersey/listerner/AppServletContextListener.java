@@ -28,34 +28,41 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import static org.apache.ofbiz.jersey.util.ApiUtil.generateAdminToken;
+import static org.apache.ofbiz.jersey.util.ApiUtil.invokeDelegator;
 
 public class AppServletContextListener implements ServletContextListener {
 
-    public static final String MODULE = AppServletContextListener.class.getName();
+	public static final String MODULE = AppServletContextListener.class.getName();
 
-    public void contextInitialized(ServletContextEvent sce) {
-        ServletContext servletContext = sce.getServletContext();
-        Delegator delegator = WebAppUtil.getDelegator(servletContext);
-        LocalDispatcher dispatcher = WebAppUtil.getDispatcher(servletContext);
-        Debug.logInfo("Jersey Context initialized, delegator " + delegator + ", dispatcher", MODULE);
-        servletContext.setAttribute("delegator", delegator);
-        servletContext.setAttribute("dispatcher", dispatcher);
+	public void contextInitialized(ServletContextEvent sce) {
+		ServletContext servletContext = sce.getServletContext();
+		Delegator delegator = WebAppUtil.getDelegator(servletContext);
+		LocalDispatcher dispatcher = WebAppUtil.getDispatcher(servletContext);
+		Debug.logInfo("Jersey Context initialized, delegator " + delegator + ", dispatcher", MODULE);
+		servletContext.setAttribute("delegator", delegator);
+		servletContext.setAttribute("dispatcher", dispatcher);
 
-        try {
-            System.out.println("--------------------------------------- TOKEN ---------------------------------------------");
-            System.out.println(generateAdminToken());
-            System.out.println();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+		try {
+			invokeDelegator(delegator);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-    }
+		try {
+			System.out.println("--------------------------------------- TOKEN ---------------------------------------------");
+			System.out.println(generateAdminToken());
+			System.out.println();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-    public void contextDestroyed(ServletContextEvent sce) {
-        ServletContext context = sce.getServletContext();
-        Debug.logInfo("Jersey Context destroyed, removing delegator and dispatcher ", MODULE);
-        context.removeAttribute("delegator");
-        context.removeAttribute("dispatcher");
-    }
+	}
+
+	public void contextDestroyed(ServletContextEvent sce) {
+		ServletContext context = sce.getServletContext();
+		Debug.logInfo("Jersey Context destroyed, removing delegator and dispatcher ", MODULE);
+		context.removeAttribute("delegator");
+		context.removeAttribute("dispatcher");
+	}
 
 }
