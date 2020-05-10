@@ -48,7 +48,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import java.security.Key;
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.apache.ofbiz.jersey.util.JsonUtils.parseJson;
@@ -58,7 +62,9 @@ public class ApiUtil {
 	private static final Key key = new AesKey("OfbizOfbizOfbizO".getBytes());
 	private static final String OFBIZ_SIGNATURE = "Apache Ofbiz";
 	private static final String TARGET_AUDIENCE = "To whom it may concern";
+	private static final String OFBIZ_GROUPS = "groups";
 	private static RsaJsonWebKey rsaJsonWebKey;
+	private static Delegator delegator;
 
 	static {
 		try {
@@ -83,6 +89,12 @@ public class ApiUtil {
 				.entity(success);
 	}
 
+	public static void invokeDelegator(Delegator del) {
+		if (delegator == null) {
+			delegator = del;
+		}
+	}
+
 	/**
 	 * @param message
 	 * @return
@@ -95,10 +107,10 @@ public class ApiUtil {
 
 	@NotNull
 	public static AuthenticationOutput getAuthenticationOutput(AuthenticationInput user) throws AuthenticatorException, JoseException {
-		return new AuthenticationOutput(generateJwsFromJwe(generateJweToAuthenticateUser(generateBodyForJWE(user))), user.getUserLoginId());
+		return new AuthenticationOutput(generateJwsFromJwe(generateJweToAuthenticateUser(generateBodyForJWE(user)), user), user.getUserLoginId());
 	}
 
-	public static String generateJwsFromJwe(String secret) throws JoseException {
+	public static String generateJwsFromJwe(String secret, AuthenticationInput user) throws JoseException {
 
 		JwtClaims claims = new JwtClaims();
 		claims.setIssuer(OFBIZ_SIGNATURE);
@@ -108,6 +120,24 @@ public class ApiUtil {
 		claims.setIssuedAtToNow();
 		claims.setNotBeforeMinutesInThePast(2);
 		claims.setClaim(SECRET_FIELD_NAME, secret);
+		List<String> groups = new ArrayList<>();
+
+		try {
+			GenericValue userLogin = EntityQuery.use(delegator)
+					.from("UserLogin")
+					.where("userLoginId", user.getUserLoginId())
+					.queryOne();
+
+			userLogin.getRelated("UserLoginSecurityGroup", null, null, false)
+					.stream()
+					.filter(x -> x.get("fromDate") == null || ((Timestamp) x.get("fromDate")).getTime() <= System.currentTimeMillis())
+					.forEach(x -> groups.add(x.getString("groupId")));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		claims.setStringListClaim(OFBIZ_GROUPS, groups);
 
 		JsonWebSignature jws = new JsonWebSignature();
 		jws.setPayload(claims.toJson());
@@ -164,7 +194,7 @@ public class ApiUtil {
 
 	public static String generateAdminToken() throws AuthenticatorException, JoseException {
 		AuthenticationInput user = AuthenticationInput.builder().userLoginId("admin").currentPassword("ofbiz").build();
-		return generateJwsFromJwe(generateJweToAuthenticateUser(generateBodyForJWE(user)));
+		return generateJwsFromJwe(generateJweToAuthenticateUser(generateBodyForJWE(user)), user);
 
 	}
 
@@ -191,7 +221,7 @@ public class ApiUtil {
 	/**
 	 * Throws AuthenticatorException when login is invalid
 	 */
-	public static void authenticateUserLogin(Delegator delegator, AuthenticationInput user) throws
+	public static void authenticateUserLogin(AuthenticationInput user) throws
 			AuthenticatorException {
 
 		if (user.getCurrentPasswordVerify() == null) {

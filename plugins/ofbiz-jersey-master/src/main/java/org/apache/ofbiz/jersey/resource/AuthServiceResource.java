@@ -36,11 +36,9 @@ public class AuthServiceResource {
 		Response.ResponseBuilder builder;
 
 		try {
-			Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
-
 			AuthenticationInput user = mapper.readValue(jsonBody, AuthenticationInput.class);
 
-			authenticateUserLogin(delegator, user);
+			authenticateUserLogin(user);
 
 			builder = Response
 					.status(Response.Status.OK)
@@ -52,7 +50,7 @@ public class AuthServiceResource {
 			builder = Response
 					.status(Response.Status.UNAUTHORIZED)
 					.type(MediaType.APPLICATION_JSON_TYPE)
-					.entity(new Error(401, "Bad login!", "Wrong username or password!"));
+					.entity(new Error(401, "Bad auth!", e.getMessage()));
 		}
 
 		return builder.build();
@@ -65,7 +63,6 @@ public class AuthServiceResource {
 		Response.ResponseBuilder builder;
 
 		try {
-
 			TokenAuthenticationInput token = mapper.readValue(jsonBody, TokenAuthenticationInput.class);
 
 			AuthenticationInput user = mapper.convertValue(getInnerClaimsFromJwt(token.getToken()), AuthenticationInput.class);
@@ -80,7 +77,7 @@ public class AuthServiceResource {
 			builder = Response
 					.status(Response.Status.UNAUTHORIZED)
 					.type(MediaType.APPLICATION_JSON_TYPE)
-					.entity(new Error(401, "Bad login!", "Wrong username or password!"));
+					.entity(new Error(401, "Bad auth!", e.getMessage()));
 		}
 
 		return builder.build();
@@ -94,7 +91,6 @@ public class AuthServiceResource {
 		Response.ResponseBuilder builder;
 
 		try {
-			Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
 			LocalDispatcher dispatcher = (LocalDispatcher) servletContext.getAttribute("dispatcher");
 
 			AuthenticationInput user = mapper.readValue(jsonBody, AuthenticationInput.class);
@@ -116,7 +112,7 @@ public class AuthServiceResource {
 			builder = Response
 					.status(Response.Status.UNAUTHORIZED)
 					.type(MediaType.APPLICATION_JSON_TYPE)
-					.entity(new Error(403, "Bad register!", "User already exists!"));
+					.entity(new Error(401, "Bad auth!", e.getMessage()));
 		}
 
 		return builder.build();

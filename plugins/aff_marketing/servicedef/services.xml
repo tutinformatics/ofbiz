@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+    <description>Affiliate Marketing Service Definition</description>
+
+    <service name="createMultiLvlAffiliate"
+             engine="java"
+             location="ee.taltech.marketing.affiliate.service.PartyService"
+             invoke="createAffiliateForUserLogin">
+        <description>Create affiliate partner</description>
+        <attribute name="partyId" type="String" mode="IN"/>
+        <attribute name="createdAffiliate" type="ee.taltech.marketing.affiliate.model.AffiliateDTO" mode="OUT"/>
+    </service>
+
+    <service name="approveAffiliatePartner"
+             engine="java"
+             location="ee.taltech.marketing.affiliate.service.PartyService"
+             invoke="approve">
+        <attribute name="partyId" type="String" mode="IN"/>
+        <attribute name="approvedPartner" type="ee.taltech.marketing.affiliate.model.AffiliateDTO" mode="OUT"/>
+    </service>
+
+    <service name="disapproveAffiliatePartner"
+             engine="java"
+             location="ee.taltech.marketing.affiliate.service.PartyService"
+             invoke="disapprove">
+        <attribute name="partyId" type="String" mode="IN"/>
+        <attribute name="disapprovedPartner" type="ee.taltech.marketing.affiliate.model.AffiliateDTO" mode="OUT"/>
+    </service>
+
+    <service name="disableAffiliate"
+             engine="java"
+             location="ee.taltech.marketing.affiliate.service.PartyService"
+             invoke="disableAffiliate">
+        <attribute name="partyId" type="String" mode="IN"/>
+        <attribute name="disapprovedPartner" type="ee.taltech.marketing.affiliate.model.AffiliateDTO" mode="OUT"/>
+    </service>
+
+    <service name="getAffiliateDiscounts"
+             engine="java"
+             location="ee.taltech.marketing.affiliate.service.PartyService"
+             invoke="getAffiliateDiscounts">
+        <attribute name="discounts" type="java.util.List" mode="OUT"/>
+    </service>
+
+    <service name="getAffiliateDiscount"
+             engine="java"
+             location="ee.taltech.marketing.affiliate.service.PartyService"
+             invoke="getAffiliateDiscount">
+        <attribute name="productCategoryId" type="String" mode="IN"/>
+        <attribute name="discount" type="ee.taltech.marketing.affiliate.model.SimpleDiscountDTO" mode="OUT"/>
+    </service>
+
+    <service name="setAffiliateDiscount"
+             engine="java"
+             location="ee.taltech.marketing.affiliate.service.PartyService"
+             invoke="setAffiliateDiscount">
+        <attribute name="productCategoryId" type="String" mode="IN"/>
+        <attribute name="amount" type="Double" mode="IN"/>
+        <attribute name="discount" type="ee.taltech.marketing.affiliate.model.SimpleDiscountDTO" mode="OUT"/>
+    </service>
+
+    <service name="setCommission"
+             engine="java"
+             location="ee.taltech.marketing.affiliate.service.PartyService"
+             invoke="setCommission">
+        <description>Set commission for product category</description>
+        <attribute name="productCategoryId" type="String" mode="IN"/>
+        <attribute name="affiliateCommission" type="String" mode="IN"/>
+        <attribute name="productCategory" type="org.apache.ofbiz.entity.GenericValue" mode="OUT"/>
+    </service>
+
+    <service name="createAffiliateCode"
+             engine="java"
+             location="ee.taltech.marketing.affiliate.service.PartyService"
+             invoke="createAffiliateCode">
+        <description>Create affiliate partner</description>
+        <attribute name="partyId" type="String" mode="IN"/>
+        <attribute name="productCategoryId" type="String" mode="IN"/>
+        <attribute name="createdCode" type="org.apache.ofbiz.entity.GenericValue" mode="OUT"/>
+    </service>
+
+    <service name="getAffiliateStatus"
+             engine="java"
+             location="ee.taltech.marketing.affiliate.service.PartyService"
+             invoke="getAffiliateStatus">
+        <description>Create affiliate partner</description>
+        <attribute name="partyId" type="String" mode="IN"/>
+        <attribute name="status" type="String" mode="OUT"/>
+    </service>
+
+    <service name="setAffiliateSettings"
+             engine="java"
+             location="ee.taltech.marketing.affiliate.service.PartyService"
+             invoke="setAffiliateSettings">
+        <description>Set Affiliate Settings</description>
+        <attribute name="settingsType" type="String" mode="IN"/>
+        <attribute name="commissionFrequency" type="String" mode="IN"/>
+        <attribute name="multiLevelAffiliation" type="String" mode="IN"/>
+        <attribute name="codeCookieDuration" type="String" mode="IN"/>
+        <attribute name="settings" type="String" mode="OUT"/>
+    </service>
+
+    <service name="getAffiliateCodes"
+             engine="java"
+             location="ee.taltech.marketing.affiliate.service.PartyService"
+             invoke="getAffiliateCodes">
+        <description>Create affiliate partner</description>
+        <attribute name="partyId" type="String" mode="IN"/>
+        <attribute name="affiliateDTOs" type="java.util.List" mode="OUT"/>
+    </service>
+
+    <service name="deleteAffiliateCode"
+             engine="java"
+             location="ee.taltech.marketing.affiliate.service.PartyService"
+             invoke="deleteAffiliateCode">
+        <description>Create affiliate partner</description>
+        <attribute name="partyId" type="String" mode="IN"/>
+        <attribute name="affiliateCodeId" type="String" mode="IN"/>
+        <attribute name="deletedCode" type="org.apache.ofbiz.entity.GenericValue" mode="OUT"/>
+    </service>
+
+    <service name="getPartyIdForUserId"
+             engine="java"
+             location="ee.taltech.marketing.affiliate.service.PartyService"
+             invoke="getPartyIdForUserId">
+        <description>Create affiliate partner</description>
+        <attribute name="userLoginId" type="String" mode="IN"/>
+        <attribute name="partyId" type="String" mode="OUT"/>
+    </service>
+
+</services>

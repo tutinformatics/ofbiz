@@ -34,6 +34,8 @@ Jooksutage järgnevaid käske
 
 [source,bash]
 ----
+./deploy-dev.sh
+# Or
 docker-compose -f docker-compose-databases-dev.yml up -d
 ./gradlew cleanAll loadAll ofbiz
 ----
@@ -42,7 +44,7 @@ Windowsi puhul kasutada gradlew.bat
 
 _Note that loadAll requires databases to be running!_
 
-Kui muudate midagi ning soovite uuesti jooksutada ofbiz’i, siis tehke: 
+Kui muudate midagi ning soovite uuesti jooksutada ofbiz’i, siis tehke:
 Ctrl + C terminalis + Y
 
 See hot reload’ib ~10 sekundiga uue koodi

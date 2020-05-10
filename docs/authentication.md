@@ -19,7 +19,6 @@ Reply for that request will be either:
 }
 ```
 
-
 From there you can log in with given input:
 
 POST `:8443/api/auth/v1/login`
@@ -70,14 +69,17 @@ Where a new token will be generated with longer duration
 
 Token's content itself will look as follows:
 
-````
+```
 {
   "iss": "Apache Ofbiz",
   "aud": "To whom it may concern",
-  "exp": 1588977215,
-  "jti": "ZnXt4dVTEqMIPLP4Ly7U8A",
-  "iat": 1588976615,
-  "nbf": 1588976495,
-  "secret": "eyJhbGciOiJBMTI4S1ciLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0.W2HuUyz2hUrZqMpAqUoWqhumWxzEcpjueUY98z9xe9atBGgfYYOr2A.BzrhVTN1XyKpChir-gkVNA.95HOjNiVdjzLyfgSxx7sINhhCJqFTxid9PEMCnI7-V9qwIBuNJYNvUS7lNQKTKdNUSrXQsz_NYms7c6QYtXeDw.bSkKfmUJIHtAlcp8n3Ay9Q"
+  "exp": 1589153076,
+  "jti": "GWYauM7NdM1rK1FGUDVMyQ",
+  "iat": 1589152476,
+  "nbf": 1589152356,
+  "secret": "eyJhbGciOiJBMTI4S1ciLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0.xAaQ723vUH6hYMuTSEvYeWHCI30W3PLQ8N0XH5bcZ3fScp2Ag5eZ5w.2nfToM1zGpnkSeOc_d6Clw.C9-meB9ZLERKoxkDEwS3ltIuboayOFp4QbRh9anPtOtIveg_V_J5LVuiBJ1ThWZx0tKNvNWkvHXvl8q5rusL2g.Zeuq0JR31iJr8saDB4_edg",
+  "groups": [
+    "FULLADMIN"
+  ]
 }
-````
+```
