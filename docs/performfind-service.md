@@ -50,3 +50,39 @@ The different operations you can give are:
 * "sameDay" get results where timestamp is in same day
 
 So the above can be used in various ways to make your dream query parameter list, almost, as max conditions for one field is 10 (_fld0 to _fld9)
+
+Another thing you can utilize are groups. Different search parameters in same group are tied with AND, different groups are tied with OR. Items with no groups are tied to all of it with AND.
+
+That means that if you have 
+```
+a = x
+a_grp = 1
+b = y
+b_grp = 1
+c = z
+c_grp = 2
+h = i
+f = g
+```
+then entities with `[ { (a = x AND b = y) OR (c = z) } AND (h = i) AND (f = g) ]` are returned
+
+Now to actual usage. These snippets would go into performFind "inputFields" object.
+Note that for group key : value items, the "_grp" in key has to be at the end of the string (like "fieldname_fld9_grp") and the values have to be strings (like "1")
+```json
+{
+"firstName": "Hello",
+"firstName_grp": "1",
+
+"lastName": "Ofbiz",
+"lastName_grp": "1",
+
+"middleName_fld0_op": "equals",
+"middleName_fld0_value": "Bye",
+"middleName_fld0_grp": "2",
+
+"age": 20
+}
+```
+This request would only return people with age 20 AND (either first name and last name Hello Ofbiz (respectively) OR with middleName Bye)  
+
+A small limitation is that if you have `"key1": "something"` and `"key1_fldX_something": "something"` then if you put `key1` before `key1_fldX_something`, all works fine, but if you put `key1` after the other one, then it will get ignored. This only happens if both lines are for same entity field. Quite rarely would those kinds of searches be done in practise.
