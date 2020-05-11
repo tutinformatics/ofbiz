@@ -14,6 +14,7 @@ Getting filters is from service getFilterableParameters:
 ```
 and response would be (not full response, may be out of date):
 ```
+{
     "responseMessage": "success",
     "filterings": {
         "partyIdFrom": {
