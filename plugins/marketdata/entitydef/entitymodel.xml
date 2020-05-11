@@ -52,6 +52,9 @@ under the License.
         <field name="registryCode" type="name"></field>
         <field name="companyStatus" type="name"></field>
         <field name="companyAddress" type="name"></field>
+        <field name="companyBusinessModel" type="name"></field>
+        <field name="companySector" type="name"></field>
+        <field name="employeeCount" type="name"></field>
         <prim-key field="companyId"/>
     </entity>
 

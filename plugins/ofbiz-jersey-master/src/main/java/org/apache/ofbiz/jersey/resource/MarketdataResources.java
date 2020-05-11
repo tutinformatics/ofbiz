@@ -64,9 +64,9 @@ public class MarketdataResources {
     }
 
     @POST
-    @Path("/{companyName}")
+    @Path("/{groupName}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addMarketdataEntity(@PathParam(value = "companyName") String entityName, String jsonBody)
+    public Response addMarketdataEntity(@PathParam(value = "groupName") String entityName, String jsonBody)
             throws GenericEntityException, ConversionException {
 
         System.out.println(jsonBody);
