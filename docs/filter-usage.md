@@ -1,3 +1,5 @@
+This is documentation for filter service which is a more frontend friendly wrapper for performFind for filtering entities based on entity field values (meaning no related objects are being checked)
+
 Usage is similar to performFind, as the supported actions are same. For written out limitations, check performFind documentation.
 
 A small summary for limitations on AND and OR is that you can do (x AND b) OR (z AND l) but not (x OR y) AND (z OR a)
