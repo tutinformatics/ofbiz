@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.List;
 
-public class Publisher extends GenericValue {
+public class Publisher {
 
     private final String topic;
     private final IMqttClient client;

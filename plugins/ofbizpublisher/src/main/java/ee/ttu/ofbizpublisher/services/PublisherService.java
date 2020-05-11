@@ -9,9 +9,9 @@ import ee.ttu.ofbizpublisher.mqtt.Publisher;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
-import org.apache.ofbiz.entity.model.ModelEntity;
 import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.service.DispatchContext;
+import org.apache.ofbiz.service.GenericServiceException;
 import org.apache.ofbiz.service.ServiceUtil;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -21,8 +21,9 @@ import java.util.stream.Collectors;
 
 public class PublisherService {
 
-    Delegator delegator;
-    DispatchContext dispatchContext;
+    private Delegator delegator;
+    private DispatchContext dispatchContext;
+    private Publisher customerPublisher;
 
     public PublisherService(Delegator delegator) {
         this.delegator = delegator;
@@ -71,44 +72,18 @@ public class PublisherService {
     }
 
     public void setPublisherData(String entityName, String topic, String filterParams) throws Exception {
-        Gson gson = new Gson();
-        Object filter = gson.fromJson(filterParams, Object.class);
-        List<List<Filter>> filterList = (List<List<Filter>>) filter;
-        List<GenericValue> genericValues = new ArrayList<>();
-        String model = delegator.getModelReader().getModelEntity(entityName).getEntityName();
-        for (List<Filter> query : filterList) {
-            SearchFilter searchFilter = new SearchFilter(query, model);
-            genericValues.addAll((Collection<? extends GenericValue>) FilteredSearchService.performFilteredSearch(dispatchContext, (Map<String, ?>) searchFilter));
-        }
-        if (filterList.isEmpty()) {
-            genericValues = EntityQuery.use(delegator).from(entityName).queryList();
-        }
+        List<GenericValue> genericValues = findFilteredEntities(entityName, topic, filterParams);
         String publisherId = UUID.randomUUID().toString();
         IMqttClient publisher = new MqttClient("tcp://mqtt.eclipse.org:1883", publisherId);
         ConnectionBinding mqttClientService = new ConnectionBinding(publisher);
         mqttClientService.makeConnection();
-        Publisher mqttService = new Publisher(publisher, topic);
-        mqttService.call(genericValues);
+        customerPublisher = new Publisher(publisher, topic);
+        customerPublisher.call(genericValues);
     }
 
     public void setPublisherDataWithPublisher(String entityName, String topic, String filterParams) throws Exception {
-        Gson gson = new Gson();
-        Object filter = gson.fromJson(filterParams, Object.class);
-        List<List<Filter>> filterList = (List<List<Filter>>) filter;
-        List<GenericValue> genericValues = new ArrayList<>();
-        for (List<Filter> query : filterList) {
-            genericValues.addAll(EntityQuery.use(delegator).from(entityName).where(query).queryList());
-        }
-        if (filterList.isEmpty()) {
-            genericValues = EntityQuery.use(delegator).from(entityName).queryList();
-        }
-        GenericValue ofbizPublisher = EntityQuery
-                .use(delegator)
-                .from("OfbizPublisher")
-                .where("topic", topic)
-                .queryFirst();
-        Publisher publisher = (Publisher) ofbizPublisher;
-        publisher.callWithTopic(genericValues, topic);
+        List<GenericValue> genericValues = findFilteredEntities(entityName, topic, filterParams);
+        customerPublisher.callWithTopic(genericValues, topic);
     }
 
     public GenericValue deletePublisher(String ofbizPublisherId) throws GenericEntityException {
@@ -131,5 +106,24 @@ public class PublisherService {
         if (ofbizPublisher == null) {
             ServiceUtil.returnError("No ofbizPublisher found!");
         }
+    }
+
+    private List<GenericValue> findFilteredEntities(String entityName, String topic, String filterParams) throws GenericEntityException, GenericServiceException {
+        Gson gson = new Gson();
+        Object filter = gson.fromJson(filterParams, Object.class);
+        List<List<Map<String, ?>>> filterList = (List<List<Map<String, ?>>>) filter;
+        List<GenericValue> genericValues = new ArrayList<>();
+        String model = delegator.getModelReader().getModelEntity(entityName).getEntityName();
+        for (List<Map<String, ?>> query : filterList) {
+            Map<String, Object> insert = new HashMap<>();
+            insert.put("entityName", model);
+            insert.put("filterParameters", query);
+            genericValues.addAll((List<GenericValue>) FilteredSearchService.performFilteredSearch(dispatchContext, insert).get("result"));
+
+        }
+        if (filterList.isEmpty()) {
+            genericValues = EntityQuery.use(delegator).from(entityName).queryList();
+        }
+        return genericValues;
     }
 }
