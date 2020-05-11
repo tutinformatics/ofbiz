@@ -18,38 +18,23 @@
  *******************************************************************************/
 package org.apache.ofbiz.widget.model;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.ofbiz.base.util.Debug;
-import org.apache.ofbiz.base.util.GeneralException;
-import org.apache.ofbiz.base.util.UtilCodec;
-import org.apache.ofbiz.base.util.UtilGenerics;
-import org.apache.ofbiz.base.util.UtilValidate;
-import org.apache.ofbiz.base.util.UtilXml;
+import freemarker.ext.beans.BeansWrapper;
+import freemarker.ext.beans.CollectionModel;
+import freemarker.ext.beans.StringModel;
+import freemarker.template.*;
+import org.apache.ofbiz.base.util.*;
 import org.apache.ofbiz.base.util.cache.UtilCache;
 import org.apache.ofbiz.base.util.collections.MapStack;
 import org.apache.ofbiz.base.util.string.FlexibleStringExpander;
 import org.apache.ofbiz.base.util.template.FreeMarkerWorker;
+import org.apache.ofbiz.widget.WidgetFactory;
 import org.apache.ofbiz.widget.renderer.ScreenRenderer;
 import org.apache.ofbiz.widget.renderer.ScreenStringRenderer;
 import org.apache.ofbiz.widget.renderer.html.HtmlWidgetRenderer;
 import org.w3c.dom.Element;
 
-import freemarker.ext.beans.BeansWrapper;
-import freemarker.ext.beans.CollectionModel;
-import freemarker.ext.beans.StringModel;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-import freemarker.template.TemplateModel;
-import freemarker.template.TemplateModelException;
-import freemarker.template.Version;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Widget Library - Screen model HTML class.
@@ -120,6 +105,8 @@ public class HtmlWidget extends ModelScreenWidget {
                     subWidgets.add(new HtmlTemplate(modelScreen, childElement));
                 } else if ("html-template-decorator".equals(childElement.getNodeName())) {
                     subWidgets.add(new HtmlTemplateDecorator(modelScreen, childElement));
+                } else if ("vuejs".equals(childElement.getNodeName())) {
+                    subWidgets.add(WidgetFactory.getModelScreenWidget(modelScreen, childElement));
                 } else {
                     throw new IllegalArgumentException("Tag not supported under the platform-specific -> html tag with name: "
                             + childElement.getNodeName());

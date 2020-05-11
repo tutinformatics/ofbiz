@@ -1,5 +1,6 @@
 package org.apache.ofbiz.entity.nosql;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.ofbiz.entity.*;
 import org.apache.ofbiz.entity.cache.Cache;
 import org.apache.ofbiz.entity.condition.EntityCondition;

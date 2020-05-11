@@ -123,4 +123,24 @@
         <value xml:lang="zh-CN">仓储设施</value>
         <value xml:lang="zh-TW">場所</value>
     </property>
+    <!--Begin For ExampleFjs plugin -->
+    <property key="PortalPage.portalPageName.ExampleRecapJs">
+        <value xml:lang="en">One example (RecapPageFrontJs)</value>
+        <value xml:lang="fr">Un exemple (RecapPageFrontJs)</value>
+    </property>
+    <property key="PortalPage.portalPageName.ExampleMgmtFrontJs">
+        <value xml:lang="en">Examples management (MgmtPageFrontJs)</value>
+        <value xml:lang="fr">Gestion des exemples (MgmtPageFrontJs)</value>
+    </property>
+    <!--End For ExampleFJs plugin -->
+    <!--Begin For PartyFjs plugin -->
+    <property key="PortalPage.portalPageName.PartyMgmtFrontJs">
+        <value xml:lang="en">Party Management</value>
+        <value xml:lang="fr">Gestion des acteurs</value>
+    </property>
+    <property key="PortalPage.portalPageName.PartyRecapFrontJs">
+        <value xml:lang="en">Party Profile Overview</value>
+        <value xml:lang="fr">Détail d'un acteur</value>
+    </property>
+    <!--End For PartyFjs plugin -->
 </resource>

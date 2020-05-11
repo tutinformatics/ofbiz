@@ -47,5 +47,6 @@ The different operations you can give are:
 * "empty" matches if value is null, this field doesn't seem to require a _fldX_value parameter with it
 * "in" is for checking if a value is in a list, so for example "in" ["Company", "TaxMan", "foo"].
 * "not-in" (no second form here) is reverse of "in" 
+* "sameDay" get results where timestamp is in same day
 
 So the above can be used in various ways to make your dream query parameter list, almost, as max conditions for one field is 10 (_fld0 to _fld9)

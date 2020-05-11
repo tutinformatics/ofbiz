@@ -82,14 +82,12 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
 			Map<String, Object> claims = getInnerClaimsFromJwt(jwtToken);
 
-			System.out.println(claims);
-
 			AuthenticationInput user = AuthenticationInput.builder()
 					.userLoginId(String.valueOf(claims.get("userLoginId")))
 					.currentPassword(String.valueOf(claims.get("currentPassword")))
 					.build();
 
-			authenticateUserLogin(delegator, user);
+			authenticateUserLogin(user);
 
 		} catch (Exception e) {
 			e.printStackTrace();
