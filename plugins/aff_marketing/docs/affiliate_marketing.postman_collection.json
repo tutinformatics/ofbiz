@@ -1,0 +1,355 @@
+{
+	"info": {
+		"_postman_id": "d1d989f1-db31-49d2-ab0a-38000b3e0f62",
+		"name": "affiliate_marketing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "affiliate",
+			"item": [
+				{
+					"name": "get Affiliates",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"fieldList\": [\"partyId\", \"createdStamp\", \"status\"],\r\n  \"entityRelations\" : {\r\n  \t\"_toOne_Person\": {\r\n  \t\t  \"fieldList\": [\"lastName\", \"firstName\"]\r\n  \t}\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hostUrl}}/api/generic/v1/entityquery/Affiliate",
+							"host": [
+								"{{hostUrl}}"
+							],
+							"path": [
+								"api",
+								"generic",
+								"v1",
+								"entityquery",
+								"Affiliate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create Affiliate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"partyId\": \"admin\",\r\n  \"_rootPartyId\": \"lul\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hostUrl}}/api/generic/v1/services/createMultiLvlAffiliate",
+							"host": [
+								"{{hostUrl}}"
+							],
+							"path": [
+								"api",
+								"generic",
+								"v1",
+								"services",
+								"createMultiLvlAffiliate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "approve Affiliate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"partyId\": \"DemoUser4\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hostUrl}}/api/generic/v1/services/approveAffiliatePartner",
+							"host": [
+								"{{hostUrl}}"
+							],
+							"path": [
+								"api",
+								"generic",
+								"v1",
+								"services",
+								"approveAffiliatePartner"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "disapprove Affiliate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"partyId\": \"DemoUser2\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hostUrl}}/api/generic/v1/services/disapproveAffiliatePartner",
+							"host": [
+								"{{hostUrl}}"
+							],
+							"path": [
+								"api",
+								"generic",
+								"v1",
+								"services",
+								"disapproveAffiliatePartner"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "affiliate code",
+			"item": [
+				{
+					"name": "create Affiliate Code",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"partyId\": \"DemoUser2\",\n\t\"productCategoryId\": \"100\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hostUrl}}/api/generic/v1/services/createAffiliateCode",
+							"host": [
+								"{{hostUrl}}"
+							],
+							"path": [
+								"api",
+								"generic",
+								"v1",
+								"services",
+								"createAffiliateCode"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "discounts",
+			"item": [
+				{
+					"name": "get all Discounts",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hostUrl}}/api/generic/v1/services/getAffiliateDiscounts",
+							"host": [
+								"{{hostUrl}}"
+							],
+							"path": [
+								"api",
+								"generic",
+								"v1",
+								"services",
+								"getAffiliateDiscounts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get specific Discount",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"productCategoryId\": \"200\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hostUrl}}/api/generic/v1/services/getAffiliateDiscount",
+							"host": [
+								"{{hostUrl}}"
+							],
+							"path": [
+								"api",
+								"generic",
+								"v1",
+								"services",
+								"getAffiliateDiscount"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "set Discounts",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"productCategoryId\": \"200\",\n\t\"amount\": 19.6\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{hostUrl}}/api/generic/v1/services/setAffiliateDiscount",
+							"host": [
+								"{{hostUrl}}"
+							],
+							"path": [
+								"api",
+								"generic",
+								"v1",
+								"services",
+								"setAffiliateDiscount"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "/login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8727944a-6817-460e-ac58-d46835b58565",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);\r",
+							"pm.environment.set(\"token\", jsonData.token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"userLoginId\": \"admin\",\n\t\"currentPassword\": \"ofbiz\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{hostUrl}}/api/auth/v1/login",
+					"host": [
+						"{{hostUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"v1",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "f91741c9-aa5f-4792-a089-b77d7809bfc0",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "116b3644-cb98-4442-a398-576368c18bea",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "e3fef192-4595-469d-a9f2-c4ba2885e0a1",
+			"key": "hostUrl",
+			"value": "https://localhost:8443",
+			"type": "string"
+		},
+		{
+			"id": "12719cd0-95fe-4866-8b22-01f064e943e4",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
