@@ -85,4 +85,8 @@ Note that for group key : value items, the "_grp" in key has to be at the end of
 ```
 This request would only return people with age 20 AND (either first name and last name Hello Ofbiz (respectively) OR with middleName Bye)  
 
-A small limitation is that if you have `"key1": "something"` and `"key1_fldX_something": "something"` then if you put `key1` before `key1_fldX_something`, all works fine, but if you put `key1` after the other one, then it will get ignored. This only happens if both lines are for same entity field. Quite rarely would those kinds of searches be done in practise.
+#### Limitations
+
+* A limitation is inability to do searches in form of [ (a OR b) AND (c OR d) ], but [ (a AND b) OR (c AND d) ] is supported via groups. For some types such as strings a workaround would be using (field IN [val1, val2]) instead of ( field = val1 OR field = val2 ) by using operation "in" and providing the list as the value. Limitation of this is that you can't use case insensitivity in that case.
+
+* A small limitation is that if you have `"key1": "something"` and `"key1_fldX_something": "something"` then if you put `key1` before `key1_fldX_something`, all works fine, but if you put `key1` after the other one, then it will get ignored. This only happens if both lines are for same entity field. Quite rarely would those kinds of searches be done in practise.
