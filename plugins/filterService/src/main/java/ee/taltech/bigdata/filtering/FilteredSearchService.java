@@ -7,10 +7,7 @@ import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.GenericServiceException;
 import org.apache.ofbiz.service.LocalDispatcher;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class FilteredSearchService {
@@ -20,6 +17,7 @@ public class FilteredSearchService {
 //			"fieldName": "name"
 //			"operation": "like"
 //			"value": "val"
+//      "group": "string"
 //		  "ignoreCase": boolean
 //		}
 		LocalDispatcher dispatcher = dctx.getDispatcher();
@@ -41,6 +39,9 @@ public class FilteredSearchService {
 				performFindInputFieldsInput.put(prefix + "value", specific.get("value"));
 				if (specific.containsKey("ignoreCase") && specific.get("ignoreCase").equals(true)) {
 					performFindInputFieldsInput.put(prefix + "ic", "Y");
+				}
+				if (specific.containsKey("group")) {
+					performFindInputFieldsInput.put(prefix + "grp", specific.get("group"));
 				}
 			}
 		}
