@@ -34,18 +34,20 @@ public class FilterService {
 			switch (type) {
 				case "date-time":
 				case "date":
+					operations = Arrays.asList("equals", "greaterThan", "greaterThanEqualTo", "lessThan", "lessThanEqualTo", "notEqual", "sameDay", "empty");
+					break;
 				case "time":
-//					operations = Arrays.asList("equals", "greaterThan", "greaterThanEqualTo", "lessThan", "lessThanEqualTo", "notEqual");
+//					operations = Arrays.asList("equals", "greaterThan", "greaterThanEqualTo", "lessThan", "lessThanEqualTo", "notEqual", "empty");
 //					break;
 				case "currency-amount":
 				case "currency-precise":
 				case "fixed-point":
-//					operations = Arrays.asList("equals", "greaterThan", "greaterThanEqualTo", "lessThan", "lessThanEqualTo", "notEqual");
+//					operations = Arrays.asList("equals", "greaterThan", "greaterThanEqualTo", "lessThan", "lessThanEqualTo", "notEqual", "empty");
 //					break;
 				case "floating-point":
 				case "integer":
 				case "numeric":
-					operations = Arrays.asList("equals", "greaterThan", "greaterThanEqualTo", "lessThan", "lessThanEqualTo", "notEqual");
+					operations = Arrays.asList("equals", "greaterThan", "greaterThanEqualTo", "lessThan", "lessThanEqualTo", "notEqual", "empty");
 					break;
 				case "blob":
 				case "byte-array":
@@ -53,7 +55,7 @@ public class FilterService {
 					yeet = true;
 					break;
 				default:
-					operations = Arrays.asList("equals", "notEqual");
+					operations = Arrays.asList("equals", "notEqual", "like", "notLike", "contains", "notContains", "empty", "in", "not-in");
 					break;
 			}
 
