@@ -4,7 +4,7 @@ Usage is similar to performFind, as the supported actions are same. For written 
 
 A small summary for limitations on AND and OR is that you can do (x AND b) OR (z AND l) but not (x OR y) AND (z OR a)
 
-These are implemented as services called "getFilterableParameters" and "performFilteredSearch". As they're services, you can access them with generic Jersey endpoint for services, POST body for the service would be what you see here.
+These are implemented as services called "getFilterableParameters" and "performFilteredSearch". As they're services, you can access them with generic Jersey endpoint for services (see documentation for generic rest endpoint), POST body for the service would be what you see here.
 
 Getting filters is from service getFilterableParameters:
 ```
