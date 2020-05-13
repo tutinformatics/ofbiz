@@ -31,6 +31,8 @@ under the License.
     <entity-resource type="data" reader-name="demo" loader="main" location="data/PipelineData.xml"/>
     <entity-resource type="data" reader-name="demo" loader="main" location="data/OpportunityData.xml"/>
     <entity-resource type="data" reader-name="demo" loader="main" location="data/CustomerData.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/OrderData.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/QuoteData.xml"/>
 
     <!-- service resources: model(s), eca(s) and group definitions -->
     <!--

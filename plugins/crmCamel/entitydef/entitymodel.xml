@@ -71,4 +71,28 @@ under the License.
         <prim-key field="customerId"/>
     </entity>
 
+    <entity entity-name="salesQuote" package-name="org.apache.ofbiz.crm" title="salesQuote Type entity">
+        <field name="quoteId" type="id"/>
+        <field name="name" type="name"/>
+        <field name="description" type="name"/>
+        <field name="issueDate" type="date"/>
+        <field name="partyId" type="name"/>
+        <prim-key field="quoteId"/>
+    </entity>
+
+    <entity entity-name="salesOrder" package-name="org.apache.ofbiz.crm" title="salesOrder Type entity">
+        <field name="orderId" type="id"/>
+        <field name="name" type="name"/>
+        <field name="totalSum" type="numeric"/>
+        <field name="status" type="name"/>
+        <field name="billingAccountId" type="id"/>
+        <field name="customerId" type="id"/>
+
+        <field name="salesChannel" type="name"/>
+        <field name="currencyUom" type="name"/>
+        <field name="partyId" type="name"/>
+        <field name="lastEdited" type="date-time"/>
+        <prim-key field="orderId"/>
+    </entity>
+
 </entitymodel>
