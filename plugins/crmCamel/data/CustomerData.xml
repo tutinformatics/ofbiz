@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+    <customer
+
+            customerId="1"
+            agentId="SAMPLE_ID1"
+            name="Sample1"/>
+    <customer
+            customerId="2"
+            agentId="SAMPLE_ID2"
+            name="Sample2"/>
+    <customer
+            customerId="3"
+            agentId="SAMPLE_ID2"
+            name="Sample3"/>
+</entity-engine-xml>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+<salesQuote
+        quoteId="SAMPLE_ID1"
+        partyId="BLOGUSER_USER"
+        name="Selver"
+        description="Duis dictum, erat in tristique placerat."
+        issueDate="2007-01-22"/>
+<salesQuote
+        quoteId="SAMPLE_ID2"
+        partyId="BLOGUSER_USER"
+        name="Selver"
+        description="Duis dictum, erat in tristique placerat."
+        issueDate="2007-01-22"/>
+<salesQuote
+        quoteId="SAMPLE_ID3"
+        partyId="BLOGUSER_USER"
+        name="Rimi"
+        description="Duis dictum, erat in tristique placerat."
+        issueDate="2007-01-22"/>
+<salesQuote
+        quoteId="SAMPLE_ID4"
+        partyId="BLOGUSER_USER"
+        name="Coop"
+        description="Duis dictum, erat in tristique placerat."
+        issueDate="2007-01-22 17:32:31.285"/>
+</entity-engine-xml>

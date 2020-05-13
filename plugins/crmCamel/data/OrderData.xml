@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+    <salesOrder
+            orderId="Sample3"
+            name="SAMPLE1"
+            clientId="SAMPLE_ID3"
+            billingAccountId="SAMPLE_ID1"
+            salesChannel="phone"
+            status="ORDER_APPROVED"
+            currencyUom="EUR"
+            lastEdited="2007-01-22 17:32:31.285"
+            totalSum="200"/>
+    <salesOrder
+            orderId="Sample3"
+            name="SAMPLE2"
+            clientId="SAMPLE_ID3"
+            billingAccountId="SAMPLE_ID2"
+            salesChannel="eMail"
+            status="ORDER_CREATED"
+            currencyUom="EUR"
+            lastEdited="2007-01-22 17:32:31.285"
+            totalSum="2500"/>
+    <salesOrder
+            orderId="Sample3"
+            name="SAMPLE3"
+            billingAccountId="SAMPLE_ID3"
+            clientId="SAMPLE_ID3"
+            salesChannel="web"
+            status="ORDER_CONFIRMED"
+            totalSum="698134"
+            currencyUom="EUR"
+            lastEdited="2007-01-22 17:32:31.285"
+    />
+
+</entity-engine-xml>
