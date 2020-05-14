@@ -1,0 +1,10 @@
+FROM openjdk
+
+EXPOSE 8443
+EXPOSE 8080
+EXPOSE 4567
+EXPOSE 1099
+
+COPY build/libs/ofbiz-all.jar app.jar
+
+CMD java -jar app.jar

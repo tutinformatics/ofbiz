@@ -18,11 +18,6 @@
  *******************************************************************************/
 package org.apache.ofbiz.widget.model;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.base.util.UtilValidate;
@@ -38,33 +33,13 @@ import org.apache.ofbiz.service.GenericServiceException;
 import org.apache.ofbiz.service.ModelParam;
 import org.apache.ofbiz.service.ModelService;
 import org.apache.ofbiz.widget.model.ModelForm.UpdateArea;
-import org.apache.ofbiz.widget.model.ModelFormField.CheckField;
-import org.apache.ofbiz.widget.model.ModelFormField.ContainerField;
-import org.apache.ofbiz.widget.model.ModelFormField.DateFindField;
-import org.apache.ofbiz.widget.model.ModelFormField.DateTimeField;
-import org.apache.ofbiz.widget.model.ModelFormField.DisplayEntityField;
-import org.apache.ofbiz.widget.model.ModelFormField.DisplayField;
-import org.apache.ofbiz.widget.model.ModelFormField.DropDownField;
-import org.apache.ofbiz.widget.model.ModelFormField.FileField;
-import org.apache.ofbiz.widget.model.ModelFormField.FormField;
-import org.apache.ofbiz.widget.model.ModelFormField.GridField;
-import org.apache.ofbiz.widget.model.ModelFormField.HiddenField;
-import org.apache.ofbiz.widget.model.ModelFormField.HyperlinkField;
-import org.apache.ofbiz.widget.model.ModelFormField.IgnoredField;
-import org.apache.ofbiz.widget.model.ModelFormField.ImageField;
-import org.apache.ofbiz.widget.model.ModelFormField.LookupField;
-import org.apache.ofbiz.widget.model.ModelFormField.MenuField;
-import org.apache.ofbiz.widget.model.ModelFormField.OptionSource;
-import org.apache.ofbiz.widget.model.ModelFormField.PasswordField;
-import org.apache.ofbiz.widget.model.ModelFormField.RadioField;
-import org.apache.ofbiz.widget.model.ModelFormField.RangeFindField;
-import org.apache.ofbiz.widget.model.ModelFormField.ResetField;
-import org.apache.ofbiz.widget.model.ModelFormField.ScreenField;
-import org.apache.ofbiz.widget.model.ModelFormField.SubmitField;
-import org.apache.ofbiz.widget.model.ModelFormField.TextField;
-import org.apache.ofbiz.widget.model.ModelFormField.TextFindField;
-import org.apache.ofbiz.widget.model.ModelFormField.TextareaField;
+import org.apache.ofbiz.widget.model.ModelFormField.*;
 import org.w3c.dom.Element;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A <code>ModelFormField</code> builder.
@@ -212,6 +187,15 @@ public class ModelFormFieldBuilder {
                 if ("change".equals(updateArea.getEventType())) {
                     onChangeUpdateAreas.add(updateArea);
                 } else if ("click".equals(updateArea.getEventType())) {
+                    onClickUpdateAreas.add(updateArea);
+                } else if ("post".equals(updateArea.getEventType())
+                        || "setArea".equals(updateArea.getEventType())
+                        || "setWatcher".equals(updateArea.getEventType())
+                        || "submit".equals(updateArea.getEventType())
+                        || "setFieldInForm".equals(updateArea.getEventType())
+                        || "collapse".equals(updateArea.getEventType())
+                        || "closeModal".equals(updateArea.getEventType())
+                        ) {
                     onClickUpdateAreas.add(updateArea);
                 }
             } else {

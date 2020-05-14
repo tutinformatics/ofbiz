@@ -18,34 +18,15 @@
  *******************************************************************************/
 package org.apache.ofbiz.widget.model;
 
-import java.util.Collection;
-import java.util.Map;
-
 import org.apache.ofbiz.widget.model.HtmlWidget.HtmlTemplate;
 import org.apache.ofbiz.widget.model.HtmlWidget.HtmlTemplateDecorator;
 import org.apache.ofbiz.widget.model.HtmlWidget.HtmlTemplateDecoratorSection;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.Column;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.ColumnContainer;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.Container;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.Content;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.DecoratorScreen;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.DecoratorSection;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.DecoratorSectionInclude;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.Form;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.Grid;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.HorizontalSeparator;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.IncludeScreen;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.Label;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.Menu;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.PlatformSpecific;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.PortalPage;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.ScreenImage;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.ScreenLink;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.Screenlet;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.Section;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.Tree;
+import org.apache.ofbiz.widget.model.ModelScreenWidget.*;
 import org.apache.ofbiz.widget.model.ModelTree.ModelNode;
 import org.apache.ofbiz.widget.model.ModelTree.ModelNode.ModelSubNode;
+
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * An object that generates an XML representation from widget models.
@@ -225,6 +206,16 @@ public class XmlWidgetVisitor extends XmlAbstractWidgetVisitor implements ModelW
         visitAttribute("style", label.getStyleExdr());
         writer.append(">");
         writer.append(label.getTextExdr().getOriginal());
+        writer.append("</label>");
+    }
+
+    @Override
+    public void visit(VueJs vuejs) throws Exception {
+        writer.append("<vuejs");
+        visitModelWidget(vuejs);
+        visitAttribute("component-name", vuejs.getComponentNameExdr());
+        writer.append(">");
+        visitParameters(vuejs.getParameterList());
         writer.append("</label>");
     }
 

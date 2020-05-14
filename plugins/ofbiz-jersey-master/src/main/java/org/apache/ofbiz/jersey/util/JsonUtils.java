@@ -27,7 +27,7 @@ public class JsonUtils {
         Map<String, Object> fieldMap;
 
         try {
-            fieldMap = UtilGenerics.<Map<String, Object>>cast(body.toObject(Map.class));
+            fieldMap = UtilGenerics.cast(body.toObject(Map.class));
         } catch (IOException e) {
             throw e;
         }
@@ -35,7 +35,7 @@ public class JsonUtils {
         for (String key : fieldMap.keySet()) {
             Object obj = fieldMap.get(key);
             try {
-                Map<String, Object> test = UtilGenerics.<Map<String, Object>>cast(JSON.from(obj).toObject(Map.class));
+                Map<String, Object> test = UtilGenerics.cast(JSON.from(obj).toObject(Map.class));
                 if (test.containsKey("_ENTITY_NAME_")) {
                     fieldMap.put(key, jsonToGenericConverter.convert(JSON.from(obj)));
                 } else {

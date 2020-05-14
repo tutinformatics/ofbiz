@@ -62,10 +62,10 @@ if (project.hasProperty('enableOwasp')) {
  * Syntax: gradlew -PenableDependencyUpdates dependencyUpdates -Drevision=release
  *
  * You may want to use the use-latest-versions plugin to help you in your work
- * Syntax: 
+ * Syntax:
  *  Check only: gradlew -PenableDependencyUpdates useLatestVersions && gradlew -PenableDependencyUpdates useLatestVersionsCheck
  *  Automated update: gradlew -PenableDependencyUpdates useLatestVersions
- *  Beware that this is only a help. 
+ *  Beware that this is only a help.
  *  If you use it without check you will need to check things by yourself (can be as tedious as not using this plugin)
  */
 if (project.hasProperty('enableDependencyUpdates')) {

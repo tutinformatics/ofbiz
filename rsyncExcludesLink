@@ -1,0 +1,11 @@
+*.patch
+*.ref
+*.refs
+rsyncExcludes
+docs/asciidoc/ofbiz-screenlet-reference.adoc
+docs/asciidoc/bash.adoc
+docs/asciidoc/developer-manual_fr.adoc
+themes/themes.adoc
+themes/common-theme/config/iconsPurpose.properties
+framework/common/config/CommonIconsTooltips.xml
+themes/common-theme/webapp/common/js/plugins/selenium.js

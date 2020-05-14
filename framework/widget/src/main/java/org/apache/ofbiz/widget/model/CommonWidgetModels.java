@@ -18,22 +18,7 @@
  *******************************************************************************/
 package org.apache.ofbiz.widget.model;
 
-import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.TimeZone;
-
-import org.apache.ofbiz.base.util.Debug;
-import org.apache.ofbiz.base.util.UtilCodec;
-import org.apache.ofbiz.base.util.UtilDateTime;
-import org.apache.ofbiz.base.util.UtilValidate;
-import org.apache.ofbiz.base.util.UtilXml;
+import org.apache.ofbiz.base.util.*;
 import org.apache.ofbiz.base.util.collections.FlexibleMapAccessor;
 import org.apache.ofbiz.base.util.string.FlexibleStringExpander;
 import org.apache.ofbiz.entity.Delegator;
@@ -45,6 +30,10 @@ import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ModelParam;
 import org.apache.ofbiz.service.ModelService;
 import org.w3c.dom.Element;
+
+import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.util.*;
 
 /**
  * A collection of shared/reused widget models.
@@ -364,13 +353,21 @@ public final class CommonWidgetModels {
                 this.linkType = linkElement.getAttribute("link-type");
             }
             List<? extends Element> parameterElementList = UtilXml.childElementList(linkElement, "parameter");
-            if (parameterElementList.isEmpty()) {
+            boolean autoPortletParamsElement = UtilXml.firstChildElement(linkElement, "auto-parameters-portlet") == null ? false : true;
+            if (parameterElementList.isEmpty() && ! autoPortletParamsElement) {
                 this.parameterList = Collections.emptyList();
             } else {
+                int paramListSize = parameterElementList.size() + (autoPortletParamsElement ? 4 : 0);
                 List<Parameter> parameterList = new ArrayList<>(
-                        parameterElementList.size());
+                        paramListSize);
                 for (Element parameterElement : parameterElementList) {
                     parameterList.add(new Parameter(parameterElement));
+                }
+                if (autoPortletParamsElement) {
+                    parameterList.add(new CommonWidgetModels.Parameter("portalPageId",    "parameters.portalPageId",    true));
+                    parameterList.add(new CommonWidgetModels.Parameter("portalPortletId", "parameters.portalPortletId", true));
+                    parameterList.add(new CommonWidgetModels.Parameter("portletSeqId",    "parameters.portletSeqId",    true));
+                    parameterList.add(new CommonWidgetModels.Parameter("currentAreaId",   "parameters.currentAreaId",   true));
                 }
                 this.parameterList = Collections.unmodifiableList(parameterList);
             }

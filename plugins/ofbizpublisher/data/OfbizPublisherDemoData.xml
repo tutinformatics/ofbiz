@@ -19,6 +19,4 @@ under the License.
 -->
 
 <entity-engine-xml>
-    <OfbizPublisher OfbizPublisherId="1" topic="ARVED" description="arvete publisher" filter="test"/>
-    <OfbizPublisher OfbizPublisherId="2" topic="LADU" description="lao publisher" filter="test2"/>
 </entity-engine-xml>
