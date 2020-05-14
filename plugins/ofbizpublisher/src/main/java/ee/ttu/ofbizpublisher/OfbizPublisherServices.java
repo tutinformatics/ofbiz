@@ -14,9 +14,8 @@ public class OfbizPublisherServices {
 
     public static final String module = OfbizPublisherServices.class.getName();
 
-    public Map<String, Object> createOfbizPublisher(DispatchContext dctx, Map<String, ? extends Object> context) {
+    public Map<String, Object> createOfbizPublisher(Delegator delegator, Map<String, ? extends Object> context) {
         Map<String, Object> result = ServiceUtil.returnSuccess();
-        Delegator delegator = dctx.getDelegator();
         try {
             Debug.log("[DEBUG]: " + context.toString() + context.keySet() + Arrays.toString(context.values().toArray()));
             GenericValue ofbizPublisher = delegator.makeValue("OfbizPublisher");

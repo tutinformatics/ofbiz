@@ -1,0 +1,46 @@
+version: '3.7'
+
+networks:
+  db-network:
+    name: db-network
+    driver: bridge
+
+services:
+
+  master:
+    container_name: "${COMPOSE_PROJECT_NAME:-citus}_master"
+    restart: unless-stopped
+    depends_on:
+      - manager
+    image: 'citusdata/citus:9.2.2'
+    ports: ["${MASTER_EXTERNAL_PORT:-5432}:5432"]
+    labels: ['com.citusdata.role=Master']
+    volumes:
+      - ./postgres-init:/docker-entrypoint-initdb.d
+    networks:
+      - db-network
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-ofbiz}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-ofbiz}
+
+  worker:
+    image: 'citusdata/citus:9.2.2'
+    restart: unless-stopped
+    labels: ['com.citusdata.role=Worker']
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-ofbiz}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-ofbiz}
+
+  manager:
+    container_name: "${COMPOSE_PROJECT_NAME:-citus}_manager"
+    restart: unless-stopped
+    depends_on:
+      - worker
+    image: 'citusdata/membership-manager:latest'
+    networks:
+      - db-network
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-ofbiz}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-ofbiz}

@@ -8,17 +8,17 @@ Currently the following /v1 endpoints (meaning `/api/generic/v1/*`) are implemen
 * **GET** `/entities`
     * Returns list of all entity names
 * **GET** `/entities/{case sensitive entity name}?field1=value&field2=value`
-    * Returns all entities (with no related / sub entities) that match the query parameters. Custom parameter "_query" accepts an int to say how many subleves you want. Currently limited to 1 as this makes request grow in size super fast. Related single items are with prefix "_Related\_", related lists of items are with prefix "_RelatedList\_". It being list or single is taken from entity declaration.
+    * Returns all entities (with no related / sub entities) that match the query parameters (not body). Custom parameter "_query" accepts an int to say how many subleves you want. Currently limited to 1 as this makes request grow in size super fast. Related single items are with prefix "_toOne\_", related lists of items are with prefix "_toMany\_". It being list or single is taken from entity declaration.
 * **DELETE** `/entities/{case sensitive entity name}?field1=val1&field2=val2`
-    * Deletes entity matching those fields if and only if there is just one such entity. For more extensive deletes it would probably make more sense to use a service.
+    * Deletes entity matching fields in query parameters (not body) if and only if there is just one such entity. For more extensive deletes it would probably make more sense to use a service.
 * **POST** `/entities/{case sensitive entity name}`
-    * Make a new entity, doesn't support subobjects or adding relations. For those use existing or own services or assist with implementing them on a generic level.
+    * Make a new entity based on body, doesn't support subobjects or adding relations. For those use existing or own services or assist with implementing them on a generic level.
     Fails if you try to add something with lacking PK fields or PKs that are in conflict with an existing entity.
 * **PUT** `/entities/{case sensitive entity name}`
-    * Updates an existing entity. Fails if no entity with chosen PKs found. PKs are taken from entity structure
+    * Updates an existing entity based on body. Updates the given fields to given values, doesn't change other fields. Fails if no entity with chosen PKs found. PKs are taken from entity structure.
 * **POST** `/entityquery/{case sensitive entity name}`
-    * Fetches entity with given parameters. Can set if all relations must return something for item to get returned or not. Inputfields supports everything performFind supports.
-    * in "field3_fld0_op" the "like" is one example. All possible values are [and, between, equals, greaterThan, greaterThanEqualTo, in, lessThan, lessThanEqualTo, like, not, notEqual, or]
+    * Fetches entity with given parameters from body. Can set if all relations must return something for item to get returned or not. Inputfields supports everything performFind supports.
+    * in "field3_fld0_op" the "like" is one example. Check [performFind docs for supported operations](./performfind-service.md)
     * For ranges you have to use two inputFields, first with fld0 and second with fld1 like in example
     * Times can be entered in milliseconds or in strings edible for java.sql.Timestamp in format "yyyy-[m]m-[d]d hh:mm:ss[.f...]"
     
@@ -34,7 +34,9 @@ Currently the following /v1 endpoints (meaning `/api/generic/v1/*`) are implemen
           "numericfield4_fld0_op": "greaterThan",
           "numericfield4_fld0_value": 12,
           "numericfield4_fld1_op": "lessThanEqualTo",
-          "numericfield4_fld1_value": "2019-12-01 20:09:01" 
+          "numericfield4_fld1_value": "2019-12-01 20:09:01",
+          "stringfield_fld0_op": "in",
+          "stringfield_fld0_value": ["str1", "str2"]
         },
         "fieldList": ["List", "of", "returned", "fields"] (optional, default all fields),
         "entityRelations": { (optional, default no relations, only given relations are returned)
