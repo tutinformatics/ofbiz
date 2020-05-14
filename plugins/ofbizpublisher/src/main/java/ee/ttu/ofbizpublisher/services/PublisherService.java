@@ -12,10 +12,13 @@ import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.GenericServiceException;
+import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ServiceUtil;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 
+import javax.servlet.ServletContext;
+import javax.ws.rs.core.Context;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -25,8 +28,13 @@ public class PublisherService {
     private DispatchContext dispatchContext;
     private Publisher customerPublisher;
 
+    @Context
+    private ServletContext servletContext;
+
     public PublisherService(Delegator delegator) {
         this.delegator = delegator;
+        LocalDispatcher dispatcher = (LocalDispatcher) servletContext.getAttribute("dispatcher");
+        this.dispatchContext = dispatcher.getDispatchContext();
     }
 
     public PublisherService(Delegator delegator, DispatchContext dispatchContext) {
