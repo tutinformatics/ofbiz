@@ -293,4 +293,10 @@ under the License.
         <attribute name="projectList" type="List" mode="OUT" optional="true"/>
     </service>
 
+    <service name="completeTasks" engine="java"
+             location="org.apache.ofbiz.project.services.ProjectCustomServices" invoke="completeTasks" auth="true">
+        <description>Complete Tasks</description>
+        <attribute name="tasks" type="List" mode="IN" optional="false"/>
+    </service>
+
 </services>
