@@ -93,8 +93,10 @@ public class PublisherService {
         List<GenericValue> genericValues = findFilteredEntities(entityName, topic, filterParams);
         String publisherId = UUID.randomUUID().toString();
         IMqttClient publisher = new MqttClient("tcp://mqtt.eclipse.org:1883", publisherId);
-        MqttMessage message = getDataInBytes(genericValues);
-        publisher.publish(topic, message);
+        ConnectionBinding mqttClientService = new ConnectionBinding(publisher);
+        mqttClientService.makeConnection();
+        customerPublisher = new Publisher(publisher, topic);
+        customerPublisher.call(genericValues);
     }
 
     public GenericValue deletePublisher(String ofbizPublisherId) throws GenericEntityException {
