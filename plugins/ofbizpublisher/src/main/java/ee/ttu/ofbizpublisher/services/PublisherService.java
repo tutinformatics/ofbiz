@@ -19,10 +19,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class PublisherService {
@@ -84,7 +81,8 @@ public class PublisherService {
 
     public void setPublisherData(String entityName, String topic, String filterParams) throws Exception {
         List<GenericValue> genericValues = findFilteredEntities(entityName, topic, filterParams);
-        IMqttClient publisher = new MqttClient("tcp://mqtt.eclipse.org:1883", topic);
+        String publisherId = UUID.randomUUID().toString();
+        IMqttClient publisher = new MqttClient("tcp://mqtt.eclipse.org:1883", publisherId);
         ConnectionBinding mqttClientService = new ConnectionBinding(publisher);
         mqttClientService.makeConnection();
         customerPublisher = new Publisher(publisher, topic);
@@ -93,10 +91,12 @@ public class PublisherService {
 
     public void setPublisherDataWithPublisher(String entityName, String topic, String filterParams) throws Exception {
         List<GenericValue> genericValues = findFilteredEntities(entityName, topic, filterParams);
-        IMqttClient publisher = new MqttClient("tcp://mqtt.eclipse.org:1883", topic);
-        publisher.connect();
-        MqttMessage message = getDataInBytes(genericValues);
-        publisher.publish(topic, message);
+        String publisherId = UUID.randomUUID().toString();
+        IMqttClient publisher = new MqttClient("tcp://mqtt.eclipse.org:1883", publisherId);
+        ConnectionBinding mqttClientService = new ConnectionBinding(publisher);
+        mqttClientService.makeConnection();
+        customerPublisher = new Publisher(publisher, topic);
+        customerPublisher.call(genericValues);
     }
 
     public GenericValue deletePublisher(String ofbizPublisherId) throws GenericEntityException {
