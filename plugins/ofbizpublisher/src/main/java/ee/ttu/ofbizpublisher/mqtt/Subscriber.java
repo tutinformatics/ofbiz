@@ -3,6 +3,8 @@ package ee.ttu.ofbizpublisher.mqtt;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
+import org.apache.ofbiz.entity.model.ModelEntity;
+import org.apache.ofbiz.entity.util.EntityQuery;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
@@ -23,30 +25,48 @@ public class Subscriber {
         this.topic = topic;
     }
 
-    public void receiveMessage(Delegator delegator, String entityName, Object filter) throws InterruptedException, MqttException {
+    public void receiveMessage(Delegator delegator, Object properties, String entityName) throws InterruptedException, MqttException {
         CountDownLatch receivedSignal = new CountDownLatch(10);
+        List<String> fieldProperties = (List<String>) properties;
         System.out.println("RECEIVE MESSAGE");
         client.subscribe(topic, (topic, message) -> {
             byte[] payload = message.getPayload();
-            deserialize(payload, delegator, entityName, filter);
+            deserialize(payload, delegator, fieldProperties, entityName);
             System.out.println(message);
             receivedSignal.countDown();
         });
         receivedSignal.await(1, TimeUnit.MINUTES);
     }
 
-    private void deserialize(byte[] payload, Delegator delegator, String entityName, Object filter) throws IOException, ClassNotFoundException, GenericEntityException {
+    private void deserialize(byte[] payload, Delegator delegator, List<String> properties, String entityName) throws IOException, ClassNotFoundException {
+        ModelEntity entity = delegator.getModelEntity(entityName);
+        List<String> fieldNames = entity.getAllFieldNames();
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(payload);
         ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
         List<GenericValue> genericValues = (List<GenericValue>) objectInputStream.readObject();
         for (GenericValue genericValue : genericValues) {
-            GenericValue check = delegator.findOne(entityName, genericValue.getPrimaryKey(), false);
-            if (check == null) {
-                try {
-                    delegator.create(genericValue);
-                } catch (GenericEntityException e) {
-                    e.printStackTrace();
+            try {
+                if (!properties.isEmpty()) {
+                    GenericValue genericValue1 = new GenericValue();
+                    GenericValue genericValue2 = EntityQuery
+                            .use(delegator)
+                            .from(entityName)
+                            .where(entity.getNoPkFieldNames().get(0), genericValue.getPrimaryKey())
+                            .queryOne();
+                    for (String field : fieldNames) {
+                        if (!fieldNames.contains(field)) {
+                            genericValue1.put(field, genericValue.get(field));
+                        } else {
+                            genericValue1.put(field, genericValue2.get(field));
+                        }
+                    }
+                    delegator.createOrStore(genericValue1);
+                } else {
+                    delegator.createOrStore(genericValue);
                 }
+
+            } catch (GenericEntityException e) {
+                e.printStackTrace();
             }
         }
 
