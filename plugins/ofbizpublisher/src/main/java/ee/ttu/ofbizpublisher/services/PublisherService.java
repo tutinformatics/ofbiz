@@ -94,6 +94,7 @@ public class PublisherService {
     public void setPublisherDataWithPublisher(String entityName, String topic, String filterParams) throws Exception {
         List<GenericValue> genericValues = findFilteredEntities(entityName, topic, filterParams);
         IMqttClient publisher = new MqttClient("tcp://mqtt.eclipse.org:1883", topic);
+        publisher.connect();
         MqttMessage message = getDataInBytes(genericValues);
         publisher.publish(topic, message);
     }
