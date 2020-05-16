@@ -40,6 +40,7 @@ import org.apache.ofbiz.entity.serialize.XmlSerializer;
 import org.apache.ofbiz.entity.transaction.TransactionUtil;
 import org.apache.ofbiz.entity.util.*;
 import org.apache.ofbiz.entityext.eca.EntityEcaUtil;
+import org.apache.ofbiz.service.DispatchContext;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

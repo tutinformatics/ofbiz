@@ -7,18 +7,18 @@ import ee.ttu.ofbizpublisher.model.PublisherDTO;
 import ee.ttu.ofbizpublisher.mqtt.ConnectionBinding;
 import ee.ttu.ofbizpublisher.mqtt.Publisher;
 import org.apache.ofbiz.entity.Delegator;
+import org.apache.ofbiz.entity.DelegatorFactory;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.util.EntityQuery;
-import org.apache.ofbiz.service.DispatchContext;
-import org.apache.ofbiz.service.GenericServiceException;
-import org.apache.ofbiz.service.LocalDispatcher;
-import org.apache.ofbiz.service.ServiceUtil;
+import org.apache.ofbiz.service.*;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-import javax.servlet.ServletContext;
-import javax.ws.rs.core.Context;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -28,18 +28,18 @@ public class PublisherService {
     private DispatchContext dispatchContext;
     private Publisher customerPublisher;
 
-    @Context
-    private ServletContext servletContext;
-
     public PublisherService(Delegator delegator) {
         this.delegator = delegator;
-        LocalDispatcher dispatcher = (LocalDispatcher) servletContext.getAttribute("dispatcher");
-        this.dispatchContext = dispatcher.getDispatchContext();
     }
 
     public PublisherService(Delegator delegator, DispatchContext dispatchContext) {
         this.delegator = delegator;
         this.dispatchContext = dispatchContext;
+    }
+
+    private LocalDispatcher createDispatcher() {
+        Delegator delegator = DelegatorFactory.getDelegator("default");
+        return ServiceContainer.getLocalDispatcher("dispatcher", delegator);
     }
 
     public List<PublisherDTO> getPublishers() throws GenericEntityException {
@@ -91,7 +91,10 @@ public class PublisherService {
 
     public void setPublisherDataWithPublisher(String entityName, String topic, String filterParams) throws Exception {
         List<GenericValue> genericValues = findFilteredEntities(entityName, topic, filterParams);
-        customerPublisher.callWithTopic(genericValues, topic);
+        String publisherId = UUID.randomUUID().toString();
+        IMqttClient publisher = new MqttClient("tcp://mqtt.eclipse.org:1883", publisherId);
+        MqttMessage message = getDataInBytes(genericValues);
+        publisher.publish(topic, message);
     }
 
     public GenericValue deletePublisher(String ofbizPublisherId) throws GenericEntityException {
@@ -126,12 +129,22 @@ public class PublisherService {
             Map<String, Object> insert = new HashMap<>();
             insert.put("entityName", model);
             insert.put("filterParameters", query);
-            genericValues.addAll((List<GenericValue>) FilteredSearchService.performFilteredSearch(dispatchContext, insert).get("result"));
+            LocalDispatcher localDispatcher = this.createDispatcher();
+            this.dispatchContext = localDispatcher.getDispatchContext();
+            genericValues.addAll((List<GenericValue>) FilteredSearchService.performFilteredSearch(this.dispatchContext, insert).get("result"));
 
         }
         if (filterList.isEmpty()) {
             genericValues = EntityQuery.use(delegator).from(entityName).queryList();
         }
         return genericValues;
+    }
+
+    private MqttMessage getDataInBytes(List<GenericValue> message) throws IOException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(bos);
+        oos.writeObject(message);
+        byte[] payload = bos.toByteArray();
+        return new MqttMessage(payload);
     }
 }
