@@ -1,0 +1,135 @@
+DISCLAIMER:
+```
+This guide is shit and you should not deploy your apps in that way.
+Guide is provided 'AS IS' and might be broken. I do not promise support of that guide or with any problems related to it. 
+comments are marked with // and should be ommited
+Configuration is expected to last ~1 month with 50$
+```
+
+prerequisite
+PREREQUISITES:
+	Google (cloud) account
+	Redeemed Martin's promo for 50$
+
+In google console:
+	Compute Engine > VM instances
+	Create instance
+	Region: (preferably) eu-north1
+	Machine type: at least n1-standart-2
+	Boot disk:
+		change
+		Size: at least 15 GB, I have 20
+	create
+
+
+connect to server (in browser, or PuTTY)
+	>  sudo su
+	>  sudo apt-get update
+    >  sudo apt-get upgrade
+    >  sudo apt-get install     apt-transport-https     ca-certificates     curl     gnupg-agent     software-properties-common
+    >  sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    >  sudo apt-key fingerprint 0EBFCD88
+    >  sudo add-apt-repository    "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable
+    >  sudo apt-get update // or 'sudo apt-get --allow-unauthenticated upgrade' if not working
+    >  sudo apt-get install docker
+    >  sudo apt-get install docker-compose
+    >  sudo apt-get install openjdk-11-jre-headless
+    >  sudo reboot
+    >  sudo apt-get install wget
+    >  sudo wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
+    >  sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list' // sudo su -c ... or >> instead of > if 'Permission denied' and /etc/apt/sources.list.d/jenkins.list is empty or absent
+    >  sudo apt-get update // or 'sudo apt-get --allow-unauthenticated upgrade' if not working
+    >  sudo apt-get install jenkins
+    >  sudo cat /var/lib/jenkins/secrets/initialAdminPassword // your jenkins startup password
+    >  sudo visudo // add 'jenkins ALL=(ALL:ALL) NOPASSWD: ALL' under # User privilege specification
+    >  sudo usermod -aG docker jenkins
+
+In google console:
+	NETWORKING > Firewall rules > create
+	> any name
+	> source ip ranges: 0.0.0.0/0 // bad practice, but fast and easy
+	> targets: All Instances in the network // bad practice, but fast and easy
+	> tcp: 8080, 8443, 8081 // bad practice, but fast and easy
+	> udp: 8080, 8443, 8081 // bad practice, but fast and easy
+
+in browser:
+	{YOUR_IP}:8080
+	enter password from `cat /var/lib/jenkins/secrets/initialAdminPassword`
+	proceed through installation
+	Make sure to have chosen plugins:
+		GitHub Authentication plugin
+		GitHub Integration Plugin
+		Gradle Plugin
+		docker
+
+In jenkins:
+	New item
+	> Freestyle project
+	create
+	Source Code Management > git 
+	Credentials: Add > jenkins
+	Scope: global
+	Username...
+	Password...  // you can create app password by:
+				 // github.com > login > icon > Settings >  Developer settings > Personal access tokens Generate new token > check public_repo > generate token 
+	add
+	
+	Choose your user
+	
+	paste your back Repository URL, eg https://github.com/tutinformatics/ofbiz.git
+	under branch: */{YOUR_BRANCH}
+	Additional Behaviours: Add
+	Check out to specific local branch
+	Branch name: {YOUR_BRANCH}
+	
+	Build Triggers:
+	> Poll SCM // bad practice, use hooks instead, but who cares
+	* * * * *
+	
+	Build:
+		> Execute shell
+		```
+		sudo docker build -t ofbiz-back:dev -f plugins/aff_marketing/deploy/Dockerfile .
+		sudo docker container stop $( sudo docker container ls | grep 0.0.0.0:8443 | awk '{print $1}') || true
+		sudo docker image rmi $(sudo docker image ls -f='dangling=true' -q) -f || true
+		sudo docker run -d -p 8443:8443 ofbiz-back:dev // remove -d if you want application logs in jenkins, but you'll have to stop the job automatically on new build. Use docker 'container logs [CONTAINER]' insead
+		sudo docker container ls
+		```
+		save > apply
+		Build Now
+
+	
+	New item
+	> Freestyle project
+	create
+	
+	Source Code Management > git 
+	paste your front Repository URL, eg https://github.com/tutinformatics/ofbiz-ui.git
+	under branch: */{YOUR_BRANCH}
+	Additional Behaviours: Add
+	Check out to specific local branch
+	Branch name: {YOUR_BRANCH}
+	
+	Build Triggers:
+	> Poll SCM // bad practice, use hooks instead, but who cares
+	* * * * *
+	
+	Build:
+		> Execute shell
+		```
+		sudo docker build -t ofbiz-front:dev -f Dockerfile .
+		sudo docker container stop $( sudo docker container ls | grep 0.0.0.0:8081 | awk '{print $1}') || true
+		sudo docker image rmi $(sudo docker image ls -f='dangling=true' -q) -f || true
+		sudo docker run -d -p 8081:80 ofbiz-front:dev // remove -d if you want application logs in jenkins, but you'll have to stop the job automatically on new build. Use docker 'container logs [CONTAINER]' insead
+		sudo docker container ls
+		```
+		save > apply
+		Build Now
+	
+	
+	???
+	Deploy takes a while to run, even if job is done (using -d). Ofbiz takes forever to run.
+	Now your deploy with CI/CD has to be configured.
+	Hopefully, your environments are available on:
+	back: {YOUR_IP}:8443
+	front: {YOUR_IP}:8081
