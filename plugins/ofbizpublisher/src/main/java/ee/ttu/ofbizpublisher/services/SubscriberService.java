@@ -67,18 +67,18 @@ public class SubscriberService {
         subscriberContext.put("description", data.get("description"));
         subscriberContext.put("filter", data.get("filter"));
         subscriberContext.put("properties", data.get("properties"));
-        setSubscriberData(data.get("topic").toString(), data.get("OfbizEntityName").toString(), data.get("filter"));
+        setSubscriberData(data.get("topic").toString(), data.get("OfbizEntityName").toString(), data.get("properties"));
         OfbizSubscriberServices ofbizSubscriberServices = new OfbizSubscriberServices();
         ofbizSubscriberServices.createOfbizSubscriber(dispatchContext, subscriberContext);
     }
 
-    private void setSubscriberData(String topic, String entityName, Object filter) throws MqttException, InterruptedException {
+    private void setSubscriberData(String topic, String entityName, Object properties) throws MqttException, InterruptedException {
         String receiverID = UUID.randomUUID().toString();
         IMqttClient receiver = new MqttClient("tcp://mqtt.eclipse.org:1883", receiverID);
         ConnectionBinding mqttClientService2 = new ConnectionBinding(receiver);
         mqttClientService2.makeConnection();
         Subscriber subscriber = new Subscriber(receiver, topic);
-        subscriber.receiveMessage(delegator, entityName, filter);
+        subscriber.receiveMessage(delegator, properties, entityName);
     }
 
     public GenericValue deleteSubscriber(String ofbizSubscriberId) throws GenericEntityException {
