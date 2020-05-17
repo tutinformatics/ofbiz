@@ -14,11 +14,7 @@ import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.service.*;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -80,8 +76,7 @@ public class PublisherService {
     }
 
     public void setPublisherData(String entityName, String topic, String filterParams) throws Exception {
-        List<GenericValue> genericValues = findFilteredEntities(entityName, topic, filterParams);
-        String publisherId = UUID.randomUUID().toString();
+        List<GenericValue> genericValues = findFilteredEntities(entityName, filterParams);
         IMqttClient client = new MqttClient("tcp://mqtt.eclipse.org:1883", topic);
         ConnectionBinding mqttClientService = new ConnectionBinding(client);
         mqttClientService.makeConnection();
@@ -91,7 +86,7 @@ public class PublisherService {
     }
 
     public void setPublisherDataWithPublisher(String entityName, String topic, String filterParams) throws Exception {
-        List<GenericValue> genericValues = findFilteredEntities(entityName, topic, filterParams);
+        List<GenericValue> genericValues = findFilteredEntities(entityName, filterParams);
         publisher.setTopic(topic);
         publisher.call(genericValues);
     }
@@ -118,7 +113,7 @@ public class PublisherService {
         }
     }
 
-    private List<GenericValue> findFilteredEntities(String entityName, String topic, String filterParams) throws GenericEntityException, GenericServiceException {
+    private List<GenericValue> findFilteredEntities(String entityName, String filterParams) throws GenericEntityException, GenericServiceException {
         Gson gson = new Gson();
         Object filter = gson.fromJson(filterParams, Object.class);
         List<List<Map<String, ?>>> filterList = (List<List<Map<String, ?>>>) filter;
@@ -131,19 +126,10 @@ public class PublisherService {
             LocalDispatcher localDispatcher = this.createDispatcher();
             this.dispatchContext = localDispatcher.getDispatchContext();
             genericValues.addAll((List<GenericValue>) FilteredSearchService.performFilteredSearch(this.dispatchContext, insert).get("result"));
-
         }
         if (filterList.isEmpty()) {
             genericValues = EntityQuery.use(delegator).from(entityName).queryList();
         }
         return genericValues;
-    }
-
-    private MqttMessage getDataInBytes(List<GenericValue> message) throws IOException {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(bos);
-        oos.writeObject(message);
-        byte[] payload = bos.toByteArray();
-        return new MqttMessage(payload);
     }
 }

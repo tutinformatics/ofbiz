@@ -41,17 +41,6 @@ public class Publisher {
         return null;
     }
 
-    public Void callWithTopic(List<GenericValue> message, String topic) throws Exception {
-        if (!this.client.isConnected()) {
-            return null;
-        }
-        MqttMessage msg = getDataInBytes(message);
-        msg.setQos(0);
-        msg.setRetained(true);
-        this.client.publish(topic, msg);
-        return null;
-    }
-
     private MqttMessage getDataInBytes(List<GenericValue> message) throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(bos);
