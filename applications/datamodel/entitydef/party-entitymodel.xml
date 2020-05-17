@@ -1561,10 +1561,7 @@ under the License.
       <field name="dateTimeCreated" type="date-time"></field>
       <field name="dateTimeApproved" type="date-time"></field>
       <prim-key field="partyId"/>
-      <relation type="one" fk-name="AFFILIATE_PARTY" rel-entity-name="Party">
-        <key-map field-name="partyId"/>
-      </relation>
-      <relation type="one" fk-name="AFFILIATE_PGRP" rel-entity-name="PartyGroup">
+      <relation type="one" fk-name="AFFILIATE_PARTY" rel-entity-name="Person">
         <key-map field-name="partyId"/>
       </relation>
     </entity>

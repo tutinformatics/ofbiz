@@ -18,14 +18,6 @@
  *******************************************************************************/
 package org.apache.ofbiz.entity.util;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.ofbiz.base.conversion.AbstractConverter;
 import org.apache.ofbiz.base.conversion.ConversionException;
 import org.apache.ofbiz.base.conversion.ConverterLoader;
@@ -38,6 +30,9 @@ import org.apache.ofbiz.entity.GenericEntity;
 import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.model.ModelField;
 import org.apache.ofbiz.entity.model.ModelFieldType;
+
+import java.io.IOException;
+import java.util.*;
 
 /** Entity Engine <code>Converter</code> classes. */
 public class Converters implements ConverterLoader {

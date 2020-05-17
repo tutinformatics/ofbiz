@@ -71,7 +71,8 @@ public class EntityDataLoadContainer implements Container {
     private static final String DATA_FILE = "file";
     private static final String DATA_DIR = "dir";
     private static final String DATA_COMPONENT = "component";
-    private static final String DELEGATOR_NAME = "delegator";
+    private static final String DELEGATOR = "delegator";
+    private static final String DELEGATOR_NAME = "delegator-name";
     private static final String DATA_GROUP = "group";
     private static final String TIMEOUT = "timeout";
     private static final String CREATE_P_KEYS = "create-pks";
@@ -101,8 +102,8 @@ public class EntityDataLoadContainer implements Container {
         ServiceDispatcher.enableSvcs(false);
 
         Configuration configuration = ContainerConfig.getConfiguration(name);
-        Configuration.Property delegatorNameProp = configuration.getProperty("delegator-name");
-        String overrideDelegator = loadDataProps.get(DELEGATOR_NAME);
+        Configuration.Property delegatorNameProp = configuration.getProperty(DELEGATOR_NAME);
+        String overrideDelegator = loadDataProps.get(DELEGATOR);
 
         if ("all-tenants".equals(overrideDelegator)) {
             // load data for all tenants
