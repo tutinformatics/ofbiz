@@ -34,7 +34,7 @@ public class ProjectCustomServices {
 
         try {
             List<Map<String, Object>> tasks = (List<Map<String, Object>>) context.get("tasks");
-            for (Map<String, Object> task : tasks) { // TODO: should run in parallel?
+            for (Map<String, Object> task : tasks) {
                 task.put("userLogin", context.get("userLogin"));
                 dispatcher.runSync("updateTaskAssigment", task);
             }
