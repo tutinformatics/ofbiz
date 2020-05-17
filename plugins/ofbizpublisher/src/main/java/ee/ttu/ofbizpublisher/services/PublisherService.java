@@ -26,7 +26,7 @@ public class PublisherService {
 
     private Delegator delegator;
     private DispatchContext dispatchContext;
-    private Publisher customerPublisher;
+    public static Publisher publisher = new Publisher();
 
     public PublisherService(Delegator delegator) {
         this.delegator = delegator;
@@ -82,21 +82,18 @@ public class PublisherService {
     public void setPublisherData(String entityName, String topic, String filterParams) throws Exception {
         List<GenericValue> genericValues = findFilteredEntities(entityName, topic, filterParams);
         String publisherId = UUID.randomUUID().toString();
-        IMqttClient publisher = new MqttClient("tcp://mqtt.eclipse.org:1883", publisherId);
-        ConnectionBinding mqttClientService = new ConnectionBinding(publisher);
+        IMqttClient client = new MqttClient("tcp://mqtt.eclipse.org:1883", topic);
+        ConnectionBinding mqttClientService = new ConnectionBinding(client);
         mqttClientService.makeConnection();
-        customerPublisher = new Publisher(publisher, topic);
-        customerPublisher.call(genericValues);
+        publisher.setClient(client);
+        publisher.setTopic(topic);
+        publisher.call(genericValues);
     }
 
     public void setPublisherDataWithPublisher(String entityName, String topic, String filterParams) throws Exception {
         List<GenericValue> genericValues = findFilteredEntities(entityName, topic, filterParams);
-        String publisherId = UUID.randomUUID().toString();
-        IMqttClient publisher = new MqttClient("tcp://mqtt.eclipse.org:1883", publisherId);
-        ConnectionBinding mqttClientService = new ConnectionBinding(publisher);
-        mqttClientService.makeConnection();
-        customerPublisher = new Publisher(publisher, topic);
-        customerPublisher.call(genericValues);
+        publisher.setTopic(topic);
+        publisher.call(genericValues);
     }
 
     public GenericValue deletePublisher(String ofbizPublisherId) throws GenericEntityException {

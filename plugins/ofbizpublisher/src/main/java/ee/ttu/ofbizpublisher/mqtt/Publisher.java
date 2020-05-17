@@ -11,12 +11,23 @@ import java.util.List;
 
 public class Publisher {
 
-    private final String topic;
-    private final IMqttClient client;
+    private String topic;
+    private IMqttClient client;
 
     public Publisher(IMqttClient client, String topic) {
         this.client = client;
         this.topic = topic;
+    }
+
+    public Publisher() {
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
+
+    public void setClient(IMqttClient client) {
+        this.client = client;
     }
 
     public Void call(List<GenericValue> message) throws Exception {
