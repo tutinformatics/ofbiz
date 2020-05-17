@@ -46,21 +46,18 @@ public class Subscriber {
         List<GenericValue> genericValues = (List<GenericValue>) objectInputStream.readObject();
         for (GenericValue genericValue : genericValues) {
             try {
-                if (!properties.isEmpty()) {
-                    GenericValue genericValue1 = new GenericValue();
-                    GenericValue genericValue2 = EntityQuery
-                            .use(delegator)
-                            .from(entityName)
-                            .where(entity.getPkFieldNames().get(0), genericValue.getPrimaryKey())
-                            .queryOne();
+                GenericValue genericValue2 = EntityQuery
+                        .use(delegator)
+                        .from(entityName)
+                        .where(entity.getPkFieldNames().get(0), genericValue.getAllFields().get(entity.getPkFieldNames().get(0)))
+                        .queryOne();
+                if (!properties.isEmpty() && genericValue2 != null) {
                     for (String field : fieldNames) {
-                        if (!fieldNames.contains(field)) {
-                            genericValue1.put(field, genericValue.get(field));
-                        } else {
-                            genericValue1.put(field, genericValue2.get(field));
+                        if (!properties.contains(field)) {
+                            genericValue2.put(field, genericValue.get(field));
                         }
                     }
-                    delegator.createOrStore(genericValue1);
+                    delegator.createOrStore(genericValue2);
                 } else {
                     delegator.createOrStore(genericValue);
                 }
