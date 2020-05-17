@@ -27,6 +27,9 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import static org.apache.ofbiz.jersey.util.ApiUtil.generateAdminToken;
+import static org.apache.ofbiz.jersey.util.ApiUtil.invokeDelegator;
+
 public class AppServletContextListener implements ServletContextListener {
 
 	public static final String MODULE = AppServletContextListener.class.getName();
@@ -38,6 +41,21 @@ public class AppServletContextListener implements ServletContextListener {
 		Debug.logInfo("Jersey Context initialized, delegator " + delegator + ", dispatcher", MODULE);
 		servletContext.setAttribute("delegator", delegator);
 		servletContext.setAttribute("dispatcher", dispatcher);
+
+		try {
+			invokeDelegator(delegator);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		try {
+			System.out.println("--------------------------------------- TOKEN ---------------------------------------------");
+			System.out.println(generateAdminToken());
+			System.out.println();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public void contextDestroyed(ServletContextEvent sce) {

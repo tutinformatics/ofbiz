@@ -17,3 +17,89 @@ Kus:
 6.   put"entity"(PK, fields) uuendab eksisteerivat entity't, mis otsitakse primary key'de järgi.
 
 TL;DR - _ lõpus tähendab, et primary key'd pole vaja kaasa anda ning kõiki fielde pole post/put tehes kaasa anda - defaultib null'iks
+
+
+Näide komplekspäringust
+
+```
+{
+  party(partyId: "DemoEmployee") {
+    partyId
+
+    _toOne_PartyGroup {
+      groupName
+      groupNameLocal
+      officeSiteName
+      annualRevenue
+      numEmployees
+      tickerSymbol
+    }
+    
+    description
+    
+    _toOne_Uom {
+      abbreviation
+    }
+    
+    externalId
+    
+    statusId
+    
+    lastUpdatedStamp
+    lastModifiedDate
+    createdStamp
+    createdDate # party creation
+    
+    _toOne_PartyType {
+      partyTypeId
+      parentTypeId
+      description
+    } 
+    
+    _toMany_PartyRole {
+      roleTypeId
+    }
+  }
+}
+```
+Mille väljund on järgmine
+```
+{
+    "data": {
+        "party": {
+            "partyId": "DemoEmployee",
+            "_toOne_PartyGroup": null,
+            "description": null,
+            "_toOne_Uom": null,
+            "externalId": null,
+            "statusId": "PARTY_ENABLED",
+            "lastUpdatedStamp": 1588598327365,
+            "lastModifiedDate": null,
+            "createdStamp": 1586114421843,
+            "createdDate": null,
+            "_toOne_PartyType": {
+                "partyTypeId": "PERSON",
+                "parentTypeId": null,
+                "description": "Person"
+            },
+            "_toMany_PartyRole": [
+                {
+                    "roleTypeId": "EMAIL_ADMIN"
+                },
+                {
+                    "roleTypeId": "EMPLOYEE"
+                },
+                {
+                    "roleTypeId": "REQ_TAKER"
+                },
+                {
+                    "roleTypeId": "PROVIDER_ANALYST"
+                },
+                {
+                    "roleTypeId": "PROJECT_TEAM"
+                }
+            ]
+        }
+    }
+}
+```

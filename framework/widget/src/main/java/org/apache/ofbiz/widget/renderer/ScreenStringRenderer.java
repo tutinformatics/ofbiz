@@ -18,12 +18,12 @@
  *******************************************************************************/
 package org.apache.ofbiz.widget.renderer;
 
-import java.io.IOException;
-import java.util.Map;
-
 import org.apache.ofbiz.base.util.GeneralException;
 import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.widget.model.ModelScreenWidget;
+
+import java.io.IOException;
+import java.util.Map;
 
 /**
  * Widget Library - Screen String Renderer interface.
@@ -46,6 +46,7 @@ public interface ScreenStringRenderer {
 
     public void renderHorizontalSeparator(Appendable writer, Map<String, Object> context, ModelScreenWidget.HorizontalSeparator separator) throws IOException;
     public void renderLabel(Appendable writer, Map<String, Object> context, ModelScreenWidget.Label label) throws IOException;
+    public void renderVueJs(Appendable writer, Map<String, Object> context, ModelScreenWidget.VueJs vuejs) throws IOException;
     public void renderLink(Appendable writer, Map<String, Object> context, ModelScreenWidget.ScreenLink link) throws IOException;
     public void renderImage(Appendable writer, Map<String, Object> context, ModelScreenWidget.ScreenImage image) throws IOException;
 

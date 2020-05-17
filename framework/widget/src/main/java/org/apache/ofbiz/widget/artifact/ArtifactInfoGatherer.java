@@ -18,95 +18,24 @@
  *******************************************************************************/
 package org.apache.ofbiz.widget.artifact;
 
-import java.util.Set;
-
 import org.apache.ofbiz.base.util.GeneralException;
 import org.apache.ofbiz.base.util.UtilValidate;
 import org.apache.ofbiz.webapp.control.ConfigXMLReader;
-import org.apache.ofbiz.widget.model.AbstractModelAction.EntityAnd;
-import org.apache.ofbiz.widget.model.AbstractModelAction.EntityCondition;
-import org.apache.ofbiz.widget.model.AbstractModelAction.EntityOne;
-import org.apache.ofbiz.widget.model.AbstractModelAction.GetRelated;
-import org.apache.ofbiz.widget.model.AbstractModelAction.GetRelatedOne;
-import org.apache.ofbiz.widget.model.AbstractModelAction.PropertyMap;
-import org.apache.ofbiz.widget.model.AbstractModelAction.PropertyToField;
-import org.apache.ofbiz.widget.model.AbstractModelAction.Script;
-import org.apache.ofbiz.widget.model.AbstractModelAction.Service;
-import org.apache.ofbiz.widget.model.AbstractModelAction.SetField;
-import org.apache.ofbiz.widget.model.FieldInfo;
-import org.apache.ofbiz.widget.model.HtmlWidget;
+import org.apache.ofbiz.widget.model.AbstractModelAction.*;
+import org.apache.ofbiz.widget.model.*;
 import org.apache.ofbiz.widget.model.HtmlWidget.HtmlTemplate;
 import org.apache.ofbiz.widget.model.HtmlWidget.HtmlTemplateDecorator;
 import org.apache.ofbiz.widget.model.HtmlWidget.HtmlTemplateDecoratorSection;
-import org.apache.ofbiz.widget.model.IterateSectionWidget;
-import org.apache.ofbiz.widget.model.ModelAction;
-import org.apache.ofbiz.widget.model.ModelActionVisitor;
-import org.apache.ofbiz.widget.model.ModelFieldVisitor;
-import org.apache.ofbiz.widget.model.ModelForm;
 import org.apache.ofbiz.widget.model.ModelForm.AltTarget;
 import org.apache.ofbiz.widget.model.ModelForm.AutoFieldsEntity;
 import org.apache.ofbiz.widget.model.ModelForm.AutoFieldsService;
-import org.apache.ofbiz.widget.model.ModelFormAction;
 import org.apache.ofbiz.widget.model.ModelFormAction.CallParentActions;
-import org.apache.ofbiz.widget.model.ModelFormField;
-import org.apache.ofbiz.widget.model.ModelFormField.CheckField;
-import org.apache.ofbiz.widget.model.ModelFormField.ContainerField;
-import org.apache.ofbiz.widget.model.ModelFormField.DateFindField;
-import org.apache.ofbiz.widget.model.ModelFormField.DateTimeField;
-import org.apache.ofbiz.widget.model.ModelFormField.DisplayEntityField;
-import org.apache.ofbiz.widget.model.ModelFormField.DisplayField;
-import org.apache.ofbiz.widget.model.ModelFormField.DropDownField;
-import org.apache.ofbiz.widget.model.ModelFormField.FieldInfoWithOptions;
-import org.apache.ofbiz.widget.model.ModelFormField.FileField;
-import org.apache.ofbiz.widget.model.ModelFormField.FormField;
-import org.apache.ofbiz.widget.model.ModelFormField.GridField;
-import org.apache.ofbiz.widget.model.ModelFormField.HiddenField;
-import org.apache.ofbiz.widget.model.ModelFormField.HyperlinkField;
-import org.apache.ofbiz.widget.model.ModelFormField.IgnoredField;
-import org.apache.ofbiz.widget.model.ModelFormField.ImageField;
-import org.apache.ofbiz.widget.model.ModelFormField.LookupField;
-import org.apache.ofbiz.widget.model.ModelFormField.MenuField;
-import org.apache.ofbiz.widget.model.ModelFormField.PasswordField;
-import org.apache.ofbiz.widget.model.ModelFormField.RadioField;
-import org.apache.ofbiz.widget.model.ModelFormField.RangeFindField;
-import org.apache.ofbiz.widget.model.ModelFormField.ResetField;
-import org.apache.ofbiz.widget.model.ModelFormField.ScreenField;
-import org.apache.ofbiz.widget.model.ModelFormField.SubmitField;
-import org.apache.ofbiz.widget.model.ModelFormField.TextField;
-import org.apache.ofbiz.widget.model.ModelFormField.TextFindField;
-import org.apache.ofbiz.widget.model.ModelFormField.TextareaField;
-import org.apache.ofbiz.widget.model.ModelGrid;
-import org.apache.ofbiz.widget.model.ModelMenu;
-import org.apache.ofbiz.widget.model.ModelMenuAction;
-import org.apache.ofbiz.widget.model.ModelMenuItem;
-import org.apache.ofbiz.widget.model.ModelScreen;
-import org.apache.ofbiz.widget.model.ModelScreenWidget;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.Column;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.ColumnContainer;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.Container;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.Content;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.DecoratorScreen;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.DecoratorSection;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.DecoratorSectionInclude;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.Form;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.Grid;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.HorizontalSeparator;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.IncludeScreen;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.Label;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.Menu;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.PlatformSpecific;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.PortalPage;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.ScreenImage;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.ScreenLink;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.Screenlet;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.Section;
-import org.apache.ofbiz.widget.model.ModelScreenWidget.Tree;
-import org.apache.ofbiz.widget.model.ModelSingleForm;
-import org.apache.ofbiz.widget.model.ModelTree;
+import org.apache.ofbiz.widget.model.ModelFormField.*;
+import org.apache.ofbiz.widget.model.ModelScreenWidget.*;
 import org.apache.ofbiz.widget.model.ModelTree.ModelNode;
 import org.apache.ofbiz.widget.model.ModelTree.ModelNode.ModelSubNode;
-import org.apache.ofbiz.widget.model.ModelTreeAction;
-import org.apache.ofbiz.widget.model.ModelWidgetVisitor;
+
+import java.util.Set;
 
 /**
  * An object that gathers artifact information from screen widgets.
@@ -239,6 +168,10 @@ public final class ArtifactInfoGatherer implements ModelWidgetVisitor, ModelActi
 
     @Override
     public void visit(Label label) throws Exception {
+    }
+
+    @Override
+    public void visit(VueJs vuejs) throws Exception {
     }
 
     @Override

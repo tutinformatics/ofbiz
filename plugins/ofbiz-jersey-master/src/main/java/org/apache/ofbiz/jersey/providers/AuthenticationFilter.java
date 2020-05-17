@@ -18,15 +18,10 @@
  *******************************************************************************/
 package org.apache.ofbiz.jersey.providers;
 
-import org.apache.ofbiz.base.util.Debug;
-import org.apache.ofbiz.base.util.UtilValidate;
 import org.apache.ofbiz.entity.Delegator;
-import org.apache.ofbiz.entity.GenericEntityException;
-import org.apache.ofbiz.entity.GenericValue;
-import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.jersey.annotation.Secured;
+import org.apache.ofbiz.jersey.pojo.AuthenticationInput;
 import org.apache.ofbiz.jersey.util.ApiUtil;
-import org.apache.ofbiz.service.ModelService;
 import org.apache.ofbiz.webapp.control.JWTManager;
 
 import javax.annotation.Priority;
@@ -40,54 +35,67 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
-import java.io.IOException;
 import java.util.Map;
+
+import static org.apache.ofbiz.jersey.util.ApiUtil.*;
 
 @Secured
 @Provider
 @Priority(Priorities.AUTHENTICATION)
 public class AuthenticationFilter implements ContainerRequestFilter {
-	
+
 	private static final String MODULE = AuthenticationFilter.class.getName();
+	private static final Boolean IS_DEV = false;
 
 	@Context
 	private ResourceInfo resourceInfo;
-	
-	@Context  
+
+	@Context
 	private HttpServletRequest httpRequest;
-	
+
 	@Context
 	private ServletContext servletContext;
-	
+
 	private static final String AUTHENTICATION_SCHEME = "Bearer";
 	private static final String REALM = "OFBiz";
 
 	@Override
-	public void filter(ContainerRequestContext requestContext) throws IOException {		
+	public void filter(ContainerRequestContext requestContext) {
 		String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
 		Delegator delegator = (Delegator) servletContext.getAttribute("delegator");
-		if (!isTokenBasedAuthentication(authorizationHeader)) {
-			abortWithUnauthorized(requestContext, false, "Unauthorized: Access is denied due to invalid or absent Authorization header");
-			return;
-		}
-		String jwtToken = JWTManager.getHeaderAuthBearerToken(httpRequest);
-		Map<String, Object> claims = JWTManager.validateToken(jwtToken, JWTManager.getJWTKey(delegator));
-		if (claims.containsKey(ModelService.ERROR_MESSAGE)) {
-			abortWithUnauthorized(requestContext, true, (String) claims.get(ModelService.ERROR_MESSAGE));
-		} else {
-			GenericValue userLogin = extractUserLoginFromJwtClaim(delegator, claims);
-			if (UtilValidate.isEmpty(userLogin)) {
-				abortWithUnauthorized(requestContext, true, "Access Denied: User does not exist in the system");
+
+		if (!IS_DEV) {
+			if (!isTokenBasedAuthentication(authorizationHeader)) {
+				abortWithUnauthorized(requestContext, false, "Unauthorized: Access is denied due to invalid or absent Authorization header");
 				return;
 			}
-			httpRequest.setAttribute("userLogin", userLogin);
 		}
-		
+
+		try {
+			String jwtToken;
+
+			if (IS_DEV) {
+				jwtToken = generateAdminToken();
+			} else {
+				jwtToken = JWTManager.getHeaderAuthBearerToken(httpRequest); // GET FROM HEADER
+			}
+
+			Map<String, Object> claims = getInnerClaimsFromJwt(jwtToken);
+
+			AuthenticationInput user = AuthenticationInput.builder()
+					.userLoginId(String.valueOf(claims.get("userLoginId")))
+					.currentPassword(String.valueOf(claims.get("currentPassword")))
+					.build();
+
+			authenticateUserLogin(user);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			abortWithUnauthorized(requestContext, true, "Access Denied: User does not exist in the system");
+		}
 	}
 
 	/**
-	/**
-	 * 
 	 * @param authorizationHeader
 	 * @return
 	 */
@@ -96,7 +104,6 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 	}
 
 	/**
-	 * 
 	 * @param requestContext
 	 */
 	private void abortWithUnauthorized(ContainerRequestContext requestContext, boolean isAuthHeaderPresent, String message) {
@@ -107,24 +114,6 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 			requestContext.abortWith(ApiUtil.errorResponse(Response.Status.FORBIDDEN.getStatusCode(), Response.Status.FORBIDDEN.getReasonPhrase(), message).build());
 		}
 
-	}
-	
-	private GenericValue extractUserLoginFromJwtClaim(Delegator delegator, Map<String, Object> claims) {
-		String userLoginId = (String) claims.get("userLoginId");
-		if (UtilValidate.isEmpty(userLoginId)) {
-			Debug.logWarning("No userLoginId found in the JWT token.", MODULE);
-			return null;
-		}
-		GenericValue userLogin = null;
-		try {
-			userLogin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", userLoginId).queryOne();
-			if (UtilValidate.isEmpty(userLogin)) {
-				Debug.logWarning("There was a problem with the JWT token. Could not find provided userLogin " + userLoginId, MODULE);
-			}
-		} catch (GenericEntityException e) {
-			Debug.logError(e, "Unable to get UserLogin information from JWT Token: " + e.getMessage(), MODULE);
-		}
-		return userLogin;
 	}
 
 }
