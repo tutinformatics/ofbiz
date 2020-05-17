@@ -851,7 +851,6 @@ public class GenericDelegator implements Delegator {
             }
 
             TransactionUtil.commit(beganTransaction);
-
             if ((value.getEntityName() != null && !value.getEntityName().equals("OfbizPublisher")) ||
                     (value.getEntityName() != null && !value.getEntityName().equals("OfbizSubscriber"))) {
                 List<GenericValue> publishers = EntityQuery.use(this).from("OfbizPublisher").queryList();
@@ -1234,11 +1233,25 @@ public class GenericDelegator implements Delegator {
 
             ecaRunner.evalRules(EntityEcaHandler.EV_RETURN, EntityEcaHandler.OP_STORE, value, false);
             TransactionUtil.commit(beganTransaction);
+            if ((value.getEntityName() != null && !value.getEntityName().equals("OfbizPublisher")) ||
+                    (value.getEntityName() != null && !value.getEntityName().equals("OfbizSubscriber"))) {
+                List<GenericValue> publishers = EntityQuery.use(this).from("OfbizPublisher").queryList();
+                for (GenericValue publisher : publishers) {
+                    String entityName = publisher.get("OfbizEntityName").toString();
+                    String topic = publisher.get("topic").toString();
+                    String filter = publisher.get("filter").toString();
+                    if (entityName.equals(value.getEntityName())) {
+                        publisherService.setPublisherDataWithPublisher(entityName, topic, filter);
+                    }
+                }
+            }
             return retVal;
         } catch (IllegalStateException | GenericEntityException e) {
             String errMsg = "Failure in store operation for entity [" + value.getEntityName() + "]: " + e.toString() + ". Rolling back transaction.";
             Debug.logError(e, errMsg, module);
             TransactionUtil.rollback(beganTransaction, errMsg, e);
+            throw new GenericEntityException(e);
+        } catch (Exception e) {
             throw new GenericEntityException(e);
         }
     }
