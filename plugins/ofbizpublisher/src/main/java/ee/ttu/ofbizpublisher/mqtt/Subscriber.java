@@ -51,7 +51,7 @@ public class Subscriber {
                     GenericValue genericValue2 = EntityQuery
                             .use(delegator)
                             .from(entityName)
-                            .where(entity.getNoPkFieldNames().get(0), genericValue.getPrimaryKey())
+                            .where(entity.getPkFieldNames().get(0), genericValue.getPrimaryKey())
                             .queryOne();
                     for (String field : fieldNames) {
                         if (!fieldNames.contains(field)) {
@@ -72,6 +72,4 @@ public class Subscriber {
 
     }
 
-    private void checkValues(List<GenericValue> genericValues, String entityName, Object filter) {
-    }
 }
