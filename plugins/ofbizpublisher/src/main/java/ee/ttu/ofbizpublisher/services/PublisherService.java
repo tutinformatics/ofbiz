@@ -91,6 +91,7 @@ public class PublisherService {
     }
 
     public void setPublisherDataWithPublisher(String entityName, String topic, String filterParams) throws Exception {
+        Thread.sleep(3000);
         List<GenericValue> genericValues = findFilteredEntities(entityName, topic, filterParams);
         publisher.setTopic(topic);
         publisher.call(genericValues);
