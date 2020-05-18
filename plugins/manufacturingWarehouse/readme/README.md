@@ -1,10 +1,10 @@
-#Manufacturing Warehouse team README
+# Manufacturing Warehouse team README
 
-##Ofbizi tööle panemine
+## Ofbizi tööle panemine
 
-###Linuxis
+### Linuxis
 
-####Back
+#### Back
 
 ```bash
 git clone https://github.com/tutinformatics/ofbiz.git
@@ -19,7 +19,7 @@ Kui tööle hakkas siis terminalis peaks selline sisu olema:
 
 ![alt text](linux_ofbiz_working.png "linux_ofbiz_working")
 
-####Front
+#### Front
 ```bash
 git clone https://github.com/tutinformatics/accounting_ui.git
 docker-compose up
@@ -45,9 +45,9 @@ Kui tööle hakkas siis terminalis peaks selline sisu olema:
 
 Netibrauseris mine lehele: localhost:80
 
-###Windows
+### Windows
 
-####Back
+#### Back
 Terminalis:
 ```bash
 cd
@@ -62,7 +62,7 @@ Ofbizi repos:
 gradlew.bat ofbiz
 ```
 
-####Front
+#### Front
 Accounting UI repos:
 ```bash
 docker-machine start default
@@ -77,9 +77,9 @@ või
 npm start
 ```
 
-##Lahendused probleemidele
-###Postgresql
-####S1
+## Lahendused probleemidele
+### Postgresql
+#### S1
 ![alt text](postgresql_s1.png "postgresql_s1")
 
 ```bash
@@ -87,7 +87,7 @@ docker-compose -f docker-compose-databases-dev.yml up -d
 ./gradlew loadAll cleanAll ofbiz
 ```
 
-####S2
+#### S2
 ```bash
 sudo lsof -i -P -n | grep 5432
 ```
@@ -96,7 +96,7 @@ Should be empty, if not:
 sudo service postgresql stop
 ```
 
-####S3
+#### S3
 ```bash
 sudo lsof -i -P -n | grep 4567
 ```
@@ -111,33 +111,33 @@ kill all:
 docker stop $(docker ps -a -q)
 ```
 
-###javaCompile
-####S1
+### javaCompile
+#### S1
 ![alt text](javacompile_s1.png "javacompile_s1")
 ```bash
 docker-compose -f docker-compose-databases-dev.yml up -d
 sudo ./gradlew loadAll ofbiz
 ```
 
-###Docker-compose
-####S1
+### Docker-compose
+#### S1
 ![alt text](docker-compose_s1.png "docker-compose_s1")
 ```bash
 docker rm citus_manager
 ```
 
-####S2
+#### S2
 ![alt text](docker-compose_s2.png "docker-compose_s2")
 
 See postgresql Solution 2
 
-####S3
+#### S3
 ![alt text](docker-compose_s3.png "docker-compose_s3")
 ```bash
 sudo service nginx stop
 ```
 
-####S4
+#### S4
 ![alt text](docker-compose_s4.png "docker-compose_s4")
 ```bash
 docker stop proxy-dev
