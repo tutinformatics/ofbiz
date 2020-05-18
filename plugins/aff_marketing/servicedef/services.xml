@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-<?xml version="1.0" encoding="UTF-8"?>
-=======
 <?xml version="1.0" encoding="UTF-8" ?>
->>>>>>> 9a3df619211611d03a839cd7175955d72857f8a5
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -24,20 +20,6 @@ under the License.
 
 <services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
-<<<<<<< HEAD
-    <description>Affiliate Marketing Services</description>
-    <vendor></vendor>
-    <version>1.0</version>
-
-    <service name="getPartiesService" default-entity-name="Party" engine="java"
-             location="PartyService" invoke="getAdminParties" auth="true">
-        <description>Get Parties</description>
-        <attribute mode="IN" name="body" optional="true" type="Object"/>
-        <override name="comments" optional="true"/>
-    </service>
-
-</services>
-=======
     <description>Affiliate Marketing Service Definition</description>
 
     <service name="createMultiLvlAffiliate"
@@ -167,4 +149,3 @@ under the License.
     </service>
 
 </services>
->>>>>>> 9a3df619211611d03a839cd7175955d72857f8a5

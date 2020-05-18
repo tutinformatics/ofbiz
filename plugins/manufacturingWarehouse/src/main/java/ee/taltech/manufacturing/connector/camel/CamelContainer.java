@@ -61,12 +61,7 @@ public class CamelContainer implements Container {
         context.setNameStrategy(new DefaultCamelContextNameStrategy("rest-api"));
         context.addComponent("restlet", new SparkComponent());
         ContainerConfig.Configuration cfg = ContainerConfig.getConfiguration(name, configFile);
-<<<<<<< HEAD:plugins/manufacturingWarehouse/src/main/java/ee/taltech/manufacturing/connector/camel/CamelContainer.java
         String packageName = ContainerConfig.getPropertyValue(cfg, "package", "ee.taltech.manufacturing.connector.camel.routes");
-=======
-        String packageName = ContainerConfig.getPropertyValue(cfg, "package", "ee.taltech.accounting.connector.camel.routes");
-
->>>>>>> 9a3df619211611d03a839cd7175955d72857f8a5:plugins/accountingConnector/src/main/java/ee/taltech/accounting/connector/camel/CamelContainer.java
         PackageScanClassResolver packageResolver = new DefaultPackageScanClassResolver();
         Set<Class<?>> routesClassesSet = packageResolver.findImplementations(BaseRoute.class, packageName);
 

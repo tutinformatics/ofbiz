@@ -18,28 +18,6 @@
  */
 
 dependencies {
-<<<<<<< HEAD
-    pluginLibsCompile 'org.apache.camel:camel-core:2.16.1'
-    pluginLibsCompile 'org.apache.camel:camel-servlet:2.16.1'
-    pluginLibsCompile 'org.apache.camel:camel-core-osgi:2.16.1'
-    pluginLibsCompile 'org.apache.camel:camel-spark-rest:2.16.1'
-
-
-    pluginLibsCompile 'org.osgi:org.osgi.core:5.0.0'
-    pluginLibsCompile 'biz.aQute.bnd:biz.aQute.bndlib:3.0.0'
-}
-
-task install {
-    doLast {
-        // Install logic for this plugin
-    }
-}
-
-task uninstall {
-    doLast {
-        // uninstall logic for this plugin
-    }
-=======
     pluginLibsCompile 'org.osgi:org.osgi.core:5.0.0'
     pluginLibsCompile 'biz.aQute.bnd:biz.aQute.bndlib:3.0.0'
 
@@ -50,5 +28,4 @@ task uninstall {
     pluginLibsCompile 'org.apache.camel:camel-spark-rest:2.16.1'
 
     pluginLibsCompile 'org.apache.camel:camel-jackson:2.18.1'
->>>>>>> 9a3df619211611d03a839cd7175955d72857f8a5
 }

@@ -1586,21 +1586,6 @@ under the License.
     <entity entity-name="Affiliate"
             package-name="org.apache.ofbiz.party.party"
             title="Affiliate Party">
-<<<<<<< HEAD
-      <field name="partyId" type="id"></field>
-      <field name="affiliateName" type="name"></field>
-      <field name="affiliateDescription" type="description"></field>
-      <field name="yearEstablished" type="very-short"></field>
-      <field name="siteType" type="comment"></field>
-      <field name="sitePageViews" type="comment"></field>
-      <field name="siteVisitors" type="comment"></field>
-      <field name="dateTimeCreated" type="date-time"></field>
-      <field name="dateTimeApproved" type="date-time"></field>
-      <prim-key field="partyId"/>
-      <relation type="one" fk-name="AFFILIATE_PARTY" rel-entity-name="Person">
-        <key-map field-name="partyId"/>
-      </relation>
-=======
         <field name="partyId" type="id"></field>
         <field name="affiliateName" type="name"></field>
         <field name="affiliateDescription" type="description"></field>
@@ -1628,7 +1613,6 @@ under the License.
         <field name="multiLevelAffiliation" type="indicator"></field>
         <field name="codeCookieDuration" type="very-short"></field>
         <prim-key field="settingsType"/>
->>>>>>> 9a3df619211611d03a839cd7175955d72857f8a5
     </entity>
     <entity entity-name="Party"
             package-name="org.apache.ofbiz.party.party"

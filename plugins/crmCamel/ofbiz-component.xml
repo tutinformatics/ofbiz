@@ -31,16 +31,11 @@ under the License.
     <entity-resource type="data" reader-name="demo" loader="main" location="data/PipelineData.xml"/>
     <entity-resource type="data" reader-name="demo" loader="main" location="data/OpportunityData.xml"/>
 
-<<<<<<< HEAD:plugins/aff_marketing/ofbiz-component.xml
-    <container name="camel-container" loaders="main,rmi" class="ee.taltech.marketing.affiliate.connector.camel.CamelContainer">
-        <!--<property name="dispatcher-factory" value="org.apache.ofbiz.service.GenericDispatcherFactory"/>-->
-=======
     <!-- service resources: model(s), eca(s) and group definitions -->
     <!--
     <service-resource type="eca" loader="main" location="servicedef/secas.xml"/>
     <service-resource type="group" loader="main" location="servicedef/groups.xml"/>
     -->
->>>>>>> 9a3df619211611d03a839cd7175955d72857f8a5:plugins/crmCamel/ofbiz-component.xml
 
     <test-suite loader="main" location="testdef/CrmTests.xml"/>
 
