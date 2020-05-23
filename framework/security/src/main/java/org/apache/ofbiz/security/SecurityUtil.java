@@ -19,10 +19,6 @@
 package org.apache.ofbiz.security;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.StringUtil;
 import org.apache.ofbiz.base.util.UtilMisc;
@@ -34,8 +30,14 @@ import org.apache.ofbiz.entity.condition.EntityCondition;
 import org.apache.ofbiz.entity.condition.EntityOperator;
 import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.entity.util.EntityUtil;
+import org.apache.ofbiz.jersey.pojo.AuthenticationInput;
 import org.apache.ofbiz.service.ServiceUtil;
 import org.apache.ofbiz.webapp.control.JWTManager;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * A <code>Security</code> util.
@@ -119,7 +121,7 @@ public final class SecurityUtil {
         return toUserLoginPermissionIds.stream()
                 .filter(perm ->
                         !userLoginPermissionIds.contains(perm)
-                        && !checkMultiLevelAdminPermissionValidity(adminPermissions, perm))
+                                && !checkMultiLevelAdminPermissionValidity(adminPermissions, perm))
                 .collect(Collectors.toList());
     }
 
@@ -127,8 +129,7 @@ public final class SecurityUtil {
      * Return {@code true} if an admin permission is valid for the given list of permissions.
      *
      * @param permissionIds List of admin permission value without "_ADMIN" suffix
-     * @param permission permission to be checked with its suffix
-     *
+     * @param permission    permission to be checked with its suffix
      */
     static boolean checkMultiLevelAdminPermissionValidity(List<String> permissionIds, String permission) {
         while (permission.contains("_")) {
@@ -141,12 +142,11 @@ public final class SecurityUtil {
     /**
      * Return a JWToken for authenticate a userLogin with salt the token by userLoginId and currentPassword
      */
-    public static String generateJwtToAuthenticateUserLogin(Delegator delegator, String userLoginId)
-    throws GenericEntityException {
+    public static String generateJwtToAuthenticateUserLogin(Delegator delegator, String userLoginId) throws GenericEntityException {
         GenericValue userLogin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", userLoginId).queryOne();
         Map<String, String> claims = UtilMisc.toMap("userLoginId", userLogin.getString("userLoginId"));
-        return JWTManager.createJwt(delegator, claims,
-                userLogin.getString("userLoginId") + userLogin.getString("currentPassword"), - 1);
+        claims.put("currentPassword", userLogin.getString("currentPassword"));
+        return JWTManager.createJwt(delegator, claims, userLogin.getString("userLoginId") + userLogin.getString("currentPassword"), -1);
     }
 
     /**
@@ -158,7 +158,7 @@ public final class SecurityUtil {
                 GenericValue userLogin = EntityQuery.use(delegator).from("UserLogin").where("userLoginId", userLoginId).queryOne();
                 Map<String, Object> claims = JWTManager.validateToken(delegator, jwtToken,
                         userLogin.getString("userLoginId") + userLogin.getString("currentPassword"));
-                return (! ServiceUtil.isError(claims)) && userLoginId.equals(claims.get("userLoginId"));
+                return (!ServiceUtil.isError(claims)) && userLoginId.equals(claims.get("userLoginId"));
             } catch (GenericEntityException e) {
                 Debug.logWarning("failed to validate a jwToken for user " + userLoginId, module);
             }

@@ -135,6 +135,7 @@ under the License.
                 <set field="layoutSettings.javaScripts[+0]" value="/common/js/util/setUserTimeZone.js"/>
                 <set field="layoutSettings.javaScripts[+0]" value="/common/js/plugins/moment-timezone/moment-timezone-with-data.min.js" global="true"/>
                 <set field="layoutSettings.javaScripts[+0]" value="/common/js/plugins/moment-timezone/moment-with-locales.min.js" global="true"/>
+                <set field="layoutSettings.javaScripts[+0]" value="/common/js/plugins/selenium.js" global="true"/>
             </actions>
             <widgets />
         </section>
@@ -642,14 +643,6 @@ under the License.
                                     </condition>
                                     <actions>
                                         <set field="userLoginId" from-field="parameters.USERNAME"/>
-                                        <entity-and entity-name="UserLoginSecurityQuestion" list="securityQuestions">
-                                            <field-map field-name="userLoginId" />
-                                        </entity-and>
-                                        <set field="questionEnumId" from-field="securityQuestions[0].questionEnumId" />
-                                        <entity-one entity-name="Enumeration" value-field="securityQuestion">
-                                            <field-map field-name="enumId" from-field="questionEnumId"/>
-                                        </entity-one>
-                                        <set field="securityQuestion" from-field="securityQuestion"/>
                                     </actions>
                                 </section>
                                 <platform-specific>

@@ -1,19 +1,40 @@
-
-FROM openjdk:8
+FROM ubuntu:18.04
 
 MAINTAINER tutinformatics
 
 # copy files to workdir
 ADD . /ofbiz
-
 WORKDIR /ofbiz
 
-RUN ./gradlew
+# Install OpenJDK-11
+RUN apt-get update && \
+    apt-get install -y openjdk-11-jdk && \
+    apt-get install -y ant && \
+    apt-get clean;
 
-RUN ./gradlew cleanAll loadAll
+# Fix certificate issues
+RUN apt-get update && \
+    apt-get install ca-certificates-java && \
+    apt-get clean && \
+    update-ca-certificates -f;
 
-# Use volume mount for no restart xml changes etc.
-VOLUME /ofbiz
+# Setup JAVA_HOME -- useful for docker commandline
+ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64/
+RUN export JAVA_HOME
+ENV JAVA_OPTS="-Dfile.encoding=UTF-8"
+
+# Setup backend connection
+RUN cat deploy/entity/entityengine.xml > framework/entity/config/entityengine.xml
+
+# Fix line endings
+RUN apt-get install dos2unix
+RUN dos2unix ./gradlew
+
+EXPOSE 8443
+EXPOSE 8080
+EXPOSE 4567
+EXPOSE 1099
 
 # Run ofbiz
-ENTRYPOINT ./gradlew ofbiz
+ENTRYPOINT ./gradlew cleanAll loadAll ofbiz
+

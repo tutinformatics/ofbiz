@@ -1,3 +1,60 @@
+Project frontend: https://github.com/tutinformatics/ofbiz-ui && https://github.com/MartenJurg/accounting_frontend
+
+== More docs
+
+link:docs/authentication.md[Authentication]
+
+link:docs/deploy-to-heroku.md[Deploy]
+
+link:docs/generic-rest-endpoint.md[REST]
+
+link:docs/graphQL-endpoint.md[GraphQL]
+
+link:docs/how-to-develop-docker.md[Docker]
+
+link:docs/small-rest-example.md[REST example]
+
+"Big data" docs: https://docs.google.com/document/d/1CkJA3Ad8scLUhbjYIMh656hjW-IeRNdmd1FUV7l1_Yc/edit?usp=sharing (Palju kasulikku infot)
+
+== Lokaalne jooksutamine
+
+[source,bash]
+----
+./deploy.sh
+----
+
+=== Masinas
+
+Minge kausta: framework/entity/config/entityengine.xml
+Ning seejärel muutke järgnevad stringid (ärge seda muudatus üles pushige)
+
+image::replace.png[]
+
+Jooksutage järgnevaid käske
+
+[source,bash]
+----
+./deploy-dev.sh
+# Or
+docker-compose -f docker-compose-databases-dev.yml up -d
+./gradlew cleanAll loadAll ofbiz
+----
+
+Windowsi puhul kasutada gradlew.bat
+
+_Note that loadAll requires databases to be running!_
+
+Kui muudate midagi ning soovite uuesti jooksutada ofbiz’i, siis tehke:
+Ctrl + C terminalis + Y
+
+See hot reload’ib ~10 sekundiga uue koodi
+
+[source,bash]
+----
+docker-compose -f docker-compose-databases-dev.yml up -d
+./gradlew ofbiz
+----
+
 ////
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file

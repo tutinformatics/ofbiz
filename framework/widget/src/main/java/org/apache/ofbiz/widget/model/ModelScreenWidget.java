@@ -18,24 +18,7 @@
  *******************************************************************************/
 package org.apache.ofbiz.widget.model;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Set;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.apache.ofbiz.base.util.Debug;
-import org.apache.ofbiz.base.util.GeneralException;
-import org.apache.ofbiz.base.util.UtilCodec;
-import org.apache.ofbiz.base.util.UtilGenerics;
-import org.apache.ofbiz.base.util.UtilXml;
+import org.apache.ofbiz.base.util.*;
 import org.apache.ofbiz.base.util.collections.MapStack;
 import org.apache.ofbiz.base.util.string.FlexibleStringExpander;
 import org.apache.ofbiz.entity.Delegator;
@@ -43,21 +26,15 @@ import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.widget.WidgetFactory;
-import org.apache.ofbiz.widget.model.CommonWidgetModels.AutoEntityParameters;
-import org.apache.ofbiz.widget.model.CommonWidgetModels.AutoServiceParameters;
-import org.apache.ofbiz.widget.model.CommonWidgetModels.Image;
-import org.apache.ofbiz.widget.model.CommonWidgetModels.Link;
-import org.apache.ofbiz.widget.model.CommonWidgetModels.Parameter;
+import org.apache.ofbiz.widget.model.CommonWidgetModels.*;
 import org.apache.ofbiz.widget.portal.PortalPageWorker;
-import org.apache.ofbiz.widget.renderer.FormRenderer;
-import org.apache.ofbiz.widget.renderer.FormStringRenderer;
-import org.apache.ofbiz.widget.renderer.MenuStringRenderer;
-import org.apache.ofbiz.widget.renderer.ScreenRenderer;
-import org.apache.ofbiz.widget.renderer.ScreenStringRenderer;
-import org.apache.ofbiz.widget.renderer.TreeStringRenderer;
-import org.apache.ofbiz.widget.renderer.VisualTheme;
+import org.apache.ofbiz.widget.renderer.*;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.util.*;
 
 
 /**
@@ -1035,6 +1012,71 @@ public abstract class ModelScreenWidget extends ModelWidget {
             return styleExdr;
         }
     }
+    public static final class VueJs extends ModelScreenWidget {
+        public static final String TAG_NAME = "vuejs";
+        private final FlexibleStringExpander componentNameExdr;
+        private final List<Parameter> parameterList;
+
+        public VueJs(ModelScreen modelScreen, Element vueJsElement) {
+            super(modelScreen, vueJsElement);
+
+            this.componentNameExdr = FlexibleStringExpander.getInstance(vueJsElement.getAttribute("component-name"));
+            List<? extends Element> parameterElementList = UtilXml.childElementList(vueJsElement, "parameter");
+            if (parameterElementList.isEmpty() ) {
+                this.parameterList = Collections.emptyList();
+            } else {
+                List<Parameter> parameterList = new ArrayList<>(parameterElementList.size());
+                for (Element parameterElement : parameterElementList) {
+                    parameterList.add(new Parameter(parameterElement));
+                }
+                this.parameterList = Collections.unmodifiableList(parameterList);
+            }
+
+        }
+
+        @Override
+        public void renderWidgetString(Appendable writer, Map<String, Object> context, ScreenStringRenderer screenStringRenderer) {
+            try {
+                screenStringRenderer.renderVueJs(writer, context, this);
+            } catch (IOException e) {
+                String errMsg = "Error rendering vue-js in screen named [" + getModelScreen().getName() + "]: " + e.toString();
+                Debug.logError(e, errMsg, module);
+                throw new RuntimeException(errMsg);
+            }
+        }
+
+        public Map<String, Object> getParameterMap(Map<String, Object> context) {
+            Map<String, Object> fullParameterMap = new HashMap<>();
+            for (Parameter parameter : this.parameterList) {
+                Object retVal = null;
+                if (parameter.value != null) {
+                    retVal = parameter.value.expandString(context);
+                } else if (parameter.fromField != null && parameter.fromField.get(context) != null) {
+                    retVal = parameter.fromField.get(context);
+                } else {
+                    retVal = context.get(parameter.name);
+                }
+                fullParameterMap.put(parameter.getName(), retVal);
+            }
+            return fullParameterMap;
+        }
+
+        public String getComponentName(Map<String, Object> context) {
+            return this.componentNameExdr.expandString(context);
+        }
+
+        public FlexibleStringExpander getComponentNameExdr() {
+            return componentNameExdr;
+        }
+        public List<Parameter> getParameterList() {
+            return parameterList;
+        }
+
+        @Override
+        public void accept(ModelWidgetVisitor visitor) throws Exception {
+            visitor.visit(this);
+        }
+    }
 
     public static final class Form extends ModelScreenWidget {
         public static final String TAG_NAME = "include-form";
@@ -1082,8 +1124,9 @@ public abstract class ModelScreenWidget extends ModelWidget {
         public ModelForm getModelForm(Map<String, Object> context) throws IOException, SAXException, ParserConfigurationException {
             String name = this.getName(context);
             String location = this.getLocation(context);
+            VisualTheme visualTheme = (VisualTheme) context.get("visualTheme");
             return FormFactory.getFormFromLocation(location, name, getModelScreen().getDelegator(context).getModelReader(),
-                    getModelScreen().getDispatcher(context).getDispatchContext());
+                    visualTheme, getModelScreen().getDispatcher(context).getDispatchContext());
         }
 
         public String getName(Map<String, Object> context) {
@@ -1169,7 +1212,9 @@ public abstract class ModelScreenWidget extends ModelWidget {
             String name = this.getName(context);
             String location = this.getLocation(context);
             try {
-                modelForm = GridFactory.getGridFromLocation(location, name, getModelScreen().getDelegator(context).getModelReader(), getModelScreen().getDispatcher(context).getDispatchContext());
+                VisualTheme visualTheme = (VisualTheme) context.get("visualTheme");
+                modelForm = GridFactory.getGridFromLocation(location, name, getModelScreen().getDelegator(context).getModelReader(),
+                        visualTheme, getModelScreen().getDispatcher(context).getDispatchContext());
             } catch (RuntimeException e) {
                 throw e;
             } catch (Exception e) {
@@ -1871,6 +1916,10 @@ public abstract class ModelScreenWidget extends ModelWidget {
     public static final class PortalPage extends ModelScreenWidget {
         public static final String TAG_NAME = "include-portal-page";
         private final FlexibleStringExpander idExdr;
+        // Begin modification FrontJs POC, add portletId and portletSeqId to be able to do a include-portal which will do a include-portlet
+        private final FlexibleStringExpander portletId;
+        private final FlexibleStringExpander portletSeqId;
+        // End modification FrontJs POC, add portletId and portletSeqId to be able to do a include-portal which will do a include-portlet
         private final FlexibleStringExpander confModeExdr;
         private final Boolean usePrivate;
 
@@ -1879,6 +1928,15 @@ public abstract class ModelScreenWidget extends ModelWidget {
             this.idExdr = FlexibleStringExpander.getInstance(portalPageElement.getAttribute("id"));
             this.confModeExdr = FlexibleStringExpander.getInstance(portalPageElement.getAttribute("conf-mode"));
             this.usePrivate = !("false".equals(portalPageElement.getAttribute("use-private")));
+
+            // Begin modification FrontJs POC, add portletId and portletSeqId to be able to do a include-portal which will do a include-portlet
+            if (! portalPageElement.getAttribute("portletId").isEmpty()) {
+                this.portletId = FlexibleStringExpander.getInstance(portalPageElement.getAttribute("portletId"));
+            } else this.portletId = null;
+            if (! portalPageElement.getAttribute("portletSeqId").isEmpty()) {
+                this.portletSeqId = FlexibleStringExpander.getInstance(portalPageElement.getAttribute("portletSeqId"));
+            } else this.portletSeqId = null;
+            // End modification FrontJs POC, add portletId and portletSeqId to be able to do a include-portal which will do a include-portlet
         }
 
         private GenericValue getPortalPageValue(Map<String, Object> context) {
@@ -1916,6 +1974,7 @@ public abstract class ModelScreenWidget extends ModelWidget {
                 List<GenericValue> portletAttributes = null;
                 GenericValue portalPage = getPortalPageValue(context);
                 String actualPortalPageId = portalPage.getString("portalPageId");
+if (this.portletId == null) { // modification FrontJs POC, add portletId and portletSeqId to be able to do a include-portal which will do a include-portlet
                 portalPageColumns = EntityQuery.use(delegator)
                                                .from("PortalPageColumn")
                                                .where("portalPageId", actualPortalPageId)
@@ -1976,10 +2035,16 @@ public abstract class ModelScreenWidget extends ModelWidget {
                         context.put("nextColumnSeqId", nextColumnSeqId);
 
                         // Get portlet's attributes
+// modification FrontJs POC, to read DefaultValue attributes too
+                        portletAttributes = getPortletAttributes(delegator, portletValue.getString("portalPageId"),
+                                                                            portletValue.getString("portalPortletId"),
+                                                                            portletValue.getString("portletSeqId"));
+/*
                         portletAttributes = EntityQuery.use(delegator)
                                                        .from("PortletAttribute")
                                                        .where("portalPageId", portletValue.get("portalPageId"), "portalPortletId", portletValue.get("portalPortletId"), "portletSeqId", portletValue.get("portletSeqId"))
                                                        .queryList();
+*/
 
                         ListIterator <GenericValue>attributesIterator = portletAttributes.listIterator();
                         while (attributesIterator.hasNext()) {
@@ -2010,6 +2075,67 @@ public abstract class ModelScreenWidget extends ModelWidget {
                 }
                 // Renders the portalPage footer
                 screenStringRenderer.renderPortalPageEnd(writer, context, this);
+// Begin modification FrontJs POC, add portletId and portletSeqId to be able to do a include-portal which will do a include-portlet
+} else {
+    String portalPageId = portalPage.getString("portalPageId");
+    String portalPortletId = this.portletId.expandString(context);
+    String portletSeqId = this.portletSeqId.expandString(context);
+    GenericValue portalPagePortletValue = EntityQuery.use(delegator)
+            .from("PortalPagePortletView")
+            .where("portalPageId"   , portalPageId,
+                   "portalPortletId", portalPortletId,
+                   "portletSeqId",    portletSeqId)
+            .cache().queryOne();
+    if (portalPagePortletValue == null) {
+        GenericValue portalPortletValue = EntityQuery.use(delegator)
+                .from("PortalPortlet")
+                .where("portalPortletId", portalPortletId)
+                .cache().queryOne();
+        if (portalPortletValue == null) {
+            String errMsg = "Error rendering PortalPortlet with portletId [" + portalPortletId + "]: inexisting portlet ";
+            throw new RuntimeException(errMsg);
+        }
+        portalPagePortletValue = delegator.makeValue("PortalPagePortletView",
+                "portalPageId"   , portalPageId,
+                "portalPortletId", portalPortletId,
+                "portletSeqId",    portletSeqId,
+                "portletName",         portalPortletValue.get("portletName"),
+                "screenName",          portalPortletValue.get("screenName"),
+                "screenLocation",      portalPortletValue.get("screenLocation"),
+                "editFormName",        portalPortletValue.get("editFormName"),
+                "editFormLocation",    portalPortletValue.get("editFormLocation"),
+                "securityServiceName", portalPortletValue.get("securityServiceName"),
+                "securityMainAction",  portalPortletValue.get("securityMainAction")
+                );
+    }
+    // Get portlet's attributes
+    portletAttributes = getPortletAttributes(delegator, portalPageId, portalPortletId, portletSeqId);
+    boolean putAttributes = false;
+    ListIterator <GenericValue>attributesIterator = null;
+    if (portletAttributes.size()>0) {
+        putAttributes = true;
+        Debug.logInfo("portletAttributes="+portletAttributes, module);
+        attributesIterator = portletAttributes.listIterator();
+        while (attributesIterator.hasNext()) {
+            GenericValue attribute = attributesIterator.next();
+            context.put(attribute.getString("attrName"), attribute.getString("attrValue"));
+        }
+    }
+
+    // Renders the portalPagePortlet
+    screenStringRenderer.renderPortalPagePortletBegin(writer, context, this, portalPagePortletValue);
+    screenStringRenderer.renderPortalPagePortletBody(writer, context, this, portalPagePortletValue);
+    screenStringRenderer.renderPortalPagePortletEnd(writer, context, this, portalPagePortletValue);
+
+    if (putAttributes) {
+        // Remove the portlet's attributes so that these are not available for other portlets
+        while (attributesIterator.hasPrevious()) {
+            GenericValue attribute = attributesIterator.previous();
+            context.remove(attribute.getString("attrName"));
+        }
+    }
+}
+//End modification FrontJs POC, add portletId and portletSeqId to be able to do a include-portal which will do a include-portlet
             } catch (IOException | GenericEntityException e) {
                 String errMsg = "Error rendering PortalPage with portalPageId [" + getId(context) + "]: " + e.toString();
                 Debug.logError(e, errMsg, module);
@@ -2051,6 +2177,41 @@ public abstract class ModelScreenWidget extends ModelWidget {
         public FlexibleStringExpander getConfModeExdr() {
             return confModeExdr;
         }
+
+        /**
+         * read portletAttribute, first all for default values (portalPage = "_NA_") and after for the portalPage.
+         * <br/>Maybe in future it will be necessary to read the user PortalPage too.
+         * @param delegator
+         * @param portalPageId
+         * @param portalPortletId
+         * @param portletSeqId
+         * @return
+         * @throws GenericEntityException
+         */
+        private static List<GenericValue> getPortletAttributes (Delegator delegator, String portalPageId,
+                                   String portalPortletId, String portletSeqId) throws GenericEntityException {
+
+           // read attributes as default values
+           List<GenericValue> portletAttributes = EntityQuery.use(delegator)
+                   .from("PortletAttribute")
+                   .where("portalPageId", "_NA_",
+                           "portalPortletId", portalPortletId,
+                           "portletSeqId", "00000")
+                   .queryList();
+
+           if (UtilValidate.isNotEmpty(portletSeqId)) {
+               List<GenericValue> portalPortletAttributes = EntityQuery.use(delegator)
+                       .from("PortletAttribute")
+                       .where("portalPageId", portalPageId,
+                               "portalPortletId", portalPortletId,
+                               "portletSeqId", portletSeqId)
+                       .queryList();
+               if (UtilValidate.isNotEmpty(portalPortletAttributes)) {
+                   portletAttributes.addAll(portalPortletAttributes);
+               }
+           }
+           return portletAttributes;
+       }
     }
 
 }

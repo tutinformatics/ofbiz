@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://ofbiz.apache.org/Widget-Form" xsi:schemaLocation="http://ofbiz.apache.org/Widget-Form http://ofbiz.apache.org/dtds/widget-form.xsd">
+
+
+    <form name="AllWorkEfforts" type="list" list-name="listWorkEfforts" paginate-target="AllWorkEfforts" target="http://localhost:4567/api/workefforts" default-entity-name="ManufacturingWarehouse" separate-columns="true">
+
+        <actions>
+
+        </actions>
+
+
+
+        <!--
+        -->
+        <field name="workEffortId" title="${uiLabelMap.workEffortId}"><display/></field>
+        <field name="workEffortTypeId" title="${uiLabelMap.workEffortTypeId}"><display/></field>
+        <field name="revisionNumber" title="${uiLabelMap.revisionNumber}"><display/></field>
+        <field name="createdStamp" title="${uiLabelMap.createdStamp}"><display/></field>
+        <field name="quantityToProduce" title="${uiLabelMap.quantityToProduce}"><display/></field>
+        <field name="createdTxStamp" title="${uiLabelMap.createdTxStamp}"><display/></field>
+        <field name="lastUpdatedTxStamp" title="${uiLabelMap.lastUpdatedTxStamp}"><display/></field>
+        <field name="currentStatusId" title="${uiLabelMap.currentStatusId}"><display/></field>
+        <field name="description" title="${uiLabelMap.description}"><display/></field>
+        <field name="workEffortName" title="${uiLabelMap.workEffortName}"><display/></field>
+        <field name="lastUpdatedStamp" title="${uiLabelMap.lastUpdatedStamp}"><display/></field>
+        <field name="estimatedMilliSeconds" title="${uiLabelMap.estimatedMilliSeconds}"><display/></field>
+        <field name="estimatedSetupMillis" title="${uiLabelMap.estimatedSetupMillis}"><display/></field>
+
+
+    </form>
+
+</forms>

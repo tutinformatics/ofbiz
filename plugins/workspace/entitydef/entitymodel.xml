@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
+
+    <title>Workspace Entity</title>
+    <description>None</description>
+    <version>1.0</version>
+
+    <entity entity-name="Workspace" package-name="org.apache.ofbiz.workspace" title="Workspace Entity">
+        <field name="workspaceId" type="id"><description>primary sequenced ID</description></field>
+        <field name="title" type="name"></field>
+        <field name="url" type="name"></field>
+        <field name="userId" type="id"></field>
+        <prim-key field="workspaceId"/>
+    </entity>
+
+</entitymodel>
