@@ -24,7 +24,7 @@ public class MarketdataService {
     // Entity PartyGroup with its relevant fields
     public static final String PARTY_GROUP_ENTITY = "PartyGroup";
 
-    public static final String PARTY_ID = "PartyId";
+    public static final String PARTY_ID = "partyId";
     public static final String GROUP_NAME = "groupName";
     public static final String ANNUAL_REVENUE = "annualRevenue";
     public static final String NUM_EMPLOYEES = "numEmployees";
@@ -49,7 +49,7 @@ public class MarketdataService {
         Delegator delegator = dctx.getDelegator();
 
 //        List<GenericValue> companies = EntityQuery.use(delegator).from(PARTY_GROUP_ENTITY).queryList();
-        GenericValue company = EntityQuery.use(delegator).from(PARTY_GROUP_ENTITY).queryOne();
+        GenericValue company = EntityQuery.use(delegator).from(PARTY_GROUP_ENTITY).where(PARTY_ID, "1234567").queryOne();
 
         List<MarketdataDto> companyList = new ArrayList<>();
 
@@ -57,12 +57,14 @@ public class MarketdataService {
 //            companyList.add(getMarketdataCompany(dctx, new HashMap<>(Map.of(PRODUCT_CATEGORY_ID, productPromo.get(PROMO_TEXT)))).get(DISCOUNT));
 //            MarketdataDto marketdataDto= new MarketdataDto(companies.get(PARTY_ID), companies.get(GROUP_NAME));
 //        }
+        System.out.println("HEY!");
+        System.out.println(company.get(PARTY_ID));
 
         companyList.add(new MarketdataDto(
-                (String) company.get(PARTY_ID),
+                company.get(PARTY_ID).toString(),
                 (String) company.get(GROUP_NAME),
-                (String) company.get(ANNUAL_REVENUE),
-                (String) company.get(NUM_EMPLOYEES))
+                company.get(ANNUAL_REVENUE).toString(),
+                company.get(NUM_EMPLOYEES).toString())
         );
 
         return new HashMap<>(Map.of("companies", companyList));
