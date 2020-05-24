@@ -9,10 +9,9 @@ import java.util.List;
 @Data
 //@AllArgsConstructor
 public class MarketdataDto {
-    String partyId;
+    String registryCode;
 
     String companyName;
-//    String registryCode;
 //    String companyStatus;
 //    String companyAddress; // List?
 //    String companyBusinessModel;
@@ -23,8 +22,8 @@ public class MarketdataDto {
 //    List<PersonDto> persons; // List?
 
 
-    public MarketdataDto(String partyId, String companyName, BigDecimal annualRevenue, Long employeeCount) {
-        this.partyId = partyId;
+    public MarketdataDto(String registryCode, String companyName, BigDecimal annualRevenue, Long employeeCount) {
+        this.registryCode = registryCode;
         this.companyName = companyName;
         this.annualRevenue = annualRevenue;
         this.employeeCount = employeeCount;

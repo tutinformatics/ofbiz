@@ -26,7 +26,7 @@ public class MarketdataService {
     // Entity PartyGroup with its relevant fields
     public static final String PARTY_GROUP_ENTITY = "PartyGroup";
 
-    public static final String PARTY_ID = "partyId";
+    public static final String PARTY_ID = "partyId"; // This is registryCode in our case
     public static final String GROUP_NAME = "groupName";
     public static final String ANNUAL_REVENUE = "annualRevenue";
     public static final String NUM_EMPLOYEES = "numEmployees";
@@ -34,19 +34,19 @@ public class MarketdataService {
     private static Pattern registryCodeRegex = Pattern.compile("\\d+");
 
 
-    public MarketdataService() throws GenericEntityException {
-        Delegator delegator = DelegatorFactory.getDelegator("default");
+//    public MarketdataService() throws GenericEntityException {
+//        Delegator delegator = DelegatorFactory.getDelegator("default");
+//
+//        String id = delegator.getNextSeqId(PARTY_GROUP_ENTITY);
+//        GenericValue demoCompany = delegator.makeValue(PARTY_GROUP_ENTITY, UtilMisc.toMap(
+//                PARTY_ID, id,
+//                GROUP_NAME, "DemoEttevõtte",
+//                ANNUAL_REVENUE, "100 000",
+//                NUM_EMPLOYEES, "20")
+//        );
+//
+//        delegator.create(demoCompany);
 
-        String id = delegator.getNextSeqId(PARTY_GROUP_ENTITY);
-        GenericValue demoCompany = delegator.makeValue(PARTY_GROUP_ENTITY, UtilMisc.toMap(
-                PARTY_ID, id,
-                GROUP_NAME, "DemoEttevõtte",
-                ANNUAL_REVENUE, "100 000",
-                NUM_EMPLOYEES, "20")
-        );
-
-        delegator.create(demoCompany);
-    }
 
     public static Map<String, List<MarketdataDto>> getMarketdataCompanies(DispatchContext dctx, Map<String, ?> context)
             throws GenericEntityException {
