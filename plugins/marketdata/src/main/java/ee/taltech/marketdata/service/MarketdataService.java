@@ -13,9 +13,11 @@ import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.ServiceUtil;
 
+import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class MarketdataService {
 
@@ -28,6 +30,9 @@ public class MarketdataService {
     public static final String GROUP_NAME = "groupName";
     public static final String ANNUAL_REVENUE = "annualRevenue";
     public static final String NUM_EMPLOYEES = "numEmployees";
+
+    private static Pattern registryCodeRegex = Pattern.compile("\\d+");
+
 
     public MarketdataService() throws GenericEntityException {
         Delegator delegator = DelegatorFactory.getDelegator("default");
@@ -48,36 +53,47 @@ public class MarketdataService {
 
         Delegator delegator = dctx.getDelegator();
 
-//        List<GenericValue> companies = EntityQuery.use(delegator).from(PARTY_GROUP_ENTITY).queryList();
-        GenericValue company = EntityQuery.use(delegator).from(PARTY_GROUP_ENTITY).where(PARTY_ID, "1234567").queryOne();
+        List<GenericValue> companies = EntityQuery.use(delegator).from(PARTY_GROUP_ENTITY).queryList();
+//        GenericValue company = EntityQuery.use(delegator).from(PARTY_GROUP_ENTITY).where(PARTY_ID, "1234567").queryOne();
 
         List<MarketdataDto> companyList = new ArrayList<>();
 
-//        for (GenericValue company : companies) {
+        for (GenericValue company : companies) {
+//            if (company.get(PARTY_ID).getClass().equals(BigDecimal.class)) {
+//            String groupName = null;
+//            String id = company.get(PARTY_ID).toString();
+//            if (company.get(GROUP_NAME) != null) {
+//                groupName = company.get(GROUP_NAME).toString();
+//            }
+                if (registryCodeRegex.matcher((String) company.get(PARTY_ID)).matches()) {
+                    companyList.add(new MarketdataDto(
+                            (String) company.get(PARTY_ID),
+                            (String) company.get(GROUP_NAME),
+                            (BigDecimal) company.get(ANNUAL_REVENUE),
+                            (Long) company.get(NUM_EMPLOYEES))
+                    );
+                }
+//            }
+
 //            companyList.add(getMarketdataCompany(dctx, new HashMap<>(Map.of(PRODUCT_CATEGORY_ID, productPromo.get(PROMO_TEXT)))).get(DISCOUNT));
 //            MarketdataDto marketdataDto= new MarketdataDto(companies.get(PARTY_ID), companies.get(GROUP_NAME));
-//        }
-        System.out.println("HEY!");
-        System.out.println(company.get(PARTY_ID));
+        }
+//        System.out.println("HEY!");
+//        System.out.println(company.get(PARTY_ID));
 
-        companyList.add(new MarketdataDto(
-                company.get(PARTY_ID).toString(),
-                (String) company.get(GROUP_NAME),
-                company.get(ANNUAL_REVENUE).toString(),
-                company.get(NUM_EMPLOYEES).toString())
-        );
+
 
         return new HashMap<>(Map.of("companies", companyList));
     }
 
 //    public static Map<String, MarketdataDto> getMarketdataCompany(DispatchContext dctx, Map<String, ?> context)
 //            throws GenericEntityException {
-
+//
 //        Delegator delegator = dctx.getDelegator();
 //
 //        GenericValue company = EntityQuery.use(delegator).from(PARTY_GROUP_ENTITY)
 //
-//        return new HashMap<>(Map.of("company", new MarketdataDto()))
+//        return new HashMap<>(Map.of("company", new MarketdataDto()));
 //    }
 
     public static Map<String, Object> createMarketdataEntry(DispatchContext dctx, Map<String, ? extends Object> context) {

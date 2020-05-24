@@ -3,6 +3,7 @@ package ee.taltech.marketdata.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -16,13 +17,13 @@ public class MarketdataDto {
 //    String companyAddress; // List?
 //    String companyBusinessModel;
 //    String companySector;
-    String annualRevenue;
-    String employeeCount;
+    BigDecimal annualRevenue;
+    Long employeeCount;
 
 //    List<PersonDto> persons; // List?
 
 
-    public MarketdataDto(String partyId, String companyName, String annualRevenue, String employeeCount) {
+    public MarketdataDto(String partyId, String companyName, BigDecimal annualRevenue, Long employeeCount) {
         this.partyId = partyId;
         this.companyName = companyName;
         this.annualRevenue = annualRevenue;
