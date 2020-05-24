@@ -19,10 +19,18 @@ under the License.
 -->
 
 <services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+          xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
     <description>Marketdata Services</description>
     <vendor></vendor>
     <version>1.0</version>
+
+    <service name="getMarketdataCompanies"
+             engine="java"
+             location="ee.taltech.marketdata.service.MarketdataService"
+             invoke="getMarketdataCompanies">
+        <description>Get list of marketdata companies.</description>
+        <attribute name="companies" type="java.util.List" mode="OUT"/>
+    </service>
 
     <service name="createOfbizDemo" default-entity-name="OfbizDemo" engine="entity-auto" invoke="create" auth="true">
         <description>Create an Ofbiz Demo record</description>
@@ -40,7 +48,8 @@ under the License.
     </service>
 
     <service name="createOfbizDemoByGroovyService" default-entity-name="OfbizDemo" engine="groovy"
-             location="component://marketdata/groovyScripts/ofbizdemo/OfbizDemoServices.groovy" invoke="createOfbizDemo" auth="true">
+             location="component://marketdata/groovyScripts/ofbizdemo/OfbizDemoServices.groovy" invoke="createOfbizDemo"
+             auth="true">
         <description>Create an Ofbiz Demo record using a service in Groovy</description>
         <auto-attributes include="pk" mode="OUT" optional="false"/>
         <auto-attributes include="nonpk" mode="IN" optional="false"/>
@@ -48,11 +57,11 @@ under the License.
     </service>
 
     <service name="createMarketdataEntry" default-entity-name="Marketdata" engine="java"
-             location="ee.taltech.marketdata.services.MarketdataService" invoke="createMarketdataEntry" auth="true">
+             location="ee.taltech.marketdata.service.MarketdataService" invoke="createMarketdataEntry" auth="true">
         <description>Add new marketdata entry using a service in Java</description>
         <auto-attributes include="pk" mode="OUT" optional="false"/>
         <auto-attributes include="nonpk" mode="IN" optional="false"/>
         <override name="comments" optional="true"/>
     </service>
-    
+
 </services>

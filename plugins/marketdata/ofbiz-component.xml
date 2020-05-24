@@ -42,13 +42,13 @@ under the License.
     <service-resource type="group" loader="main" location="servicedef/groups.xml"/>
     -->
 
-    <test-suite loader="main" location="testdef/MarketdataTests.xml"/>
+<!--    <test-suite loader="main" location="testdef/MarketdataTests.xml"/>-->
 
     <!-- web applications; will be mounted when using the embedded container -->
-    <webapp name="marketdata"
-        title="Marketdata"
-        server="default-server"
-        location="webapp/marketdata"
-        base-permission="OFBTOOLS,MARKETDATA"
-        mount-point="/marketdata"/>
+<!--    <webapp name="marketdata"-->
+<!--        title="Marketdata"-->
+<!--        server="default-server"-->
+<!--        location="webapp/marketdata"-->
+<!--        base-permission="OFBTOOLS,MARKETDATA"-->
+<!--        mount-point="/marketdata"/>-->
 </ofbiz-component>

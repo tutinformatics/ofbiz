@@ -1,21 +1,82 @@
-package ee.taltech.marketdata.services;
+package ee.taltech.marketdata.service;
 
+import ee.taltech.marketdata.model.MarketdataDto;
+import ee.taltech.marketing.affiliate.model.SimpleDiscountDTO;
 import org.apache.ofbiz.base.util.Debug;
+import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.base.util.UtilProperties;
 import org.apache.ofbiz.entity.Delegator;
+import org.apache.ofbiz.entity.DelegatorFactory;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
+import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.ServiceUtil;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 public class MarketdataService {
 
     public static final String module = MarketdataService.class.getName();
+
+    // Entity PartyGroup with its relevant fields
+    public static final String PARTY_GROUP_ENTITY = "PartyGroup";
+
+    public static final String PARTY_ID = "PartyId";
+    public static final String GROUP_NAME = "groupName";
+    public static final String ANNUAL_REVENUE = "annualRevenue";
+    public static final String NUM_EMPLOYEES = "numEmployees";
+
+    public MarketdataService() throws GenericEntityException {
+        Delegator delegator = DelegatorFactory.getDelegator("default");
+
+        String id = delegator.getNextSeqId(PARTY_GROUP_ENTITY);
+        GenericValue demoCompany = delegator.makeValue(PARTY_GROUP_ENTITY, UtilMisc.toMap(
+                PARTY_ID, id,
+                GROUP_NAME, "DemoEttevõtte",
+                ANNUAL_REVENUE, "100 000",
+                NUM_EMPLOYEES, "20")
+        );
+
+        delegator.create(demoCompany);
+    }
+
+    public static Map<String, List<MarketdataDto>> getMarketdataCompanies(DispatchContext dctx, Map<String, ?> context)
+            throws GenericEntityException {
+
+        Delegator delegator = dctx.getDelegator();
+
+//        List<GenericValue> companies = EntityQuery.use(delegator).from(PARTY_GROUP_ENTITY).queryList();
+        GenericValue company = EntityQuery.use(delegator).from(PARTY_GROUP_ENTITY).queryOne();
+
+        List<MarketdataDto> companyList = new ArrayList<>();
+
+//        for (GenericValue company : companies) {
+//            companyList.add(getMarketdataCompany(dctx, new HashMap<>(Map.of(PRODUCT_CATEGORY_ID, productPromo.get(PROMO_TEXT)))).get(DISCOUNT));
+//            MarketdataDto marketdataDto= new MarketdataDto(companies.get(PARTY_ID), companies.get(GROUP_NAME));
+//        }
+
+        companyList.add(new MarketdataDto(
+                (String) company.get(PARTY_ID),
+                (String) company.get(GROUP_NAME),
+                (String) company.get(ANNUAL_REVENUE),
+                (String) company.get(NUM_EMPLOYEES))
+        );
+
+        return new HashMap<>(Map.of("companies", companyList));
+    }
+
+//    public static Map<String, MarketdataDto> getMarketdataCompany(DispatchContext dctx, Map<String, ?> context)
+//            throws GenericEntityException {
+
+//        Delegator delegator = dctx.getDelegator();
+//
+//        GenericValue company = EntityQuery.use(delegator).from(PARTY_GROUP_ENTITY)
+//
+//        return new HashMap<>(Map.of("company", new MarketdataDto()))
+//    }
 
     public static Map<String, Object> createMarketdataEntry(DispatchContext dctx, Map<String, ? extends Object> context) {
         Map<String, Object> result = ServiceUtil.returnSuccess();

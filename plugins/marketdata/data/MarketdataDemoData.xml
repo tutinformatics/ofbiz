@@ -28,25 +28,35 @@ under the License.
     <OfbizDemo ofbizDemoId="SAMPLE_DEMO_4" ofbizDemoTypeId="EXTERNAL" firstName="Sample First 4"
                lastName="Sample last 4" comments="This is test comment for fourth record."/>
 
-        <MarketdataModel
-                companyId="SAMPLE_DEMO_5"
-                companyName="001 group OÜ"
-                registryCode="12754230"
-                companyStatus="Registrisse kantud"
-                companyAddress="Harju maakond, Tallinn, Haabersti linnaosa, Õismäe tee 78-9"
-                companyBusinessModel="B2B"
-                companySector="Cleantech"
-                employeeCount="43"/>
+    <MarketdataModel
+            companyId="SAMPLE_DEMO_5"
+            companyName="001 group OÜ"
+            registryCode="12754230"
+            companyStatus="Registrisse kantud"
+            companyAddress="Harju maakond, Tallinn, Haabersti linnaosa, Õismäe tee 78-9"
+            companyBusinessModel="B2B"
+            companySector="Cleantech"
+            employeeCount="43"/>
 
-        <MarketdataModel
-                companyId="SAMPLE_DEMO_6"
-                companyName="002 group OÜ"
-                registryCode="12567785"
-                companyStatus="Pole registris"
-                companyAddress="Harju maakond, Tallinn, Kristiine linnaosa, Nõmme 12"
-                companyBusinessModel="B2C"
-                companySector="Business software"
-                employeeCount="12"/>
+
+    <Party partyId="1234567"></Party>
+
+    <PartyGroup
+            partyId="1234567"
+            groupName="JUSS JA JASS"
+            annualRevenue="100000"
+            numEmployees="2104"
+    />
+
+    <MarketdataModel
+            companyId="SAMPLE_DEMO_6"
+            companyName="002 group OÜ"
+            registryCode="12567785"
+            companyStatus="Pole registris"
+            companyAddress="Harju maakond, Tallinn, Kristiine linnaosa, Nõmme 12"
+            companyBusinessModel="B2C"
+            companySector="Business software"
+            employeeCount="12"/>
     <!--   <PartyGroup
             partyId="DemoCustomer"
             groupName="001 group OÜ"
