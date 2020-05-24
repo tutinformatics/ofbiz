@@ -39,14 +39,35 @@ under the License.
             employeeCount="43"/>
 
 
-    <Party partyId="1234567"></Party>
+    <Party partyId="12652512"></Party>
 
+    <!-- MUST USE . NOT , for revenue-->
     <PartyGroup
-            partyId="1234567"
-            groupName="JUSS JA JASS"
-            annualRevenue="100000"
-            numEmployees="2104"
+            partyId="12652512"
+            groupName="001 KINNISVARA OÜ"
+            officeSiteName="Harju ( Tallinn )"
+            annualRevenue="9953.35"
+            numEmployees="1"
+            comments="KINNISVARAALANE TEGEVUS"
+            logoImageUrl=""
     />
+
+<!--    <PartyContactMech-->
+<!--        partyId="1234567"-->
+<!--        contactMechId="1234567"-->
+<!--        />-->
+
+<!--    <ContactMech-->
+<!--            contactMechId="1234567"-->
+<!--            />-->
+
+<!--    <PostalAddress-->
+<!--            contactMechId="1234567"-->
+<!--            address1="Sõpruse pst"-->
+<!--            houseNumber="219-44"-->
+<!--            city="Tallinn"-->
+<!--            postalCode="13414"-->
+<!--            />-->
 
     <MarketdataModel
             companyId="SAMPLE_DEMO_6"
