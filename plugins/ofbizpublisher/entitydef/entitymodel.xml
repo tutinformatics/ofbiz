@@ -33,7 +33,7 @@ under the License.
         <field name="OfbizEntityName" type="name"/>
         <field name="topic" type="name"/>
         <field name="description" type="description"/>
-        <field name="filter" type="long-varchar"/>
+        <field name="filter" type="very-long"/>
         <prim-key field="OfbizPublisherId"/>
     </entity>
 

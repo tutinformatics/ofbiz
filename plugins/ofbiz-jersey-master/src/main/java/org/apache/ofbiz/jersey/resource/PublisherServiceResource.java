@@ -43,7 +43,7 @@ public class PublisherServiceResource {
     public void init() {
         LocalDispatcher dispatcher = (LocalDispatcher) servletContext.getAttribute("dispatcher");
         DispatchContext dpc = dispatcher.getDispatchContext();
-        publisherService = new PublisherService(dpc.getDelegator());
+        publisherService = new PublisherService(dpc.getDelegator(), dpc);
         subscriberService = new SubscriberService(dpc);
     }
 

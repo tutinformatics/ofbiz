@@ -9,14 +9,25 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.List;
 
-public class Publisher extends GenericValue {
+public class Publisher {
 
-    private final String topic;
-    private final IMqttClient client;
+    private String topic;
+    private IMqttClient client;
 
     public Publisher(IMqttClient client, String topic) {
         this.client = client;
         this.topic = topic;
+    }
+
+    public Publisher() {
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
+
+    public void setClient(IMqttClient client) {
+        this.client = client;
     }
 
     public Void call(List<GenericValue> message) throws Exception {
@@ -27,17 +38,6 @@ public class Publisher extends GenericValue {
         msg.setQos(0);
         msg.setRetained(true);
         client.publish(this.topic, msg);
-        return null;
-    }
-
-    public Void callWithTopic(List<GenericValue> message, String topic) throws Exception {
-        if (!this.client.isConnected()) {
-            return null;
-        }
-        MqttMessage msg = getDataInBytes(message);
-        msg.setQos(0);
-        msg.setRetained(true);
-        this.client.publish(topic, msg);
         return null;
     }
 

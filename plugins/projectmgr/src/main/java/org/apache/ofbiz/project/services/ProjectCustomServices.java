@@ -26,7 +26,26 @@ public class ProjectCustomServices {
 
     public static final String module = ProjectCustomServices.class.getName();
 
-    public static Map<String, Object> getProjectList(DispatchContext dctx, Map<String, ? extends Object> context) {
+    @SuppressWarnings("unchecked")
+    public static Map<String, Object> completeTasks(DispatchContext dctx, Map<String, ?> context) {
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dctx.getDelegator();
+
+        try {
+            List<Map<String, Object>> tasks = (List<Map<String, Object>>) context.get("tasks");
+            for (Map<String, Object> task : tasks) {
+                task.put("userLogin", context.get("userLogin"));
+                dispatcher.runSync("updateTaskAssigment", task);
+            }
+        } catch (GenericServiceException e) {
+            Debug.logError(e, module);
+            return ServiceUtil.returnError("Exception thrown while running completeTasks service: " + module);
+        }
+        return result;
+    }
+
+    public static Map<String, Object> getProjectList(DispatchContext dctx, Map<String, ?> context) {
         Map<String, Object> result = ServiceUtil.returnSuccess();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dctx.getDelegator();
