@@ -685,7 +685,7 @@ under the License.
         <attribute name="productCategoryTypeId" type="String" mode="IN" optional="false"/>
     </service>
 
-    <service name="addProductsIntoCategory" engine="java"
+    <service name="addProductsIntoCategoryBigBuy" engine="java"
              location="org.apache.ofbiz.product.category.BigBuyInventory" invoke="addProducts" auth="true">
         <description>Adds BigBuy products from chosen category.</description>
         <attribute name="categoryId" type="String" mode="IN" optional="false"/>
@@ -703,6 +703,32 @@ under the License.
 
     <!--______________________________________________________________________________________________________________________________-->
 
+
+
+    <!-- Create ChinaBrands category, add products, add products into category-->
+    <service name="createCategoryInChinaBrandsCatalog" engine="java"
+             location="org.apache.ofbiz.product.category.ChinaBrandsInventory" invoke="addChinaBrandsCategory" auth="true">
+        <description>Creates chosen category and adds it into BigBuy catalog.</description>
+        <attribute name="productCategoryTypeId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="addProductsIntoCategoryChinaBrands" engine="java"
+             location="org.apache.ofbiz.product.category.ChinaBrandsInventory" invoke="addProductsCB" auth="true">
+        <description>Adds ChinaBrands products from chosen category.</description>
+        <attribute name="categoryId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="createChinaBrandsCatalogAndSupplier" engine="java"
+             location="org.apache.ofbiz.product.category.ChinaBrandsInventory" invoke="addChinaBrandsCatalogAndSupplier" auth="true">
+        <description>Creates ChinaBrands party, gives to it Supplier role, creates ChinaBrands catalog.</description>
+    </service>
+
+    <service name="updateChinaBrandsDataFiles" engine="java"
+             location="org.apache.ofbiz.product.category.ChinaBrandsInventory" invoke="updateBigBuyData" auth="true">
+        <description>Creates a json files for ChinaBrands inventory.</description>
+    </service>
+
+    <!--______________________________________________________________________________________________________________________________-->
 
     <service name="updateProductCategory" default-entity-name="ProductCategory" engine="groovy"
                 location="component://product/groovyScripts/product/category/CategoryServices.groovy" invoke="updateProductCategory" auth="true">
