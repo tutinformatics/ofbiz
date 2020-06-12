@@ -74,3 +74,32 @@ System.err.println(e.getMessage();
 **`Funktsiooni lõpp.`**
 
 Meetod peab tagastama `Map<String, Object>`. Tavaliselt tagastatakse `ServiceUtil.returnSuccess()` kui kõik oli tehtud veata ja `ServiceUtil.returnError(e.getMessage())` kui oli mingi error try/catch sees.
+
+---
+`Näide meie projektist. Siin on näha kuidas käivitatakse teist service´i läbi java classi.`
+```
+public static Map<String, Object> addBigBuyCategory(DispatchContext ctx, Map<String, Object> context) {
+    Map<String, Object> success = ServiceUtil.returnSuccess();
+    LocalDispatcher dispatcher = ctx.getDispatcher(); //Local dispatcheri loomine
+    GenericValue userLogin = (GenericValue) context.get("userLogin"); //Andmed autentimiseks
+    Locale locale = (Locale) context.get("locale"); //Andmed autentimiseks
+    String productCategoryTypeId = (String) context.get("productCategoryTypeId"); //Sisetatud info salvestamine
+          
+    // See lõik paneb contexti vajalik info
+    Map<String, Object> contextCopyCategoryToCatalog = new HashMap<>(context); 
+    contextCopyCategoryToCatalog.put("userLogin", userLogin); //Autentimine
+    contextCopyCategoryToCatalog.put("locale", locale); //Autentimine
+    contextCopyCategoryToCatalog.put("prodCatalogCategoryTypeId", "PCCT_PURCH_ALLW"); //Service´le vajalik parameeter
+    contextCopyCategoryToCatalog.put("prodCatalogId", "BigBuyCatalog"); //Service´le vajalik parameeter
+    contextCopyCategoryToCatalog.put("productCategoryId", productCategoryTypeId); //Service´le vajalik parameeter
+        
+    // käivitab service´i contextis oleva andmetega  
+    try {
+        dispatcher.runSync("addProductCategoryToProdCatalog", contextCopyCategoryToCatalog);
+    } catch (GenericServiceException e) {
+        System.err.println(e.getMessage());
+    }
+    
+    return success;
+}
+```
