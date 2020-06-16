@@ -66,15 +66,16 @@ Iga päringu jaoks on mingi time limit (näiteks 1 päring iga 5 sec), mida saab
 
 **Status codes:**
 
-200 - success
+- 200 - success
 
-404 - not found
+- 404 - not found
 
-415 - invalid Content-Type header
+- 415 - invalid Content-Type header
 
-429 - exceeded requests limits
+- 429 - exceeded requests limits
 
 **Päringu tüübid:**
+
 - GET  /rest/catalog/products.{_format} - kõik tooted (10 päringuid tunnis)
 - GET  /rest/catalog/product/{id}.{_format} - üks toode kindla id´ga (1 päring iga 5 sec)
 
@@ -90,5 +91,7 @@ format - json|xml|html
 isoCode - keel (es default)
 
 https://api.sandbox.bigbuy.eu/rest/catalog/categories.json
+
 https://api.sandbox.bigbuy.eu/rest/catalog/categories.xml 
+
 https://api.sandbox.bigbuy.eu/rest/catalog/categories.html 
