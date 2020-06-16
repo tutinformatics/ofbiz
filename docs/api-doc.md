@@ -95,3 +95,11 @@ https://api.sandbox.bigbuy.eu/rest/catalog/categories.json
 https://api.sandbox.bigbuy.eu/rest/catalog/categories.xml 
 
 https://api.sandbox.bigbuy.eu/rest/catalog/categories.html 
+
+**Service**
+
+Kuna APId võib kasutada piiratud korda tunnis, tegime service´i mis salvestab päringust saadud andmed JSON faili. 
+
+(337 - 391 read)
+
+https://github.com/tutinformatics/ofbiz/blob/liidestused-ee/applications/product/src/main/java/org/apache/ofbiz/product/category/BigBuyInventory.java
