@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<entity-engine-xml>
+    <OfbizDemo ofbizDemoId="SAMPLE_DEMO_1" ofbizDemoTypeId="INTERNAL" firstName="Sample First 1"
+               lastName="Sample Last 1" comments="This is test comment for first record."/>
+    <OfbizDemo ofbizDemoId="SAMPLE_DEMO_2" ofbizDemoTypeId="INTERNAL" firstName="Sample First 2"
+               lastName="Sample last 2" comments="This is test comment for second record."/>
+    <OfbizDemo ofbizDemoId="SAMPLE_DEMO_3" ofbizDemoTypeId="EXTERNAL" firstName="Sample First 3"
+               lastName="Sample last 3" comments="This is test comment for third record."/>
+    <OfbizDemo ofbizDemoId="SAMPLE_DEMO_4" ofbizDemoTypeId="EXTERNAL" firstName="Sample First 4"
+               lastName="Sample last 4" comments="This is test comment for fourth record."/>
+
+    <MarketdataModel
+            companyId="SAMPLE_DEMO_5"
+            companyName="001 group OÜ"
+            registryCode="12754230"
+            companyStatus="Registrisse kantud"
+            companyAddress="Harju maakond, Tallinn, Haabersti linnaosa, Õismäe tee 78-9"
+            companyBusinessModel="B2B"
+            companySector="Cleantech"
+            employeeCount="43"/>
+
+
+    <Party partyId="12652512"></Party>
+
+    <!-- MUST USE . NOT , for revenue-->
+    <PartyGroup
+            partyId="12652512"
+            groupName="001 KINNISVARA OÜ"
+            officeSiteName="Harju ( Tallinn )"
+            annualRevenue="9953.35"
+            numEmployees="1"
+            comments="KINNISVARAALANE TEGEVUS"
+            logoImageUrl=""
+    />
+
+<!--    <PartyContactMech-->
+<!--        partyId="1234567"-->
+<!--        contactMechId="1234567"-->
+<!--        />-->
+
+<!--    <ContactMech-->
+<!--            contactMechId="1234567"-->
+<!--            />-->
+
+<!--    <PostalAddress-->
+<!--            contactMechId="1234567"-->
+<!--            address1="Sõpruse pst"-->
+<!--            houseNumber="219-44"-->
+<!--            city="Tallinn"-->
+<!--            postalCode="13414"-->
+<!--            />-->
+
+    <MarketdataModel
+            companyId="SAMPLE_DEMO_6"
+            companyName="002 group OÜ"
+            registryCode="12567785"
+            companyStatus="Pole registris"
+            companyAddress="Harju maakond, Tallinn, Kristiine linnaosa, Nõmme 12"
+            companyBusinessModel="B2C"
+            companySector="Business software"
+            employeeCount="12"/>
+    <!--   <PartyGroup
+            partyId="DemoCustomer"
+            groupName="001 group OÜ"
+            annualRevenue="1000 000"
+            numEmployees="12754230"/>
+    <PartyGroup
+            partyId="DemoCustomer"
+            groupName="002 group OÜ"
+            annualRevenue="1000 000"
+            numEmployees="12754230"/>-->
+</entity-engine-xml>
